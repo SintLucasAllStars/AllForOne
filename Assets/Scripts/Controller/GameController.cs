@@ -10,7 +10,10 @@ public class GameController : Singleton<GameController>
     // Use this for initialization
     void Start()
     {
-        playerDiedWindow.SetActive(false);
+		if (playerDiedWindow!=null)
+		{
+			playerDiedWindow.SetActive(false);
+		}
     }
 
     // Update is called once per frame
@@ -18,7 +21,10 @@ public class GameController : Singleton<GameController>
     {
         if (player.dead)
         {
-            playerDiedWindow.SetActive(true);
+			if (playerDiedWindow != null)
+			{
+				playerDiedWindow.SetActive(true);
+			}
             if (InputManager.Instance.restartButton)
             {
                 Application.LoadLevel(Application.loadedLevel);

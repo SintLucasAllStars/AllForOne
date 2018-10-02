@@ -36,6 +36,8 @@ public class CharacterController : MonoBehaviour
 	public bool stateLocked = false;
 	[HideInInspector]
 	public float playerSpeed;
+	[HideInInspector]
+    public float playerTurnSpeed;
 	Vector3 oldPos;
 	[HideInInspector]
 	public bool dead = false;
@@ -78,8 +80,9 @@ public class CharacterController : MonoBehaviour
 			//	a.EveryFrame();
 			//}
 
-			if (!stateLocked && (transform.position.x >= oldPos.x - 0.01f && transform.position.x <= oldPos.x + 0.01f) && (transform.position.z >= oldPos.z - 0.01f && transform.position.x <= oldPos.x + 0.01f) && grounded && !stateLocked)
+			if (!stateLocked && (transform.position.x >= oldPos.x - 0.01f && transform.position.x <= oldPos.x + 0.01f) && (transform.position.z >= oldPos.z - 0.01f && transform.position.x <= oldPos.x + 0.01f) && playerSpeed ==0 && playerTurnSpeed == 0&& grounded && !stateLocked)
 			{
+				Debug.Log("dd");
 				currentPlayerState = PlayerStates.idle;
 			}
 			else

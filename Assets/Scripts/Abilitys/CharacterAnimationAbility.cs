@@ -14,11 +14,14 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 
 	public override void OnStart()
 	{
-		_characterController = GetComponent<CharacterController>();
+		if (AbilityPermitted)
+		{
+			_characterController = GetComponent<CharacterController>();
 
-        _characterController.callEveryFrame += EveryFrame;
-		_characterController.characterDied += Died;
-		BeforeAbility();
+			_characterController.callEveryFrame += EveryFrame;
+			_characterController.characterDied += Died;
+			BeforeAbility();
+		}
 	}
 
 	public override void EveryFrame()
@@ -43,6 +46,7 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 		if (_characterController.currentPlayerState == CharacterController.PlayerStates.moving)
         {
             animator.SetFloat("Speed", _characterController.playerSpeed);
+			animator.SetFloat("Direction", _characterController.playerTurnSpeed);
         }
         if (_characterController.grounded)
         {

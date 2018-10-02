@@ -76,10 +76,11 @@ public class WalkAbility : Ability, IPlayerAbilitys
 				tSpeed = slowWalkSpeed;
 			}
 			if (z != 0&&!_characterController.stateLocked&&_characterController.grounded)
-			{            
+			{
 				_characterController.currentPlayerState = CharacterController.PlayerStates.moving;
 			}
 			_characterController.playerSpeed = tSpeed*forge.z;
+			_characterController.playerTurnSpeed = x*2;
 			transform.Translate(forge * Time.deltaTime * tSpeed);
 		}
 	}
