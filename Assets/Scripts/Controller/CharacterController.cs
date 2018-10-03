@@ -44,6 +44,9 @@ public class CharacterController : MonoBehaviour
 	[HideInInspector]
 	public float health =100;
 
+	[HideInInspector]
+	public bool lockPlayer = true; //lock player so he can't be controlled
+
 	public delegate void CallEveryFrame();
 	public  CallEveryFrame callEveryFrame;
 	public delegate void Died();
@@ -51,9 +54,6 @@ public class CharacterController : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		if(transform.CompareTag("Player")){
-			GameController.Instance.player = this;
-		}
 		abilitys = GetComponents<Ability>();
 		foreach (Ability a in abilitys)
 		{
@@ -64,7 +64,12 @@ public class CharacterController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		EveryFrame();
+		if (!lockPlayer)
+		{
+			EveryFrame();
+		}else{
+			currentPlayerState = PlayerStates.idle;
+		}
 	}
 	void EveryFrame()
 	{
@@ -82,7 +87,6 @@ public class CharacterController : MonoBehaviour
 
 			if (!stateLocked && (transform.position.x >= oldPos.x - 0.01f && transform.position.x <= oldPos.x + 0.01f) && (transform.position.z >= oldPos.z - 0.01f && transform.position.x <= oldPos.x + 0.01f) && playerSpeed ==0 && playerTurnSpeed == 0&& grounded && !stateLocked)
 			{
-				Debug.Log("dd");
 				currentPlayerState = PlayerStates.idle;
 			}
 			else
@@ -95,7 +99,6 @@ public class CharacterController : MonoBehaviour
 			if (!this.transform.CompareTag ("Player"))
 			{
 				this.gameObject.active = false;
-				WildLifeController.Instance.smallSpawnedAnimals.Remove(this);
 				Destroy(this.gameObject);
 			}
             this.gameObject.SetActive(false);

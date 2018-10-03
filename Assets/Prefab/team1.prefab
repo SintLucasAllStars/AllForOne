@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 114890364944146218}
   - component: {fileID: 114734211836926986}
   m_Layer: 11
-  m_Name: Player
+  m_Name: team1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2440,7 +2440,7 @@ Transform:
   m_GameObject: {fileID: 1188911637818192}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -78.41}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 4121922688338272}
   - {fileID: 4810434940816738}
@@ -2612,6 +2612,7 @@ MonoBehaviour:
   playerTurnSpeed: 0
   dead: 0
   health: 100
+  lockPlayer: 1
 --- !u!114 &114276983676396528
 MonoBehaviour:
   m_ObjectHideFlags: 1

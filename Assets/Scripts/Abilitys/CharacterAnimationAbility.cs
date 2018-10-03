@@ -27,9 +27,18 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 	public override void EveryFrame()
 	{
 		if (AbilityPermitted)
-		{
+        {
 
-			WhileAbility();
+            WhileAbility();
+        }
+	}
+	void Update(){
+		if (GameController.Instance.pickingPlayer)
+		{
+			animator.SetBool("Idle", true);
+			animator.SetBool("Moving", false);
+			animator.SetBool("Jump", false);
+			animator.SetBool("Die", false);
 		}
 	}
 	void Died(){
