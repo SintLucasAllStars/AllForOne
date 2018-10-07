@@ -14,7 +14,9 @@ public class CameraMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StartCoroutine(MoveToward(new Vector3(0,20,0)));
+        //StartCoroutine(MoveToward(new Vector3(0,20,0)));
+        GameManager.instance.StartRound += StartRound;
+        GameManager.instance.EndRound += EndRound;
     }
 
     // Update is called once per frame
@@ -24,6 +26,16 @@ public class CameraMovement : MonoBehaviour
         {
             Move();
         }
+    }
+
+    void StartRound(GameManager.GameState gameState)
+    {
+
+    }
+
+    void EndRound(GameManager.GameState gameState)
+    {
+        
     }
 
     void Move()

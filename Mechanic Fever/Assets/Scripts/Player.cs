@@ -1,16 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Player : MonoBehaviour {
+[System.Serializable]
+public class Player
+{
+    [SerializeField] private int points;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private int charactersAlive;
+
+    public bool CheckPoints(int costPoints)
+    {
+        return points >= costPoints;
+    }
+
+    public bool CreateCharacter(int costPoints)
+    {
+        if(CheckPoints(costPoints))
+        {
+            charactersAlive++;
+            points -= costPoints;
+            return true;
+        }
+        return false;
+    }
+
+    public bool KillCharacter()
+    {
+        charactersAlive--;
+        return charactersAlive <= 0;
+    }
+
 }
