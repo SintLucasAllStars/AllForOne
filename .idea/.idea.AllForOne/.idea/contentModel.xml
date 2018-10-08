@@ -21,6 +21,18 @@
             </e>
             <e p="READTHIS.txt" t="Include" />
           </e>
+          <e p="MoveMotionPack" t="Include">
+            <e p="SampleScene" t="Include">
+              <e p="Scripts" t="Include">
+                <e p="PlayManager.cs" t="Include" />
+              </e>
+              <e p="Shaders" t="Include">
+                <e p="DiffuseReflectiveShader.shader" t="Include" />
+                <e p="ReflectiveDiffuseSpec.shader" t="Include" />
+                <e p="ReflectiveDiffuseSpecTransp.shader" t="Include" />
+              </e>
+            </e>
+          </e>
           <e p="SimpleCorridor" t="Include">
             <e p="README.txt" t="Include" />
             <e p="Scripts" t="Include">
@@ -29,24 +41,17 @@
           </e>
         </e>
         <e p="hoi.cs" t="Include" />
-        <e p="MoveMotionPack" t="Include">
-          <e p="SampleScene" t="Include">
-            <e p="Scripts" t="Include">
-              <e p="PlayManager.cs" t="Include" />
-            </e>
-            <e p="Shaders" t="Include">
-              <e p="DiffuseReflectiveShader.shader" t="Include" />
-              <e p="ReflectiveDiffuseSpec.shader" t="Include" />
-              <e p="ReflectiveDiffuseSpecTransp.shader" t="Include" />
-            </e>
-          </e>
-        </e>
         <e p="Scripts" t="Include">
-          <e p="Player" t="Include">
+          <e p="CameraMovement.cs" t="Include" />
+          <e p="Players" t="Include">
             <e p="Animation" t="Include">
+              <e p="AnimationClipOverrides.cs" t="Include" />
               <e p="AnimationClips.cs" t="Include" />
               <e p="ThirdPersonAnimation.cs" t="Include" />
             </e>
+            <e p="Character.cs" t="Include" />
+            <e p="CharacterPlacement.cs" t="Include" />
+            <e p="Player.cs" t="Include" />
             <e p="ThirdPersonCharacter.cs" t="Include" />
             <e p="ThirdPersonController.cs" t="Include" />
           </e>
