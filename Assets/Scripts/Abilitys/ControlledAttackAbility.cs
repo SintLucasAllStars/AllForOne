@@ -8,8 +8,7 @@ public class ControlledAttackAbility : Ability, IPlayerAbilitys
 	CharacterController _characterController;
 	[SerializeField]
 	float attackRange = 5;
-	[SerializeField]
-	float damage = 10;
+	public float damage = 10;
 	[SerializeField]
 	float coolDown = 1;
 	[SerializeField]
@@ -62,18 +61,31 @@ public class ControlledAttackAbility : Ability, IPlayerAbilitys
 	public override void WhileAbility()
 	{
 		CharacterController objectToHit = hit.transform.GetComponent<CharacterController>();
-		objectToHit.health -= damage;
-		if (objectToHit.health <= 0)
+		if (objectToHit != null)
 		{
-			objectToHit.dead = true;
-
-            Instantiate(killParticle, hit.transform.position, Quaternion.identity);
-		}
-		else
-		{
-			Instantiate(hitParticle, hit.transform.position,Quaternion.identity);
+			if (objectToHit.team != _characterController.team)
+			{
+				objectToHit.health -= damage;
+				if (objectToHit.health <= 0)
+				{
+					objectToHit.dead = true;
+					if (killParticle != null)
+					{
+						Instantiate(killParticle, hit.transform.position, Quaternion.identity);
+					}
+				}
+				else
+				{
+					if (hitParticle != null)
+					{
+						Instantiate(hitParticle, hit.transform.position, Quaternion.identity);
+					}
+				}
+			}
 		}
 		Invoke("AfterAbility", attackLentgh);
+
+
 	}
 
 	public override void AfterAbility()

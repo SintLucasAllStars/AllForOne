@@ -42,8 +42,8 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 		}
 	}
 	void Died(){
-		animator.speed = 0;
-		animator.enabled = false;
+		//animator.speed = 0;
+		//animator.enabled = false;
 	}
 	public override void BeforeAbility()
 	{
@@ -88,6 +88,7 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 					animator.SetBool("Die", false);
 					break;
 				case CharacterController.PlayerStates.die:
+					Debug.Log("die");
 					animator.SetBool("Die", true);
 					animator.SetBool("Idle", false);
 					animator.SetBool("Moving", false);

@@ -858,6 +858,7 @@ GameObject:
   - component: {fileID: 136569991676784592}
   - component: {fileID: 114118706931977326}
   - component: {fileID: 114909120541679710}
+  - component: {fileID: 114620093317578976}
   m_Layer: 11
   m_Name: team2
   m_TagString: Player
@@ -2603,13 +2604,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe653d147a0e4f05a4598dd720f47c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AbilityPermitted: 0
+  AbilityPermitted: 1
   attackRange: 5
   damage: 100
   coolDown: 1
   thingsToAttack:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 2048
   attackLentgh: 0.5
   hitParticle: {fileID: 0}
   killParticle: {fileID: 0}
@@ -2630,6 +2631,17 @@ MonoBehaviour:
   slowWalkSpeed: 2
   walkSideWays: 0
   turnSpeed: 100
+--- !u!114 &114620093317578976
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675502927092046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d742f1aea30c4d749b1a0766038472b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114707302637117598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2654,6 +2666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6da8895bc4bd4739ab2fe173ba66e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 0
   canWalkRight: 1
   canWalkLeft: 1
   canWalkForward: 1
@@ -2670,12 +2683,12 @@ MonoBehaviour:
   thingsToGroundWith:
     serializedVersion: 2
     m_Bits: 512
+  health: 100
   currentPlayerState: 0
   stateLocked: 0
   playerSpeed: 0
   playerTurnSpeed: 0
   dead: 0
-  health: 100
   lockPlayer: 1
 --- !u!114 &114909120541679710
 MonoBehaviour:

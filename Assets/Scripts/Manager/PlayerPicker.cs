@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerPicker : MonoBehaviour {
-	public bool canPickPlayer;
-	public GameObject pickObject;
+	public bool canPickPlayer;//when true you can click on a character
+	public GameObject pickObject; //object which will spawn on the characters
 	public LayerMask layersToRayWith;
 
-	List<GameObject> clickObjects = new List<GameObject>();
+	List<GameObject> clickObjects = new List<GameObject>();//all object which spawned on the players 
 	GameController gameController;
 	bool setup = false;
+
 	// Use this for initialization
 	void Start () {
 		gameController = GameController.Instance;
@@ -29,6 +30,7 @@ public class PlayerPicker : MonoBehaviour {
         {
             GameObject game = Instantiate(pickObject, gameController.teams[gameController.currentTeam].teamUnits[i].unit.transform.position, Quaternion.identity);
             game.GetComponent<PlayerPickObject>().id = i;
+			game.GetComponent<MeshRenderer>().material.color = gameController.teams[gameController.currentTeam].teamColor;
             clickObjects.Add(game);
         }
 	}

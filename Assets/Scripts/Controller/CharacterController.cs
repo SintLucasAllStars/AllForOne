@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
+	public int team;
 	private Ability[] abilitys;
 	[HideInInspector]
 	public bool canWalkRight;
@@ -13,6 +14,7 @@ public class CharacterController : MonoBehaviour
 	public bool canWalkForward;
 	[HideInInspector]
 	public bool canWalkBack;
+
 	public bool grounded;
 
 	[SerializeField]
@@ -30,6 +32,9 @@ public class CharacterController : MonoBehaviour
 	[SerializeField]
 	LayerMask thingsToGroundWith;
 
+
+    public float health = 100;
+
 	public enum PlayerStates { idle, moving, jump, die,attacking };
 	public PlayerStates currentPlayerState;
 	[HideInInspector]
@@ -41,8 +46,6 @@ public class CharacterController : MonoBehaviour
 	Vector3 oldPos;
 	[HideInInspector]
 	public bool dead = false;
-	[HideInInspector]
-	public float health =100;
 
 	[HideInInspector]
 	public bool lockPlayer = true; //lock player so he can't be controlled
@@ -68,7 +71,12 @@ public class CharacterController : MonoBehaviour
 		{
 			EveryFrame();
 		}else{
-			currentPlayerState = PlayerStates.idle;
+			if (!dead)
+			{
+				currentPlayerState = PlayerStates.idle;
+			}else{
+				EveryFrame();
+			}
 		}
 	}
 	void EveryFrame()
@@ -101,7 +109,7 @@ public class CharacterController : MonoBehaviour
 				this.gameObject.active = false;
 				Destroy(this.gameObject);
 			}
-            this.gameObject.SetActive(false);
+           // this.gameObject.SetActive(false);
 		}
 	}
 	void CastRayCastToSides()

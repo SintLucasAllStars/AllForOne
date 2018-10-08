@@ -27,6 +27,24 @@ public class TurnController : MonoBehaviour {
             GameController.Instance.currentTeam = 0;
         }
 	}
+	public bool NextTeamWithPoints(int currentTeamId){
+		for (int i = currentTeamId+1; i < GameController.Instance.teams.Length;i++){
+			if (GameController.Instance.teams[i].points > 10)
+			{
+				GameController.Instance.currentTeam = i;
+				return true;
+			}
+		}
+		for (int j = 0; j < currentTeamId+1; j++)
+        {
+			if (GameController.Instance.teams[j].points > 10)
+			{
+				GameController.Instance.currentTeam = j;
+				return true;
+			}
+        }
+		return false;
+	}
 	IEnumerator Timer(){
 		yield return new WaitForSeconds(timePerRound);
 		NextTeam();

@@ -5,10 +5,9 @@ using UnityEngine;
 public class WalkAbility : Ability, IPlayerAbilitys
 {
 	private CharacterController _characterController;
-	[SerializeField]
-	float speed = 1;
-	[SerializeField]
-	float runSpeed = 5;
+
+	public float speed = 1;
+	public float runSpeed = 5;
 	[SerializeField]
 	float slowWalkSpeed = 5;
 	[SerializeField]

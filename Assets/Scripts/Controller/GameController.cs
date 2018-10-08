@@ -55,9 +55,7 @@ public class GameController : Singleton<GameController>
             Application.Quit();
         }
     }
-	GameObject SpawnPlayer(Vector3 position,GameObject prefab){
-		return Instantiate(prefab, position, Quaternion.identity);
-	}
+
 	void SetNewPlayer(CharacterController newPlayer,CharacterController oldPlayer){
 		if (oldPlayer != null)
 		{
