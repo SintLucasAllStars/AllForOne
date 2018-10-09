@@ -62,9 +62,6 @@ public class Character : MonoBehaviour
         }
     }
 
-
-
-
     public void SetStats(float health, float strength, float speed, float defence)
     {
         this.health = health;

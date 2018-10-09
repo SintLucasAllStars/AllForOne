@@ -9,36 +9,81 @@ public class CharacterCreator : MonoBehaviour
 
     [Header("Stats")]
     [SerializeField] private Vector2 healthRange;
+    [SerializeField] private float healthCost;
+
     [SerializeField] private Vector2 speedRange;
-    [SerializeField] private Vector2 defenceRange;
+    [SerializeField] private float speedCost;
+
+    [SerializeField] private float defenceCost;
+
+    [SerializeField] private float strengthCost;
+
 
     [Header("UI")]
     [SerializeField] private Slider healthSlider;
-    [SerializeField] private Slider damageSlider;
+    [SerializeField] private Slider strengthSlider;
     [SerializeField] private Slider speedSlider;
     [SerializeField] private Slider defenceSlider;
+    [SerializeField] private Text points;
     [SerializeField] private Button createCharacterButton;
+
+    [SerializeField] private GameObject UI;
+
+
+    [SerializeField] private Transform renderPosition;
+
+    [Header("Spawning")]
+    [SerializeField] private GameObject prefab;
+    [SerializeField] private LayerMask layer;
+    private GameObject currentCharacter;
+    private bool placingCharacter;
+    private Camera cam;
+
 
     private void Start()
     {
         GameManager.instance.StartRound += OnStartRound;
+        cam = GetComponent<Camera>();
+        ResetUI();
     }
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.C))
-            if(CheckPlayerPointsBool())
-                StartPlacement();
+        if(placingCharacter)
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, 200, layer   ))
+            {
+                if(hit.collider.CompareTag("Floor"))
+                {
+                    currentCharacter.transform.position = hit.point;
+                    if(Input.GetMouseButtonDown(0))
+                    {
+                        EndPlacement();
+                    }
+                }
+            }
+        }
+
     }
 
-    void StartPlacement()
+    public void StartPlacement()
     {
+        UI.SetActive(false);
+        placingCharacter = true;
+    }
 
+    void EndPlacement()
+    {
+        placingCharacter = false;
+        GameManager.instance.CreateCharacter(CalculatePoints());
+        ResetUI();
     }
 
     void OnStartRound()
     {
         GameManager.instance.StartRound -= OnStartRound;
+        Destroy(UI);
         Destroy(this);
     }
 
@@ -56,13 +101,13 @@ public class CharacterCreator : MonoBehaviour
     {
         float health = Mathf.Lerp(healthRange.x, healthRange.y, healthSlider.value);
         float speed = Mathf.Lerp(speedRange.x, speedRange.y, speedSlider.value);
-        float defence = Mathf.Lerp(defenceRange.x, defenceRange.y, defenceSlider.value);
 
-        character.SetStats(health, defenceSlider.value, speed, defence);
+        character.SetStats(health, strengthSlider.value, speed, defenceSlider.value);
     }
 
-    void CheckPlayerPoints()
+    public void OnSliderValueChanged()
     {
+        points.text = "Points: " + CalculatePoints();
         createCharacterButton.interactable = GameManager.instance.CheckCharacterPoints(CalculatePoints());
     }
 
@@ -73,18 +118,20 @@ public class CharacterCreator : MonoBehaviour
 
     int CalculatePoints()
     {
-        float currentvalue = healthSlider.value + damageSlider.value + speedSlider.value + defenceSlider.value;
-        currentvalue /= 4;
-        return Mathf.RoundToInt(Mathf.Lerp(minPoints, maxPoints, currentvalue));
+        float currentvalue = minPoints + (healthSlider.value * healthCost) + (strengthSlider.value * strengthCost) + (speedSlider.value * speedCost) + (defenceSlider.value  * defenceCost);
+        return Mathf.RoundToInt(Mathf.Clamp(currentvalue, minPoints, maxPoints));
     }
 
     void ResetUI()
     {
-        healthSlider.value = Random.Range(0,1);
-        damageSlider.value = Random.Range(0, 1);
-        speedSlider.value = Random.Range(0, 1);
-        defenceSlider.value = Random.Range(0, 1);
+        healthSlider.value = Random.Range(0f, 1f);
+        strengthSlider.value = Random.Range(0f, 1f);
+        speedSlider.value = Random.Range(0f, 1f);
+        defenceSlider.value = Random.Range(0f, 1f);
 
-        CheckPlayerPoints();
+        currentCharacter = Instantiate(prefab, renderPosition.position, Quaternion.Euler(Vector3.zero));
+        UI.SetActive(true);
+
+        OnSliderValueChanged();
     }
 }

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     //Player
     [SerializeField] Player playerOne;
     [SerializeField] Player playerTwo;
-    bool isPlyerOnesTurn = true;
+    bool IsTurnPlayerOne = true;
 
 
 
@@ -53,11 +53,11 @@ public class GameManager : MonoBehaviour
         Player currentPlayer = GetCurrentPlayer();
         currentPlayer.CreateCharacter(costPoints);
 
-        isPlyerOnesTurn = !isPlyerOnesTurn;
+        IsTurnPlayerOne = !IsTurnPlayerOne;
         if(GetCurrentPlayer().isOutOfPoints)
         {
             if(!currentPlayer.isOutOfPoints)
-                isPlyerOnesTurn = !isPlyerOnesTurn;
+                IsTurnPlayerOne = !IsTurnPlayerOne;
             else
                 StartRound.Invoke();
         }
@@ -68,13 +68,13 @@ public class GameManager : MonoBehaviour
     {
         if(GetCurrentPlayer().KillCharacter())
         {
-            Debug.Log("Game ended! Player: " + ((isPlyerOnesTurn) ? "Two" : "One") + " Won");
+            Debug.Log("Game ended! Player: " + ((IsTurnPlayerOne) ? "Two" : "One") + " Won");
         }
     }
 
-    Player GetCurrentPlayer()
+    public Player GetCurrentPlayer()
     {
-        return (isPlyerOnesTurn) ? playerOne : playerTwo;
+        return (IsTurnPlayerOne) ? playerOne : playerTwo;
     }
 
 }

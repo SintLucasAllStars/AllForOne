@@ -5,10 +5,12 @@ public class Player
 {
     private const int minPoints = 10;
 
-    [SerializeField] private int points = 100;
+    public int points = 100;
     [HideInInspector] public bool isOutOfPoints = false;
 
-    private int charactersAlive;
+    public int charactersAlive { get; private set; }
+
+    public Color playerColor;
 
     public bool CheckPoints(int costPoints)
     {

@@ -15,7 +15,6 @@ public class CameraMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StartCoroutine(MoveToward(new Vector3(0, 20, 0)));
         GameManager.instance.EndRound += EndRound;
     }
 
