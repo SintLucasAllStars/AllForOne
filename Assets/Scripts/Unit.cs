@@ -5,10 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Unit : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Stats
+    {
+        public float health;
+        public float strength;
+        public float speed;
+        public float defence;
+    }
+
     public int owner = 0;
     public float speedRotation = 2;
     public float speedMovement = 2;
 
+    public Stats stats;
 
     private Animator animator;
 

@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public int index        = 0;
     public new string name  = "Player";
     public Color color      = Color.white;
+    public int points       = 100;
     public bool turn        = false;
     [Space]
     [SerializeField] private ParticleSystem particle = null;
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float cameraOffset = 25;
 
     private Unit hovered = null;
+    
     #endregion
 
     #region Methods
