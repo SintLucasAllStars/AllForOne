@@ -10,17 +10,17 @@ public abstract class Unit
     [SerializeField] private string m_name;
 
     //unit default hp
-    public string health { get { return m_health; } private set { m_health = value; } }
-    [SerializeField] private string m_health;
+    public ushort health { get { return m_health; } private set { m_health = value; } }
+    [SerializeField] private ushort m_health;
     //unit default strength
-    public string strength { get { return m_strength; } private set { m_strength = value; } }
-    [SerializeField] private string m_strength;
+    public ushort strength { get { return m_strength; } private set { m_strength = value; } }
+    [SerializeField] private ushort m_strength;
     //unit default speed
-    public string speed { get { return m_speed; } private set { m_speed = value; } }
-    [SerializeField] private string m_speed;
+    public ushort speed { get { return m_speed; } private set { m_speed = value; } }
+    [SerializeField] private ushort m_speed;
     //unit default defense
-    public string defense { get { return m_defense; } private set { m_defense = value; } }
-    [SerializeField] private string m_defense;
+    public ushort defense { get { return m_defense; } private set { m_defense = value; } }
+    [SerializeField] private ushort m_defense;
 
     //unit default meshSkin
     public GameObject objectMesh { get { return m_objectMesh; } private set { m_objectMesh = value; } }

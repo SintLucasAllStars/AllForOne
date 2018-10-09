@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public Unit playerNormalStats { get; private set; }
+    public Soldier playerNormalStats { get; private set; }
 
 
     
     public void init (Unit uDefaultType)
     {
-        playerNormalStats = uDefaultType;
+        playerNormalStats = (Soldier) uDefaultType;
 
         /*   
         playerType.name = uType.name;
