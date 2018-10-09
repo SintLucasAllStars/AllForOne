@@ -13,10 +13,27 @@ public class UnitCreator : MonoBehaviour
         public Text textMax;
     }
 
-    [SerializeField] private SliderElement health, strength, speed, defence;
-    [SerializeField] private Text cost, remaining;
+    public GameObject Unit { get { return unit; } } 
+    public Player Player { get { return player; } set { player = value; CreateUnit(); } }
+    public int Cost { get { return cost; } }
+
+    public static UnitCreator instance;
+
+    [SerializeField] private GameObject unitPrefab = null;
+
+    [Header("UI")]
     [SerializeField] private RawImage preview;
-    public Player player = null;
+    [SerializeField] private Text tCost, remaining;
+    [SerializeField] private SliderElement health, strength, speed, defence;
+    
+    private Player player = null;
+    private GameObject unit = null;
+    private int cost = 0;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Update()
     {
@@ -29,9 +46,18 @@ public class UnitCreator : MonoBehaviour
         CalculateCost();
     }
 
-    float Remap(float value, float inputFrom, float inputTo, float outputFrom, float outputTo)
+    private void CreateUnit()
     {
-        return outputFrom + (value - inputFrom) * (outputTo - outputFrom) / (inputTo - inputFrom);
+        GameObject _unit = Instantiate(unitPrefab) as GameObject;
+
+        foreach (Renderer item in _unit.GetComponentsInChildren<Renderer>())
+        {
+            item.material.SetColor("_EmissionColor", player.color);
+        }
+
+        unit = _unit;
+        ShowRoom.instance.DisplayObject(unit);
+        unit.SetActive(false);
     }
 
     private void CalculateCost()
@@ -41,6 +67,12 @@ public class UnitCreator : MonoBehaviour
         int c = Mathf.CeilToInt(Remap(strength.slider.value, strength.slider.minValue, strength.slider.maxValue, 2, 20));
         int d = Mathf.CeilToInt(Remap(defence.slider.value, defence.slider.minValue, defence.slider.maxValue, 2, 20));
 
-        cost.text = "Cost: " + (a + b + c + d).ToString();
+        cost = a + b + c + d;
+        tCost.text = "Cost: " + cost.ToString();
+    }
+
+    float Remap(float value, float inputFrom, float inputTo, float outputFrom, float outputTo)
+    {
+        return outputFrom + (value - inputFrom) * (outputTo - outputFrom) / (inputTo - inputFrom);
     }
 }

@@ -29,24 +29,76 @@ public class Player : MonoBehaviour
         particle.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        Hover();
-        CameraMotion();
-
-        //If we are hovering over an owned Unit.
-        if(Input.GetMouseButtonDown(0))
+        if(GameManager.instance.isSpawnMode)
         {
-            if(hovered)
-            {
-                hovered.Select();
-            }
+            UnitCreator.instance.Player = this;
         }
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if(GameManager.instance.isSpawnMode)
+        {
+            HoverPlace();
+        }
+        else
+        {
+            HoverSelect();
+            
+            //If we are hovering over an owned Unit.
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (hovered)
+                {
+                    hovered.Select();
+                }
+            }
+        }
+
+        CameraMotion();
+    }
+
+    private void HoverPlace()
+    {
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            Debug.DrawLine(ray.origin, hit.point, Color.green);
+
+            //Are we hitting the floor layer.
+            if (hit.collider.gameObject.layer == 9)
+            {
+                UnitCreator.instance.Unit.SetActive(true);
+                UnitCreator.instance.Unit.transform.position = hit.point;
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (UnitCreator.instance.Cost <= points)
+                    {
+                        points -= UnitCreator.instance.Cost;
+                        Instantiate(UnitCreator.instance.Unit, hit.point, Quaternion.identity);
+                    }
+                }
+            }
+            else
+            {
+                UnitCreator.instance.Unit.SetActive(false);
+            }
+        }
+        else
+        {
+            UnitCreator.instance.Unit.SetActive(false);
+        }
+
+    }
+
     //Check whether the mouse is hovering over an Unit.
-    private void Hover()
+    private void HoverSelect()
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;

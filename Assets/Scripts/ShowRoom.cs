@@ -12,7 +12,22 @@ public class ShowRoom : MonoBehaviour
     public static ShowRoom instance;
 
     [SerializeField] private Transform center;
+
+    private GameObject shownObject = null;
     #endregion
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    public void DisplayObject(GameObject gameObject)
+    {
+        if(shownObject)
+            Destroy(shownObject);
+
+        shownObject = Instantiate(gameObject, center);
+    }
 
     #region Methods
     private void Update()
