@@ -11,29 +11,36 @@ public class Character : MonoBehaviour
     private ThirdPersonUserControl controller;
     private ThirdPersonCharacter character;
 
-    [Header("Stats")]
-    [SerializeField] private Vector2 healthRange;
     private float health;
 
     [SerializeField] private Vector2 damageRange;
     private float strength;
 
-    [SerializeField] private Vector2 speedRange;
-    [SerializeField] private float speed;
-
-    [SerializeField] private Vector2 defenceRange;
     private float defence;
 
-    public bool isFortified;
+    [HideInInspector] public bool isFortified;
+
+
+    bool isActive;
 
     private void Awake()
     {
         controller = GetComponent<ThirdPersonUserControl>();
         character = GetComponent<ThirdPersonCharacter>();
+
+        GameManager.instance.EndRound += EndRound;
     }
+
+    void EndRound()
+    {
+        if(isActive)
+            ActivateCharacter(false);
+    }
+
 
     public void ActivateCharacter(bool activate)
     {
+        isActive = activate;
         cameraGameObject.SetActive(activate);
         controller.enabled = activate;
         character.enabled = activate;
@@ -55,26 +62,29 @@ public class Character : MonoBehaviour
         }
     }
 
+
+
+
     public void SetStats(float health, float strength, float speed, float defence)
     {
-        this.health = Mathf.Lerp(healthRange.x, healthRange.y, health);
+        this.health = health;
         this.strength = strength;
-        this.speed = Mathf.Lerp(speedRange.x, speedRange.y, speed);
-        this.defence = Mathf.Lerp(defenceRange.x, defenceRange.y, defence);
+        controller.runSpeed = speed;
+        this.defence = defence;
     }
 
-    public int CalculatePoints()
-    {
-        float currentvalue = health + strength + speed + defence;
+    //public int CalculatePoints()
+    //{
+    //    float currentvalue = health + strength + speed + defence;
 
-        float minValue = healthRange.x + strength + speedRange.x + defenceRange.x;
-        float maxValue = healthRange.y + speedRange.y + defenceRange.y;
+    //    float minValue = healthRange.x + strength + speedRange.x + defenceRange.x;
+    //    float maxValue = healthRange.y + strength + speedRange.y + defenceRange.y;
 
-        currentvalue -= minValue;
-        maxValue -= minValue;
+    //    currentvalue -= minValue;
+    //    maxValue -= minValue;
 
-        return Mathf.RoundToInt(Mathf.Lerp(minValue, maxValue, currentvalue / maxValue));
-    }
+    //    return Mathf.RoundToInt(Mathf.Lerp(minValue, maxValue, currentvalue / maxValue));
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -84,7 +94,7 @@ public class Character : MonoBehaviour
         }
         else if(other.CompareTag("PickUp"))
         {
-
+            Debug.Log("PickUp");
         }
     }
 
@@ -93,10 +103,6 @@ public class Character : MonoBehaviour
         if(other.CompareTag("Trigger"))
         {
             other.GetComponent<ITriger>().OnDeactivate();
-        }
-        else if(other.CompareTag("PickUp"))
-        {
-
         }
     }
 }

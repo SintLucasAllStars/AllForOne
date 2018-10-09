@@ -3,7 +3,10 @@
 [System.Serializable]
 public class Player
 {
-    [SerializeField] private int points;
+    private const int minPoints = 10;
+
+    [SerializeField] private int points = 100;
+    [HideInInspector] public bool isOutOfPoints = false;
 
     private int charactersAlive;
 
@@ -12,15 +15,15 @@ public class Player
         return points >= costPoints;
     }
 
-    public bool CreateCharacter(int costPoints)
+    public void CreateCharacter(int costPoints)
     {
         if(CheckPoints(costPoints))
         {
             charactersAlive++;
             points -= costPoints;
-            return true;
+
+            isOutOfPoints = points < minPoints;
         }
-        return false;
     }
 
     public bool KillCharacter()

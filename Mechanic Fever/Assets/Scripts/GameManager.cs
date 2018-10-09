@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private const int MinimumPoints = 10;
+
     //Instance
     public static GameManager instance;
 
     //Events
-    public enum GameState
-    {
-        Build, Play, UnitSelection
-    }
-
-    public delegate void GameRound(GameState gameState);
+    public delegate void GameRound();
 
     public event GameRound StartRound;
     public event GameRound EndRound;
@@ -21,7 +18,7 @@ public class GameManager : MonoBehaviour
     //Player
     [SerializeField] Player playerOne;
     [SerializeField] Player playerTwo;
-    bool IsPlyerOnesTurn = true;
+    bool isPlyerOnesTurn = true;
 
 
 
@@ -45,17 +42,39 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void CreateCharacter(Character character)
+    public bool CheckCharacterPoints(int points)
     {
-        ((IsPlyerOnesTurn) ? playerOne : playerTwo).CreateCharacter(character.CalculatePoints());
+        return GetCurrentPlayer().CheckPoints(points);
+    }
+
+
+    public void CreateCharacter(int costPoints)
+    {
+        Player currentPlayer = GetCurrentPlayer();
+        currentPlayer.CreateCharacter(costPoints);
+
+        isPlyerOnesTurn = !isPlyerOnesTurn;
+        if(GetCurrentPlayer().isOutOfPoints)
+        {
+            if(!currentPlayer.isOutOfPoints)
+                isPlyerOnesTurn = !isPlyerOnesTurn;
+            else
+                StartRound.Invoke();
+        }
+
     }
 
     public void KillCharacter()
     {
-        if(((IsPlyerOnesTurn) ? playerOne : playerTwo).KillCharacter())
+        if(GetCurrentPlayer().KillCharacter())
         {
-            Debug.Log("Game ended! Player: " + ((IsPlyerOnesTurn) ? "Two" : "One") + " Won");
+            Debug.Log("Game ended! Player: " + ((isPlyerOnesTurn) ? "Two" : "One") + " Won");
         }
+    }
+
+    Player GetCurrentPlayer()
+    {
+        return (isPlyerOnesTurn) ? playerOne : playerTwo;
     }
 
 }

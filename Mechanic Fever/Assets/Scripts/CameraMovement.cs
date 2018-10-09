@@ -7,15 +7,15 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float maxHeight;
 
-    [SerializeField] float time;
+    [SerializeField] float travelTime;
+    [SerializeField] GameObject roof;
 
     bool move = true;
 
     // Use this for initialization
     void Start()
     {
-        //StartCoroutine(MoveToward(new Vector3(0,20,0)));
-        GameManager.instance.StartRound += StartRound;
+        StartCoroutine(MoveToward(new Vector3(0, 20, 0)));
         GameManager.instance.EndRound += EndRound;
     }
 
@@ -28,14 +28,14 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    void StartRound(GameManager.GameState gameState)
+    void StartRound()
     {
 
     }
 
-    void EndRound(GameManager.GameState gameState)
+    void EndRound()
     {
-        
+        StartCoroutine(MoveToward(Camera.main.transform.root.position));
     }
 
     void Move()
@@ -54,11 +54,11 @@ public class CameraMovement : MonoBehaviour
         Vector3 currentPosition = transform.position;
 
         float elapsedTime = 0.0f;
-        while(elapsedTime < time)
-      {
+        while(elapsedTime < travelTime)
+        {
             yield return new WaitForEndOfFrame();
             elapsedTime += Time.deltaTime;
-            transform.position = Vector3.Lerp(currentPosition,target, Mathf.Clamp01(elapsedTime / time));
+            transform.position = Vector3.Slerp(currentPosition, target, Mathf.Clamp01(elapsedTime / travelTime));
         }
         move = true;
 

@@ -37,6 +37,8 @@ namespace UnityStandardAssets.Cameras
 
 	        m_PivotTargetRot = m_Pivot.transform.localRotation;
 			m_TransformTargetRot = transform.localRotation;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
         }
 
 
