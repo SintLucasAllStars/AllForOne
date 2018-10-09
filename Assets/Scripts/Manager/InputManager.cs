@@ -17,6 +17,8 @@ public class InputManager : Singleton<InputManager> {
     public bool slowWalkButton;
     [HideInInspector]
     public bool attackButton;
+	[HideInInspector]
+    public bool fortifieButton;
     [HideInInspector]
     public bool restartButton;
     [HideInInspector]
@@ -37,5 +39,6 @@ public class InputManager : Singleton<InputManager> {
         attackButton = Input.GetButtonDown("Fire1");
         restartButton = Input.GetButtonDown("Restart");
         escButton = Input.GetButtonDown("Cancel");
+		fortifieButton = Input.GetButton("fortifie")&& !Input.GetButton("Horizontal")&& !Input.GetButton("Vertical");
     }
 }

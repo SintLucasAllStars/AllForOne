@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameController : Singleton<GameController>
 {
     public CharacterController currentPlayer;   // current Player Who Can Be controlled
-	public Team[] teams;
+	public List<Team> teams;
 	public Camera thirdPersonCamera;
 	public Camera topDownViewCamera;
 
@@ -42,14 +42,27 @@ public class GameController : Singleton<GameController>
     // Update is called once per frame
     void Update()
     {
-		if(pickingPlayer){
+		if(pickingPlayer&&teams.Count > 1){
 			if (currentPlayer != null)
 			{
+				if(teams[currentTeam].teamUnits.Count == 0){
+					teams.RemoveAt(currentTeam);
+					return;
+				}
 				currentPlayer.lockPlayer = true;
 				playerPicker.canPickPlayer = true;
 
 			}
+
 		}
+		else
+        {
+			if (teams.Count == 1)
+			{
+				currentPlayer.lockPlayer = true;
+				Debug.Log("team: " + teams[0].teamName + " Wins");
+			}
+        }
 	
         if(InputManager.Instance.escButton){
             Application.Quit();

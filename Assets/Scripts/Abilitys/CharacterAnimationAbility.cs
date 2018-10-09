@@ -42,6 +42,15 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 		}
 	}
 	void Died(){
+		Debug.Log("die");
+        animator.SetBool("Die", true);
+        animator.SetBool("Idle", false);
+        animator.SetBool("Moving", false);
+		animator.SetBool("Jump", false);
+        animator.SetBool("Fortifie", false);
+        animator.SetBool("Fortifying", false);
+
+
 		//animator.speed = 0;
 		//animator.enabled = false;
 	}
@@ -74,18 +83,23 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 					animator.SetBool("Moving", false);
 					animator.SetBool("Jump", false);
 					animator.SetBool("Die", false);
+                    animator.SetBool("Fortifie", false);
 					break;
 				case CharacterController.PlayerStates.moving:
 					animator.SetBool("Moving", true);
 					animator.SetBool("Idle", false);
 					animator.SetBool("Jump", false);
 					animator.SetBool("Die", false);
+                    animator.SetBool("Fortifie", false);
+                    animator.SetBool("Fortifying", false);
 					break;
 				case CharacterController.PlayerStates.jump:
 					animator.SetBool("Jump", true);
 					animator.SetBool("Moving", false);
 					animator.SetBool("Idle", false);
 					animator.SetBool("Die", false);
+					animator.SetBool("Fortifie", false);
+                    animator.SetBool("Fortifying", false);
 					break;
 				case CharacterController.PlayerStates.die:
 					Debug.Log("die");
@@ -93,6 +107,8 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 					animator.SetBool("Idle", false);
 					animator.SetBool("Moving", false);
 					animator.SetBool("Jump", false);
+					animator.SetBool("Fortifie", false);
+                    animator.SetBool("Fortifying", false);
 					break;
 				case CharacterController.PlayerStates.attacking:
 					animator.SetTrigger("Attack");
@@ -100,12 +116,32 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 					animator.SetBool("Moving", false);
 					animator.SetBool("Jump", false);
 					animator.SetBool("Die", false);
+					animator.SetBool("Fortifie", false);
+                    animator.SetBool("Fortifying", false);
 					break;
+				case CharacterController.PlayerStates.fortified:
+                    animator.SetBool("Idle", false);
+                    animator.SetBool("Moving", false);
+                    animator.SetBool("Jump", false);
+                    animator.SetBool("Die", false);
+					animator.SetBool("Fortifie", true);
+                    animator.SetBool("Fortifying", false);
+                    break;
+				case CharacterController.PlayerStates.fortifying:
+                    animator.SetBool("Idle", false);
+                    animator.SetBool("Moving", false);
+                    animator.SetBool("Jump", false);
+                    animator.SetBool("Die", false);
+					animator.SetBool("Fortifie", false);
+                    animator.SetBool("Fortifying", true);
+                    break;
 				default:
 					animator.SetBool("Idle", true);
 					animator.SetBool("Moving", false);
 					animator.SetBool("Jump", false);
 					animator.SetBool("Die", false);
+					animator.SetBool("Fortifie", false);
+                    animator.SetBool("Fortifying", false);
 					break;
 
 			}

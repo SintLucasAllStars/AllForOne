@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 114890364944146218}
   - component: {fileID: 114734211836926986}
   - component: {fileID: 114325276724521654}
+  - component: {fileID: 114789031069863920}
   m_Layer: 11
   m_Name: team1
   m_TagString: Player
@@ -2665,6 +2666,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityPermitted: 1
   runParticle: {fileID: 198276410660148166}
+--- !u!114 &114789031069863920
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1188911637818192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff48fbf20f0c4299abc08e5d768e50c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AbilityPermitted: 1
+  fortifieTime: 3
+  fortified: 0
+  defense: 0
 --- !u!114 &114890364944146218
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2677,17 +2693,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AbilityPermitted: 1
-  attackRange: 5
+  attackRange: 8
   damage: 100
   coolDown: 1
   thingsToAttack:
     serializedVersion: 2
     m_Bits: 2048
   attackLentgh: 0.5
-  hitParticle: {fileID: 1087970521925688, guid: 7d9c1627cad71494cb2c533a8fa40a7b,
-    type: 2}
-  killParticle: {fileID: 1979295386867908, guid: 875a61bf3bff74752890eb5de071d711,
-    type: 2}
+  hitParticle: {fileID: 100000, guid: 206e628c7d66b7746a56ab3d91837979, type: 2}
+  killParticle: {fileID: 100000, guid: 8210d137690c33644a00479b51e6113b, type: 2}
 --- !u!114 &114920248220291454
 MonoBehaviour:
   m_ObjectHideFlags: 1

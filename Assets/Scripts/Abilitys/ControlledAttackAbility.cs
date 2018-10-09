@@ -21,6 +21,7 @@ public class ControlledAttackAbility : Ability, IPlayerAbilitys
 	GameObject killParticle;
 
 	RaycastHit hit;
+	bool canAttack = true; // check if cooldown is done;
 
 	public override void OnStart()
 	{
@@ -32,40 +33,57 @@ public class ControlledAttackAbility : Ability, IPlayerAbilitys
 	{
 		if (AbilityPermitted)
 		{
-			Debug.DrawRay(transform.position+ (Vector3.up/2), transform.forward , Color.red, attackRange, false);
+			Debug.DrawRay(transform.position+(Vector3.up*2), transform.forward , Color.red, attackRange, false);
 			if (InputManager.Instance.attackButton)
 			{
 				BeforeAbility();
 			}
 		}
 	}
-
+	IEnumerator Timer(){
+		yield return new WaitForSeconds(coolDown);
+		canAttack = true;
+	}
 	public override void BeforeAbility()
 	{
-		Ray ray = new Ray(transform.position+ (Vector3.up/2), transform.forward);
-		if (!_characterController.stateLocked)
+		if (canAttack)
 		{
-			_characterController.currentPlayerState = CharacterController.PlayerStates.attacking;
-			_characterController.stateLocked = true;
-		}
-		if (Physics.Raycast(ray, out hit, attackRange, thingsToAttack))
-		{
-			WhileAbility();
-		}
-		else
-		{
-			Invoke("AfterAbility", attackLentgh);
+			canAttack = false;
+			Ray ray = new Ray(transform.position + (Vector3.up * 2), transform.forward);
+			if (!_characterController.stateLocked)
+			{
+				_characterController.currentPlayerState = CharacterController.PlayerStates.attacking;
+				_characterController.stateLocked = true;
+			}
+			if (Physics.Raycast(ray, out hit, attackRange, thingsToAttack))
+			{
+				Invoke("WhileAbility", 0.5f);
+			}
+			else
+			{
+				Invoke("AfterAbility", attackLentgh);
+			}
+			StartCoroutine(Timer());
 		}
 	}
 
 	public override void WhileAbility()
 	{
+		if(hit.transform == null){
+            Invoke("AfterAbility", attackLentgh);
+			return;
+		}
 		CharacterController objectToHit = hit.transform.GetComponent<CharacterController>();
 		if (objectToHit != null)
 		{
 			if (objectToHit.team != _characterController.team)
 			{
-				objectToHit.health -= damage;
+				FortifieAbility fortifieAbility = objectToHit.GetComponent<FortifieAbility>();
+				float finalDamage = damage;
+				if(fortifieAbility.fortified){
+					finalDamage = damage - fortifieAbility.defense;
+				}
+				objectToHit.health -= finalDamage;
 				if (objectToHit.health <= 0)
 				{
 					objectToHit.dead = true;
@@ -78,12 +96,12 @@ public class ControlledAttackAbility : Ability, IPlayerAbilitys
 				{
 					if (hitParticle != null)
 					{
-						Instantiate(hitParticle, hit.transform.position, Quaternion.identity);
+						Instantiate(hitParticle, hit.transform.position+(Vector3.up*2), Quaternion.identity);
 					}
 				}
 			}
 		}
-		Invoke("AfterAbility", attackLentgh);
+        Invoke("AfterAbility", attackLentgh);
 
 
 	}

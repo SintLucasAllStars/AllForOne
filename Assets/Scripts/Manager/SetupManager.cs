@@ -114,8 +114,12 @@ public class SetupManager : MonoBehaviour
 	}
 	public void DoneCreatingUnit()
 	{
+		if(costOfNewUnit == 0){
+			ValuesChanged();
+		}
 		if (controller.teams[controller.currentTeam].points >= costOfNewUnit)
 		{
+			
 			selectCanvas.SetActive(false);
 			readyUnit = true;
 			controller.teams[controller.currentTeam].points -= costOfNewUnit;

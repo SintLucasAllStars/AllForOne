@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 114118706931977326}
   - component: {fileID: 114909120541679710}
   - component: {fileID: 114620093317578976}
+  - component: {fileID: 114375480151645682}
   m_Layer: 11
   m_Name: team2
   m_TagString: Player
@@ -2605,15 +2606,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AbilityPermitted: 1
-  attackRange: 5
+  attackRange: 8
   damage: 100
   coolDown: 1
   thingsToAttack:
     serializedVersion: 2
     m_Bits: 2048
   attackLentgh: 0.5
-  hitParticle: {fileID: 0}
-  killParticle: {fileID: 0}
+  hitParticle: {fileID: 100000, guid: 206e628c7d66b7746a56ab3d91837979, type: 2}
+  killParticle: {fileID: 100000, guid: 8210d137690c33644a00479b51e6113b, type: 2}
 --- !u!114 &114343708237929024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2631,6 +2632,21 @@ MonoBehaviour:
   slowWalkSpeed: 2
   walkSideWays: 0
   turnSpeed: 100
+--- !u!114 &114375480151645682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675502927092046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff48fbf20f0c4299abc08e5d768e50c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AbilityPermitted: 1
+  fortifieTime: 3
+  fortified: 0
+  defense: 0
 --- !u!114 &114620093317578976
 MonoBehaviour:
   m_ObjectHideFlags: 1

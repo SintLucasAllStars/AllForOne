@@ -1,24 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour {
 	[Tooltip("Time in seconds")]
 	public float timePerRound = 5;
+
+	public Text timerText;
+
+	float timer;
 	// Use this for initialization
 	void Start () {
 		GameController.Instance.playerPicked += PlayerPicked;
+		timerText.text = "";
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 	public void PlayerPicked(){
 		StartCoroutine(Timer());
+		timerText.text = timePerRound.ToString();
 	}
 	public void NextTeam(){
-		if (GameController.Instance.teams.Length - 1 > GameController.Instance.currentTeam)
+		if (GameController.Instance.teams.Count - 1 > GameController.Instance.currentTeam)
         {
             GameController.Instance.currentTeam++;
         }
@@ -28,7 +31,7 @@ public class TurnController : MonoBehaviour {
         }
 	}
 	public bool NextTeamWithPoints(int currentTeamId){
-		for (int i = currentTeamId+1; i < GameController.Instance.teams.Length;i++){
+		for (int i = currentTeamId+1; i < GameController.Instance.teams.Count;i++){
 			if (GameController.Instance.teams[i].points > 10)
 			{
 				GameController.Instance.currentTeam = i;
@@ -43,11 +46,21 @@ public class TurnController : MonoBehaviour {
 				return true;
 			}
         }
+		NextTeam();
 		return false;
 	}
 	IEnumerator Timer(){
-		yield return new WaitForSeconds(timePerRound);
-		NextTeam();
-		GameController.Instance.pickingPlayer = true;
+		while(timer != timePerRound){
+			yield return new WaitForSeconds(timePerRound / timePerRound);
+			timer++;
+			timerText.text = (timePerRound - timer).ToString();
+		}
+			if (GameController.Instance.teams.Count > 1)
+		{
+            timerText.text = "";
+				NextTeam();
+				GameController.Instance.pickingPlayer = true;
+			}
+		
 	}
 }

@@ -35,7 +35,7 @@ public class CharacterController : MonoBehaviour
 
     public float health = 100;
 
-	public enum PlayerStates { idle, moving, jump, die,attacking };
+	public enum PlayerStates { idle, moving, jump, die,attacking,fortified,fortifying};
 	public PlayerStates currentPlayerState;
 	[HideInInspector]
 	public bool stateLocked = false;
@@ -54,6 +54,7 @@ public class CharacterController : MonoBehaviour
 	public  CallEveryFrame callEveryFrame;
 	public delegate void Died();
     public Died characterDied;
+	bool died;
 	// Use this for initialization
 	void Start()
 	{
@@ -95,19 +96,32 @@ public class CharacterController : MonoBehaviour
 
 			if (!stateLocked && (transform.position.x >= oldPos.x - 0.01f && transform.position.x <= oldPos.x + 0.01f) && (transform.position.z >= oldPos.z - 0.01f && transform.position.x <= oldPos.x + 0.01f) && playerSpeed ==0 && playerTurnSpeed == 0&& grounded && !stateLocked)
 			{
-				currentPlayerState = PlayerStates.idle;
+				if (currentPlayerState != PlayerStates.fortifying && currentPlayerState != PlayerStates.fortified)
+				{
+					currentPlayerState = PlayerStates.idle;
+				}
 			}
 			else
 			{
 				oldPos = transform.position;
 			}
 		}else{
-			currentPlayerState = PlayerStates.die;
-			characterDied();
-			if (!this.transform.CompareTag ("Player"))
+			if (!died)
 			{
-				this.gameObject.active = false;
-				Destroy(this.gameObject);
+				gameObject.layer = 12;
+				currentPlayerState = PlayerStates.die;
+				characterDied();
+				for (int i = 0; i < GameController.Instance.teams[team].teamUnits.Count;i++){
+					if(GameController.Instance.teams[team].teamUnits[i].unit == this){
+						GameController.Instance.teams[team].teamUnits.RemoveAt(i);
+					}
+				}
+				if (!this.transform.CompareTag("Player"))
+				{
+					this.gameObject.active = false;
+					Destroy(this.gameObject);
+				}
+				died = true;
 			}
            // this.gameObject.SetActive(false);
 		}
