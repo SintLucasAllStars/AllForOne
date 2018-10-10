@@ -746,8 +746,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4125408758918800}
-  - component: {fileID: 54777446906523828}
-  - component: {fileID: 114311483035378104}
   - component: {fileID: 114850126968008144}
   m_Layer: 10
   m_Name: FreeLookCameraRig
@@ -1601,21 +1599,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!54 &54777446906523828
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1912128045651380}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!95 &95861813193893286
 Animator:
   serializedVersion: 3
@@ -1665,34 +1648,13 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.3
---- !u!114 &114311483035378104
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1912128045651380}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e44af8091779fcb40801d5b284353dbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Target: {fileID: 4678670246531412}
-  m_AutoTargetPlayer: 0
-  m_UpdateType: 2
-  m_MoveSpeed: 1
-  m_TurnSpeed: 1.5
-  m_TurnSmoothing: 0
-  m_TiltMax: 75
-  m_TiltMin: 45
-  m_LockCursor: 0
-  m_VerticalAutoReturn: 0
 --- !u!114 &114850126968008144
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1912128045651380}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94b04ec3bda6b7747aa53936ef3b0ae2, type: 3}
   m_Name: 
