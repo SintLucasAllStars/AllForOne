@@ -20,12 +20,17 @@ public class CharacterCreator : MonoBehaviour
 
 
     [Header("UI")]
+    [SerializeField] private Text player;
+    [SerializeField] private Text playerPoints;
+    [SerializeField] private Image background;
+
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider strengthSlider;
     [SerializeField] private Slider speedSlider;
     [SerializeField] private Slider defenceSlider;
     [SerializeField] private Text points;
     [SerializeField] private Button createCharacterButton;
+    [SerializeField] private Text hire;
 
     [SerializeField] private GameObject UI;
 
@@ -64,7 +69,6 @@ public class CharacterCreator : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void StartPlacement()
@@ -107,7 +111,7 @@ public class CharacterCreator : MonoBehaviour
 
     public void OnSliderValueChanged()
     {
-        points.text = "Points: " + CalculatePoints();
+        points.text = "Costs: " + CalculatePoints();
         createCharacterButton.interactable = GameManager.instance.CheckCharacterPoints(CalculatePoints());
     }
 
@@ -124,6 +128,13 @@ public class CharacterCreator : MonoBehaviour
 
     void ResetUI()
     {
+        Player currentPlayer = GameManager.instance.GetCurrentPlayer();
+        player.text = "Player " + currentPlayer.playerIndex;
+        playerPoints.text = "Points: " + currentPlayer.points;
+
+        background.color = currentPlayer.color;
+        hire.color = currentPlayer.color;
+
         healthSlider.value = Random.Range(0f, 1f);
         strengthSlider.value = Random.Range(0f, 1f);
         speedSlider.value = Random.Range(0f, 1f);

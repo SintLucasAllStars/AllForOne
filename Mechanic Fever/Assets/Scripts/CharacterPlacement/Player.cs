@@ -5,12 +5,14 @@ public class Player
 {
     private const int minPoints = 10;
 
+    public int playerIndex;
+
     public int points = 100;
     [HideInInspector] public bool isOutOfPoints = false;
 
     public int charactersAlive { get; private set; }
 
-    public Color playerColor;
+    public Color color;
 
     public bool CheckPoints(int costPoints)
     {

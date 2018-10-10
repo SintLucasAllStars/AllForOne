@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
     public event GameRound EndRound;
 
     //Player
-    [SerializeField] Player playerOne;
-    [SerializeField] Player playerTwo;
+    [SerializeField] private Player playerOne;
+    [SerializeField] private Player playerTwo;
     bool IsTurnPlayerOne = true;
 
 
