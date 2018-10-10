@@ -7,7 +7,7 @@ public class UnitPlacement : MonoBehaviour
     public UnitUIEvent canvasUIEvent;
 
     [SerializeField] LayerMask placeLayer, InsideSpawnPlaceLayer;
-    public GameObject prefab;
+    public GameObject selectObject;
     private Camera cam;
 
 
@@ -23,16 +23,21 @@ public class UnitPlacement : MonoBehaviour
     {
         if (selectSoldier != null)
         {
+            if (selectObject == null)
+            {
+                selectObject = Instantiate(selectSoldier.unitSoldier.objectMesh) as GameObject;
+            }
+
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, 50f, placeLayer))
             {
-                prefab.transform.position = hit.point;
+                selectObject.transform.position = hit.point;
 
                 if (hit.collider.gameObject.layer == Mathf.Log(InsideSpawnPlaceLayer.value, 2))
                 {
-                    if (Input.GetMouseButtonUp(0))
+                    if (Input.GetMouseButtonDown(0))
                     {
                         GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, hit.point, Quaternion.identity) as GameObject;
                         spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier);
@@ -44,6 +49,9 @@ public class UnitPlacement : MonoBehaviour
                         selectSoldier = null;
                         canvasUIEvent.NavigaTo(UnitUIEvent.CanvasNavigation.unitList);
                     }
+                } else
+                {
+
                 }
             }
         }

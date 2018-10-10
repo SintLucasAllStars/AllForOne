@@ -560,7 +560,7 @@ MonoBehaviour:
   InsideSpawnPlaceLayer:
     serializedVersion: 2
     m_Bits: 4096
-  prefab: {fileID: 46781513}
+  selectObject: {fileID: 0}
   selectSoldier: {fileID: 0}
 --- !u!1001 &1095543015
 Prefab:
@@ -606,6 +606,12 @@ Prefab:
       propertyPath: placementUnit
       value: 
       objectReference: {fileID: 905162128}
+    - target: {fileID: 114014627372005482, guid: e81fc4b77fc833747826d64ef7d4c3d2,
+        type: 2}
+      propertyPath: customObject
+      value: 
+      objectReference: {fileID: 1915260519259072, guid: f483f88480abbd2468eec982d6865c59,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e81fc4b77fc833747826d64ef7d4c3d2, type: 2}
   m_IsPrefabAsset: 0
@@ -642,6 +648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deda94982d878434e98d822ff8e3ace0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPremium: 1
   playerBlue:
     playerName: NewPlayer
     playerMoney: 100

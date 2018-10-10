@@ -31,11 +31,12 @@ public abstract class Unit
 
     public abstract void Place();
 
-    public virtual void CreateUnit(ushort health, ushort strength, ushort speed, ushort defense, ushort cost)
+    public virtual void CreateUnit(ushort health, ushort strength, ushort speed, ushort defense, ushort cost, GameObject objectMesh)
     {
         this.health = health;
         this.strength = strength;
         this.speed = speed;
         this.defense = defense;
+        this.objectMesh = objectMesh;
     }
 }

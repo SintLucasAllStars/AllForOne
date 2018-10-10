@@ -91,7 +91,8 @@ public class UnitUIEvent : MonoBehaviour
     {
         if (index == 0)
         {
-            NavigaTo(CanvasNavigation.customUnit);
+            if (PlayerManager.instance.isPremium)
+                NavigaTo(CanvasNavigation.customUnit);
         }
         else if (PlayerManager.instance.playerRed.playerMoney >= standardUnit[index - 1].unitSoldier.cost)
         {

@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class UnitUICustomStats : MonoBehaviour
 {
     public Slider healthSlider, strengthSlider, speedSlider, defenseSlider;
-    public ushort health, speed, strength, defense, cost;
+    private ushort health, speed, strength, defense, cost;
+    public GameObject customObject;
 
     public Text buttonText;
 
@@ -38,7 +39,7 @@ public class UnitUICustomStats : MonoBehaviour
     {
         SoldierAsset asset = ScriptableObject.CreateInstance<SoldierAsset>();
         asset.unitSoldier = new Soldier();
-        asset.unitSoldier.CreateUnit(health, strength, speed, defense, cost);
+        asset.unitSoldier.CreateUnit(health, strength, speed, defense, cost, customObject);
 
         return asset;
     }

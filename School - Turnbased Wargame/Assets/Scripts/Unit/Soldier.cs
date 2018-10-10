@@ -13,9 +13,9 @@ public class Soldier : Unit
        
     }
 
-    public override void CreateUnit(ushort health, ushort strength, ushort speed, ushort defense, ushort cost)
+    public override void CreateUnit(ushort health, ushort strength, ushort speed, ushort defense, ushort cost, GameObject objectMesh)
     {
-        base.CreateUnit(health, strength, speed, defense, cost);
+        base.CreateUnit(health, strength, speed, defense, cost, objectMesh);
         this.cost = cost;
     }
 }
