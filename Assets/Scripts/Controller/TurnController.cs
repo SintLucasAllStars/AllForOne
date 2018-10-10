@@ -8,11 +8,12 @@ public class TurnController : MonoBehaviour {
 	public float timePerRound = 5;
 
 	public Text timerText;
-
+	PickUpsController pickUpsController;
 	float timer;
 	// Use this for initialization
 	void Start () {
 		GameController.Instance.playerPicked += PlayerPicked;
+		pickUpsController = GetComponent<PickUpsController>();
 		timerText.text = "";
 	}
 
@@ -24,10 +25,12 @@ public class TurnController : MonoBehaviour {
 	public void NextTeam(){
 		if (GameController.Instance.teams.Count - 1 > GameController.Instance.currentTeam)
         {
+			pickUpsController.SpawnRandomObject();
             GameController.Instance.currentTeam++;
         }
         else
         {
+			pickUpsController.SpawnRandomObject();
             GameController.Instance.currentTeam = 0;
         }
 	}

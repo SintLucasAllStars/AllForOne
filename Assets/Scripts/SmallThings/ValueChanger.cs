@@ -16,7 +16,7 @@ public class ValueChanger : MonoBehaviour {
 			fortifieAbility = GetComponent<FortifieAbility>();
 		}
 		characterController.team = team;
-		attackAbility.damage = strength;
+		attackAbility.strength = strength;
 		walkAbility.speed = speed / 3;
 		walkAbility.runSpeed = speed;
 		characterController.health = health;

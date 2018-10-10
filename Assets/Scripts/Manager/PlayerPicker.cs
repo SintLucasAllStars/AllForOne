@@ -17,6 +17,8 @@ public class PlayerPicker : MonoBehaviour {
 	}
 	void SetPlayerPicker(){
 		gameController.thirdPersonCamera.enabled = false;
+		gameController.thirdPersonCamera.transform.position=gameController.topDownViewCamera.transform.position;
+		gameController.thirdPersonCamera.transform.rotation = gameController.topDownViewCamera.transform.rotation;
         gameController.topDownViewCamera.enabled = true;
         if (clickObjects.Count > 0)
         {
