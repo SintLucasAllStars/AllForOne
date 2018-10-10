@@ -36,6 +36,16 @@ public class UnitCreator : MonoBehaviour
         instance = this;
     }
 
+    private void OnEnable()
+    {
+        GameManager.instance.OnGameStart += DeActive;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.instance.OnGameStart -= DeActive;
+    }
+
     private void Update()
     {
         health.textMin.text     = health.slider.value.ToString();
@@ -97,18 +107,18 @@ public class UnitCreator : MonoBehaviour
 
     private void CalculateCost()
     {
-        int a = Mathf.CeilToInt(Remap(health.slider.value, health.slider.minValue, health.slider.maxValue, 3, 30));
-        int b = Mathf.CeilToInt(Remap(speed.slider.value, speed.slider.minValue, speed.slider.maxValue, 3, 30));
-        int c = Mathf.CeilToInt(Remap(strength.slider.value, strength.slider.minValue, strength.slider.maxValue, 2, 20));
-        int d = Mathf.CeilToInt(Remap(defence.slider.value, defence.slider.minValue, defence.slider.maxValue, 2, 20));
+        int a = Mathf.CeilToInt(Math.Map(health.slider.value, health.slider.minValue, health.slider.maxValue, 3, 30));
+        int b = Mathf.CeilToInt(Math.Map(speed.slider.value, speed.slider.minValue, speed.slider.maxValue, 3, 30));
+        int c = Mathf.CeilToInt(Math.Map(strength.slider.value, strength.slider.minValue, strength.slider.maxValue, 2, 20));
+        int d = Mathf.CeilToInt(Math.Map(defence.slider.value, defence.slider.minValue, defence.slider.maxValue, 2, 20));
 
         cost = a + b + c + d;
         tCost.text = "Cost: " + cost.ToString();
     }
 
-    float Remap(float value, float inputFrom, float inputTo, float outputFrom, float outputTo)
+    private void DeActive()
     {
-        return outputFrom + (value - inputFrom) * (outputTo - outputFrom) / (inputTo - inputFrom);
+        Destroy(gameObject);
     }
 
     public void ButtonReady()

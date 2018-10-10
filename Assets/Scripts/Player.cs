@@ -66,6 +66,8 @@ public class Player : MonoBehaviour
                 if (hovered)
                 {
                     hovered.Select();
+                    enabled = false;
+                    particle.gameObject.SetActive(false);
                 }
             }
         }

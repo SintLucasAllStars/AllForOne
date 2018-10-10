@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    
+    public delegate void GameStart();
+    public event GameStart OnGameStart;
 
     public static GameManager instance = null;
 
@@ -79,6 +80,9 @@ public class GameManager : MonoBehaviour
         }
 
         isSpawnMode = false;
+
+        if (OnGameStart != null)
+            OnGameStart();
 
         for (int i = 0; i < players.Count; i++)
         {

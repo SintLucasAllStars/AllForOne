@@ -31,6 +31,13 @@ public class UnitCamera : MonoBehaviour {
         this.unit = unit;
     }
 
+    public void SetPlayerCamera()
+    {
+        isUnit = false;
+        transform.position = new Vector3(0, 10, 0);
+        transform.rotation = Quaternion.Euler(60, 0, 0);
+    }
+
     private void LateUpdate()
     {
         if(isUnit)
