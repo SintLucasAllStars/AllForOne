@@ -17,6 +17,7 @@ public class TurnController : MonoBehaviour {
 	}
 
 	public void PlayerPicked(){
+		timer = 0;
 		StartCoroutine(Timer());
 		timerText.text = timePerRound.ToString();
 	}
@@ -50,7 +51,7 @@ public class TurnController : MonoBehaviour {
 		return false;
 	}
 	IEnumerator Timer(){
-		while(timer != timePerRound){
+		while(timer < timePerRound){
 			yield return new WaitForSeconds(timePerRound / timePerRound);
 			timer++;
 			timerText.text = (timePerRound - timer).ToString();
