@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Unit
 {
     //unit Name
-    public string name {  get { return m_name; } private set { m_name = value; } }
+    public string name { get { return m_name; } private set { m_name = value; } }
     [SerializeField] private string m_name;
 
     //unit default hp
@@ -29,11 +29,13 @@ public abstract class Unit
     public Texture2D objectIcon { get { return m_objectIcon; } private set { m_objectIcon = value; } }
     [SerializeField] private Texture2D m_objectIcon;
 
-
-    /*public Unit(Unit unit)
-    {
-
-    } */
-
     public abstract void Place();
+
+    public virtual void CreateUnit(ushort health, ushort strength, ushort speed, ushort defense, ushort cost)
+    {
+        this.health = health;
+        this.strength = strength;
+        this.speed = speed;
+        this.defense = defense;
+    }
 }

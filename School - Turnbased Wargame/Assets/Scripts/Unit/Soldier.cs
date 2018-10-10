@@ -12,6 +12,12 @@ public class Soldier : Unit
     {
        
     }
+
+    public override void CreateUnit(ushort health, ushort strength, ushort speed, ushort defense, ushort cost)
+    {
+        base.CreateUnit(health, strength, speed, defense, cost);
+        this.cost = cost;
+    }
 }
 
 
