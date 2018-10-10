@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private const int MinimumPoints = 10;
-
     //Instance
     public static GameManager instance;
 
@@ -32,20 +30,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
-
-    }
-
-    void EndCurrentRound()
-    {
-        Debug.Log("Check");
-        IsTurnPlayerOne = !IsTurnPlayerOne;
     }
 
     public bool CheckCharacterPoints(int points)
     {
         return GetCurrentPlayer().CheckPoints(points);
     }
-
 
     public bool CreateCharacter(int costPoints)
     {
@@ -61,14 +51,11 @@ public class GameManager : MonoBehaviour
             {
                 if(EndRound != null)
                     EndRound.Invoke();
-                EndRound += EndCurrentRound;
-
                 return false;
             }
         }
 
         return true;
-
     }
 
     public void KillCharacter()
@@ -86,9 +73,14 @@ public class GameManager : MonoBehaviour
 
     public void RunEvent(bool start)
     {
+        if(!start)
+           IsTurnPlayerOne = !IsTurnPlayerOne;
+
         GameRound currentEvent = (start) ? StartRound : EndRound;
         if(currentEvent != null)
             currentEvent.Invoke();
     }
+
+
 
 }

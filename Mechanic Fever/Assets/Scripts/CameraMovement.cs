@@ -11,17 +11,12 @@ public class CameraMovement : MonoBehaviour
 
     [SerializeField] private float travelTime;
     [SerializeField] private GameObject roof;
-    [SerializeField]
-    private
 
     bool move = true;
-    private Camera topDownCamera;
 
     // Use this for initialization
     void Start()
     {
-        topDownCamera = GetComponent<Camera>();
-
         //Subscribe to event when first round has started.
         GameManager.instance.StartRound += StartRound;
     }
@@ -47,9 +42,10 @@ public class CameraMovement : MonoBehaviour
 
     void EndRound()
     {
+        transform.parent.parent.GetComponent<UnityStandardAssets.Cameras.ProtectCameraFromWallClip>().enabled = false;
         transform.parent = null;
         StartCoroutine(MoveToward(new Vector3(transform.position.x, topDownHeight, transform.position.z), Quaternion.Euler(topDownRotation), true));
-        topDownCamera.enabled = true;
+        roof.SetActive(false);
     }
 
     void Move()
@@ -85,7 +81,9 @@ public class CameraMovement : MonoBehaviour
         }
 
         this.move = move;
-        ToggleRoof();
+        roof.SetActive(!move);
+        if(!move)
+            GetComponentInParent<UnityStandardAssets.Cameras.ProtectCameraFromWallClip>().enabled = true;
     }
 
     private void ToggleRoof()

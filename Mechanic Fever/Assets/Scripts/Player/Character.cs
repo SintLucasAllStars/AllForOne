@@ -26,8 +26,6 @@ public class Character : MonoBehaviour
     public Transform pivot;
     public Vector3 cameraLocation;
 
-    bool isActive;
-
     private void Start()
     {
         controller = GetComponent<ThirdPersonUserControl>();
@@ -55,7 +53,6 @@ public class Character : MonoBehaviour
     public void ActivateCharacter(bool activate)
     {
         cameraGameObject.SetActive(activate);
-        isActive = activate;
         controller.enabled = activate;
         character.enabled = activate;
         playeRigidbody.isKinematic = !activate;
