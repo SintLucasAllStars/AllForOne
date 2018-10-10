@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool Ready { get { return ready; } set { ready = value; GameManager.instance.NextTurn(); } }
+
     #region Fields
     [Header("Stats")]
     public int index        = 0;
@@ -17,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float cameraOffset = 25;
 
     private Unit hovered = null;
+
+    private bool ready = false;
     
     #endregion
 
@@ -35,6 +39,12 @@ public class Player : MonoBehaviour
     {
         if(GameManager.instance.isSpawnMode)
         {
+            if (ready || points == 0)
+            {
+                GameManager.instance.NextTurn();
+                return;
+            }
+                
             UnitCreator.instance.Player = this;
         }
     }

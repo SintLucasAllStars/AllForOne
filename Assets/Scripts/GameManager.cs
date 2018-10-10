@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer.enabled = false;
 
+        ReadyCheck();
+
         if(currentPlayer.index + 1 >= players.Count)
         {
             for (int i = 0; i < players.Count; i++)
@@ -60,6 +62,17 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ReadyCheck()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (!players[i].Ready)
+                return;
+        }
+
+        isSpawnMode = false;
     }
 
     public void AddPlayer(Player player)

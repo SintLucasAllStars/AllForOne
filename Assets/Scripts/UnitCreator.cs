@@ -22,10 +22,11 @@ public class UnitCreator : MonoBehaviour
     [SerializeField] private GameObject unitPrefab = null;
 
     [Header("UI")]
-    [SerializeField] private RawImage preview;
+    [SerializeField] private Text tPlayerName;
     [SerializeField] private Text tCost, remaining;
     [SerializeField] private SliderElement health, strength, speed, defence;
-    
+    [SerializeField] private RawImage preview;
+
     private Player player = null;
     private GameObject unit = null;
     private int cost = 0;
@@ -43,6 +44,8 @@ public class UnitCreator : MonoBehaviour
         defence.textMin.text    = defence.slider.value.ToString();
 
         remaining.text = player.points.ToString();
+        tPlayerName.text = player.name;
+
         CalculateCost();
     }
 
@@ -74,5 +77,10 @@ public class UnitCreator : MonoBehaviour
     float Remap(float value, float inputFrom, float inputTo, float outputFrom, float outputTo)
     {
         return outputFrom + (value - inputFrom) * (outputTo - outputFrom) / (inputTo - inputFrom);
+    }
+
+    public void ButtonReady()
+    {
+        player.Ready = true;
     }
 }
