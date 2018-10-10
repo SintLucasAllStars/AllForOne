@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Players;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class CharacterPlacement : MonoBehaviour
 {
@@ -16,12 +17,16 @@ public class CharacterPlacement : MonoBehaviour
 
 
     private Vector3 _screenPoint;
-    private ThirdPersonController _thirdPersonController ;
+    private ThirdPersonCharacter _thirdPersonCharacter;
+    private ThirdPersonUserControl _userControl;
+    private Rigidbody _rigidbody;
     
     
     private void Awake()
     {
-        _thirdPersonController = GetComponent<ThirdPersonController>();
+        _thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
+        _userControl = GetComponent<ThirdPersonUserControl>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
 
@@ -34,7 +39,10 @@ public class CharacterPlacement : MonoBehaviour
         }
         else
         {
-            _thirdPersonController.enabled = true;
+            _thirdPersonCharacter.enabled = true;
+            _userControl.enabled = true;
+            _rigidbody.useGravity = true;
+            GameManager.Instance.CharacterPlaced();
             enabled = false;
         }
         
@@ -57,7 +65,6 @@ public class CharacterPlacement : MonoBehaviour
         _mousePosition.x = Mathf.Clamp(_mousePosition.x, _xClamp.x, _xClamp.y);
         _mousePosition.y = Mathf.Clamp(_mousePosition.y, _yClamp.x, _yClamp.y);
         _mousePosition.z = Mathf.Clamp(_mousePosition.z, _zClamp.x, _zClamp.y);
-        Debug.Log(_mousePosition);
         transform.position = _mousePosition;
     }
 

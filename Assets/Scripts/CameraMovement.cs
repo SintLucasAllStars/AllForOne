@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -8,8 +9,8 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private Vector3 _startPosition;
     [SerializeField] private Vector3 _startRotation;
 
-    [SerializeField] private Transform _topView;
-    [SerializeField] private Transform _characterView;
+    public Transform TopView;
+    public Transform CharacterView;
 
     [SerializeField] private float _turnSpeed = .25f;
     [SerializeField] private float _movementSpeed = .25f;
@@ -21,18 +22,24 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-
+        
 
      
     }
-        
-
+    
     private void Start()
     {
-        StartCoroutine(CameraSlerp(_characterView));
+        CameraSlerp(CharacterView, false);
     }
 
-    private IEnumerator CameraSlerp(Transform target)
+    public void CameraSlerp(Transform target, bool setParent)
+    {
+        StopAllCoroutines();
+        StartCoroutine(IECameraSlerp(target, setParent));
+        transform.SetParent(setParent ? target : null);
+    }
+
+    private IEnumerator IECameraSlerp(Transform target, bool setParent)
     {
         bool finished = false;
         yield return  new WaitForSeconds(1);
@@ -44,6 +51,7 @@ public class CameraMovement : MonoBehaviour
             if (distanceToLocation < 0.1f)
             {
                 finished = true;
+                GameManager.Instance.CameraCoroutineFinished(setParent);
             }
 
             yield return null;

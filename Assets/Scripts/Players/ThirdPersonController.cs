@@ -68,6 +68,8 @@ namespace Players
             if (_finishedPlacement) return;
             _thirdPersonAnimation.SetPlacementFinished(true);
             _finishedPlacement = true;
+            
+                
         }	
 
         private void ApplyTurnRotation()

@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class Character
 {
-    public int Health;
-    public int Speed;
-    public int Strength;
-    public int Defence;
+    public float Health;
+    public float Speed;
+    public float Strength;
+    public float Defence;
+    public CharacterMono MyCharacterMono;
+    public int OwnedByPlayer;
 
-    public Character(int strength, int defence, int speed, int health)
+   
+
+    public Character(float strength, float defence, float speed, float health,int ownedByPlayer)
     {
         Strength = strength;
         Defence = defence;
         Speed = speed;
         Health = health;
+        OwnedByPlayer = ownedByPlayer;
+
     }
 
 }

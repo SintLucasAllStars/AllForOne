@@ -1,28 +1,46 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Players;
 using UnityEngine;
 
 public class Player
 {
-    public int Points;
+    private int _points;
     public int PlayerNumber;
-    private List<Character> _characters;
-    
+    public List<Character> Characters;
+
+    public bool Choosing;
+
+    public int CurrentlyActiveCharacter;
     
     public Player(int playerNumber)
     {
         PlayerNumber = playerNumber;
-        _characters = new List<Character>();
+        _points = 100;
+        Choosing = true;
+        Characters = new List<Character>();
+        CurrentlyActiveCharacter = 0;
     }
 
     public int GetPoints()
     {
-        return Points;
+        return _points;
     }
 
-    public void AddCharacter(int strenght, int defence, int speed, int health)
+    public void SetPoints(int points)
     {
-        _characters.Add(new Character(strenght,defence,speed, health));
+        _points = points;
+        if(_points - PlayerManager.Instance.GetTotalCost() <= 0)
+        {
+            Choosing = false;
+        }
     }
+
+    public void AddCharacter(Character character)
+    {
+        Characters.Add(character);
+    }
+    
+    
 
 }

@@ -40,10 +40,8 @@ namespace Players.Animation
 
         private void ApplyAnimations()
         {
-            _clipOverrides["Walk"] = Clips.RunAnimationClip;
-            _clipOverrides["Idle"] = Clips.IdleAnimationClip;
-            _clipOverrides["TurnRight"] = Clips.TurnRightAnimationClip;
-            _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;    
+            _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
+
             
             _animatorOverrideController.ApplyOverrides(_clipOverrides);
         }
@@ -65,7 +63,7 @@ namespace Players.Animation
 
         public void SetPlacementFinished(bool input)
         {
-            _animator.SetBool("Grounded", input);
+            //_animator.SetBool("Grounded", input);
         }
 
 
@@ -74,11 +72,24 @@ namespace Players.Animation
     [System.Serializable]
     public class AnimationCLips
     {
+        public AnimationClip HangAnimationClip;
+//        public AnimationClip HumanoidCrouchIdleAnimationClip;
+//        public AnimationClip HumanoidCrouchWalkAnimationClip;
+//        public AnimationClip HumanoidCrouchWalkLeftAnimationCLip;
+//        public AnimationClip HumanoidCrouchWalkRightBAnimationClip;
+//        public AnimationClip HumanoidFallAnimationClip;
+//        public AnimationClip HumanoidIdleAnimationClip;
+//        public AnimationClip HumanoidJumpForwardLeftAnimationClip;
+//        public AnimationClip HumanoidJumpForwardRightAnimationClip;
+//        public AnimationClip HumanoidJumpUpAnimationClip;
+//        public AnimationClip 
+        
+        
+        
         public AnimationClip RunAnimationClip;
         public AnimationClip WalkAnimationClip;
         public AnimationClip IdleAnimationClip;
         public AnimationClip TurnRightAnimationClip;
         public AnimationClip TurnLeftAnimationClip;
-        public AnimationClip HangAnimationClip;
     }
 }
