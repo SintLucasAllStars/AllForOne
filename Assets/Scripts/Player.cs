@@ -85,15 +85,14 @@ public class Player : MonoBehaviour
             //Are we hitting the floor layer.
             if (hit.collider.gameObject.layer == 9)
             {
-                UnitCreator.instance.Unit.SetActive(true);
-                UnitCreator.instance.Unit.transform.position = hit.point;
+                UnitCreator.instance.PreviewUnit(hit.point);
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (UnitCreator.instance.Cost <= points)
                     {
                         points -= UnitCreator.instance.Cost;
-                        Instantiate(UnitCreator.instance.Unit, hit.point, Quaternion.identity);
+                        UnitCreator.instance.SpawnUnit(hit.point);
                         GameManager.instance.NextTurn();
                     }
                 }

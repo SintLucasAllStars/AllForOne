@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 4575388891735978}
   - component: {fileID: 95959325246014528}
   - component: {fileID: 114812909756789490}
+  - component: {fileID: 136711865918450016}
   m_Layer: 0
   m_Name: Space_Soldier_A
   m_TagString: Untagged
@@ -333,6 +334,19 @@ MonoBehaviour:
     strength: 0
     speed: 0
     defence: 0
+--- !u!136 &136711865918450016
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376488165212542}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.1, z: 0}
 --- !u!137 &137017305475582562
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

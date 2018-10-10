@@ -51,16 +51,45 @@ public class UnitCreator : MonoBehaviour
 
     private void CreateUnit()
     {
-        GameObject _unit = Instantiate(unitPrefab) as GameObject;
+        unit = Instantiate(unitPrefab) as GameObject;
 
-        foreach (Renderer item in _unit.GetComponentsInChildren<Renderer>())
+        foreach (Renderer item in unit.GetComponentsInChildren<Renderer>())
         {
             item.material.SetColor("_EmissionColor", player.color);
         }
 
-        unit = _unit;
+        unit.GetComponent<Collider>().enabled = false;
+
         ShowRoom.instance.DisplayObject(unit);
         unit.SetActive(false);
+    }
+
+    /// <summary>
+    /// Preview the Unit at given location.
+    /// </summary>
+    public void PreviewUnit(Vector3 position)
+    {
+        Unit.SetActive(true);
+        Unit.transform.position = position;
+        unit.transform.Rotate(0, Input.GetAxis("RotatePreviewUnit") * 2.5f, 0);
+    }
+
+    /// <summary>
+    /// Spawn the unit with stats from the creator on given location.
+    /// </summary>
+    public void SpawnUnit(Vector3 position)
+    {
+        Unit _unit = unit.GetComponent<Unit>();
+        _unit.owner             = player.index;
+        _unit.stats.health      = health.slider.value;
+        _unit.stats.strength    = strength.slider.value;
+        _unit.stats.speed       = speed.slider.value;
+        _unit.stats.defence     = defence.slider.value;
+
+        unit.SetActive(true);
+        unit.name = "Unit_Player_" + player.index;
+        unit.GetComponent<Collider>().enabled = true;
+        unit = null;
     }
 
     private void CalculateCost()
