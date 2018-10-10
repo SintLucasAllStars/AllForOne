@@ -48,6 +48,7 @@ public class Unit : MonoBehaviour
 
     public void Select()
     {
-        print("Select");
+        isSelected = true;
+        UnitCamera.instance.SetUnitCamera(this);
     }
 }

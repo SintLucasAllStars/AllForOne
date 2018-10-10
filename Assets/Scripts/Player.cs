@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     {
         if(GameManager.instance.isSpawnMode)
         {
-            if (ready || points == 0)
+            if (ready)
             {
                 GameManager.instance.NextTurn();
                 return;
@@ -69,8 +69,6 @@ public class Player : MonoBehaviour
                 }
             }
         }
-
-        CameraMotion();
     }
 
     private void HoverPlace()
@@ -91,7 +89,9 @@ public class Player : MonoBehaviour
                 {
                     if (UnitCreator.instance.Cost <= points)
                     {
-                        points -= UnitCreator.instance.Cost;
+                        if ((points -= UnitCreator.instance.Cost) == 0)
+                            ready = true;
+
                         UnitCreator.instance.SpawnUnit(hit.point);
                         GameManager.instance.NextTurn();
                     }
@@ -140,28 +140,6 @@ public class Player : MonoBehaviour
                 particle.gameObject.SetActive(false);
             }
         }
-    }
-
-    //Move the camera within clamped range.
-    private void CameraMotion()
-    {
-        float motionX = Input.GetAxis("Horizontal") * Time.deltaTime * 10;
-        float motionY = Input.GetAxis("Vertical") * Time.deltaTime * 10;
-
-        //Clamp camera position within set distance from the player.
-        if (motionX > 0 && camera.transform.position.x > transform.position.x + cameraOffset)
-            motionX = 0;
-
-        if (motionX < 0 && camera.transform.position.x < transform.position.x - cameraOffset)
-            motionX = 0;
-
-        if (motionY > 0 && camera.transform.position.z > transform.position.z + cameraOffset)
-            motionY = 0;
-
-        if (motionY < 0 && camera.transform.position.z < transform.position.x - cameraOffset)
-            motionY = 0;
-
-        camera.transform.Translate(motionX, 0, motionY, Space.World);
     }
     #endregion
 }

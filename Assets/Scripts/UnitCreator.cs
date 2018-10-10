@@ -69,9 +69,12 @@ public class UnitCreator : MonoBehaviour
     /// </summary>
     public void PreviewUnit(Vector3 position)
     {
-        Unit.SetActive(true);
-        Unit.transform.position = position;
-        unit.transform.Rotate(0, Input.GetAxis("RotatePreviewUnit") * 2.5f, 0);
+        if(unit)
+        {
+            Unit.SetActive(true);
+            Unit.transform.position = position;
+            unit.transform.Rotate(0, Input.GetAxis("RotatePreviewUnit") * 2.5f, 0);
+        }
     }
 
     /// <summary>
