@@ -16,13 +16,18 @@ public class Unit : MonoBehaviour
 
     public float Timer { get { return timer; } }
 
-    public int owner = 0;
-    public float speedRotation = 2;
-    public float speedMovement = 2;
-
+    [Header("Stats")]
     public Stats stats;
 
+    [HideInInspector] public int owner = 0;
+    
+    [Header("Configuration")]
+    [SerializeField] private Transform hand = null;
+    [SerializeField] private float speedRotation = 2;
+    [SerializeField] private float speedMovement = 2;
+
     private Animator animator;
+    private Weapon weapon;
 
     private bool isSelected = false;
 
@@ -74,5 +79,31 @@ public class Unit : MonoBehaviour
         isSelected = false;
         UnitCamera.instance.SetPlayerCamera();
         GameManager.instance.NextTurn();
+    }
+
+    public void Hit(float damage)
+    {
+        if ((stats.health -= damage) <= 0)
+            Die();
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Weapon _weapon = null;
+
+        if (_weapon = other.GetComponent<Weapon>())
+        {
+            if (weapon)
+                weapon.Unequip();
+
+            weapon = _weapon;
+            weapon.Equip(this, hand);
+        }
+            
     }
 }
