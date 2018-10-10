@@ -6,10 +6,11 @@ using UnityEngine;
 public class Player
 {
     public string playerName;
+    public ushort playerMoney;
     public Color playerColor;
 
-    public List<GameObject> playerGameObject = new List<GameObject>();
 
+    public List<GameObject> playerGameObject = new List<GameObject>();
     public Character this[int index] 
     {
         get
@@ -21,6 +22,7 @@ public class Player
     public Player (Color pColor)
     {
         this.playerName = "NewPlayer";
+        this.playerMoney = 100;
         this.playerColor = pColor;
     }
 }

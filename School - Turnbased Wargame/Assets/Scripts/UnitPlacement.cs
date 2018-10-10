@@ -28,15 +28,15 @@ public class UnitPlacement : MonoBehaviour
 
             if (hit.collider.gameObject.layer == Mathf.Log(InsideSpawnPlaceLayer.value, 2))
             {
-                if (Input.GetMouseButtonUp(0))
+                if (Input.GetMouseButtonUp(0) && PlayerManager.instance.playerRed.playerMoney >= soldier01.unitSoldier.cost)
                 {
                     GameObject spawnUnit = Instantiate(soldier01.unitSoldier.objectMesh, hit.point, Quaternion.identity) as GameObject;
                     spawnUnit.AddComponent<Character>().init(soldier01.unitSoldier);
                     PlayerManager.instance.playerRed.playerGameObject.Add(spawnUnit);
 
-                    //PlayerManager.instance.playerRed[0].playerNormalStats.name = "hello";
-                    Debug.Log("First char: " + PlayerManager.instance.playerRed[0].playerNormalStats.name);
-                    Debug.Log("Last char: " + spawnUnit.GetComponent<Character>().playerNormalStats.health);
+                    PlayerManager.instance.playerRed.playerMoney -= soldier01.unitSoldier.cost;
+
+                    //PlayerManager.instance.playerRed[0].playerNormalStats.name = "hello";;
 
 
                 }
