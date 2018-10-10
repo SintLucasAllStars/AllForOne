@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
         particle = Instantiate(particle);
         particle.GetComponent<Renderer>().material.SetColor("_TintColor", color);
         particle.gameObject.SetActive(false);
+
+        GameManager.instance.AddPlayer(this);
     }
 
     private void OnEnable()
@@ -82,6 +84,7 @@ public class Player : MonoBehaviour
                     {
                         points -= UnitCreator.instance.Cost;
                         Instantiate(UnitCreator.instance.Unit, hit.point, Quaternion.identity);
+                        GameManager.instance.NextTurn();
                     }
                 }
             }
