@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player playerTwo;
     bool IsTurnPlayerOne = true;
 
-
-
     // Use this for initialization
     void Awake()
     {
@@ -34,12 +32,13 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+
     }
 
-    // Update is called once per frame
-    void Update()
+    void EndCurrentRound()
     {
-
+        Debug.Log("Check");
+        IsTurnPlayerOne = !IsTurnPlayerOne;
     }
 
     public bool CheckCharacterPoints(int points)
@@ -48,7 +47,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void CreateCharacter(int costPoints)
+    public bool CreateCharacter(int costPoints)
     {
         Player currentPlayer = GetCurrentPlayer();
         currentPlayer.CreateCharacter(costPoints);
@@ -59,8 +58,16 @@ public class GameManager : MonoBehaviour
             if(!currentPlayer.isOutOfPoints)
                 IsTurnPlayerOne = !IsTurnPlayerOne;
             else
-                StartRound.Invoke();
+            {
+                if(EndRound != null)
+                    EndRound.Invoke();
+                EndRound += EndCurrentRound;
+
+                return false;
+            }
         }
+
+        return true;
 
     }
 
@@ -75,6 +82,13 @@ public class GameManager : MonoBehaviour
     public Player GetCurrentPlayer()
     {
         return (IsTurnPlayerOne) ? playerOne : playerTwo;
+    }
+
+    public void RunEvent(bool start)
+    {
+        GameRound currentEvent = (start) ? StartRound : EndRound;
+        if(currentEvent != null)
+            currentEvent.Invoke();
     }
 
 }

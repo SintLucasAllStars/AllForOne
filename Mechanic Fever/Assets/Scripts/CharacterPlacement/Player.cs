@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class Player
 {
-    private const int minPoints = 10;
-
     public int playerIndex;
+    public string playerTag;
 
+    private const int minPoints = 10;
     public int points = 100;
     [HideInInspector] public bool isOutOfPoints = false;
 
-    public int charactersAlive { get; private set; }
-
     public Color color;
+    public Material material;
+
+    public int charactersAlive { get; private set; }
 
     public bool CheckPoints(int costPoints)
     {

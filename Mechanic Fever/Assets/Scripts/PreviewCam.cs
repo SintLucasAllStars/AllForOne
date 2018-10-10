@@ -8,7 +8,7 @@ public class PreviewCam : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GameManager.instance.StartRound += Delete;
+        GameManager.instance.EndRound += Delete;
 	}
 	
 	// Update is called once per frame
@@ -18,7 +18,7 @@ public class PreviewCam : MonoBehaviour {
 
     void Delete()
     {
-        GameManager.instance.StartRound -= Delete;
-        Destroy(gameObject);
+        GameManager.instance.EndRound -= Delete;
+        Destroy(gameObject.transform.parent.gameObject);
     }
 }

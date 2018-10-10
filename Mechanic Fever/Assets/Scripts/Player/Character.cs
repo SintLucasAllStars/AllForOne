@@ -7,7 +7,6 @@ public class Character : MonoBehaviour
     private const int minPoints = 10;
 
     [Header("Activation")]
-    [SerializeField] private GameObject cameraGameObject;
     private ThirdPersonUserControl controller;
     private ThirdPersonCharacter character;
 
@@ -20,30 +19,62 @@ public class Character : MonoBehaviour
 
     [HideInInspector] public bool isFortified;
 
+    private Rigidbody playeRigidbody;
+
+    [Header("Camera")]
+    [SerializeField] private GameObject cameraGameObject;
+    public Transform pivot;
+    public Vector3 cameraLocation;
 
     bool isActive;
 
-    private void Awake()
+    private void Start()
     {
         controller = GetComponent<ThirdPersonUserControl>();
         character = GetComponent<ThirdPersonCharacter>();
-
         GameManager.instance.EndRound += EndRound;
+        playeRigidbody = GetComponent<Rigidbody>();
+    }
+
+    public void SetStats(float health, float strength, float speed, float defence)
+    {
+        this.health = health;
+        this.strength = strength;
+        controller.runSpeed = speed;
+        this.defence = defence;
+        GetComponent<CapsuleCollider>().enabled = true;
     }
 
     void EndRound()
     {
-        if(isActive)
-            ActivateCharacter(false);
+        GameManager.instance.EndRound -= EndRound;
+        ActivateCharacter(false);
     }
 
 
     public void ActivateCharacter(bool activate)
     {
-        isActive = activate;
         cameraGameObject.SetActive(activate);
+        isActive = activate;
         controller.enabled = activate;
         character.enabled = activate;
+        playeRigidbody.isKinematic = !activate;
+
+        if(activate)
+            GameManager.instance.EndRound += EndRound;
+        else
+            ResetAnimator();
+    }
+
+    private void ResetAnimator()
+    {
+        Animator animator = GetComponent<Animator>();
+        animator.SetFloat("Forward", 0);
+        animator.SetFloat("Turn", 0);
+        animator.SetFloat("Jump", 0);
+        animator.SetFloat("JumpLeg", 0);
+        animator.SetBool("OnGround", true);
+        animator.SetBool("Crouch", false);
     }
 
     public void Attack()
@@ -61,27 +92,6 @@ public class Character : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    public void SetStats(float health, float strength, float speed, float defence)
-    {
-        this.health = health;
-        this.strength = strength;
-        controller.runSpeed = speed;
-        this.defence = defence;
-    }
-
-    //public int CalculatePoints()
-    //{
-    //    float currentvalue = health + strength + speed + defence;
-
-    //    float minValue = healthRange.x + strength + speedRange.x + defenceRange.x;
-    //    float maxValue = healthRange.y + strength + speedRange.y + defenceRange.y;
-
-    //    currentvalue -= minValue;
-    //    maxValue -= minValue;
-
-    //    return Mathf.RoundToInt(Mathf.Lerp(minValue, maxValue, currentvalue / maxValue));
-    //}
 
     private void OnTriggerEnter(Collider other)
     {

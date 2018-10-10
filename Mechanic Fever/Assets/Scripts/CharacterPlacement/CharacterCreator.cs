@@ -1,5 +1,5 @@
-﻿using UnityEngine.UI;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterCreator : MonoBehaviour
 {
@@ -22,50 +22,54 @@ public class CharacterCreator : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Text player;
     [SerializeField] private Text playerPoints;
+
+    [Space()]
     [SerializeField] private Image background;
 
+    [Space()]
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider strengthSlider;
     [SerializeField] private Slider speedSlider;
     [SerializeField] private Slider defenceSlider;
+
+    [Space()]
     [SerializeField] private Text points;
     [SerializeField] private Button createCharacterButton;
     [SerializeField] private Text hire;
 
+    [Space()]
     [SerializeField] private GameObject UI;
 
-
+    [Space()]
     [SerializeField] private Transform renderPosition;
 
     [Header("Spawning")]
     [SerializeField] private GameObject prefab;
-    [SerializeField] private LayerMask layer;
-    private GameObject currentCharacter;
+    private Transform currentCharacter;
     private bool placingCharacter;
     private Camera cam;
 
 
     private void Start()
     {
-        GameManager.instance.StartRound += OnStartRound;
         cam = GetComponent<Camera>();
-        ResetUI();
+        ResetUi();
     }
 
     private void Update()
     {
-        if(placingCharacter)
+        if(!placingCharacter)
+            return;
+
+        RaycastHit hit;
+        if(Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, 200))
         {
-            RaycastHit hit;
-            if(Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, 200, layer   ))
+            if(hit.collider.CompareTag("Floor"))
             {
-                if(hit.collider.CompareTag("Floor"))
+                currentCharacter.position = hit.point;
+                if(Input.GetMouseButtonDown(0))
                 {
-                    currentCharacter.transform.position = hit.point;
-                    if(Input.GetMouseButtonDown(0))
-                    {
-                        EndPlacement();
-                    }
+                    EndPlacement();
                 }
             }
         }
@@ -77,31 +81,31 @@ public class CharacterCreator : MonoBehaviour
         placingCharacter = true;
     }
 
-    void EndPlacement()
+    private void EndPlacement()
     {
         placingCharacter = false;
-        GameManager.instance.CreateCharacter(CalculatePoints());
-        ResetUI();
+        Create(currentCharacter.GetComponent<Character>());
     }
 
-    void OnStartRound()
+
+    private void Delete()
     {
-        GameManager.instance.StartRound -= OnStartRound;
         Destroy(UI);
         Destroy(this);
     }
 
     // Use this for initialization
-    void Create(Character character)
+    private void Create(Character character)
     {
         SetStats(character);
+        if(GameManager.instance.CreateCharacter(CalculatePoints()))
+            ResetUi();
+        else
+            Delete();
 
-        GameManager.instance.CreateCharacter(CalculatePoints());
-
-        ResetUI();
     }
 
-    void SetStats(Character character)
+    private void SetStats(Character character)
     {
         float health = Mathf.Lerp(healthRange.x, healthRange.y, healthSlider.value);
         float speed = Mathf.Lerp(speedRange.x, speedRange.y, speedSlider.value);
@@ -109,24 +113,13 @@ public class CharacterCreator : MonoBehaviour
         character.SetStats(health, strengthSlider.value, speed, defenceSlider.value);
     }
 
-    public void OnSliderValueChanged()
+    private int CalculatePoints()
     {
-        points.text = "Costs: " + CalculatePoints();
-        createCharacterButton.interactable = GameManager.instance.CheckCharacterPoints(CalculatePoints());
+        float currentValue = minPoints + (healthSlider.value * healthCost) + (strengthSlider.value * strengthCost) + (speedSlider.value * speedCost) + (defenceSlider.value * defenceCost);
+        return Mathf.RoundToInt(Mathf.Clamp(currentValue, minPoints, maxPoints));
     }
 
-    bool CheckPlayerPointsBool()
-    {
-        return GameManager.instance.CheckCharacterPoints(CalculatePoints());
-    }
-
-    int CalculatePoints()
-    {
-        float currentvalue = minPoints + (healthSlider.value * healthCost) + (strengthSlider.value * strengthCost) + (speedSlider.value * speedCost) + (defenceSlider.value  * defenceCost);
-        return Mathf.RoundToInt(Mathf.Clamp(currentvalue, minPoints, maxPoints));
-    }
-
-    void ResetUI()
+    private void ResetUi()
     {
         Player currentPlayer = GameManager.instance.GetCurrentPlayer();
         player.text = "Player " + currentPlayer.playerIndex;
@@ -135,14 +128,37 @@ public class CharacterCreator : MonoBehaviour
         background.color = currentPlayer.color;
         hire.color = currentPlayer.color;
 
+        SetRandomSliders();
+
+        currentCharacter = SpawnCharacter(currentPlayer.playerTag, currentPlayer.material).transform;
+        UI.SetActive(true);
+
+    }
+
+    private void SetRandomSliders()
+    {
         healthSlider.value = Random.Range(0f, 1f);
         strengthSlider.value = Random.Range(0f, 1f);
         speedSlider.value = Random.Range(0f, 1f);
         defenceSlider.value = Random.Range(0f, 1f);
 
-        currentCharacter = Instantiate(prefab, renderPosition.position, Quaternion.Euler(Vector3.zero));
-        UI.SetActive(true);
+        SetPoints();
 
-        OnSliderValueChanged();
     }
+
+    public void SetPoints()
+    {
+        points.text = "Costs: " + CalculatePoints();
+        createCharacterButton.interactable = GameManager.instance.CheckCharacterPoints(CalculatePoints());
+    }
+
+    private GameObject SpawnCharacter(string tag, Material material)
+    {
+        Debug.Log("Spawn");
+        GameObject g = Instantiate(prefab, renderPosition.position, Quaternion.Euler(Vector3.zero));
+        g.tag = tag;
+        g.GetComponentInChildren<SkinnedMeshRenderer>().material = material;
+        return g;
+    }
+
 }

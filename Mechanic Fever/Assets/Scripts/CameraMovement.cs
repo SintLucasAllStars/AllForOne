@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float maxHeight;
+    [SerializeField] private float speed;
 
-    [SerializeField] float travelTime;
-    [SerializeField] GameObject roof;
+    [SerializeField] private float topDownHeight;
+    [SerializeField] private Vector3 topDownRotation;
+
+    [SerializeField] private float travelTime;
+    [SerializeField] private GameObject roof;
+    [SerializeField]
+    private
 
     bool move = true;
+    private Camera topDownCamera;
 
     // Use this for initialization
     void Start()
     {
-        GameManager.instance.EndRound += EndRound;
+        topDownCamera = GetComponent<Camera>();
+
+        //Subscribe to event when first round has started.
+        GameManager.instance.StartRound += StartRound;
     }
 
     // Update is called once per frame
@@ -25,16 +33,23 @@ public class CameraMovement : MonoBehaviour
         {
             Move();
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+            GameManager.instance.RunEvent(false);
+
     }
 
     void StartRound()
     {
-
+        GameManager.instance.EndRound += EndRound;
+        GameManager.instance.StartRound -= StartRound;
     }
 
     void EndRound()
     {
-        StartCoroutine(MoveToward(Camera.main.transform.root.position));
+        transform.parent = null;
+        StartCoroutine(MoveToward(new Vector3(transform.position.x, topDownHeight, transform.position.z), Quaternion.Euler(topDownRotation), true));
+        topDownCamera.enabled = true;
     }
 
     void Move()
@@ -47,21 +62,34 @@ public class CameraMovement : MonoBehaviour
         transform.position += right + forward;
     }
 
-    IEnumerator MoveToward(Vector3 target)
+    public void FlyToward(Character character)
     {
-        move = false;
-        Vector3 currentPosition = transform.position;
+        transform.parent = character.pivot;
+        StartCoroutine(MoveToward(character.cameraLocation, Quaternion.Euler(Vector3.zero), false));
+    }
+
+    public IEnumerator MoveToward(Vector3 target, Quaternion rotationTarget, bool move)
+    {
+        this.move = false;
+        Vector3 currentPosition = transform.localPosition;
+        Quaternion currentRotation = transform.rotation;
 
         float elapsedTime = 0.0f;
         while(elapsedTime < travelTime)
         {
             yield return new WaitForEndOfFrame();
             elapsedTime += Time.deltaTime;
-            transform.position = Vector3.Slerp(currentPosition, target, Mathf.Clamp01(elapsedTime / travelTime));
+            float currentValue = Mathf.Clamp01(elapsedTime / travelTime);
+            transform.localPosition = Vector3.Lerp(currentPosition, target, currentValue);
+            transform.localRotation = Quaternion.Lerp(currentRotation, rotationTarget, currentValue);
         }
-        move = true;
 
+        this.move = move;
+        ToggleRoof();
     }
 
-
+    private void ToggleRoof()
+    {
+        roof.SetActive(!roof.activeSelf);
+    }
 }
