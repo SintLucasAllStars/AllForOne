@@ -51,6 +51,5 @@ public class CharactarSelector : MonoBehaviour
         character.ActivateCharacter(true);
         cameraMovement.FlyToward(character);
         selectingCharacter = false;
-        GameManager.instance.RunEvent(true);
     }
 }

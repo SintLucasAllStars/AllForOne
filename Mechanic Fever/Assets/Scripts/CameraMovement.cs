@@ -82,12 +82,10 @@ public class CameraMovement : MonoBehaviour
 
         this.move = move;
         roof.SetActive(!move);
-        if(!move)
+        if (!move)
+        {
             GetComponentInParent<UnityStandardAssets.Cameras.ProtectCameraFromWallClip>().enabled = true;
-    }
-
-    private void ToggleRoof()
-    {
-        roof.SetActive(!roof.activeSelf);
+            GameManager.instance.RunEvent(true);
+        }
     }
 }

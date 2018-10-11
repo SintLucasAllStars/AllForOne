@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player playerTwo;
     bool IsTurnPlayerOne = true;
 
+    //Game
+    [SerializeField] private Timer timer;
+    public bool activeGame = false;
+
     // Use this for initialization
     void Awake()
     {
@@ -30,6 +34,14 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+
+    private void Update()
+    {
+        if(!activeGame)
+            return;
+
+        timer.Tick();
     }
 
     public bool CheckCharacterPoints(int points)
@@ -51,6 +63,8 @@ public class GameManager : MonoBehaviour
             {
                 if(EndRound != null)
                     EndRound.Invoke();
+                IsTurnPlayerOne = true;
+                timer.Initialize();
                 return false;
             }
         }
@@ -74,7 +88,9 @@ public class GameManager : MonoBehaviour
     public void RunEvent(bool start)
     {
         if(!start)
-           IsTurnPlayerOne = !IsTurnPlayerOne;
+            IsTurnPlayerOne = !IsTurnPlayerOne;
+
+        activeGame = start;
 
         GameRound currentEvent = (start) ? StartRound : EndRound;
         if(currentEvent != null)
