@@ -4,13 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public int damageMultiplier;
+    public int range;
+    public string animationName;
 }

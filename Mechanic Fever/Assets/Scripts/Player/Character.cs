@@ -26,12 +26,28 @@ public class Character : MonoBehaviour
     public Transform pivot;
     public Vector3 cameraLocation;
 
+    Animator animator;
+    [SerializeField] float angle;
+
     private void Start()
     {
         controller = GetComponent<ThirdPersonUserControl>();
         character = GetComponent<ThirdPersonCharacter>();
         GameManager.instance.EndRound += EndRound;
         playeRigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+            Attack();
+        if(Input.GetKey(KeyCode.F))
+            animator.Play("Death");
+        if(Input.GetKey(KeyCode.R)){
+            animator.SetFloat("Angle", angle);
+            animator.Play("Damage");
+        }
     }
 
     public void SetStats(float health, float strength, float speed, float defence)
@@ -65,7 +81,6 @@ public class Character : MonoBehaviour
 
     private void ResetAnimator()
     {
-        Animator animator = GetComponent<Animator>();
         animator.SetFloat("Forward", 0);
         animator.SetFloat("Turn", 0);
         animator.SetFloat("Jump", 0);
@@ -76,6 +91,7 @@ public class Character : MonoBehaviour
 
     public void Attack()
     {
+        animator.Play("Punch");
         int damage = Mathf.RoundToInt(Mathf.Lerp(damageRange.x, damageRange.y, strength));
         //Raycast :)
     }
