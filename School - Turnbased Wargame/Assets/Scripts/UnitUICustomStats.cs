@@ -22,7 +22,9 @@ public class UnitUICustomStats : MonoBehaviour
     public void MathfUnitCost ()
     {
         //Strength and defense are cheap
-        cost = (ushort)(health + speed + Mathf.RoundToInt((strength + defense) / 2f));
+        // 100 health cost 33 and Strength cost 16
+
+        cost = (ushort)((health + speed + ((strength + defense) / 2f)) / 3f);
         buttonText.text = "Create ($" + cost + ")";
     }
 

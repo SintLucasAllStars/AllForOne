@@ -8,6 +8,7 @@ public class Player
     public string playerName;
     public ushort playerMoney;
     public Color playerColor;
+    public Color playerUIColor;
 
 
     public List<GameObject> playerGameObject = new List<GameObject>();
@@ -19,10 +20,11 @@ public class Player
         }
     }
 
-    public Player (Color pColor)
+    public Player (Color pColor, Color pUIColor)
     {
         this.playerName = "NewPlayer";
         this.playerMoney = 100;
         this.playerColor = pColor;
+        this.playerUIColor = pUIColor;
     }
 }

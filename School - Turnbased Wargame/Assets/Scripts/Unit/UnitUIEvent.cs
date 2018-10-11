@@ -5,6 +5,22 @@ using UnityEngine.UI;
 
 public class UnitUIEvent : MonoBehaviour
 {
+    #region Singleton
+    public static UnitUIEvent instance;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    #endregion
+
     public UnitPlacement placementUnit;
     public List<SoldierAsset> standardUnit;
 
@@ -40,13 +56,18 @@ public class UnitUIEvent : MonoBehaviour
     public GameObject unitListScroll;
     public GameObject customUnitCreate;
     public Text titleText;
+    public Text moneyText;
 
     public GameObject unitUI;
+    public Image customUIColorCanvas;
+    public Image customUIColorCreateCanvas;
+    private Image[] imageUICanvasColor;
 
     public void CreateCanvasList ()
     {
         GameObject scrollContent = unitListScroll.GetComponentsInChildren<Transform>()[1].gameObject;
 
+        imageUICanvasColor = new Image[standardUnit.Count];
         for(int i = 0; i < standardUnit.Count; i++)
         {
             GameObject ui = Instantiate(unitUI, scrollContent.transform) as GameObject;
@@ -68,7 +89,7 @@ public class UnitUIEvent : MonoBehaviour
 
             int c = i + 1;
             ui.GetComponentInChildren<Button>().onClick.AddListener(() => OnUnitListClick(c));
-
+            imageUICanvasColor[i] = ui.GetComponent<Image>();
         }
     }
 
@@ -80,7 +101,7 @@ public class UnitUIEvent : MonoBehaviour
     public void OnCustomUnitClick (UnitUICustomStats customUnit)
     {
         SoldierAsset sa = customUnit.CreateAsset();
-        if (PlayerManager.instance.playerRed.playerMoney >= sa.unitSoldier.cost)
+        if (PlayerManager.instance.playerCurrentTurn.playerMoney >= sa.unitSoldier.cost)
         {
             NavigaTo(CanvasNavigation.none);
             placementUnit.selectSoldier = sa;
@@ -94,7 +115,7 @@ public class UnitUIEvent : MonoBehaviour
             if (PlayerManager.instance.isPremium)
                 NavigaTo(CanvasNavigation.customUnit);
         }
-        else if (PlayerManager.instance.playerRed.playerMoney >= standardUnit[index - 1].unitSoldier.cost)
+        else if (PlayerManager.instance.playerCurrentTurn.playerMoney >= standardUnit[index - 1].unitSoldier.cost)
         {
             NavigaTo(CanvasNavigation.none);
             placementUnit.selectSoldier = standardUnit[index - 1];
@@ -120,6 +141,14 @@ public class UnitUIEvent : MonoBehaviour
                 {
                     CanvasUnit.SetActive(true);
                     titleText.text = "Select a unit";
+                    moneyText.text = "$" + PlayerManager.instance.playerCurrentTurn.playerMoney;
+                    Color playerUIColor = PlayerManager.instance.playerCurrentTurn.playerUIColor;
+                    customUIColorCanvas.color = playerUIColor;
+                    foreach(Image i in imageUICanvasColor)
+                    {
+                        i.color = playerUIColor;
+                    }
+
                 }
                 break;
 
@@ -129,6 +158,7 @@ public class UnitUIEvent : MonoBehaviour
                 {
                     CanvasUnit.SetActive(true);
                     titleText.text = "Create a unit";
+                    customUIColorCreateCanvas.color = PlayerManager.instance.playerCurrentTurn.playerUIColor;
                 }
                 break;
 

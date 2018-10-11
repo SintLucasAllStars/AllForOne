@@ -15,7 +15,7 @@ public class UnitIcon : MonoBehaviour
             {
                 Instantiate(unitIcon, p.transform);
             }
-            MapManager.instance.MapDeck(true);
+            //MapManager.instance.MapDeck(true);
         }
 	}
 	

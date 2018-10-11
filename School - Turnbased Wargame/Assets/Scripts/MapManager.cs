@@ -4,20 +4,6 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour 
 {
-    public static MapManager instance;
-
-    void Awake ()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        } else
-        {
-            Debug.LogWarning("Double map?!");
-        }
-    }
-
-
     [SerializeField] GameObject[] mapDeck;
 
 

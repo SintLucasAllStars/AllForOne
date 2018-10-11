@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
         if (instance != null)
         {
             Debug.LogWarning("There are multiple PlayerManager? Remove old static...");
+            Destroy(this);
         }
         instance = this;
     }
@@ -18,8 +19,15 @@ public class PlayerManager : MonoBehaviour
 
     public bool isPremium;
 
-    public Player playerBlue = new Player(Color.blue);
-    public Player playerRed = new Player(Color.red);
+    public Player playerBlue = new Player(Color.blue, new Color(0.5f, 0.65f, 1));
+    public Player playerRed = new Player(Color.red, new Color(1, 0.4f, 0.34f));
 
+    public Player playerCurrentTurn
+    {
+        get
+        {
+            return GameManager.instance.isPlayerBlue ? playerBlue : playerRed;
+        }
+    }
 
 }

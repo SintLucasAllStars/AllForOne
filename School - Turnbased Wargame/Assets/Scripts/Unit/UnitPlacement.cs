@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class UnitPlacement : MonoBehaviour
 {
-    public UnitUIEvent canvasUIEvent;
-
     [SerializeField] LayerMask placeLayer, InsideSpawnPlaceLayer;
     public GameObject selectObject;
     private Camera cam;
@@ -39,15 +37,7 @@ public class UnitPlacement : MonoBehaviour
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
-                        GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, hit.point, Quaternion.identity) as GameObject;
-                        spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier);
-                        PlayerManager.instance.playerRed.playerGameObject.Add(spawnUnit);
-
-                        PlayerManager.instance.playerRed.playerMoney -= selectSoldier.unitSoldier.cost;
-
-                        //PlayerManager.instance.playerRed[0].playerNormalStats.name = "hello";;
-                        selectSoldier = null;
-                        canvasUIEvent.NavigaTo(UnitUIEvent.CanvasNavigation.unitList);
+                        SpawnUnit(hit.point);
                     }
                 } else
                 {
@@ -55,5 +45,25 @@ public class UnitPlacement : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void SpawnUnit (Vector3 point)
+    {
+        SpawnUnit(point, true);
+    }
+
+    public void SpawnUnit (Vector3 point, bool nextTurn)
+    {
+        GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, point, Quaternion.identity) as GameObject;
+        spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier);
+
+
+        PlayerManager.instance.playerCurrentTurn.playerGameObject.Add(spawnUnit);
+        PlayerManager.instance.playerCurrentTurn.playerMoney -= selectSoldier.unitSoldier.cost;
+
+        //PlayerManager.instance.playerRed[0].playerNormalStats.name = "hello";;
+        selectSoldier = null;
+        if (nextTurn)
+            GameManager.instance.NextPlayerPrepare();
     }
 }
