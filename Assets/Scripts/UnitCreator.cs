@@ -69,6 +69,7 @@ public class UnitCreator : MonoBehaviour
         }
 
         unit.GetComponent<Collider>().enabled = false;
+        unit.GetComponent<Rigidbody>().useGravity = false;
 
         ShowRoom.instance.DisplayObject(unit);
         unit.SetActive(false);
@@ -98,9 +99,11 @@ public class UnitCreator : MonoBehaviour
         _unit.stats.strength    = strength.slider.value;
         _unit.stats.speed       = speed.slider.value;
         _unit.stats.defence     = defence.slider.value;
+        _unit.Spawn();
 
         unit.SetActive(true);
         unit.name = "Unit_Player_" + player.index;
+        unit.GetComponent<Rigidbody>().useGravity = true;
         unit.GetComponent<Collider>().enabled = true;
         unit = null;
     }

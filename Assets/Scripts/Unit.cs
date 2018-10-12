@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [RequireComponent(typeof(Animator))]
 public class Unit : MonoBehaviour
 {
@@ -27,18 +28,26 @@ public class Unit : MonoBehaviour
     [SerializeField] private float speedMovement = 2;
 
     private Animator animator;
+    private AnimatorOverrideController aoc;
     private Weapon weapon;
 
     private bool isSelected = false;
 
-    private float timer = 10;
+    private float timer = 0;
 
-    protected virtual void Awake()
+    public void Spawn()
     {
-        animator = GetComponent<Animator>();
+
     }
 
-    protected virtual void Update()
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+        aoc = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        animator.runtimeAnimatorController = aoc;
+    }
+
+    void Update()
     {
         if(isSelected)
         {
@@ -49,18 +58,18 @@ public class Unit : MonoBehaviour
                 float x = Input.GetAxis("Horizontal") * Time.deltaTime * 10 * speedRotation;
                 float y = Input.GetAxis("Vertical");
 
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    y *= 2;
-                }
-
-                animator.SetFloat("Speed", y);
+                animator.SetFloat("Y", y);
                 transform.Rotate(0, x, 0);
+
+                if(Input.GetButtonDown("Attack"))
+                {
+                    animator.SetTrigger("Attack");
+                }
             }
             else
             {
                 DeSelect();
-                animator.SetFloat("Speed", 0);
+                animator.SetFloat("Y", 0);
             }
         }
     }
@@ -68,7 +77,7 @@ public class Unit : MonoBehaviour
     public void Select()
     {
         UnitUI.instance.DisplayUI(this, true);
-        timer = 10;
+        timer = 1000;
         isSelected = true;
         UnitCamera.instance.SetUnitCamera(this);
     }
@@ -98,12 +107,19 @@ public class Unit : MonoBehaviour
 
         if (_weapon = other.GetComponent<Weapon>())
         {
-            if (weapon)
+            if (weapon && weapon != _weapon)
                 weapon.Unequip();
 
             weapon = _weapon;
             weapon.Equip(this, hand);
+            EquipWeapon();
         }
             
+    }
+
+    private void EquipWeapon()
+    {
+        animator.SetBool("Armed", true);
+        aoc["Attack"] = weapon.Stats.Animation;
     }
 }
