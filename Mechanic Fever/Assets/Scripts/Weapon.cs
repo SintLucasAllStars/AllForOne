@@ -7,4 +7,6 @@ public class Weapon : MonoBehaviour {
     public int damageMultiplier;
     public int range;
     public string animationName;
+    public int animationAttackDelay;
+    public float resetDelay;
 }

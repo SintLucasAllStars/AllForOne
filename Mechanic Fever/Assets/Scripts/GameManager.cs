@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     //Player
     [SerializeField] private Player playerOne;
     [SerializeField] private Player playerTwo;
-    bool IsTurnPlayerOne = true;
+    public bool IsTurnPlayerOne = true;
 
     //Game
     [SerializeField] private Timer timer;

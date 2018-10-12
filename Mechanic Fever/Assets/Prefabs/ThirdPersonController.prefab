@@ -554,7 +554,7 @@ GameObject:
   m_Layer: 10
   m_Name: Pivot
   m_TagString: Untagged
-  m_Icon: {fileID: -1500306622, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -750,10 +750,10 @@ GameObject:
   m_Layer: 10
   m_Name: FreeLookCameraRig
   m_TagString: MainCamera
-  m_Icon: {fileID: -215833656, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1916481337779764
 GameObject:
   m_ObjectHideFlags: 1
@@ -1676,11 +1676,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e37646aa09997740940ffdb4518751e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageRange: {x: 0, y: 0}
+  damageRange: {x: 1, y: 4}
   isFortified: 0
-  cameraGameObject: {fileID: 1912128045651380}
   pivot: {fileID: 4150869222252610}
   cameraLocation: {x: 0, y: 0, z: -4}
+  defaultAnimation: Punch
+  defaultAnimationDelay: 0.1
+  resetDelay: 0.06
+  defaultDamage: 1
+  defaultRange: 1
 --- !u!136 &136495767143119972
 CapsuleCollider:
   m_ObjectHideFlags: 1

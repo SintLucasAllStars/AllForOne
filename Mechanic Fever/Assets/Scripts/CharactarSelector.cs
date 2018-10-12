@@ -48,7 +48,6 @@ public class CharactarSelector : MonoBehaviour
 
     private void SelectUnit(Character character)
     {
-        character.ActivateCharacter(true);
         cameraMovement.FlyToward(character);
         selectingCharacter = false;
     }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
-
+using System.Collections;
 public class Character : MonoBehaviour
 {
     private const int maxPoints = 100;
@@ -22,12 +22,23 @@ public class Character : MonoBehaviour
     private Rigidbody playeRigidbody;
 
     [Header("Camera")]
-    [SerializeField] private GameObject cameraGameObject;
     public Transform pivot;
     public Vector3 cameraLocation;
 
-    Animator animator;
-    [SerializeField] float angle;
+    private Animator animator;
+
+    [SerializeField] private string defaultAnimation;
+    [SerializeField] private float defaultAnimationDelay;
+    [SerializeField] private float resetDelay;
+    [SerializeField] private int defaultDamage;
+    [SerializeField] private int defaultRange;
+
+    private Weapon weapon;
+    private bool isAttacking = false;
+    private PowerUp powerUp;
+
+    private bool isActive = false;
+
 
     private void Start()
     {
@@ -40,12 +51,14 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+        if(!isActive) return;
+
         if(Input.GetMouseButtonDown(0))
             Attack();
         if(Input.GetKey(KeyCode.F))
             animator.Play("Death");
-        if(Input.GetKey(KeyCode.R)){
-            animator.SetFloat("Angle", angle);
+        if(Input.GetKey(KeyCode.R))
+        {
             animator.Play("Damage");
         }
     }
@@ -68,15 +81,21 @@ public class Character : MonoBehaviour
 
     public void ActivateCharacter(bool activate)
     {
-        cameraGameObject.SetActive(activate);
+        isActive = activate;
         controller.enabled = activate;
         character.enabled = activate;
         playeRigidbody.isKinematic = !activate;
 
         if(activate)
+        {
             GameManager.instance.EndRound += EndRound;
+            gameObject.layer = 2;//Set player to ignoreRaycast
+        }
         else
+        {
             ResetAnimator();
+            gameObject.layer = 10;//Set player layer;
+        }
     }
 
     private void ResetAnimator()
@@ -91,18 +110,51 @@ public class Character : MonoBehaviour
 
     public void Attack()
     {
-        animator.Play("Punch");
-        int damage = Mathf.RoundToInt(Mathf.Lerp(damageRange.x, damageRange.y, strength));
-        //Raycast :)
+        if(isAttacking) return;
+
+        animator.Play((weapon == null) ? defaultAnimation : weapon.animationName);
+        isAttacking = true;
+
+        if(weapon != null)
+            StartCoroutine(AttackDelay(weapon.animationAttackDelay, weapon.resetDelay));
+        else
+            StartCoroutine(AttackDelay(defaultAnimationDelay, resetDelay));
     }
 
-    public void Damage(int damage)
+    private IEnumerator AttackDelay(float delayTime, float resetDelay)
+    {
+        int damage = Mathf.RoundToInt(Mathf.Lerp(damageRange.x, damageRange.y, strength)) + ((weapon == null) ? defaultDamage : weapon.damageMultiplier);
+        yield return new WaitForSeconds(delayTime);
+
+        Debug.DrawRay(transform.position + transform.up, transform.forward * ((weapon == null) ? defaultRange : weapon.range), Color.red, 10);
+        Debug.Log("Excuse");
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position + transform.up, transform.forward, out hit, ((weapon == null) ? defaultRange : weapon.range)))
+        {
+            if(hit.collider.CompareTag("Player" + (GameManager.instance.IsTurnPlayerOne ? "Two" : "One")))
+            {
+                hit.collider.GetComponent<Character>().Damage(damage, Vector3.Angle(hit.collider.transform.forward, transform.forward));
+            }
+        }
+        yield return new WaitForSeconds(resetDelay);
+        isAttacking = false;
+    }
+
+
+    public void Damage(int damage, float angle)
     {
         health -= (isFortified) ? damage - damage / 2 * (1 - defence) : damage;
         if(health <= 0)
         {
+            animator.Play("Death");
             GameManager.instance.KillCharacter();
-            Destroy(gameObject);
+            gameObject.layer = 0;
+            Destroy(gameObject, 5);
+        }
+        else
+        {
+            animator.SetFloat("Angle", angle);
+            animator.Play("Damage");
         }
     }
 

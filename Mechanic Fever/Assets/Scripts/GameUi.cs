@@ -8,17 +8,13 @@ public class GameUi : MonoBehaviour
     [SerializeField] private RectTransform clockRectTransform;
 
     [SerializeField] private Vector3 maxAngle;
-    private Quaternion maxRotation;
 
     private Canvas canvas;
-
 
     // Use this for initialization
     void Start()
     {
         canvas = GetComponent<Canvas>();
-
-        maxRotation = Quaternion.Euler(maxAngle);
 
         GameManager.instance.StartRound += delegate { ToggleUI(true); };
         GameManager.instance.EndRound += delegate { ToggleUI(false); }; ;

@@ -44,7 +44,7 @@ public class CameraMovement : MonoBehaviour
     {
         transform.parent.parent.GetComponent<UnityStandardAssets.Cameras.ProtectCameraFromWallClip>().enabled = false;
         transform.parent = null;
-        StartCoroutine(MoveToward(new Vector3(transform.position.x, topDownHeight, transform.position.z), Quaternion.Euler(topDownRotation), true));
+        StartCoroutine(MoveToward(new Vector3(transform.position.x, topDownHeight, transform.position.z), Quaternion.Euler(topDownRotation), null, true));
         roof.SetActive(false);
     }
 
@@ -61,10 +61,10 @@ public class CameraMovement : MonoBehaviour
     public void FlyToward(Character character)
     {
         transform.parent = character.pivot;
-        StartCoroutine(MoveToward(character.cameraLocation, Quaternion.Euler(Vector3.zero), false));
+        StartCoroutine(MoveToward(character.cameraLocation, Quaternion.Euler(Vector3.zero), character, false));
     }
 
-    public IEnumerator MoveToward(Vector3 target, Quaternion rotationTarget, bool move)
+    public IEnumerator MoveToward(Vector3 target, Quaternion rotationTarget, Character character, bool move)
     {
         this.move = false;
         Vector3 currentPosition = transform.localPosition;
@@ -84,6 +84,7 @@ public class CameraMovement : MonoBehaviour
         roof.SetActive(!move);
         if (!move)
         {
+            character.ActivateCharacter(true);
             GetComponentInParent<UnityStandardAssets.Cameras.ProtectCameraFromWallClip>().enabled = true;
             GameManager.instance.RunEvent(true);
         }
