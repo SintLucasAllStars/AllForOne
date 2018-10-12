@@ -79,15 +79,21 @@ public class Unit : MonoBehaviour
         UnitUI.instance.DisplayUI(this, true);
         timer = 1000;
         isSelected = true;
-        UnitCamera.instance.SetUnitCamera(this);
+        GlobalCamera.instance.SetUnitCamera(this);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void DeSelect()
     {
         UnitUI.instance.DisplayUI(this, false);
         isSelected = false;
-        UnitCamera.instance.SetPlayerCamera();
+        GlobalCamera.instance.SetPlayerCamera();
         GameManager.instance.NextTurn();
+
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 
     public void Hit(float damage)

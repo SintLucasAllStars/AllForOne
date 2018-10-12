@@ -15,9 +15,9 @@ public class Player : MonoBehaviour
     public bool turn        = false;
     [Space]
     [SerializeField] private ParticleSystem particle = null;
-    [SerializeField] private new Camera camera;
-    [SerializeField] private float cameraOffset = 25;
+    [SerializeField] private LayerMask rayMask = 0;
 
+    private new Camera camera;
     private Unit hovered = null;
 
     private bool ready = false;
@@ -33,7 +33,10 @@ public class Player : MonoBehaviour
         particle.gameObject.SetActive(false);
 
         GameManager.instance.AddPlayer(this);
+        camera = GlobalCamera.instance.Camera;
     }
+
+
 
     private void OnEnable()
     {
@@ -78,7 +81,7 @@ public class Player : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 30, rayMask))
         {
             Debug.DrawLine(ray.origin, hit.point, Color.green);
 
@@ -106,6 +109,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            Debug.DrawLine(ray.origin, ray.direction * 10, Color.white);
             UnitCreator.instance.Unit.SetActive(false);
         }
 
@@ -117,7 +121,7 @@ public class Player : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 30, rayMask))
         {
             Debug.DrawLine(ray.origin, hit.point, Color.green);
 
