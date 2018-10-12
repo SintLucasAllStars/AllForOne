@@ -26,6 +26,7 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] private WeaponStats stats;
     [SerializeField] private Transform handle;
+    [SerializeField] private Vector3 rotation = new Vector3(0,0,0);
 
     private Unit unit = null;
     private bool equiped = false;
@@ -53,8 +54,11 @@ public class Weapon : MonoBehaviour
             this.unit = unit;
             transform.SetParent(parent);
             transform.position = parent.position;
-            transform.rotation = parent.rotation;
+            transform.rotation = parent.rotation * Quaternion.Euler(rotation);
             equiped = true;
+
+            if (OnEquip != null)
+                OnEquip();
         } 
     }
 

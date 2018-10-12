@@ -32,7 +32,7 @@ public class ShowRoom : MonoBehaviour
     #region Methods
     private void Update()
     {
-        center.Rotate(0, 1 * Time.deltaTime * 25, 0);
+        center.Rotate(0, Time.deltaTime * 25, 0);
     }
     #endregion
 }

@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
         public float defence;
     }
 
-    public float Timer { get { return timer; } }
+    public float Timer { get { return playTime; } }
 
     [Header("Stats")]
     public Stats stats;
@@ -25,15 +25,17 @@ public class Unit : MonoBehaviour
     [Header("Configuration")]
     [SerializeField] private Transform hand = null;
     [SerializeField] private float speedRotation = 2;
-    [SerializeField] private float speedMovement = 2;
+    
 
     private Animator animator;
     private AnimatorOverrideController aoc;
     private Weapon weapon;
 
+    private float playTime = 10;
+
     private bool isSelected = false;
 
-    private float timer = 0;
+    
 
     public void Spawn()
     {
@@ -51,9 +53,9 @@ public class Unit : MonoBehaviour
     {
         if(isSelected)
         {
-            if(timer >= 0)
+            if(playTime >= 0)
             {
-                timer -= Time.unscaledDeltaTime;
+                playTime -= Time.unscaledDeltaTime;
 
                 float x = Input.GetAxis("Horizontal") * Time.deltaTime * 10 * speedRotation;
                 float y = Input.GetAxis("Vertical");
@@ -77,7 +79,7 @@ public class Unit : MonoBehaviour
     public void Select()
     {
         UnitUI.instance.DisplayUI(this, true);
-        timer = 1000;
+        playTime = 10;
         isSelected = true;
         GlobalCamera.instance.SetUnitCamera(this);
 
@@ -92,7 +94,7 @@ public class Unit : MonoBehaviour
         GlobalCamera.instance.SetPlayerCamera();
         GameManager.instance.NextTurn();
 
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
@@ -109,18 +111,20 @@ public class Unit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Weapon _weapon = null;
-
-        if (_weapon = other.GetComponent<Weapon>())
+        if(isSelected)
         {
-            if (weapon && weapon != _weapon)
-                weapon.Unequip();
+            Weapon _weapon = null;
 
-            weapon = _weapon;
-            weapon.Equip(this, hand);
-            EquipWeapon();
-        }
-            
+            if (_weapon = other.GetComponent<Weapon>())
+            {
+                if (weapon && weapon != _weapon)
+                    weapon.Unequip();
+
+                weapon = _weapon;
+                weapon.Equip(this, hand);
+                EquipWeapon();
+            }
+        }   
     }
 
     private void EquipWeapon()
