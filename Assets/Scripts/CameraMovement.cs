@@ -43,14 +43,18 @@ public class CameraMovement : MonoBehaviour
     {
         bool finished = false;
         yield return  new WaitForSeconds(1);
+        Debug.Log("started");
+
         while(!finished)
         {
             var distanceToLocation = Vector3.Distance(transform.position, target.position);
-            transform.position = Vector3.Slerp(transform.position, target.position, _movementSpeed  * Time.deltaTime);
-            transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, target.eulerAngles, _turnSpeed  * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, target.position, _movementSpeed * Time.deltaTime);
+            transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, target.eulerAngles, _turnSpeed * Time.deltaTime);
+            //transform.LookAt(target.eulerAngles);
             if (distanceToLocation < 0.1f)
             {
                 finished = true;
+                Debug.Log("finished");
                 GameManager.Instance.CameraCoroutineFinished(setParent);
             }
 

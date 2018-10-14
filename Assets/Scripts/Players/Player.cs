@@ -27,6 +27,11 @@ public class Player
         return _points;
     }
 
+    public Character GetCurrentlyActiveCharacter()
+    {
+        return Characters[CurrentlyActiveCharacter];
+    }
+
     public void SetPoints(int points)
     {
         _points = points;

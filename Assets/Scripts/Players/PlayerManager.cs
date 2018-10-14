@@ -40,7 +40,7 @@ namespace Players
             return _playersArray[_currentlyActive - 1];
         }
 
-        public bool SetCurrentlyActivePlayer()
+        public bool SetCurrentlyActivePlayerSelection()
         {
             while (true)
             {
@@ -70,6 +70,18 @@ namespace Players
             
             Debug.Log(StillChoosing());
         
+        }
+
+        public void SetCurrentlyActivePlayer()
+        {
+            if (_currentlyActive + 1 > AmountOfPlayers)
+            {
+                _currentlyActive = 1;
+            }
+            else
+            {
+                _currentlyActive++;
+            }
         }
 
 

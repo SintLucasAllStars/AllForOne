@@ -47,8 +47,7 @@ namespace Players
                 _moveDirection = transform.TransformDirection(Vector3.forward) * Input.GetAxis("Vertical");
                 _turnAmount = Mathf.Atan2(_turnVector3.x, _turnVector3.z);
                 _forwardAmount = _moveDirection.z;
-                SetAnimations();
-
+        
                 ApplyTurnRotation();
             
                 _moveDirection *= _speed;
@@ -66,7 +65,6 @@ namespace Players
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             if (_finishedPlacement) return;
-            _thirdPersonAnimation.SetPlacementFinished(true);
             _finishedPlacement = true;
             
                 
@@ -78,11 +76,6 @@ namespace Players
             transform.Rotate(0,_turnAmount * turnSpeed * Time.deltaTime, 0);
         }
 
-        private void SetAnimations()
-        {
-            _thirdPersonAnimation.SetSpeed(Mathf.Abs(_forwardAmount));
-            //_thirdPersonAnimation.SetXInput();
         
-        }
     }
 }

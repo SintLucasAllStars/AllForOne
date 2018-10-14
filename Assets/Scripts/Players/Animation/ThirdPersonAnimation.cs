@@ -41,6 +41,7 @@ namespace Players.Animation
         private void ApplyAnimations()
         {
             _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
+            _clipOverrides["Punch"] = Clips.PunchAnimationClip;
 
             
             _animatorOverrideController.ApplyOverrides(_clipOverrides);
@@ -51,19 +52,21 @@ namespace Players.Animation
         
         }
 
-        public void SetSpeed(float speed)
+        public void SetPunchTrigger()
         {
-            _animator.SetFloat("Speed",speed, 0.1f, Time.deltaTime);        
+            _animator.SetTrigger("Punch");
         }
 
-        public void SetXInput(float xInput)
+        public bool IsPunching()
         {
-            _animator.SetFloat("Xinput",xInput, 0.1f, Time.deltaTime);        
+            return _animator.GetCurrentAnimatorStateInfo(0).IsTag("Punching");
         }
+        
+        
 
-        public void SetPlacementFinished(bool input)
+        public void ResetForward()
         {
-            //_animator.SetBool("Grounded", input);
+            _animator.SetFloat("Forward", 0f);
         }
 
 
@@ -73,19 +76,7 @@ namespace Players.Animation
     public class AnimationCLips
     {
         public AnimationClip HangAnimationClip;
-//        public AnimationClip HumanoidCrouchIdleAnimationClip;
-//        public AnimationClip HumanoidCrouchWalkAnimationClip;
-//        public AnimationClip HumanoidCrouchWalkLeftAnimationCLip;
-//        public AnimationClip HumanoidCrouchWalkRightBAnimationClip;
-//        public AnimationClip HumanoidFallAnimationClip;
-//        public AnimationClip HumanoidIdleAnimationClip;
-//        public AnimationClip HumanoidJumpForwardLeftAnimationClip;
-//        public AnimationClip HumanoidJumpForwardRightAnimationClip;
-//        public AnimationClip HumanoidJumpUpAnimationClip;
-//        public AnimationClip 
-        
-        
-        
+        public AnimationClip PunchAnimationClip;
         public AnimationClip RunAnimationClip;
         public AnimationClip WalkAnimationClip;
         public AnimationClip IdleAnimationClip;

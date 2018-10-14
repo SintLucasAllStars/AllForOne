@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
+using System.Linq;
 using Players;
 using Tools;
 using UnityEngine;
@@ -36,7 +37,7 @@ public class GameManager : Singleton<GameManager>
 
     public void CharacterPlaced()
     {
-        if (PlayerManager.Instance.SetCurrentlyActivePlayer())
+        if (PlayerManager.Instance.SetCurrentlyActivePlayerSelection())
         {
             _characterPanel.OnNewCharacter();
         }
@@ -58,23 +59,30 @@ public class GameManager : Singleton<GameManager>
         if (_waitingForCoroutine && !setParent)
         {
             _inSelectionState = true;
-            //TimerActive = true;
-//            int currentCharacter = PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter;
-//            _cameraMovement.CameraSlerp(PlayerManager.Instance.GetCurrentlyActivePlayer().Characters[currentCharacter ].MyCharacterMono.CameraTransform);
-//            if (currentCharacter  < PlayerManager.Instance.GetCurrentlyActivePlayer().Characters.Count -1)
-//            {
-//                PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter++;
-//            }
-//            else
-//            {
-//                Debug.Log("NewTurn");
-//            }
             _waitingForCoroutine = false;
         }
         else if (_waitingForCoroutine && setParent)
         {
             TimerActive = true;
+            PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.EnableUserControl();
         }
+    }
+
+    private void TurnFinished()
+    {
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.DisableUserControl();
+//        if (currentCharacter + 1 < PlayerManager.Instance.GetCurrentlyActivePlayer().Characters.Count())
+//        {
+//            PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter++;
+//        }
+//        else
+//        {
+//            PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter =
+//        }
+        PlayerManager.Instance.SetCurrentlyActivePlayer();
+        _timeLeft = 10.0f;
+
+
     }
 
     public void SetCameraMovement(Transform transformLocal, bool setParent)
@@ -92,10 +100,11 @@ public class GameManager : Singleton<GameManager>
             if (_timeLeft < 0.0f)
             {
                 TimerActive = false;
-                int currentCharacter = PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter;
-                PlayerManager.Instance.GetCurrentlyActivePlayer().Characters[currentCharacter].MyCharacterMono.DisableUserControl();
+
+                
                 _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
                 _timeLeft = 0.0f;
+                TurnFinished();
             }
 
             _timeLeftText.text = _timeLeft.ToString("F");
