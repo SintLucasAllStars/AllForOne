@@ -4,9 +4,12 @@ using System.Linq;
 using Players;
 using Players.Animation;
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Assertions.Must;
+using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class CharacterMono : MonoBehaviour
+public class CharacterMono : MonoBehaviour ,ICharacter
 {
 
     public Character MyCharacter;
@@ -17,37 +20,76 @@ public class CharacterMono : MonoBehaviour
     private ThirdPersonUserControl _thirdPersonUserControl;
 
     [SerializeField] private List<BoxCollider> _boxColliders = new List<BoxCollider>();
+    [SerializeField] private Slider _slider;
+
+
+    private WeaponMono _weaponMono;
+
+
+
 
     private void Awake()
     {
         _thirdPersonUserControl = GetComponent<ThirdPersonUserControl>();
         _thirdPersonAnimation = GetComponent<ThirdPersonAnimation>();
+        _weaponMono = GetComponent<WeaponMono>();
+
+
+    }
+
+    public int OwnedBy()
+    {
+        return MyCharacter.OwnedBy();
+    }
+
+    public void SetHealth(float damage)
+    {
+        MyCharacter.SetHealth(damage);
+    }
+
+    public void SetSliderValue()
+    {
+        Debug.Log(MyCharacter.Health);
+        _slider.value = MyCharacter.Health;
+    }
+
+
+    private void Update()
+    {
+        Vector3 vector3 = Camera.main.transform.position - _slider.transform.position;
+        vector3.x = vector3.z = 0.0f;
+        _slider.transform.LookAt(Camera.main.transform.position - vector3);
+        _slider.transform.Rotate(0,180,0);
     }
 
     private void Start()
     {
-        CheckForColliders(transform);
-        Debug.Log(_boxColliders.Count);
+        _slider.value = MyCharacter.Health;
     }
 
-
-    private void CheckForColliders(Transform transformLocal)
+    public void HandleAttack(RaycastHit hit)
     {
-        if (transformLocal.GetComponents<BoxCollider>() != null)
+        var hitChar = hit.collider.GetComponent<ICharacter>();
+
+        if (hitChar != null)
         {
-            _boxColliders.AddRange(transformLocal.GetComponents<BoxCollider>());
-        }
-        for (int i = 0; i < transformLocal.childCount; i++)
-        {
-            CheckForColliders(transformLocal.GetChild(i).transform);
+            if (GameManager.Instance.FriendlyFire)
+            {
+                hitChar.SetHealth(MyCharacter.Strength / 100 * _weaponMono.MyWeapon.Damage);
+
+
+
+            }
         }
     }
+
 
     public void DisableUserControl()
     {
         _thirdPersonUserControl.enabled = false;
         _thirdPersonAnimation.ResetForward();
-        
+        _slider.gameObject.SetActive(true);
+
     }
 
     public void EnableUserControl()
@@ -61,25 +103,14 @@ public class CharacterMono : MonoBehaviour
         {
             Debug.Log("Click");
             GameManager.Instance.SetCameraMovement(CameraTransform, true);
-   
-             
+            _slider.gameObject.SetActive(false);
+            GameManager.Instance.EnableHealthSlider();
         }
     }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        foreach (var t in _boxColliders)
-        {
-            if (other == t)
-            {
-                Debug.Log("Collider triggered self");
-                return;
-            }
-        }
-        //if(_thirdPersonAnimation.IsPunching())        
-    }
-    
-    
 
- 
+
+
+
+
+
 }

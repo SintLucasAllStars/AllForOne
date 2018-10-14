@@ -16,12 +16,14 @@ namespace Players
         private float _turnAmount;
         private float _forwardAmount;
         private Vector3 _turnVector3;
-    
-    
+
+
         private  Vector3 _moveDirection= Vector3.zero;
         private CharacterController _characterController;
         private ThirdPersonAnimation _thirdPersonAnimation;
         private bool _finishedPlacement;
+
+
 
         private Character _character;
 
@@ -47,9 +49,9 @@ namespace Players
                 _moveDirection = transform.TransformDirection(Vector3.forward) * Input.GetAxis("Vertical");
                 _turnAmount = Mathf.Atan2(_turnVector3.x, _turnVector3.z);
                 _forwardAmount = _moveDirection.z;
-        
+
                 ApplyTurnRotation();
-            
+
                 _moveDirection *= _speed;
 
                 if (Input.GetButton("Jump"))
@@ -66,9 +68,9 @@ namespace Players
         {
             if (_finishedPlacement) return;
             _finishedPlacement = true;
-            
-                
-        }	
+
+
+        }
 
         private void ApplyTurnRotation()
         {
@@ -76,6 +78,6 @@ namespace Players
             transform.Rotate(0,_turnAmount * turnSpeed * Time.deltaTime, 0);
         }
 
-        
+
     }
 }

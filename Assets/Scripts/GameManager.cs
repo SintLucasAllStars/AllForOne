@@ -23,6 +23,11 @@ public class GameManager : Singleton<GameManager>
 
     [HideInInspector] public bool TimerActive;
 
+    [SerializeField] private Slider _healthSlider;
+
+
+    public bool FriendlyFire = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -32,7 +37,8 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         //TimerActive = true;
-        _timeLeft = 10f;
+        _healthSlider.gameObject.SetActive(false);
+        _timeLeft = 1000f;
     }
 
     public void CharacterPlaced()
@@ -92,16 +98,23 @@ public class GameManager : Singleton<GameManager>
         _inSelectionState = false;
     }
 
+    public void EnableHealthSlider()
+    {
+        _healthSlider.gameObject.SetActive(true);
+        _healthSlider.value = PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().Health;
+    }
+
     private void Update()
     {
         if (TimerActive)
         {
             _timeLeft -= Time.deltaTime;
+            _healthSlider.value = PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().Health;
             if (_timeLeft < 0.0f)
             {
                 TimerActive = false;
 
-                
+                _healthSlider.gameObject.SetActive(false);
                 _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
                 _timeLeft = 0.0f;
                 TurnFinished();

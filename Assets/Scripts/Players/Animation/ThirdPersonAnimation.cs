@@ -11,18 +11,32 @@ namespace Players.Animation
     public class ThirdPersonAnimation : MonoBehaviour
     {
 
-  
+
 
         public AnimationCLips Clips;
         private Animator _animator;
         private AnimatorOverrideController _animatorOverrideController;
         private AnimationClipOverrides _clipOverrides;
-    
+        private WeaponMono _weaponMono;
+
+        private CharacterMono _characterMono;
+        private CapsuleCollider _capsuleCollider;
+
+
+        [SerializeField] private GameObject _root;
+
+        private RaycastHit _raycastHit;
+
 
         private void Awake()
         {
-            _animator = GetComponent<Animator>();    
+            _animator = GetComponent<Animator>();
+            _weaponMono = GetComponent<WeaponMono>();
+            _characterMono = GetComponent<CharacterMono>();
+            _capsuleCollider = GetComponent<CapsuleCollider>();
+
         }
+
 
         private void Start()
         {
@@ -43,13 +57,35 @@ namespace Players.Animation
             _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
             _clipOverrides["Punch"] = Clips.PunchAnimationClip;
 
-            
+
             _animatorOverrideController.ApplyOverrides(_clipOverrides);
         }
 
         private void Update()
         {
-        
+
+        }
+
+//        private void OnDrawGizmos()
+//        {
+//            Vector3 rayCastPos = new Vector3(transform.position.x, transform.position.y + _capsuleCollider.center.y, transform.position.z);
+//            Vector3 forwards = new Vector3(transform.forward.x, transform.position.y , transform.forward.z);
+//            Ray myRay = new Ray(rayCastPos, forwards);
+//            Debug.DrawRay(myRay.origin,myRay.direction, Color.red);
+//        }
+
+        public void Hit()
+        {
+            Vector3 rayCastPos = new Vector3(transform.position.x, transform.position.y + _capsuleCollider.center.y, transform.position.z);
+            Vector3 forwards = new Vector3(transform.forward.x, transform.position.y , transform.forward.z);
+            Ray myRay = new Ray(rayCastPos, forwards);
+            Debug.DrawRay(myRay.origin,myRay.direction, Color.red);
+            if (Physics.Raycast(myRay, out _raycastHit, _weaponMono.Range))
+            {
+
+                _characterMono.HandleAttack(_raycastHit);
+
+            }
         }
 
         public void SetPunchTrigger()
@@ -61,8 +97,8 @@ namespace Players.Animation
         {
             return _animator.GetCurrentAnimatorStateInfo(0).IsTag("Punching");
         }
-        
-        
+
+
 
         public void ResetForward()
         {
