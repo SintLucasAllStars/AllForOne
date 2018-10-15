@@ -2,20 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WeaponStats", menuName = "AllForOne/WeaponStats", order = 0)]
-public class WeaponStats : ScriptableObject
-{
-    public AnimationClip Animation { get { return animation; } }
-    public float Damage { get { return damage; } }
-    public float Speed { get { return speed; } }
-    public float Range { get { return range; } }
-
-    [SerializeField] private AnimationClip animation;
-    [SerializeField] private float damage = 0;
-    [SerializeField] private float speed = 0;
-    [SerializeField] private float range = 0;
-}
-
 public class Weapon : MonoBehaviour
 {
     public delegate void DelEquip();
@@ -41,7 +27,7 @@ public class Weapon : MonoBehaviour
             {
                 if(_unit.owner != unit.owner)
                 {
-                    _unit.Hit(stats.Damage + unit.stats.strength);
+                    _unit.Hit(stats.Damage + unit.stats.Strength);
                 }
             }
         }

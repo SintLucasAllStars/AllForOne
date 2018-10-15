@@ -95,10 +95,10 @@ public class UnitCreator : MonoBehaviour
     {
         Unit _unit = unit.GetComponent<Unit>();
         _unit.owner             = player;
-        _unit.stats.health      = health.slider.value;
-        _unit.stats.strength    = strength.slider.value;
-        _unit.stats.speed       = speed.slider.value;
-        _unit.stats.defence     = defence.slider.value;
+        _unit.stats.Health      = health.slider.value;
+        _unit.stats.Strength    = strength.slider.value;
+        _unit.stats.Speed       = speed.slider.value;
+        _unit.stats.Defence     = defence.slider.value;
         _unit.Spawn();
 
         unit.SetActive(true);

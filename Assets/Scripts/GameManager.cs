@@ -13,9 +13,9 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Properties
-    public Player CurrentPlayer { get { return players[currentPlayer]; } }
-    public Player Winner { get { return winner; } }
-    public bool SpawnMode { get { return spawnMode; } }
+    public Player CurrentPlayer     { get { return players[currentPlayer]; } }
+    public Player Winner            { get { return winner; } }
+    public bool SpawnMode           { get { return spawnMode; } }
     #endregion
 
     #region Fields
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         CurrentPlayer.enabled = false;
 
+        //If all players are ready in spawn mode, start the game.
         if (spawnMode && ReadyCheck())
         {
             StartGame();
@@ -55,9 +56,7 @@ public class GameManager : MonoBehaviour
         if (currentPlayer + 1 >= players.Count)
             currentPlayer = 0;
         else
-        {
             currentPlayer += 1;
-        }
 
         CurrentPlayer.enabled = true;
     }
@@ -79,7 +78,6 @@ public class GameManager : MonoBehaviour
     //Checks whether all players are done placing units.
     private bool ReadyCheck()
     {
-        //Check whether all players are ready.
         for (int i = 0; i < players.Count; i++)
         {
             if (!players[i].Ready)
@@ -92,13 +90,11 @@ public class GameManager : MonoBehaviour
     //Check whether there is a sole winner.
     private void WinCheck()
     {
-        print(players.Count);
         if (players.Count == 1)
         {
             winner = players[0];
             EndGame();
         }
-
     }
 
     //Disable all players.
@@ -126,6 +122,9 @@ public class GameManager : MonoBehaviour
     private void EndGame()
     {
         DisablePlayers();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         if (OnGameEnd != null)
             OnGameEnd();

@@ -8,10 +8,15 @@ public class Unit : MonoBehaviour
     [System.Serializable]
     public struct Stats
     {
-        public float health;
-        public float strength;
-        public float speed;
-        public float defence;
+        public float Health     { get { return health; }            set { health = value; } }
+        public float Strength   { get { return strength; }          set { strength = value; } }
+        public float Speed      { get { return speed * 0.25f; }     set { speed = value; } }
+        public float Defence    { get { return defence * 1.5f; }    set { defence = value; } }
+
+        [SerializeField] private float health;
+        [SerializeField] private float strength;
+        [SerializeField] private float speed;
+        [SerializeField] private float defence;
     }
 
     public float Timer { get { return playTime; } }
@@ -34,12 +39,14 @@ public class Unit : MonoBehaviour
 
     private bool isSelected = false;
 
-    
+    private float cd_Attack = 0;
 
     public void Spawn()
     {
         owner.UnitCount += 1;
         print(owner.name + " Unit Count: " + owner.UnitCount);
+
+        animator.SetFloat("MovementSpeed", 1 + stats.Speed);
     }
 
     void Awake()
@@ -63,10 +70,35 @@ public class Unit : MonoBehaviour
                 animator.SetFloat("Y", y);
                 transform.Rotate(0, x, 0);
 
-                if(Input.GetButtonDown("Attack"))
+                if(Input.GetButtonDown("Attack") && cd_Attack <= 0)
                 {
+                    if (weapon)
+                    {
+                        cd_Attack = weapon.Stats.Animation.length / weapon.Stats.Speed;
+                    }  
+                    else
+                    {
+                        cd_Attack = 1.867f / 3;
+
+                        RaycastHit hit;
+
+                        if(Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit))
+                        {
+                            if(hit.collider.GetComponent<Unit>())
+                            {
+                                hit.collider.GetComponent<Unit>().Hit(stats.Strength);
+                            }
+                        }
+                    }
+
                     animator.SetTrigger("Attack");
+
+
+
                 }
+
+                if (cd_Attack > 0)
+                    cd_Attack -= Time.deltaTime;
             }
             else
             {
@@ -100,7 +132,7 @@ public class Unit : MonoBehaviour
 
     public void Hit(float damage)
     {
-        if ((stats.health -= damage) <= 0)
+        if ((stats.Health -= (damage / stats.Defence)) <= 0)
             Die();
     }
 
@@ -131,6 +163,7 @@ public class Unit : MonoBehaviour
 
     private void EquipWeapon()
     {
+        animator.SetFloat("AttackSpeed", weapon.Stats.Speed);
         animator.SetBool("Armed", true);
         aoc["Attack"] = weapon.Stats.Animation;
     }
