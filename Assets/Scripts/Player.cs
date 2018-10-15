@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int UnitCount { get { return unitCount; } set { unitCount = value; if(unitCount <= 0) { GameManager.instance.PlayerRemove(this); } } }
     public bool Ready { get { return ready; } set { ready = value; GameManager.instance.NextTurn(); } }
 
     #region Fields
@@ -18,10 +19,10 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask rayMask = 0;
 
     private new Camera camera;
-    private Unit hovered = null;
 
     private bool ready = false;
-    
+
+    private int unitCount = 0;
     #endregion
 
     #region Methods
@@ -32,15 +33,16 @@ public class Player : MonoBehaviour
         particle.GetComponent<Renderer>().material.SetColor("_TintColor", color);
         particle.gameObject.SetActive(false);
 
-        GameManager.instance.AddPlayer(this);
+        if (name == "Player")
+            name = "Player_" + index;
+
+        GameManager.instance.PlayerAdd(this);
         camera = GlobalCamera.instance.Camera;
     }
 
-
-
     private void OnEnable()
     {
-        if(GameManager.instance.isSpawnMode)
+        if(GameManager.instance.SpawnMode)
         {
             if (ready)
             {
@@ -55,24 +57,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.instance.isSpawnMode)
+        if(GameManager.instance.SpawnMode)
         {
             HoverPlace();
         }
         else
         {
             HoverSelect();
-            
-            //If we are hovering over an owned Unit.
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (hovered)
-                {
-                    hovered.Select();
-                    enabled = false;
-                    particle.gameObject.SetActive(false);
-                }
-            }
         }
     }
 
@@ -90,6 +81,7 @@ public class Player : MonoBehaviour
             {
                 UnitCreator.instance.PreviewUnit(hit.point);
 
+                //Input for placing the unit.
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (UnitCreator.instance.Cost <= points)
@@ -132,17 +124,22 @@ public class Player : MonoBehaviour
             {
                 //If we hit a unit that belongs to this player.
                 //Cache it and enable selection visual.
-                if (unit.owner == index)
+                if (unit.owner == this)
                 {
-                    hovered = unit;
-
                     particle.gameObject.SetActive(true);
-                    particle.transform.position = hovered.transform.position;
+                    particle.transform.position = unit.transform.position;
+
+                    //If we are hovering over an owned Unit.
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        unit.Select();
+                        enabled = false;
+                        particle.gameObject.SetActive(false);
+                    }
                 }
             }
             else
             {
-                hovered = null;
                 particle.gameObject.SetActive(false);
             }
         }

@@ -85,14 +85,5 @@ public class GlobalCamera : MonoBehaviour {
 
             transform.Translate(motionX, 0, motionY, Space.World);
         }
-
-        if (Input.GetKeyDown(KeyCode.U))
-            ResetPosition();
-    }
-
-    private void ResetPosition()
-    {
-        input.x = 0;
-        input.y = 0;
     }
 }

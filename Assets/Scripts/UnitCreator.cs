@@ -94,7 +94,7 @@ public class UnitCreator : MonoBehaviour
     public void SpawnUnit(Vector3 position)
     {
         Unit _unit = unit.GetComponent<Unit>();
-        _unit.owner             = player.index;
+        _unit.owner             = player;
         _unit.stats.health      = health.slider.value;
         _unit.stats.strength    = strength.slider.value;
         _unit.stats.speed       = speed.slider.value;
@@ -121,6 +121,7 @@ public class UnitCreator : MonoBehaviour
 
     private void DeActive()
     {
+        GameManager.instance.OnGameStart -= DeActive;
         Destroy(gameObject);
     }
 

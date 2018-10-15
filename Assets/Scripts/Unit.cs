@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [RequireComponent(typeof(Animator))]
 public class Unit : MonoBehaviour
 {
@@ -19,13 +18,13 @@ public class Unit : MonoBehaviour
 
     [Header("Stats")]
     public Stats stats;
-
-    [HideInInspector] public int owner = 0;
     
     [Header("Configuration")]
     [SerializeField] private Transform hand = null;
     [SerializeField] private float speedRotation = 2;
-    
+
+    [HideInInspector] public Player owner;
+
 
     private Animator animator;
     private AnimatorOverrideController aoc;
@@ -39,7 +38,8 @@ public class Unit : MonoBehaviour
 
     public void Spawn()
     {
-
+        owner.UnitCount += 1;
+        print(owner.name + " Unit Count: " + owner.UnitCount);
     }
 
     void Awake()
@@ -106,6 +106,8 @@ public class Unit : MonoBehaviour
 
     public void Die()
     {
+        owner.UnitCount -= 1;
+        print(owner.name + " Unit Count: " + owner.UnitCount);
         Destroy(gameObject);
     }
 
