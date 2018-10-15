@@ -12,7 +12,7 @@ public class Player
     public bool Choosing;
 
     public int CurrentlyActiveCharacter;
-    
+
     public Player(int playerNumber)
     {
         PlayerNumber = playerNumber;
@@ -32,6 +32,11 @@ public class Player
         return Characters[CurrentlyActiveCharacter];
     }
 
+    public void RemoveCharacter(Character character)
+    {
+        Characters.Remove(character);
+    }
+
     public void SetPoints(int points)
     {
         _points = points;
@@ -45,7 +50,7 @@ public class Player
     {
         Characters.Add(character);
     }
-    
-    
+
+
 
 }

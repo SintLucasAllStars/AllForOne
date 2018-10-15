@@ -19,6 +19,10 @@
         {
             Health -= damage;
             MyCharacterMono.SetSliderValue();
+            if (Health < 0)
+            {
+                MyCharacterMono.Die();
+            }
         }
 
 

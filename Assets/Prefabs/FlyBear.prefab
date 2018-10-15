@@ -476,7 +476,7 @@ GameObject:
   - component: {fileID: 114238328524234296}
   m_Layer: 0
   m_Name: FlyBear
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -699,7 +699,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1955631359681278}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 306.7435, y: 0.894, z: 121.78045}
+  m_LocalPosition: {x: 174.2, y: 0.894, z: 301.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4811464513316888}
@@ -874,9 +874,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60aec541f95906b4b8dfbae299170f8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _xClamp: {x: 267.4, y: 313.3}
+  _xClamp: {x: 143.2, y: 194}
   _yClamp: {x: 4, y: 5}
-  _zClamp: {x: 83.2, y: 115.7}
+  _zClamp: {x: 283, y: 320}
+  _material: {fileID: 2100000, guid: f5294d661371a4446a8ef1d6690b5f5c, type: 2}
+  _skinnedMeshRenderer: {fileID: 137918429786401116}
 --- !u!114 &114238328524234296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -925,6 +927,7 @@ MonoBehaviour:
     HangAnimationClip: {fileID: 7400000, guid: 7419f369a3cf1ac41bb303e3deaff9d3, type: 3}
     PunchAnimationClip: {fileID: 7400000, guid: 84737158b8acdfd46a09c0013aadaca7,
       type: 3}
+    DieAnimationClip: {fileID: 7400000, guid: c307e8960f14ae145ba46f10ea5b29c7, type: 3}
     RunAnimationClip: {fileID: 7400000, guid: 253fd07e80009a947a13c5df68009454, type: 2}
     WalkAnimationClip: {fileID: 7400000, guid: 66f07a2c9062a174b86887d1622498bf, type: 2}
     IdleAnimationClip: {fileID: 7400000, guid: a178bb221d265b9438121289a4c2f10b, type: 3}
@@ -932,6 +935,7 @@ MonoBehaviour:
       type: 3}
     TurnLeftAnimationClip: {fileID: 0}
   _root: {fileID: 1632765973865108}
+  _colliderCenterOffsetY: 0.3
 --- !u!114 &114448967992803296
 MonoBehaviour:
   m_ObjectHideFlags: 1

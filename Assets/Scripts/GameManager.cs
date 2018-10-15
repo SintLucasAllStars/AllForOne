@@ -25,6 +25,8 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private Slider _healthSlider;
 
+    [SerializeField] private Material _resetMaterial;
+
 
     public bool FriendlyFire = false;
 
@@ -36,9 +38,15 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        ResetMaterial();
         //TimerActive = true;
         _healthSlider.gameObject.SetActive(false);
         _timeLeft = 1000f;
+    }
+
+    private void ResetMaterial()
+    {
+        _resetMaterial.color = Color.white;
     }
 
     public void CharacterPlaced()

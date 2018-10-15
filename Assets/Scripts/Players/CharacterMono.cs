@@ -53,6 +53,13 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         _slider.value = MyCharacter.Health;
     }
 
+    public void Die()
+    {
+        _thirdPersonAnimation.Die();
+        PlayerManager.Instance.GetCurrentlyActivePlayer().RemoveCharacter(MyCharacter);
+        RemoveSlider();
+    }
+
 
     private void Update()
     {
@@ -60,6 +67,12 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         vector3.x = vector3.z = 0.0f;
         _slider.transform.LookAt(Camera.main.transform.position - vector3);
         _slider.transform.Rotate(0,180,0);
+    }
+
+    private void RemoveSlider()
+    {
+       Destroy(_slider.gameObject);
+       Destroy(this);
     }
 
     private void Start()
@@ -76,9 +89,6 @@ public class CharacterMono : MonoBehaviour ,ICharacter
             if (GameManager.Instance.FriendlyFire)
             {
                 hitChar.SetHealth(MyCharacter.Strength / 100 * _weaponMono.MyWeapon.Damage);
-
-
-
             }
         }
     }

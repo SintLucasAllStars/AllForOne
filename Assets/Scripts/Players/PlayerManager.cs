@@ -15,8 +15,8 @@ namespace Players
 
         [SerializeField]
         public CharacterPrefabs Prefabs;
-        
-        
+
+
         [SerializeField] private Player[] _playersArray;
         public int AmountOfPlayers
         {
@@ -24,7 +24,7 @@ namespace Players
             {
                 return _playersArray.Length;
             }
-       
+
         }
 
 
@@ -32,12 +32,17 @@ namespace Players
         {
             return StrengthCost + HealthCost + DefenceCost + SpeedCost;
         }
-        
+
         private int _currentlyActive = 1;
-       
+
         public Player GetCurrentlyActivePlayer()
         {
             return _playersArray[_currentlyActive - 1];
+        }
+
+        public void RemoveCharacter(Character character)
+        {
+            GetCurrentlyActivePlayer().RemoveCharacter(character);
         }
 
         public bool SetCurrentlyActivePlayerSelection()
@@ -64,12 +69,12 @@ namespace Players
                     return true;
                 }
                 return false;
-           
-     
+
+
             }
-            
+
             Debug.Log(StillChoosing());
-        
+
         }
 
         public void SetCurrentlyActivePlayer()
@@ -89,8 +94,8 @@ namespace Players
         {
             _currentlyActive = Random.Range(1, _playersArray.Length + 1);
             Debug.Log("Player " + _currentlyActive + " Chosen");
-            
-            
+
+
         }
 
         private bool StillChoosing()
@@ -107,28 +112,28 @@ namespace Players
             go.GetComponent<CharacterMono>().MyCharacter = character;
             character.MyCharacterMono = go.GetComponent<CharacterMono>();
         }
-      
-        
+
+
 
         private void Start()
         {
             _playersArray = new Player[2];
-         
+
 
             InitializePlayer();
         }
 
         private void InitializePlayer()
-        {   
-             
+        {
+
             for (int i = 0; i < _playersArray.Length; i++)
             {
                _playersArray[i] = new Player(i + 1);
             }
         }
 
-        
-        
+
+
 
     }
 }

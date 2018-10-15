@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using Players;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class CharacterPlacement : MonoBehaviour
 {
 
     private Vector3 _mousePosition;
-    
+
     [Header("CLAMP VALUES")]
     [SerializeField] private Vector2 _xClamp;
     [SerializeField] private Vector2 _yClamp;
@@ -20,37 +22,93 @@ public class CharacterPlacement : MonoBehaviour
     private ThirdPersonCharacter _thirdPersonCharacter;
     private ThirdPersonUserControl _userControl;
     private Rigidbody _rigidbody;
-    
-    
+
+    private RaycastHit _raycastHit;
+    private MaterialPropertyBlock _materialPropertyBlock;
+    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRenderer;
+
+
+
     private void Awake()
     {
         _thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
         _userControl = GetComponent<ThirdPersonUserControl>();
         _rigidbody = GetComponent<Rigidbody>();
+        _materialPropertyBlock = new MaterialPropertyBlock();
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+        _materialPropertyBlock.SetColor("_Color", Color.white);
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+
+
+
     }
 
 
     private void Update()
     {
-      
+
+        Debug.Log(OnFloor());
+
         if (!Input.GetMouseButtonDown(0))
         {
             FollowMouse();
+            SetColor(OnFloor());
+        }
+        else if(OnFloor())
+        {
+            PlaceCharacter();
+            _materialPropertyBlock.SetColor("_Color", Color.white);
+            _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+
+        }
+
+
+    }
+
+
+    private void SetColor(bool onFloor)
+    {
+        _skinnedMeshRenderer.GetPropertyBlock(_materialPropertyBlock);
+        if (!onFloor)
+        {
+            if (_materialPropertyBlock.GetColor("_Color") != Color.white)
+            {
+                Color lerpColor = Color.Lerp(Color.black, Color.white,3f *Time.deltaTime);
+                _materialPropertyBlock.SetColor("_Color", lerpColor);
+            }
         }
         else
         {
-            _thirdPersonCharacter.enabled = true;
-            _userControl.enabled = true;
-            _rigidbody.useGravity = true;
-            GameManager.Instance.CharacterPlaced();
-            enabled = false;
+            if (_materialPropertyBlock.GetColor("_Color") != Color.black)
+            {
+                Color lerpColor = Color.Lerp(Color.white, Color.black, 3f * Time.deltaTime);
+                _materialPropertyBlock.SetColor("_Color", lerpColor);
+            }
         }
-        
+
+        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+    }
+
+    private void PlaceCharacter()
+    {
+        _thirdPersonCharacter.enabled = true;
+        _userControl.enabled = true;
+        _rigidbody.useGravity = true;
+        GameManager.Instance.CharacterPlaced();
+        enabled = false;
+    }
+
+
+    private bool OnFloor()
+    {
+        Ray myRay = new Ray(transform.position, -transform.up);
+        if (!Physics.Raycast(myRay, out _raycastHit, 50f)) return false;
+        return !_raycastHit.collider.CompareTag("Terrain");
     }
 
     private void FollowMouse()
     {
-        _screenPoint = Camera.main.WorldToScreenPoint(transform.position);        
+        _screenPoint = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 currentScreenPoint = new Vector3
         (
             Input.mousePosition.x,
@@ -60,7 +118,7 @@ public class CharacterPlacement : MonoBehaviour
 
         // ReSharper disable once Unity.InefficientCameraMainUsage
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(currentScreenPoint);
-        
+
         _mousePosition = curPosition;
         _mousePosition.x = Mathf.Clamp(_mousePosition.x, _xClamp.x, _xClamp.y);
         _mousePosition.y = Mathf.Clamp(_mousePosition.y, _yClamp.x, _yClamp.y);

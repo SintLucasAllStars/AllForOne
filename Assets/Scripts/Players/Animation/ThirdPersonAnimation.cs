@@ -21,9 +21,14 @@ namespace Players.Animation
 
         private CharacterMono _characterMono;
         private CapsuleCollider _capsuleCollider;
+        private Rigidbody _rigidbody;
 
 
         [SerializeField] private GameObject _root;
+
+
+        //when character dies
+        [SerializeField] private float _colliderCenterOffsetY;
 
         private RaycastHit _raycastHit;
 
@@ -34,6 +39,7 @@ namespace Players.Animation
             _weaponMono = GetComponent<WeaponMono>();
             _characterMono = GetComponent<CharacterMono>();
             _capsuleCollider = GetComponent<CapsuleCollider>();
+            _rigidbody = GetComponent<Rigidbody>();
 
         }
 
@@ -56,10 +62,11 @@ namespace Players.Animation
         {
             _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
             _clipOverrides["Punch"] = Clips.PunchAnimationClip;
-
-
+            _clipOverrides["Die"] = Clips.DieAnimationClip;
             _animatorOverrideController.ApplyOverrides(_clipOverrides);
         }
+
+
 
         private void Update()
         {
@@ -88,6 +95,16 @@ namespace Players.Animation
             }
         }
 
+        public void Die()
+        {
+            _animator.SetTrigger("Die");
+            _capsuleCollider.enabled = false;
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
+
+
+        }
+
         public void SetPunchTrigger()
         {
             _animator.SetTrigger("Punch");
@@ -113,6 +130,7 @@ namespace Players.Animation
     {
         public AnimationClip HangAnimationClip;
         public AnimationClip PunchAnimationClip;
+        public AnimationClip DieAnimationClip;
         public AnimationClip RunAnimationClip;
         public AnimationClip WalkAnimationClip;
         public AnimationClip IdleAnimationClip;
