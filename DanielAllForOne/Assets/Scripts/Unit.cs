@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    private UnitInterface _unitInterface;
 
-    public UnitStats UnitStats;
+    private void Start()
+    {
+        _unitInterface = FindObjectOfType<UnitInterface>();
+    }
 
-}
+    public void InitializeUnit(int unitTeamId, float[] unitStats)
+    {
+        GetUnitTeamId = unitTeamId;
+        UnitStats = unitStats;
+        IsUnitActive = false;
+    }
 
-public struct UnitStats
-{
-    public int Health;
-    public int Strenght;
-    public int Speed;
-    public int Defense;
+    public PowerUp UnitPowerUp { get; set; }
+    public bool IsUnitActive { get; set; }
+    public int GetUnitTeamId { get; private set; }
+    public float[] UnitStats { get; private set; }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (IsUnitActive)
+        {
+            if (other.gameObject.CompareTag("PowerUp") && Input.GetKeyDown(KeyCode.E))
+            {
+                UnitPowerUp = other.gameObject.GetComponent<PowerUp>();
+                _unitInterface.SetCurrentUnitPowerUp(UnitPowerUp.PowerType);
+                Destroy(other.gameObject);
+            }
+        }
+    }
 }

@@ -5,67 +5,111 @@ using UnityEngine.UI;
 
 public class InterfaceManager : MonoBehaviour
 {
+    public static InterfaceManager Instance;
 
-    [SerializeField] private Slider[] _statsSliders;
-    [SerializeField] private Text[] _pointsToSpendTexts;
+    private PlayerManager _playerManager;
+    private UnitSelectionManager _unitSelectionManager;
+
+    [SerializeField] private Text _availableSpendingPoints;
+    [SerializeField] private Text _currentTotalSpendingPoints;
+    [SerializeField] private Text _currentPlayingPlayerText;
+
     [SerializeField] private Text[] _currentSpendingPointsTexts;
-    [SerializeField] private GameObject _statsInterface;
+    [SerializeField] private Slider[] _statsSliders;
 
-    private int[,] _pointsToSpendArr = { { 90, 90, 90, 90 }, { 90, 90, 90, 90 } };
-    private int[] _oldSliderValues = new int[] { 0, 0, 0, 0 };
-    private string[] _attribTextNames = new string[] { "Health: ", "Strength: ", "Speed: ", "Defense: " };
-    private bool IsPointsAvailable = true;
+    [SerializeField] private GameObject _statsInterface;
+    [SerializeField] private GameObject _toMuchSpendingPointsPopUp;
+
+    private string[] _attribTextNames = new string[] { "Health", "Strength", "Speed", "Defense" };
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
     private void Start()
     {
-        for (int i = 0; i < 4; i++)
-            SetPointsToSpendTexts(i);
+        _playerManager = FindObjectOfType<PlayerManager>();
+        _unitSelectionManager = FindObjectOfType<UnitSelectionManager>();
+
+        StartStatsSelection();
     }
 
-    public void SetPointsToSpendTexts(int index)
+    public void StartStatsSelection()
     {
-        int playerIndex = GameManager.Instance.GetCurrentPlayingPlayer;
+        _toMuchSpendingPointsPopUp.SetActive(false);
 
         for (int i = 0; i < 4; i++)
-            _pointsToSpendTexts[i].text = _attribTextNames[i] + "Points: " + _pointsToSpendArr[playerIndex, i].ToString();
+            SetCurrentSpendingPoints(i);
 
+        SetAvailablePointsToSpend();
+        SetCurrentSelectingPlayer();
+
+        _statsInterface.SetActive(true);
     }
 
-    public void SetCurrentSpendingPointsTexts(int index)
+    public void SetCurrentSpendingPoints(int index)
     {
-        int playerIndex = GameManager.Instance.GetCurrentPlayingPlayer;
+        int amount = 0;
 
-        int amount = (int)_statsSliders[index].value * 10;
-        int diff = amount - _oldSliderValues[index];
-
-        _oldSliderValues[index] = amount;
-
-        _currentSpendingPointsTexts[index].text = _attribTextNames[index] + amount;
-
-        if (_pointsToSpendArr[playerIndex, index] - diff >= 0)
-            _pointsToSpendArr[playerIndex, index] -= diff;
+        if (index % 2 == 0)
+            amount = (int)_statsSliders[index].value * 3;
         else
-            _pointsToSpendArr[playerIndex, index] = 0;
+            amount = (int)_statsSliders[index].value * 2;
 
-        SetPointsToSpendTexts(index);
+        _currentSpendingPointsTexts[index].text = _attribTextNames[index] + " : " + amount;
+
+        SetCurrentTotalSpendingPoints();
+    }
+
+    public void SetCurrentTotalSpendingPoints()
+    {
+        int amount = 0;
+
+        for (int i = 0; i < 4; i++)
+            amount += i % 2 == 0 ? (int)_statsSliders[i].value * 3 : (int)_statsSliders[i].value * 2;
+
+        _currentTotalSpendingPoints.text = "Current Total Spending Points: " + amount;
+    }
+
+    public void SetAvailablePointsToSpend()
+    {
+        _availableSpendingPoints.text = "Available Points To Spend: " + _unitSelectionManager.AvailablePoints;
+    }
+
+    public void SetCurrentSelectingPlayer()
+    {
+        if (_playerManager.GetCurrentPlayingPlayerIndex == 0)
+            _currentPlayingPlayerText.text = "Player: RED";
+        else
+        {
+            _currentPlayingPlayerText.text = "Player: BLUE";
+        }
     }
 
     public void HireUnit()
     {
-        UnitStats unitStats;
+        float[] stats = new float[4];
 
-        unitStats.Health = (int)_statsSliders[0].value * 10;
-        unitStats.Strenght = (int)_statsSliders[1].value * 10;
-        unitStats.Speed = (int)_statsSliders[2].value * 10;
-        unitStats.Defense = (int)_statsSliders[3].value * 10;
+        int totalPointAmount = 0;
 
-        _statsInterface.SetActive(false);
+        for (int i = 0; i < 4; i++)
+            totalPointAmount += i % 2 == 0 ? (int)_statsSliders[i].value * 3 : (int)_statsSliders[i].value * 2;
 
-        StartCoroutine(GameManager.Instance.UnitPlacement(unitStats));
+
+        if (_unitSelectionManager.DecreasePoints(totalPointAmount)){
+
+            _statsInterface.SetActive(false);
+
+            for (int i = 0; i < 4; i++)
+                stats[i] = i % 2 == 0 ? _statsSliders[i].value * 3 : _statsSliders[i].value * 2;
+
+            StartCoroutine(_unitSelectionManager.UnitPlacement(stats));
+
+        }
+        else
+            _toMuchSpendingPointsPopUp.SetActive(true);
     }
 
-    private bool IsPointSubstractionAvailable(int index, int amount)
-    {
-        return _pointsToSpendArr[GameManager.Instance.GetCurrentPlayingPlayer, index] - amount > 0;
-    }
 }
