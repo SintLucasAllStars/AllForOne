@@ -30,10 +30,8 @@ public class InterfaceManager : MonoBehaviour
 
     private void Start()
     {
-        _playerManager = FindObjectOfType<PlayerManager>();
         _unitSelectionManager = FindObjectOfType<UnitSelectionManager>();
-
-        StartStatsSelection();
+        _playerManager = FindObjectOfType<PlayerManager>();
     }
 
     public void StartStatsSelection()

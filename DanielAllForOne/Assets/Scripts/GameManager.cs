@@ -8,10 +8,17 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
 
-    [SerializeField] private GameObject[] _powerUps;
+    [SerializeField] private GameObject[] _powerUpsObjects;
+    [SerializeField] private GameManager[] _weaponsObjects;
     private int[,] _powerUpGrid = new int[20, 20];
 
     #endregion
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
     public void InitializePowerUpGrid()
     {
@@ -19,23 +26,28 @@ public class GameManager : MonoBehaviour
         {
             for (int z = 0; z < _powerUpGrid.GetLength(1); z++)
             {
-                int r = Random.Range(0, 20);
+                int randomPowerUp = Random.Range(0, 30);
+                int randomWeapon = Random.Range(0, 50);
 
-                if(r == 1)
+                if (randomPowerUp == 1)
                 {
                     Vector3 pos = new Vector3(x + 0.5f - _powerUpGrid.GetLength(0), 0, z + 0.5f - _powerUpGrid.GetLength(1));
 
-                    int r2 = Random.Range(0, _powerUps.Length);
+                    int r2 = Random.Range(0, _powerUpsObjects.Length);
 
-                    Instantiate(_powerUps[r2], pos, Quaternion.identity);
+                    Instantiate(_powerUpsObjects[r2], pos, Quaternion.identity);
+                }
+
+                if (randomWeapon == 1)
+                {
+                    Vector3 pos = new Vector3(x + 0.5f - _powerUpGrid.GetLength(0), 0, z + 0.5f - _powerUpGrid.GetLength(1));
+
+                    int r2 = Random.Range(0, _weaponsObjects.Length);
+
+                    Instantiate(_weaponsObjects[r2], pos, Quaternion.identity);
                 }
             }
         }
     }
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-    }
 }

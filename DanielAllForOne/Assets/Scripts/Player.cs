@@ -12,5 +12,4 @@ public class Player {
     }
 
     public Color GetTeamColor { get; private set; }
-
 }

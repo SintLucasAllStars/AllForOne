@@ -15,8 +15,6 @@ public class PlayerManager : MonoBehaviour
     {
         _unitSelectionManager = FindObjectOfType<UnitSelectionManager>();
         _unitInterface = FindObjectOfType<UnitInterface>();
-        float x = 10;
-        Debug.Log(x += x * 0.1f);
 
         _PlayerArr = new[]{
             new Player(Color.red),
@@ -121,6 +119,4 @@ public class PlayerManager : MonoBehaviour
         yield return null;
 
     }
-
-
 }

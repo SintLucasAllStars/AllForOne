@@ -16,13 +16,16 @@ public class Unit : MonoBehaviour
         GetUnitTeamId = unitTeamId;
         UnitStats = unitStats;
         IsUnitActive = false;
+
+        weapon = WeaponManager.Weapons[WeaponTypes.Punch];
     }
 
     public PowerUp UnitPowerUp { get; set; }
+    public Weapon weapon { get; set; }
     public bool IsUnitActive { get; set; }
     public int GetUnitTeamId { get; private set; }
     public float[] UnitStats { get; private set; }
-
+    
     private void OnTriggerStay(Collider other)
     {
         if (IsUnitActive)

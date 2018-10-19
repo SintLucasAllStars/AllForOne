@@ -11,9 +11,6 @@ public class UnitSelectionManager : MonoBehaviour
     private PlayerManager _playerManager;
     private int[] _availablePoints = new int[] { 100, 100 };
 
-
-
-
     private void Start()
     {
         _playerManager = FindObjectOfType<PlayerManager>();
@@ -89,7 +86,6 @@ public class UnitSelectionManager : MonoBehaviour
 
             if (!IsPlayerPointsAvailable)
             {
-                //Both players out of points.. start game
                 StartCoroutine(UnitSelection());
                 GameManager.Instance.InitializePowerUpGrid();
             }
@@ -142,5 +138,4 @@ public class UnitSelectionManager : MonoBehaviour
             yield return null;
         }
     }
-
 }
