@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] _powerUpsObjects;
     [SerializeField] private GameManager[] _weaponsObjects;
     private int[,] _powerUpGrid = new int[20, 20];
+    public float PlayerTime = 10f;
 
     #endregion
 

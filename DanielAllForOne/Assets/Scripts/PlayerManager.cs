@@ -39,10 +39,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public IEnumerator PlayerMovement(Transform unitTransform)
+    public void StartPlayerMovement(Unit unit)
     {
-        Unit unit = unitTransform.gameObject.GetComponent<Unit>();
+        StartCoroutine(LerpToUnit(unit.transform));
+        unit.IsUnitActive = true;
+    }
 
+    public IEnumerator LerpToUnit(Transform unitTransform)
+    {
         Camera.main.transform.SetParent(unitTransform);
 
         Vector3 target = new Vector3(0, unitTransform.localPosition.y, -2);
@@ -53,39 +57,6 @@ public class PlayerManager : MonoBehaviour
             Camera.main.transform.LookAt(unitTransform);
             yield return null;
         }
-
-        unit.IsUnitActive = true;
-
-        float time = 10;
-
-        while (time >= 0)
-        {
-            Vector3 offset = Camera.main.transform.position - unitTransform.position;
-
-            Camera.main.transform.position = offset + unitTransform.position;
-
-            float translation = Input.GetAxis("Vertical") * unit.UnitStats[2];
-            float rotation = Input.GetAxis("Horizontal") * unit.UnitStats[2];
-
-            translation *= Time.deltaTime;
-            rotation *= Time.deltaTime;
-
-            unitTransform.Translate(0, 0, translation);
-
-            unitTransform.Rotate(0, rotation, 0);
-            time -= Time.deltaTime;
-
-            if (Input.GetKeyDown(KeyCode.Q) && unit.UnitPowerUp != null)
-                StartCoroutine(UseUnitPowerUp(unit.UnitPowerUp, unit.UnitStats));
-
-            yield return null;
-        }
-
-        unit.IsUnitActive = false;
-
-        SetNextPlayerIndex();
-
-        StartCoroutine(_unitSelectionManager.UnitSelection());
     }
 
     public IEnumerator UseUnitPowerUp(PowerUp powerUp, float[] unitStats)

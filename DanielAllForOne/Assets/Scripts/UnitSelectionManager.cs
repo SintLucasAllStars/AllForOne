@@ -125,12 +125,12 @@ public class UnitSelectionManager : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Unit u = hit.collider.gameObject.GetComponent<Unit>();
+                    Unit unit = hit.collider.GetComponent<Unit>();
 
-                    if (IsUnitSelectable(u.GetUnitTeamId))
+                    if (IsUnitSelectable(unit.UnitTeamId))
                     {
                         select = false;
-                        StartCoroutine(_playerManager.PlayerMovement(u.transform));
+                        _playerManager.StartPlayerMovement(unit);
                     }
                 }
             }
