@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     public Animator anim;
 
-    private CharacterController control;
+    private Rigidbody rb;
+
     public float speed;
 
 
     private void Start()
     {
-        control = GetComponent<CharacterController>();
+        rb = gameObject.AddComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void Update ()
     {
-        Vector3 move = new Vector3(0, -0.1f, Input.GetAxis("Vertical"));  ///eerste horizontal
-        control.Move(move * Time.deltaTime *  speed / 5f);
+        transform.Translate(0, 0, Input.GetAxis("Vertical") * speed * Time.deltaTime / 10f);
+        transform.Rotate(0, Input.GetAxis("Horizontal") * 130f * Time.deltaTime, 0);
+
     }
 
 }

@@ -9,15 +9,35 @@ public class Character : MonoBehaviour
     public PlayerController controller;
 
 
+    [SerializeField] private bool m_isPlaying;
+
+    public bool isPlaying
+    {
+        get
+        {
+            return m_isPlaying;
+        }
+        set
+        {
+            controller.enabled = value;
+            m_isPlaying = value;
+        }
+    }
+
+
     private void OnEnable()
     {
         controller = GetComponent<PlayerController>();
+        isPlaying = false;
     }
 
 
     public void init (Unit uDefaultType)
     {
         playerNormalStats = (Soldier) uDefaultType;
+
+        controller.speed = uDefaultType.speed;
+
 
         /*   
         playerType.name = uType.name;

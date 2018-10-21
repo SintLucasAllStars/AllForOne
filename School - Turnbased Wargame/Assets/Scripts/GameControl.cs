@@ -48,8 +48,10 @@ public class GameControl : MonoBehaviour
 
     public void GameSelectUnit (GameObject unit)
     {
+        unit.GetComponent<Character>().isPlaying = true;
         camControl.playerTarget = unit;
         camControl.CameraCurrentControl = CameraController.CameraControlEnum.playerThirdPerson;
+
     }
 
 }
