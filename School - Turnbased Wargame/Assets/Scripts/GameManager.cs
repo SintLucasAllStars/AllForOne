@@ -51,10 +51,13 @@ public class GameManager : MonoBehaviour
                     if (PlayerManager.instance.playerCurrentTurn.playerMoney < 10)
                     {
                         Debug.Log("Other player has too no money. Game start");
+                        isPlayerBlue = !isPlayerBlue;
                         GameControl.instance.GamePlacementReady();
                         break;
                     }
                 }
+
+                GameControl.instance.camControl.CameraCurrentControl = isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
                 UnitUIEvent.instance.NavigaTo(UnitUIEvent.CanvasNavigation.unitList);
                 break;
 

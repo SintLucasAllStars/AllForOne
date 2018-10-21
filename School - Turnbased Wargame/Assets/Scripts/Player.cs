@@ -9,7 +9,7 @@ public class Player
     public ushort playerMoney;
     public Color playerColor;
     public Color playerUIColor;
-
+    public Transform playerHome;
 
     public List<GameObject> playerGameObject = new List<GameObject>();
     public Character this[int index] 

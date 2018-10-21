@@ -57,7 +57,7 @@ public class UnitPlacement : MonoBehaviour
         GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, point, Quaternion.identity) as GameObject;
         spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier);
 
-
+        spawnUnit.transform.parent = PlayerManager.instance.playerCurrentTurn.playerHome;
         PlayerManager.instance.playerCurrentTurn.playerGameObject.Add(spawnUnit);
         PlayerManager.instance.playerCurrentTurn.playerMoney -= selectSoldier.unitSoldier.cost;
 

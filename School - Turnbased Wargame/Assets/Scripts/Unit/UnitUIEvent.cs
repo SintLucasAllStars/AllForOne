@@ -26,6 +26,9 @@ public class UnitUIEvent : MonoBehaviour
         CreateCanvasList();
         customUnitCreate.SetActive(false);
         NavigaTo(CanvasNavigation.unitList);
+
+        GameControl.instance.camControl.CameraCurrentControl = GameManager.instance.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
+
     }
 
 
@@ -164,6 +167,7 @@ public class UnitUIEvent : MonoBehaviour
                 if (enable)
                 {
                     CanvasUnit.SetActive(false);
+                    GameControl.instance.camControl.CameraCurrentControl = CameraController.CameraControlEnum.mapControl;
                 }
                 break;
         }

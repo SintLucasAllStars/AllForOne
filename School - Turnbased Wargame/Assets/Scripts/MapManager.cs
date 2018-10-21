@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour 
 {
-    [SerializeField] GameObject[] mapDeck;
+    [SerializeField] List <GameObject> mapDeck = new List<GameObject>();
 
+
+    private void Awake()
+    {
+        foreach (Transform o in GetComponentsInChildren<Transform>())
+        {
+            if (o.tag == "Roof")
+            {
+                mapDeck.Add(o.gameObject);
+            }
+        }
+    }
 
     private void Start()
     {
