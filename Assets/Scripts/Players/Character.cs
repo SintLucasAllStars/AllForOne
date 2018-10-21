@@ -24,6 +24,39 @@
                 MyCharacterMono.Die();
             }
         }
+        
+        public int GetCurrentAmountOfAdrenaline()
+        {
+            return MyCharacterMono.GetCurrentAmountOfAdrenaline();
+        }
+
+        public int GetCurrentAmountOfTimeMachine()
+        {
+            return MyCharacterMono.GetCurrentAmountOfTimeMachine();
+
+        }
+
+        public void AddStrength(float amountOfStrength)
+        {
+            Strength += amountOfStrength;
+        }
+
+        public void AddSpeed(float amountOfSpeed)
+        {
+            Speed += amountOfSpeed;
+        }
+        
+        
+
+        public int GetCurrentAmountOfRage()
+        {
+            return MyCharacterMono.GetCurrentAmountOfRage();
+        }
+
+        public void ActivatePowerUp(PowerUp.PowerUpEnum powerUpEnum)
+        {
+            MyCharacterMono.ActivatePowerUp(powerUpEnum);
+        }
 
 
         public Character(float strength, float defence, float speed, float health,int ownedByPlayer)

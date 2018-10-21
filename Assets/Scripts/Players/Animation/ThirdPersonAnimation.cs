@@ -58,6 +58,17 @@ namespace Players.Animation
             _animatorOverrideController.GetOverrides(_clipOverrides);
         }
 
+        public void FootL()
+        {
+            
+        }
+
+        public void FootR()
+        {
+            
+        }
+        
+
         private void ApplyAnimations()
         {
             _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
@@ -73,13 +84,31 @@ namespace Players.Animation
 
         }
 
-//        private void OnDrawGizmos()
-//        {
-//            Vector3 rayCastPos = new Vector3(transform.position.x, transform.position.y + _capsuleCollider.center.y, transform.position.z);
-//            Vector3 forwards = new Vector3(transform.forward.x, transform.position.y , transform.forward.z);
-//            Ray myRay = new Ray(rayCastPos, forwards);
-//            Debug.DrawRay(myRay.origin,myRay.direction, Color.red);
-//        }
+        public void WeaponChanged(Weapon.WeaponEnum weaponEnum)
+        {
+            switch (weaponEnum)
+            {
+                case Weapon.WeaponEnum.Fists:
+                    break;
+                case Weapon.WeaponEnum.Gloves:
+                    break;
+                case Weapon.WeaponEnum.Knife:
+                    break;
+                case Weapon.WeaponEnum.WarHammer:
+                    break;
+                case Weapon.WeaponEnum.Gun:
+                    _clipOverrides["HumanoidIdle"] = Clips.CrosbowIdleAnimationClip;
+                    _clipOverrides["HumanoidRun"] = Clips.CrosbowRunAnimationClip;
+                    _clipOverrides["Punch"] = Clips.CrossbowAttackAnimationClip;
+                    _animatorOverrideController.ApplyOverrides(_clipOverrides);
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("weaponEnum", weaponEnum, null);
+            }
+        }
+
+
 
         public void Hit()
         {
@@ -101,7 +130,6 @@ namespace Players.Animation
             _capsuleCollider.enabled = false;
             _rigidbody.useGravity = false;
             _rigidbody.isKinematic = true;
-
 
         }
 
@@ -131,10 +159,11 @@ namespace Players.Animation
         public AnimationClip HangAnimationClip;
         public AnimationClip PunchAnimationClip;
         public AnimationClip DieAnimationClip;
-        public AnimationClip RunAnimationClip;
-        public AnimationClip WalkAnimationClip;
-        public AnimationClip IdleAnimationClip;
-        public AnimationClip TurnRightAnimationClip;
-        public AnimationClip TurnLeftAnimationClip;
+
+
+        public AnimationClip CrosbowIdleAnimationClip;
+        public AnimationClip CrosbowRunAnimationClip;
+        public AnimationClip CrossbowAttackAnimationClip;
+
     }
 }

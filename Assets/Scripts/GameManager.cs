@@ -30,6 +30,14 @@ public class GameManager : Singleton<GameManager>
 
     public bool FriendlyFire = false;
 
+    [SerializeField] private PowerUpPanel _powerUpPanel;
+
+
+    private bool _powerUpActive = false;
+
+    private bool _pauseTimer;
+    
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,6 +51,10 @@ public class GameManager : Singleton<GameManager>
         _healthSlider.gameObject.SetActive(false);
         _timeLeft = 1000f;
     }
+    
+    
+    
+
 
     private void ResetMaterial()
     {
@@ -66,6 +78,11 @@ public class GameManager : Singleton<GameManager>
     public bool InSelectionState()
     {
         return _inSelectionState;
+    }
+
+    public bool PowerUpActive()
+    {
+        return _powerUpActive;
     }
 
     public void CameraCoroutineFinished(bool setParent)
@@ -95,8 +112,6 @@ public class GameManager : Singleton<GameManager>
 //        }
         PlayerManager.Instance.SetCurrentlyActivePlayer();
         _timeLeft = 10.0f;
-
-
     }
 
     public void SetCameraMovement(Transform transformLocal, bool setParent)
@@ -112,9 +127,39 @@ public class GameManager : Singleton<GameManager>
         _healthSlider.value = PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().Health;
     }
 
+    public void ResetPowerUpPanelTexts()
+    {
+        _powerUpPanel.SetTexts();
+    }
+
+    public void ActivatePowerUp(PowerUp powerUp)
+    {
+        StartCoroutine(IEPowerUp(powerUp));
+    }
+
+    private IEnumerator IEPowerUp(PowerUp powerUp)
+    {
+        _powerUpActive = true;
+        _pauseTimer = powerUp.FreezeTime;
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().AddSpeed(powerUp.SpeedBoost);
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().AddStrength(powerUp.StrengthBoost);
+        _powerUpPanel.SetTime(powerUp.TimeLength);
+        yield return new WaitForSeconds(powerUp.TimeLength);
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().AddSpeed(-powerUp.SpeedBoost);
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().AddStrength(-powerUp.StrengthBoost);
+        _powerUpActive = false;
+        _pauseTimer = false;
+        _powerUpPanel.PowerUpFinished();
+
+
+    }
+    
+    
+    
+
     private void Update()
     {
-        if (TimerActive)
+        if (TimerActive && !_pauseTimer)
         {
             _timeLeft -= Time.deltaTime;
             _healthSlider.value = PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().Health;

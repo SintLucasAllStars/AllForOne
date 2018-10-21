@@ -474,6 +474,7 @@ GameObject:
   - component: {fileID: 114448967992803296}
   - component: {fileID: 114264880235222692}
   - component: {fileID: 114238328524234296}
+  - component: {fileID: 114998533838904324}
   m_Layer: 0
   m_Name: FlyBear
   m_TagString: Player
@@ -699,7 +700,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1955631359681278}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 174.2, y: 0.894, z: 301.6}
+  m_LocalPosition: {x: 174.2, y: 0.894, z: 304.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4811464513316888}
@@ -729,7 +730,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1088591140308016}
   m_LocalRotation: {x: 0.11979029, y: 0, z: 0, w: 0.9927993}
-  m_LocalPosition: {x: 0, y: 1.34, z: -1.69}
+  m_LocalPosition: {x: 0.91, y: 1.34, z: -1.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4744299190679842}
@@ -877,7 +878,6 @@ MonoBehaviour:
   _xClamp: {x: 143.2, y: 194}
   _yClamp: {x: 4, y: 5}
   _zClamp: {x: 283, y: 320}
-  _material: {fileID: 2100000, guid: f5294d661371a4446a8ef1d6690b5f5c, type: 2}
   _skinnedMeshRenderer: {fileID: 137918429786401116}
 --- !u!114 &114238328524234296
 MonoBehaviour:
@@ -893,6 +893,9 @@ MonoBehaviour:
   Damage: 10
   Range: 50
   Speed: 10
+  Left: {fileID: 0}
+  Right: {fileID: 0}
+  CurrentWeapon: 0
 --- !u!114 &114264880235222692
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -909,7 +912,6 @@ MonoBehaviour:
   m_JumpPower: 12
   m_GravityMultiplier: 2
   m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.1
 --- !u!114 &114399192698957190
@@ -925,15 +927,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Clips:
     HangAnimationClip: {fileID: 7400000, guid: 7419f369a3cf1ac41bb303e3deaff9d3, type: 3}
-    PunchAnimationClip: {fileID: 7400000, guid: 84737158b8acdfd46a09c0013aadaca7,
+    PunchAnimationClip: {fileID: 7400000, guid: 2c22c1d4a1a1927418705861b9a1dd47,
       type: 3}
     DieAnimationClip: {fileID: 7400000, guid: c307e8960f14ae145ba46f10ea5b29c7, type: 3}
-    RunAnimationClip: {fileID: 7400000, guid: 253fd07e80009a947a13c5df68009454, type: 2}
-    WalkAnimationClip: {fileID: 7400000, guid: 66f07a2c9062a174b86887d1622498bf, type: 2}
-    IdleAnimationClip: {fileID: 7400000, guid: a178bb221d265b9438121289a4c2f10b, type: 3}
-    TurnRightAnimationClip: {fileID: 7400000, guid: ba637457b141fb749883e9195ed24964,
+    CrosbowIdleAnimationClip: {fileID: 7400000, guid: ae974b8959da5554b8b1d24ef2bc2ad3,
       type: 3}
-    TurnLeftAnimationClip: {fileID: 0}
+    CrosbowRunAnimationClip: {fileID: 7400000, guid: 030890c62e632f443bc46d249f3981f4,
+      type: 3}
+    CrossbowAttackAnimationClip: {fileID: 0}
   _root: {fileID: 1632765973865108}
   _colliderCenterOffsetY: 0.3
 --- !u!114 &114448967992803296
@@ -1023,8 +1024,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraTransform: {fileID: 4811464513316888}
-  _boxColliders: []
   _slider: {fileID: 114782010158412270}
+  _leftHand: {fileID: 4534639576632246}
+  _rightHand: {fileID: 4725392776879482}
 --- !u!114 &114782010158412270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1073,6 +1075,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114998533838904324
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1955631359681278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14b2639f34f5aa4fbdb99ce32a6ac3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114998847174150982
 MonoBehaviour:
   m_ObjectHideFlags: 1

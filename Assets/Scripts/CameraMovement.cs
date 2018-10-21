@@ -18,6 +18,8 @@ public class CameraMovement : MonoBehaviour
     private Animator _animator;
     public Animation Animation;
     
+    
+    
 
 
     private void Awake()

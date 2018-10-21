@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Players;
@@ -19,11 +20,14 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     private ThirdPersonAnimation _thirdPersonAnimation;
     private ThirdPersonUserControl _thirdPersonUserControl;
 
-    [SerializeField] private List<BoxCollider> _boxColliders = new List<BoxCollider>();
     [SerializeField] private Slider _slider;
-
+    [SerializeField] private Transform _leftHand;
+    [SerializeField] private Transform _rightHand;
+ 
 
     private WeaponMono _weaponMono;
+
+    private PowerUpInventory _powerUpInventory;
 
 
 
@@ -33,13 +37,15 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         _thirdPersonUserControl = GetComponent<ThirdPersonUserControl>();
         _thirdPersonAnimation = GetComponent<ThirdPersonAnimation>();
         _weaponMono = GetComponent<WeaponMono>();
-
-
+        _powerUpInventory = GetComponent<PowerUpInventory>();
+                
+        MyCharacter = new Character(10,10,10,10,10);
     }
 
     public int OwnedBy()
     {
         return MyCharacter.OwnedBy();
+
     }
 
     public void SetHealth(float damage)
@@ -50,6 +56,7 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     public void SetSliderValue()
     {
         Debug.Log(MyCharacter.Health);
+        
         _slider.value = MyCharacter.Health;
     }
 
@@ -58,6 +65,14 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         _thirdPersonAnimation.Die();
         PlayerManager.Instance.GetCurrentlyActivePlayer().RemoveCharacter(MyCharacter);
         RemoveSlider();
+    }
+    
+    
+    //[0] = leftHand, [1] = rightHand
+    
+    public Transform[] GetRightAndLeftHand()
+    {
+        return new[] {_leftHand, _rightHand};
     }
 
 
@@ -93,6 +108,27 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         }
     }
 
+    public int GetCurrentAmountOfAdrenaline()
+    {
+        return _powerUpInventory.GetCurrentAmountOfAdrenaline();
+    }
+
+    public int GetCurrentAmountOfTimeMachine()
+    {
+        return _powerUpInventory.GetCurrentAmountOfTimeMachine();
+
+    }
+
+    public int GetCurrentAmountOfRage()
+    {
+        return _powerUpInventory.GetCurrentAmountOfRage();
+    }
+
+    public void ActivatePowerUp(PowerUp.PowerUpEnum powerUpEnum)
+    {
+       _powerUpInventory.ActivatePowerUp(powerUpEnum);
+    }
+
 
     public void DisableUserControl()
     {
@@ -117,6 +153,11 @@ public class CharacterMono : MonoBehaviour ,ICharacter
             GameManager.Instance.EnableHealthSlider();
         }
     }
+
+//    public IEnumerator IEPowerUp(float speedBoost, float strengthBoost,bool freezeTime, float length)
+//    {
+//        
+//    }
 
 
 
