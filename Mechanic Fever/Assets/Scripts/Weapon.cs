@@ -1,12 +1,61 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public class Weapon : MonoBehaviour {
+public class Weapon : MonoBehaviour
+{
+    [Header("Stats")]
+    public WeaponStats stats;
 
+    [SerializeField] new Collider collider;
+    int damage;
+    string enemyTag;
+
+    public void Init(float playerDamage, string enemyTag)
+    {
+        damage = Mathf.RoundToInt(playerDamage * stats.damageMultiplier);
+        this.enemyTag = enemyTag;
+    }
+
+    public void Attack()
+    {
+        if(!collider.enabled)
+            StartCoroutine(EnableCollider());
+    }
+
+    private IEnumerator EnableCollider()
+    {
+        yield return new WaitForSeconds(stats.attackPeriod.x);
+        Debug.Log("Enabled");
+        collider.enabled = true;
+        yield return new WaitForSeconds(stats.attackPeriod.y - stats.attackPeriod.x);
+        collider.enabled = false;
+        Debug.Log("Disabled");
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        if(collision.collider.CompareTag(enemyTag))
+        {
+            collision.collider.GetComponent<Character>().Damage(damage, 0);
+            collider.enabled = false;
+            StopAllCoroutines();
+            Debug.Log("Check");
+        }
+    }
+
+}
+
+[System.Serializable]
+public struct WeaponStats
+{
+    [Header("Stats")]
     public int damageMultiplier;
     public int range;
+
+    [Header("Animation")]
     public string animationName;
-    public int animationAttackDelay;
-    public float resetDelay;
+    public float animationLength;
+    public Vector2 attackPeriod;
+
 }

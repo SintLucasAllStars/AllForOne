@@ -61,9 +61,10 @@ public class GameManager : MonoBehaviour
                 IsTurnPlayerOne = !IsTurnPlayerOne;
             else
             {
+                IsTurnPlayerOne = true;
                 if(EndRound != null)
                     EndRound.Invoke();
-                IsTurnPlayerOne = true;
+
                 timer.Initialize();
                 return false;
             }

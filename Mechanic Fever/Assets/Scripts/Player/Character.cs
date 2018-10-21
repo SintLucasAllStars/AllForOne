@@ -10,16 +10,17 @@ public class Character : MonoBehaviour
     private ThirdPersonUserControl controller;
     private ThirdPersonCharacter character;
 
-    private float health;
+    private float health = 100;
 
     [SerializeField] private Vector2 damageRange;
-    private float strength;
+    private float damage;
 
     private float defence;
 
-    [HideInInspector] public bool isFortified;
+    public bool isFortified = false;
 
     private Rigidbody playeRigidbody;
+    private CapsuleCollider playerCollider;
 
     [Header("Camera")]
     public Transform pivot;
@@ -27,26 +28,25 @@ public class Character : MonoBehaviour
 
     private Animator animator;
 
-    [SerializeField] private string defaultAnimation;
-    [SerializeField] private float defaultAnimationDelay;
-    [SerializeField] private float resetDelay;
-    [SerializeField] private int defaultDamage;
-    [SerializeField] private int defaultRange;
+    [Header("Weapon Stats")]
+    [SerializeField] Weapon defaultWeapon;
+    Weapon currentWeapon;
 
-    private Weapon weapon;
     private bool isAttacking = false;
+
     private PowerUp powerUp;
 
-    private bool isActive = false;
+    [SerializeField] bool isActive = false;
 
 
     private void Start()
     {
         controller = GetComponent<ThirdPersonUserControl>();
         character = GetComponent<ThirdPersonCharacter>();
-        GameManager.instance.EndRound += EndRound;
         playeRigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        playerCollider = GetComponent<CapsuleCollider>();
+        defaultWeapon.Init(damage, GetEnemyTag());
     }
 
     private void Update()
@@ -63,13 +63,13 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void SetStats(float health, float strength, float speed, float defence)
+    public void SetStats(float health, float damage, float speed, float defence)
     {
         this.health = health;
-        this.strength = strength;
-        controller.runSpeed = speed;
+        this.damage = Mathf.Lerp(damageRange.x, damageRange.y, damage);
+        character.m_MoveSpeedMultiplier = speed;
         this.defence = defence;
-        GetComponent<CapsuleCollider>().enabled = true;
+        playerCollider.enabled = true;
     }
 
     void EndRound()
@@ -84,15 +84,18 @@ public class Character : MonoBehaviour
         isActive = activate;
         controller.enabled = activate;
         character.enabled = activate;
-        playeRigidbody.isKinematic = !activate;
+        playeRigidbody.constraints = !activate ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.FreezeRotation;
 
         if(activate)
         {
+            defaultWeapon.Init(damage, GetEnemyTag());
             GameManager.instance.EndRound += EndRound;
             gameObject.layer = 2;//Set player to ignoreRaycast
+            playerCollider.radius = .2f;
         }
         else
         {
+            playerCollider.radius = .3f;
             ResetAnimator();
             gameObject.layer = 10;//Set player layer;
         }
@@ -112,37 +115,53 @@ public class Character : MonoBehaviour
     {
         if(isAttacking) return;
 
-        animator.Play((weapon == null) ? defaultAnimation : weapon.animationName);
-        isAttacking = true;
+        Weapon weapon = GetWeapon();
+        weapon.Attack();
 
-        if(weapon != null)
-            StartCoroutine(AttackDelay(weapon.animationAttackDelay, weapon.resetDelay));
-        else
-            StartCoroutine(AttackDelay(defaultAnimationDelay, resetDelay));
+        animator.Play(weapon.stats.animationName);
+        //StartCoroutine(AnimationEnd());
+        //isAttacking = true;
     }
 
-    private IEnumerator AttackDelay(float delayTime, float resetDelay)
+    //private IEnumerator AnimationEnd()
+    //{
+    //    yield return new WaitForSeconds(GetWeapon().stats.animationLength);
+    //    isAttacking = false;
+    //}
+
+    //private IEnumerator AttackDelay()
+    //{
+    //    WeaponStats stats = GetWeaponStats();
+    //    Debug.Log(stats);
+    //    animator.Play(stats.animationName);
+
+    //    yield return new WaitForSeconds(stats.attackDelay);
+
+    //    int damage = Mathf.RoundToInt(Mathf.Lerp(damageRange.x, damageRange.y, strength)) + stats.damageMultiplier;
+
+    //    RaycastHit hit;
+    //    if(Physics.Raycast(transform.position + transform.up, transform.forward, out hit, stats.range))
+    //        if(hit.collider.CompareTag("Player" + (GameManager.instance.IsTurnPlayerOne ? "Two" : "One")))
+    //            hit.collider.GetComponent<Character>().Damage(damage, 0);
+
+    //    yield return new WaitForSeconds(stats.resetDelay);
+    //    isAttacking = false;
+    //    Debug.Log("ATTACK");
+    //}
+
+    public Weapon GetWeapon()
     {
-        int damage = Mathf.RoundToInt(Mathf.Lerp(damageRange.x, damageRange.y, strength)) + ((weapon == null) ? defaultDamage : weapon.damageMultiplier);
-        yield return new WaitForSeconds(delayTime);
-
-        Debug.DrawRay(transform.position + transform.up, transform.forward * ((weapon == null) ? defaultRange : weapon.range), Color.red, 10);
-        Debug.Log("Excuse");
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position + transform.up, transform.forward, out hit, ((weapon == null) ? defaultRange : weapon.range)))
-        {
-            if(hit.collider.CompareTag("Player" + (GameManager.instance.IsTurnPlayerOne ? "Two" : "One")))
-            {
-                hit.collider.GetComponent<Character>().Damage(damage, Vector3.Angle(hit.collider.transform.forward, transform.forward));
-            }
-        }
-        yield return new WaitForSeconds(resetDelay);
-        isAttacking = false;
+        return currentWeapon == null ? defaultWeapon : currentWeapon;
     }
 
+    public string GetEnemyTag()
+    {
+        return "Player" + (GameManager.instance.IsTurnPlayerOne ? "Two" : "One");
+    }
 
     public void Damage(int damage, float angle)
     {
+        Debug.Log((isFortified) ? damage - damage / 2 * (1 - defence) : damage);
         health -= (isFortified) ? damage - damage / 2 * (1 - defence) : damage;
         if(health <= 0)
         {
@@ -178,3 +197,4 @@ public class Character : MonoBehaviour
         }
     }
 }
+

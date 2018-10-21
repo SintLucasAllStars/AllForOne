@@ -12,10 +12,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
-
-        public float runSpeed = 2;
-
-
         
         private void Start()
         {
@@ -67,7 +63,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
 #if !MOBILE_INPUT
 			// walk speed multiplier
-	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= runSpeed;
+	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 2;
 #endif
 
             // pass all parameters to the character control script

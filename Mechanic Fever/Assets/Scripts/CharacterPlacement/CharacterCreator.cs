@@ -1,4 +1,4 @@
-﻿   using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterCreator : MonoBehaviour
@@ -156,6 +156,9 @@ public class CharacterCreator : MonoBehaviour
     {
         Debug.Log("Spawn");
         GameObject g = Instantiate(prefab, renderPosition.position, Quaternion.Euler(Vector3.zero));
+
+        //Technically a randomized body :)
+        g.transform.localScale = new Vector3(g.transform.localScale.x, Random.Range(1.2f, 1.3f), g.transform.localScale.y);
         g.tag = tag;
         g.GetComponentInChildren<SkinnedMeshRenderer>().material = material;
         return g;
