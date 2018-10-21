@@ -15,7 +15,13 @@ public class UnitIcon : MonoBehaviour
             {
                 Instantiate(unitIcon, p.transform);
             }
-            //MapManager.instance.MapDeck(true);
+
+            foreach (GameObject p in PlayerManager.instance.playerBlue.playerGameObject)
+            {
+                Instantiate(unitIcon, p.transform);
+            }
+
+            Destroy(this);
         }
 	}
 	

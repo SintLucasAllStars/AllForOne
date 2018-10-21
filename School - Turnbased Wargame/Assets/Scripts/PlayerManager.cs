@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour
         if (instance != null)
         {
             Debug.LogWarning("There are multiple PlayerManager? Remove old static...");
-            Destroy(this);
+            Destroy(instance);
         }
         instance = this;
     }

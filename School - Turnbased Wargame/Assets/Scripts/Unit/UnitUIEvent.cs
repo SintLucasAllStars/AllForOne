@@ -9,15 +9,12 @@ public class UnitUIEvent : MonoBehaviour
     public static UnitUIEvent instance;
     private void Awake()
     {
-        if (instance == null)
+        if (instance != null)
         {
-            instance = this;
-            DontDestroyOnLoad(this);
+            Debug.LogWarning("There are multiple UnitUIEvent? Remove old static...");
+            Destroy(instance);
         }
-        else
-        {
-            Destroy(this);
-        }
+        instance = this;
     }
     #endregion
 
