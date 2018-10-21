@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,32 +8,33 @@ public class UnitInterface : MonoBehaviour {
 
     public GameObject UnitInterfaceCanvas;
 
-    public Text CurrentUnitPowerUp;
+    public Text CurrentUnitPowerUp, CurrentUnitWeapon;
+    public Text UnitHealthText, UnitSpeedText, UnitStrengthText, UnitDefenseText;
 
     public void InitializeCanvas(Unit unit)
     {
         UnitInterfaceCanvas.SetActive(true);
-        SetCurrentUnitPowerUp(unit.UnitPowerUp.PowerType);
+
+        SetInterfacePowerUp(unit.UnitPowerUp.PowerType);
+        SetInterfaceUnitStats(unit.UnitStats);
+        SeInterfaceUnitWeapon(unit.UnitWeapon.weaponType);
     }
 
-    public void SetCurrentUnitPowerUp(PowerUpType type)
+    public void SetInterfacePowerUp(PowerUpType type)
     {
-        switch (type)
-        {
-            case PowerUpType.Adrenaline:
-                CurrentUnitPowerUp.text = "Power up: Adrenaline";
-                break;
-            case PowerUpType.Rage:
-                CurrentUnitPowerUp.text = "Power up: Rage";
-                break;
-            case PowerUpType.TimeMachine:
-                CurrentUnitPowerUp.text = "Power up: Time Machine";
-                break;
-            case PowerUpType.None:
-                CurrentUnitPowerUp.text = "Power up: ";
-                break;
-        }
+        CurrentUnitPowerUp.text = "Power Up: " + Enum.GetName(type.GetType(), type);
     }
 
-	
+    public void SeInterfaceUnitWeapon(WeaponTypes type)
+    {
+        CurrentUnitWeapon.text = "Weapon: " + Enum.GetName(type.GetType(), type);
+    }
+
+    public void SetInterfaceUnitStats(Stats stats)
+    {
+        UnitHealthText.text = "Health: " + stats.Health;
+        UnitSpeedText.text = "Speed: " + stats.Speed;
+        UnitStrengthText.text = "Strength: " + stats.Strenght;
+        UnitDefenseText.text = "Defense: " + stats.Defense;
+    }
 }

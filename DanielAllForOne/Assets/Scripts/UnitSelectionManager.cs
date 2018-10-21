@@ -9,6 +9,8 @@ public class UnitSelectionManager : MonoBehaviour
     public GameObject UnitPrefab;
 
     private PlayerManager _playerManager;
+    private UnitInterface _unitInterfaceManager;
+
     private int[] _availablePoints = new int[] { 100, 100 };
 
     private void Start()
@@ -76,7 +78,14 @@ public class UnitSelectionManager : MonoBehaviour
             yield return null;
         }
 
-        unit.GetComponent<Unit>().InitializeUnit(_playerManager.GetCurrentPlayingPlayerIndex, stats);
+        Stats unitStats;
+
+        unitStats.Health = stats[0];
+        unitStats.Speed = stats[1];
+        unitStats.Strenght = stats[2];
+        unitStats.Defense = stats[3];
+
+        unit.GetComponent<Unit>().InitializeUnit(_playerManager.GetCurrentPlayingPlayerIndex, unitStats);
 
         _playerManager.SetNextPlayerIndex();
 
@@ -108,15 +117,18 @@ public class UnitSelectionManager : MonoBehaviour
 
         Camera.main.transform.SetParent(CamTransform);
 
+        //Move back to topdown view position.
         while (Vector3.Distance(Camera.main.transform.position, CamTransform.position) > 0.01f)
         {
             Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, CamTransform.position, Time.deltaTime * 3);
             Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, CamTransform.rotation, Time.deltaTime * 3);
         }
 
+        //Start selecting units.
         while (select)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
             RaycastHit hit;
 
             Debug.DrawRay(ray.origin, ray.direction * 50, Color.green);
@@ -130,6 +142,7 @@ public class UnitSelectionManager : MonoBehaviour
                     if (IsUnitSelectable(unit.UnitTeamId))
                     {
                         select = false;
+                        _unitInterfaceManager.InitializeCanvas(unit);
                         _playerManager.StartPlayerMovement(unit);
                     }
                 }

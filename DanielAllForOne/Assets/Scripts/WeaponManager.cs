@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    
+    [SerializeField]
+    private WeaponObject[] _weapons;
 }

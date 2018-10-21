@@ -12,6 +12,8 @@ public class Unit : MonoBehaviour
     public WeaponObject UnitWeapon;
     public Stats UnitStats;
 
+    public Transform WeaponHolder;
+
     public bool IsUnitActive { get; set; }
     public int UnitTeamId { get; private set; }
 
@@ -31,14 +33,28 @@ public class Unit : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-       if((UnitStats.Health -= (damage - UnitStats.Defense)) <= 0){
+        if ((UnitStats.Health -= (damage / UnitStats.Defense)) <= 0)
             Die();
-        }
     }
 
     public void Die()
     {
         Destroy(gameObject);
+    }
+
+    public void EquipWeapon(WeaponObject weaponObject)
+    {
+        UnitWeapon = weaponObject;
+        weaponObject.GetComponent<Rigidbody>().useGravity = false;
+        weaponObject.transform.SetParent(WeaponHolder);
+        weaponObject.InitializeWeapon(this);
+    }
+
+    public void UnEquipWeapon()
+    {
+        UnitWeapon.IsWeaponActive = false;
+        UnitWeapon.transform.parent = null;
+        UnitWeapon.GetComponent<Rigidbody>().useGravity = true;
     }
 
     private void Update()
@@ -70,6 +86,9 @@ public class Unit : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Q))
                 StartCoroutine(UsePowerUp());
+
+            if (Input.GetKeyDown(KeyCode.C))
+                UnEquipWeapon();
         }
     }
 
@@ -80,15 +99,22 @@ public class Unit : MonoBehaviour
             if (other.CompareTag("PowerUp") && Input.GetKeyDown(KeyCode.E))
             {
                 UnitPowerUp = other.gameObject.GetComponent<PowerUp>();
-                _unitInterface.SetCurrentUnitPowerUp(UnitPowerUp.PowerType);
+                _unitInterface.SetInterfacePowerUp(UnitPowerUp.PowerType);
                 Destroy(other.gameObject);
             }
 
-            if (other.CompareTag("Unit"))
+            if (other.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.F))
             {
-                if (other.GetComponent<Unit>().UnitTeamId != UnitTeamId)
+                WeaponObject weaponObject = other.GetComponent<WeaponObject>();
+
+                if (UnitWeapon == null)
                 {
-                    other.GetComponent<Unit>().TakeDamage(UnitWeapon.Damage + UnitStats.Strenght);
+                    EquipWeapon(weaponObject);
+                }
+                else
+                {
+                    UnEquipWeapon();
+                    EquipWeapon(weaponObject);
                 }
             }
         }
@@ -120,12 +146,13 @@ public class Unit : MonoBehaviour
         }
     }
 
-    [System.Serializable]
-    public struct Stats
-    {
-        public float Health;
-        public float Strenght;
-        public float Speed;
-        public float Defense;
-    }
+}
+
+[System.Serializable]
+public struct Stats
+{
+    public float Health;
+    public float Strenght;
+    public float Speed;
+    public float Defense;
 }
