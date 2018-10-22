@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuManager : MonoBehaviour {
+public class MenuManager : MonoBehaviour
+{
 
-	
-	void Start () {
-		
+	[SerializeField] private GameObject _unitCreationScreen;
+
+	private void OnEnable()
+	{
+		GameManager.OnStartSetup += OnStartSetup;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	private void OnStartSetup()
+	{
+		Instantiate(_unitCreationScreen, transform);
 	}
 }

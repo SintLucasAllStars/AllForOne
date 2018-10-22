@@ -41,8 +41,11 @@ public class UnitPlacer : MonoBehaviour
 				_placeObjectMaterial.color = Color.green;
 				if (Input.GetMouseButtonDown(0))
 				{
-					Instantiate(_currentObject, hit.point, Quaternion.identity);
+					CameraController.Instance.SetCameraState(CameraState.Static);
+					_currentObject.transform.position = hit.point;
 					_isPlacing = false;
+					UnitCreation.Instance.gameObject.SetActive(true);
+					UnitCreation.Instance.LoadScreen();
 				}
 			}
 			else

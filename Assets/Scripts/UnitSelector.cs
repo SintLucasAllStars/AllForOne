@@ -6,19 +6,35 @@ public class UnitSelector : MonoBehaviour
 {
 
 	private UnitController _currentUnit;
-	private GameObject _camera;
-	private Vector3 _restPos;
 	private Quaternion _restRot;
+	private CameraController _cameraController;
+
+	private bool _canSelect;
+	private int _currentPlayer;
 	
 	void Start ()
 	{
-		_camera = Camera.main.gameObject;
-		_restPos = _camera.transform.position;
-		_restRot = _camera.transform.rotation;
+		_cameraController = CameraController.Instance;
 	}
-	
-	// Update is called once per frame
+
+	private void OnEnable()
+	{
+		GameManager.OnStartRound += OnStartRound;
+	}
+
+	private void OnDisable()
+	{
+		GameManager.OnStartRound -= OnStartRound;
+	}
+
+	private void OnStartRound(int player)
+	{
+		_currentPlayer = player;
+		_canSelect = true;
+	}
+
 	void Update () {
+		if(!_canSelect) return;
 		if(Input.GetKeyDown(KeyCode.Escape)) ClearCurrentUnit();
 
 		if (Input.GetMouseButtonDown(0))
@@ -26,10 +42,9 @@ public class UnitSelector : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
 			{
-				Debug.Log("ray");
 				if (hit.collider.CompareTag("Unit"))
 				{
-					Debug.Log(hit);
+					if(hit.transform.GetComponent<Unit>().Player != _currentPlayer) return;
 					SetCurrentUnit(hit.transform.gameObject);
 				}
 			}
@@ -40,17 +55,20 @@ public class UnitSelector : MonoBehaviour
 	{
 		_currentUnit = unit.GetComponent<UnitController>();
 		_currentUnit.enabled = true;
-		_camera.transform.SetParent(unit.transform);
-		_camera.transform.position = unit.transform.position - (unit.transform.forward*2) + (Vector3.up * 3);
-		_camera.transform.localRotation = Quaternion.Euler(Vector3.zero);
+		_cameraController.SetCameraState(CameraState.TopDown);
+		_cameraController.ParentTo(unit.transform);
+		_cameraController.SetCameraState(CameraState.ThirdPerson);
+		_cameraController.MoveCameraToPosition(100, unit.transform.position - (unit.transform.forward * 2) + (Vector3.up * 3),Quaternion.Euler(Vector3.zero));
 	}
+
+
 
 	private void ClearCurrentUnit()
 	{
 		_currentUnit.enabled = false;
 		_currentUnit = null;
-		_camera.transform.position = _restPos;
-		_camera.transform.eulerAngles = new Vector3(90,0,0);
-		
+		_cameraController.ClearParent();
+		_cameraController.SetCameraState(CameraState.TopDown);
+		_cameraController.ResetCameraPosition(100);
 	}
 }

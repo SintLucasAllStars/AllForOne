@@ -9,13 +9,18 @@ using UnityStandardAssets.Characters.ThirdPerson;
         private Vector3 _camForward;          
         private Vector3 _move;
         private bool _jump;
-        private bool _attack;
+        private float _attackTimeout;
+        private Animator _animator;
         public Transform CamPoint;
+
+        private Unit _unit;
 
         private void OnEnable()
         {
+            if (_unit == null) _unit = GetComponent<Unit>();
             if (_cam == null && Camera.main != null) _cam = Camera.main.transform;
             if(_character == null) _character = GetComponent<ThirdPersonCharacter>();
+            if (_animator == null) _animator = GetComponent<Animator>();
         }
 
 
@@ -26,9 +31,13 @@ using UnityStandardAssets.Characters.ThirdPerson;
                 _jump = Input.GetKeyDown(KeyCode.Space);
             }
 
-            if (!_attack)
+            if (Input.GetMouseButtonDown(0))
             {
-                _attack = Input.GetMouseButtonDown(0);
+                if (Time.time >= _attackTimeout)
+                {
+                    _attackTimeout = Time.time + 1;
+                    _animator.CrossFade("Attack", 0f);
+                }
             }
         }
 
@@ -46,7 +55,6 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
             _character.Move(_move, crouch, _jump);
             _jump = false;
-            _attack = false;
         }
     }
 
