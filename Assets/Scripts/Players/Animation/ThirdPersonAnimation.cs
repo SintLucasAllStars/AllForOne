@@ -71,10 +71,10 @@ namespace Players.Animation
 
         private void ApplyAnimations()
         {
-            _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
-            _clipOverrides["Punch"] = Clips.PunchAnimationClip;
-            _clipOverrides["Die"] = Clips.DieAnimationClip;
-            _animatorOverrideController.ApplyOverrides(_clipOverrides);
+//            _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
+//            _clipOverrides["Punch"] = Clips.PunchAnimationClip;
+//            _clipOverrides["Die"] = Clips.DieAnimationClip;
+//            _animatorOverrideController.ApplyOverrides(_clipOverrides);
         }
 
 

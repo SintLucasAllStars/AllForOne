@@ -23,9 +23,12 @@ public class CharacterPlacement : MonoBehaviour
     private ThirdPersonUserControl _userControl;
     private Rigidbody _rigidbody;
 
+
+    private Animator _animator;
+    private CapsuleCollider _capsuleCollider;
     private RaycastHit _raycastHit;
-    private MaterialPropertyBlock _materialPropertyBlock;
-    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRenderer;
+    private MaterialPropertyBlock [] _materialPropertyBlocks;
+    [SerializeField] private SkinnedMeshRenderer [] _skinnedMeshRenderers;
 
 
 
@@ -34,10 +37,18 @@ public class CharacterPlacement : MonoBehaviour
         _thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
         _userControl = GetComponent<ThirdPersonUserControl>();
         _rigidbody = GetComponent<Rigidbody>();
-        _materialPropertyBlock = new MaterialPropertyBlock();
-        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
-        _materialPropertyBlock.SetColor("_Color", Color.white);
-        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+        _animator = GetComponent<Animator>();
+        
+;            
+        _materialPropertyBlocks = new MaterialPropertyBlock[_skinnedMeshRenderers.Length];
+        for (int i = 0; i < _skinnedMeshRenderers.Length; i++)
+        {
+            _materialPropertyBlocks[i] = new MaterialPropertyBlock();
+            _skinnedMeshRenderers[i].SetPropertyBlock(_materialPropertyBlocks[i]);
+            _materialPropertyBlocks[i].SetColor("_Color", Color.white);
+            _skinnedMeshRenderers[i].SetPropertyBlock(_materialPropertyBlocks[i]);
+        }
+
 
 
 
@@ -57,8 +68,11 @@ public class CharacterPlacement : MonoBehaviour
         else if(OnFloor())
         {
             PlaceCharacter();
-            _materialPropertyBlock.SetColor("_Color", Color.white);
-            _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+            for (int i = 0; i < _skinnedMeshRenderers.Length; i++)
+            {
+                _materialPropertyBlocks[i].SetColor("_Color", Color.white);
+                _skinnedMeshRenderers[i].SetPropertyBlock(_materialPropertyBlocks[i]);
+            }
 
         }
 
@@ -68,34 +82,40 @@ public class CharacterPlacement : MonoBehaviour
 
     private void SetColor(bool onFloor)
     {
-        _skinnedMeshRenderer.GetPropertyBlock(_materialPropertyBlock);
-        if (!onFloor)
-        {
-            if (_materialPropertyBlock.GetColor("_Color") != Color.white)
-            {
-                Color lerpColor = Color.Lerp(Color.black, Color.white,3f *Time.deltaTime);
-                _materialPropertyBlock.SetColor("_Color", lerpColor);
-            }
-        }
-        else
-        {
-            if (_materialPropertyBlock.GetColor("_Color") != Color.black)
-            {
-                Color lerpColor = Color.Lerp(Color.white, Color.black, 3f * Time.deltaTime);
-                _materialPropertyBlock.SetColor("_Color", lerpColor);
-            }
-        }
 
-        _skinnedMeshRenderer.SetPropertyBlock(_materialPropertyBlock);
+        for (int i = 0; i < _skinnedMeshRenderers.Length ; i++)
+        {
+            _skinnedMeshRenderers[i].GetPropertyBlock(_materialPropertyBlocks[i]);
+            if (!onFloor)
+            {
+                if (_materialPropertyBlocks[i].GetColor("_Color") != Color.white)
+                {
+                    Color lerpColor = Color.Lerp(Color.black, Color.white,3f *Time.deltaTime);
+                    _materialPropertyBlocks[i].SetColor("_Color", lerpColor);
+
+                }
+            }
+            else
+            {
+                if (_materialPropertyBlocks[i].GetColor("_Color") != Color.black)
+                {
+                    Color lerpColor = Color.Lerp(Color.white, Color.black, 3f * Time.deltaTime);
+                    _materialPropertyBlocks[i].SetColor("_Color", lerpColor);
+                }
+            }
+            _skinnedMeshRenderers[i].SetPropertyBlock(_materialPropertyBlocks[i]);
+        }
+ 
     }
 
     private void PlaceCharacter()
     {
+        
         _thirdPersonCharacter.enabled = true;
         _userControl.enabled = true;
         _rigidbody.useGravity = true;
-        GameManager.Instance.CharacterPlaced();
         enabled = false;
+
     }
 
 
