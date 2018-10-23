@@ -64,6 +64,6 @@ public class UnitPlacement : MonoBehaviour
         //PlayerManager.instance.playerRed[0].playerNormalStats.name = "hello";;
         selectSoldier = null;
         if (nextTurn)
-            GameManager.instance.NextPlayerPrepare();
+            GameControl.instance.NextPlayerPrepare();
     }
 }

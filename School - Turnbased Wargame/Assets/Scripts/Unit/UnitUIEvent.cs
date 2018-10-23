@@ -112,7 +112,7 @@ public class UnitUIEvent : MonoBehaviour
     {
         if (index == 0)
         {
-            if (PlayerManager.instance.isPremium)
+            if (GameManager.instance.isPremium)
                 NavigaTo(CanvasNavigation.customUnit);
         }
         else if (PlayerManager.instance.playerCurrentTurn.playerMoney >= standardUnit[index - 1].unitSoldier.cost)

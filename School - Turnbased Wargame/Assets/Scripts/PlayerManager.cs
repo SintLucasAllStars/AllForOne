@@ -17,8 +17,6 @@ public class PlayerManager : MonoBehaviour
     }
     #endregion
 
-    public bool isPremium;
-
     public Player playerBlue = new Player(Color.blue, new Color(0.5f, 0.65f, 1));
     public Player playerRed = new Player(Color.red, new Color(1, 0.4f, 0.34f));
 
