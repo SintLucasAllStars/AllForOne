@@ -121,7 +121,8 @@ public class GameControl : MonoBehaviour
     {
         startTurn = false;
         currentTurnCharacterPlay.isPlaying = false;
-        camControl.CameraCurrentControl = CameraController.CameraControlEnum.playerRedView;
+        camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerRedView : CameraController.CameraControlEnum.playerBlueView;
+        GameNextTurn();
     }
 
     public void GameNextTurn ()
@@ -129,7 +130,16 @@ public class GameControl : MonoBehaviour
         switch(GM.currentGameMode)
         {
             case GameMode.Coop:
-
+                GM.PlayerSwitch();
+                if (PlayerManager.instance.playerCurrentTurn.playerGameObject.Count == 0)
+                {
+                    GM.PlayerSwitch();
+                    Debug.Log("Player: " + (GM.isPlayerBlue ? "blue" : "red") + " won");
+                }
+                else
+                {
+                    mapUnitUI.ShowUnitUI(GM.isPlayerBlue);
+                }
 
                 break;
         }

@@ -30,13 +30,19 @@ public class UnitMapUI : MonoBehaviour
                 playerRedUI.Add(unitUI);
             }
 
-            foreach (GameObject p in PlayerManager.instance.playerBlue.playerGameObject)
+            for (int i = 0; i < PlayerManager.instance.playerBlue.playerGameObject.Count; i++)
             {
+                GameObject p = PlayerManager.instance.playerBlue.playerGameObject[i];
+
                 GameObject unitUI = Instantiate(unitIcon, p.transform) as GameObject;
                 unitUI.GetComponent<SpriteRenderer>().color = PlayerManager.instance.playerBlue.playerUIColor;
 
+                unitUI.AddComponent<UnitGameObjectInteractable>().unitGameObject = p;
+                unitUI.GetComponent<UnitGameObjectInteractable>().unitIndex = i;
+
                 playerBlueUI.Add(unitUI);
             }
+
             HideUnitUI();
 
             mainCam = GameControl.instance.camControl.GetComponent<Camera>();
@@ -48,6 +54,7 @@ public class UnitMapUI : MonoBehaviour
         ShowUnitUI(true);
         ShowUnitUI(false);
     }
+
     public void ShowUnitUI (bool isPlayerblue)
     {
         foreach(GameObject o in isPlayerblue ? playerBlueUI : playerRedUI)
@@ -82,10 +89,10 @@ public class UnitMapUI : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 50f, layerUI))   //5 = layer UI
             {
-                if (Input.GetMouseButtonDown(0) && hit.transform.GetComponent<UnitGameObjectInteractable>() != null)
+                if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<UnitGameObjectInteractable>() != null)
                 {
                     GameControl.instance.GameSelectUnit(PlayerManager.instance.playerCurrentTurn.
-                        playerGameObject[hit.transform.GetComponent<UnitGameObjectInteractable>().unitIndex]);
+                        playerGameObject[hit.collider.gameObject.GetComponent<UnitGameObjectInteractable>().unitIndex]);
 
                     HideUnitUI();
                 }

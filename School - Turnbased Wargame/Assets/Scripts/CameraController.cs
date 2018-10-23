@@ -40,17 +40,31 @@ public class CameraController : MonoBehaviour
         {
             case CameraControlEnum.mapControl:
                 transform.Translate(InputController() * cameraSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Euler(CameraAngleTopDown());
                 break;
 
             case CameraControlEnum.playerBlueView:
                 Vector3 targetB = PlayerManager.instance.playerBlue.playerHome.position;
                 targetB.y = cameraHeight;
                 transform.position = Vector3.MoveTowards(transform.position, targetB, Vector3.Distance(transform.position, targetB) * 2f * Time.deltaTime);
+                transform.rotation = Quaternion.Euler(CameraAngleTopDown());
+                /*
+                if (transform.eulerAngles.x != 90)
+                {
+                    float currentAngleX = transform.eulerAngles.x;
+                    float nearAngleX = 90;
+
+                    float distanceAngleX = nearAngleX > currentAngleX ? nearAngleX - currentAngleX : currentAngleX - nearAngleX;
+                    Debug.Log(distanceAngleX);
+                    transform.Rotate(distanceAngleX * Time.deltaTime, 0, 0);
+                } */
+
                 break;
             case CameraControlEnum.playerRedView:
                 Vector3 targetR = PlayerManager.instance.playerRed.playerHome.position;
                 targetR.y = cameraHeight;
                 transform.position = Vector3.MoveTowards(transform.position, targetR, Vector3.Distance(transform.position, targetR) * 2f * Time.deltaTime);
+                transform.rotation = Quaternion.Euler(CameraAngleTopDown());
                 break;
 
             case CameraControlEnum.playerThirdPerson:
@@ -69,6 +83,12 @@ public class CameraController : MonoBehaviour
         }
     }
 
+
+    private Vector3 CameraAngleTopDown ()
+    {
+        Vector3 targetAngle = new Vector3(90, 0, 0);
+        return Vector3.MoveTowards(transform.eulerAngles, targetAngle, Time.deltaTime * 60f);
+    }
     private Vector3 InputController ()
     {
         Vector3 inputPos = new Vector3(0, 0, 0);
