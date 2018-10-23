@@ -8,21 +8,22 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1353556183169980}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1353556183169980
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4880171382377168}
   - component: {fileID: 33504133076230460}
   - component: {fileID: 65683237735657690}
   - component: {fileID: 23431713296950924}
   - component: {fileID: 114130314852858550}
+  - component: {fileID: 54614741038646444}
   m_Layer: 0
   m_Name: AdrenalineObject
   m_TagString: PowerUp
@@ -33,7 +34,7 @@ GameObject:
 --- !u!4 &4880171382377168
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353556183169980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -46,7 +47,7 @@ Transform:
 --- !u!23 &23431713296950924
 MeshRenderer:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353556183169980}
   m_Enabled: 1
@@ -56,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 3ce6dd2b73d851b4cbd386afc719c95b, type: 2}
   m_StaticBatchInfo:
@@ -80,14 +82,29 @@ MeshRenderer:
 --- !u!33 &33504133076230460
 MeshFilter:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353556183169980}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54614741038646444
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1353556183169980}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &65683237735657690
 BoxCollider:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353556183169980}
   m_Material: {fileID: 0}
@@ -99,7 +116,7 @@ BoxCollider:
 --- !u!114 &114130314852858550
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1353556183169980}
   m_Enabled: 1
@@ -107,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc76ea0b7772b84496b3fff0e3643ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PowerType: 0
-  PowerUpDuration: 10
-  PowerUpEnhancement: 0.5
+  PowerUpInfo:
+    PowerType: 1
+    PowerUpDuration: 5
+    PowerUpEnhancement: 0.1

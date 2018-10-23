@@ -4,10 +4,16 @@ using UnityEngine;
 
 public enum PowerUpType
 {
-    Adrenaline, Rage, TimeMachine, None
+    None, Adrenaline, Rage, TimeMachine
 };
 
 public class PowerUp : MonoBehaviour
+{
+    public PowerUpInfo PowerUpInfo;
+}
+
+[System.Serializable]
+public struct PowerUpInfo
 {
     public PowerUpType PowerType;
     public float PowerUpDuration;

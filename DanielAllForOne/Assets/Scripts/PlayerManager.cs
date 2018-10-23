@@ -15,6 +15,7 @@ public class PlayerManager : MonoBehaviour
     {
         _unitSelectionManager = FindObjectOfType<UnitSelectionManager>();
         _unitInterface = FindObjectOfType<UnitInterface>();
+        
 
         _PlayerArr = new[]{
             new Player(Color.red),
@@ -33,23 +34,51 @@ public class PlayerManager : MonoBehaviour
         _currentPlayingPlayer = _currentPlayingPlayer == 0 ? _currentPlayingPlayer += 1 : _currentPlayingPlayer -= 1;
     }
 
+    public void IsGameOver()
+    {
+        for (int i = 0; i < _PlayerArr.Length; i++)
+        {
+            Debug.Log(_PlayerArr[i].GetUnitListCount);
+
+            if (_PlayerArr[i].GetUnitListCount <= 0)
+            {
+                if (i == 0)
+                    Debug.Log("Blue team won!");
+                else
+                    Debug.Log("Red team won!");
+
+            }
+        }
+    }
+
     public Player GetCurrentPlayer {
         get {
             return _PlayerArr[_currentPlayingPlayer];
         }
     }
 
+    public Player GetOtherPlayer {
+        get {
+            int x = _currentPlayingPlayer == 0 ? _currentPlayingPlayer += 1 : _currentPlayingPlayer -= 1;
+            return _PlayerArr[x];
+        }
+    }
+
     public void StartPlayerMovement(Unit unit)
     {
         StartCoroutine(LerpToUnit(unit.transform));
+
         unit.IsUnitActive = true;
+
+        StartCoroutine(unit.RayCastWeapon());
     }
 
     public IEnumerator LerpToUnit(Transform unitTransform)
     {
         Camera.main.transform.SetParent(unitTransform);
 
-        Vector3 target = new Vector3(0, unitTransform.localPosition.y, -2);
+        Vector3 target = new Vector3(0, unitTransform.localPosition.y, -3);
+        Quaternion quaternionTarget = new Quaternion(32, 0, 0, 0);
 
         //Lerp to the selected unit.
         while (Vector3.Distance(Camera.main.transform.localPosition, target) >= 0.01f)

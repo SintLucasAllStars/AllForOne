@@ -10,12 +10,20 @@ public class UnitSelectionManager : MonoBehaviour
 
     private PlayerManager _playerManager;
     private UnitInterface _unitInterfaceManager;
+    private InterfaceManager _interfaceManager;
+    private CamMovement _camMovement;
 
     private int[] _availablePoints = new int[] { 100, 100 };
 
     private void Start()
     {
+        _camMovement = FindObjectOfType<CamMovement>();
+        _unitInterfaceManager = FindObjectOfType<UnitInterface>();
         _playerManager = FindObjectOfType<PlayerManager>();
+        _interfaceManager = FindObjectOfType<InterfaceManager>();
+
+        _interfaceManager.StartStatsSelection();
+
     }
 
     public int AvailablePoints {
@@ -61,22 +69,27 @@ public class UnitSelectionManager : MonoBehaviour
 
     public IEnumerator UnitPlacement(float[] stats)
     {
-        GameObject unit = InstantiateUnit(_playerManager.GetCurrentPlayer.GetTeamColor);
+        GameObject unitObject = InstantiateUnit(_playerManager.GetCurrentPlayer.GetTeamColor);
+
+        StartCoroutine(_camMovement.MoveCamera());
 
         while (!Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
             RaycastHit hit;
 
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
             if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
             {
-                unit.transform.position = new Vector3(hit.point.x, 1, hit.point.z);
+                unitObject.transform.position = new Vector3(hit.point.x, 1, hit.point.z);
             }
 
             yield return null;
         }
+
+        _camMovement.IsCamAvailable = false;
 
         Stats unitStats;
 
@@ -85,7 +98,13 @@ public class UnitSelectionManager : MonoBehaviour
         unitStats.Strenght = stats[2];
         unitStats.Defense = stats[3];
 
-        unit.GetComponent<Unit>().InitializeUnit(_playerManager.GetCurrentPlayingPlayerIndex, unitStats);
+        Unit unit = unitObject.GetComponent<Unit>();
+
+        unit.InitializeUnit(_playerManager.GetCurrentPlayingPlayerIndex, unitStats);
+
+        unit.GetComponent<CapsuleCollider>().enabled = true;
+
+        _playerManager.GetCurrentPlayer.AddUnit(unit);
 
         _playerManager.SetNextPlayerIndex();
 
@@ -111,6 +130,8 @@ public class UnitSelectionManager : MonoBehaviour
 
     public IEnumerator UnitSelection()
     {
+        StartCoroutine(_camMovement.MoveCamera());
+
         bool select = true;
 
         int unitLayerMask = LayerMask.GetMask("UnitLayer");
@@ -131,9 +152,9 @@ public class UnitSelectionManager : MonoBehaviour
 
             RaycastHit hit;
 
-            Debug.DrawRay(ray.origin, ray.direction * 50, Color.green);
+            Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
 
-            if (Physics.Raycast(ray, out hit, 50, unitLayerMask))
+            if (Physics.Raycast(ray, out hit, 100, unitLayerMask))
             {
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -147,6 +168,8 @@ public class UnitSelectionManager : MonoBehaviour
                     }
                 }
             }
+
+            _camMovement.IsCamAvailable = false;
 
             yield return null;
         }

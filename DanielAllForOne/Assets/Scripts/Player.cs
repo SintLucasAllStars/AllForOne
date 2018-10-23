@@ -12,4 +12,27 @@ public class Player {
     }
 
     public Color GetTeamColor { get; private set; }
+
+    public void AddUnit(Unit unit)
+    {
+        _playerUnitList.Add(unit);
+    }
+
+    public void RemoveUnit(Unit unit)
+    {
+        if (_playerUnitList.Remove(unit))
+        {
+            Debug.Log("removing");
+        }
+        else
+        {
+            Debug.Log("Nope");
+        }
+    }
+
+    public int GetUnitListCount {
+        get {
+            return _playerUnitList.Count;
+        }
+    }
 }

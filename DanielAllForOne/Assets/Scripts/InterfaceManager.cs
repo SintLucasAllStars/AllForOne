@@ -20,6 +20,8 @@ public class InterfaceManager : MonoBehaviour
     [SerializeField] private GameObject _statsInterface;
     [SerializeField] private GameObject _toMuchSpendingPointsPopUp;
 
+    [SerializeField] private Image CurrentPlayerImage;
+
     private string[] _attribTextNames = new string[] { "Health", "Strength", "Speed", "Defense" };
 
     private void Awake()
@@ -79,11 +81,12 @@ public class InterfaceManager : MonoBehaviour
     public void SetCurrentSelectingPlayer()
     {
         if (_playerManager.GetCurrentPlayingPlayerIndex == 0)
-            _currentPlayingPlayerText.text = "Player: RED";
-        else
         {
-            _currentPlayingPlayerText.text = "Player: BLUE";
+            CurrentPlayerImage.color = Color.red;
+            Debug.Log("kek");
         }
+        else
+            CurrentPlayerImage.color = Color.blue;
     }
 
     public void HireUnit()

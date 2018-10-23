@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private GameObject[] _powerUpsObjects;
-    [SerializeField] private GameManager[] _weaponsObjects;
+    [SerializeField] private GameObject[] _weaponsObjects;
     private int[,] _powerUpGrid = new int[20, 20];
-    public float PlayerTime = 10f;
+    public float PlayerTime;
 
     #endregion
 
