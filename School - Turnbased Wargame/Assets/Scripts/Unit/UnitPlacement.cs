@@ -8,7 +8,6 @@ public class UnitPlacement : MonoBehaviour
     public GameObject selectObject;
     private Camera cam;
 
-
     public SoldierAsset selectSoldier;
 
     private void Start()
@@ -54,8 +53,9 @@ public class UnitPlacement : MonoBehaviour
 
     public void SpawnUnit (Vector3 point, bool nextTurn)
     {
-        GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, point, Quaternion.identity) as GameObject;
-        spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier);
+        Vector3 spawnHeight = new Vector3(5, 0, 0);
+        GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, point + spawnHeight, Quaternion.identity) as GameObject;
+        spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier, GameManager.instance.isPlayerBlue, PlayerManager.instance.playerCurrentTurn.playerGameObject.Count);
 
         spawnUnit.transform.parent = PlayerManager.instance.playerCurrentTurn.playerHome;
         PlayerManager.instance.playerCurrentTurn.playerGameObject.Add(spawnUnit);

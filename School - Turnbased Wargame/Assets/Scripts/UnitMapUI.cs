@@ -57,10 +57,26 @@ public class UnitMapUI : MonoBehaviour
 
     public void ShowUnitUI (bool isPlayerblue)
     {
+        List<GameObject> removeObjects = new List<GameObject>(); 
         foreach(GameObject o in isPlayerblue ? playerBlueUI : playerRedUI)
         {
-            o.SetActive(true);
+            try
+            {
+                o.SetActive(true);
+            }
+            catch
+            {
+                removeObjects.Add (o);
+            }
         }
+        if (removeObjects.Count > 0)
+        {
+            foreach (GameObject d in removeObjects)
+            {
+                (isPlayerblue ? playerBlueUI : playerRedUI).Remove(d);
+            }
+        }
+
         checkClickUI = true;
     }
 
@@ -72,9 +88,24 @@ public class UnitMapUI : MonoBehaviour
     }
     public void HideUnitUI(bool isPlayerblue)
     {
+        List<GameObject> removeObjects = new List<GameObject>();
         foreach (GameObject o in isPlayerblue ? playerBlueUI : playerRedUI)
         {
-            o.SetActive(false);
+            try
+            {
+                o.SetActive(false);
+            } catch
+            {
+                removeObjects.Add(o);
+            }
+        }
+
+        if (removeObjects.Count > 0)
+        {
+            foreach (GameObject d in removeObjects)
+            {
+                (isPlayerblue ? playerBlueUI : playerRedUI).Remove(d);
+            }
         }
         checkClickUI = false;
     }

@@ -121,7 +121,6 @@ public class GameControl : MonoBehaviour
     {
         startTurn = false;
         currentTurnCharacterPlay.isPlaying = false;
-        camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerRedView : CameraController.CameraControlEnum.playerBlueView;
         GameNextTurn();
     }
 
@@ -131,18 +130,30 @@ public class GameControl : MonoBehaviour
         {
             case GameMode.Coop:
                 GM.PlayerSwitch();
-                if (PlayerManager.instance.playerCurrentTurn.playerGameObject.Count == 0)
+                if (CheckAllUnitDeath())
                 {
                     GM.PlayerSwitch();
                     Debug.Log("Player: " + (GM.isPlayerBlue ? "blue" : "red") + " won");
                 }
                 else
                 {
+                    camControl.cameraAfterControl = true;
+                    camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
                     mapUnitUI.ShowUnitUI(GM.isPlayerBlue);
                 }
 
                 break;
         }
+    }
+
+    public bool CheckAllUnitDeath ()
+    {
+        foreach (GameObject o in PlayerManager.instance.playerCurrentTurn.playerGameObject )
+        {
+            if (o != null)
+                return false;
+        }
+        return true;
     }
 
 

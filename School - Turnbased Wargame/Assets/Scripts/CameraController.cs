@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     private Camera cam;
 
     public GameObject playerTarget;
+    public bool cameraAfterControl = false;
 
     private void Awake()
     {
@@ -47,24 +48,31 @@ public class CameraController : MonoBehaviour
                 Vector3 targetB = PlayerManager.instance.playerBlue.playerHome.position;
                 targetB.y = cameraHeight;
                 transform.position = Vector3.MoveTowards(transform.position, targetB, Vector3.Distance(transform.position, targetB) * 2f * Time.deltaTime);
-                transform.rotation = Quaternion.Euler(CameraAngleTopDown());
-                /*
-                if (transform.eulerAngles.x != 90)
+
+                if (isCameraTopDown())
                 {
-                    float currentAngleX = transform.eulerAngles.x;
-                    float nearAngleX = 90;
-
-                    float distanceAngleX = nearAngleX > currentAngleX ? nearAngleX - currentAngleX : currentAngleX - nearAngleX;
-                    Debug.Log(distanceAngleX);
-                    transform.Rotate(distanceAngleX * Time.deltaTime, 0, 0);
-                } */
-
+                    if (cameraAfterControl)
+                        CameraCurrentControl = CameraControlEnum.mapControl;
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(CameraAngleTopDown());
+                }
                 break;
             case CameraControlEnum.playerRedView:
                 Vector3 targetR = PlayerManager.instance.playerRed.playerHome.position;
                 targetR.y = cameraHeight;
                 transform.position = Vector3.MoveTowards(transform.position, targetR, Vector3.Distance(transform.position, targetR) * 2f * Time.deltaTime);
-                transform.rotation = Quaternion.Euler(CameraAngleTopDown());
+
+                if (isCameraTopDown())
+                {
+                    if (cameraAfterControl)
+                        CameraCurrentControl = CameraControlEnum.mapControl;
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(CameraAngleTopDown());
+                }
                 break;
 
             case CameraControlEnum.playerThirdPerson:
@@ -84,9 +92,16 @@ public class CameraController : MonoBehaviour
     }
 
 
+    private bool isCameraTopDown ()
+    {
+        return (transform.eulerAngles.x == 90 &&
+            transform.eulerAngles.y == 0 &&
+            transform.eulerAngles.z == 0);
+    }
+
     private Vector3 CameraAngleTopDown ()
     {
-        Vector3 targetAngle = new Vector3(90, 0, 0);
+        Vector3 targetAngle = new Vector3(90, transform.eulerAngles.y > 180 ? 360 : 0, 0);
         return Vector3.MoveTowards(transform.eulerAngles, targetAngle, Time.deltaTime * 60f);
     }
     private Vector3 InputController ()
