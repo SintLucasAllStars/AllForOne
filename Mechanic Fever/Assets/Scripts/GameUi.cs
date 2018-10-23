@@ -3,13 +3,29 @@ using UnityEngine;
 
 public class GameUi : MonoBehaviour
 {
+    public static GameUi instance;
+
     [SerializeField] private Image timerBackground;
     [SerializeField] private Image clockTimer;
     [SerializeField] private RectTransform clockRectTransform;
 
     [SerializeField] private Vector3 maxAngle;
 
+    public Image powerUp;
+
     private Canvas canvas;
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else if(instance != this)
+        {
+            Destroy(this);
+        }
+    }
 
     // Use this for initialization
     void Start()
@@ -31,14 +47,16 @@ public class GameUi : MonoBehaviour
     void ToggleColor()
     {
         Color color = GameManager.instance.GetCurrentPlayer().color;
-        timerBackground.color = color;
-        clockTimer.color = color;
+        Image[] images = GetComponentsInChildren<Image>(true);
+        for(int i = 0; i < images.Length; i++)
+        {
+            images[i].color = color;
+        }
     }
 
     void ToggleUI(bool enable)
     {
         canvas.enabled = enable;
         clockRectTransform.localRotation = Quaternion.identity;
-
     }
 }

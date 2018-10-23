@@ -130,7 +130,7 @@ public class CharacterCreator : MonoBehaviour
 
         SetRandomSliders();
 
-        currentCharacter = SpawnCharacter(currentPlayer.playerTag, currentPlayer.material).transform;
+        currentCharacter = SpawnCharacter(currentPlayer.playerTag, currentPlayer.material, currentPlayer.color).transform;
         UI.SetActive(true);
 
     }
@@ -152,7 +152,7 @@ public class CharacterCreator : MonoBehaviour
         createCharacterButton.interactable = GameManager.instance.CheckCharacterPoints(CalculatePoints());
     }
 
-    private GameObject SpawnCharacter(string tag, Material material)
+    private GameObject SpawnCharacter(string tag, Material material, Color color)
     {
         Debug.Log("Spawn");
         GameObject g = Instantiate(prefab, renderPosition.position, Quaternion.Euler(Vector3.zero));
@@ -160,7 +160,8 @@ public class CharacterCreator : MonoBehaviour
         //Technically a randomized body :)
         g.transform.localScale = new Vector3(g.transform.localScale.x, Random.Range(1.2f, 1.3f), g.transform.localScale.y);
         g.tag = tag;
-        g.GetComponentInChildren<SkinnedMeshRenderer>().material = material;
+        g.GetComponentInChildren<SkinnedMeshRenderer>(true).material = material;
+        g.GetComponentInChildren<Image>().color = color;
         return g;
     }
 

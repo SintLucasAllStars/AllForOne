@@ -9,6 +9,7 @@ public class PowerUp : MonoBehaviour
         Adernaline = 10, Rage = 5, Freeze = 3
     }
     public PowerType currentType;
+    public Sprite sprite;
 
     public float endTime;
     public float boost;
@@ -55,5 +56,10 @@ public class PowerUp : MonoBehaviour
     {
         GameManager.instance.EndRound -= Destroy;
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.instance.EndRound -= Destroy;
     }
 }

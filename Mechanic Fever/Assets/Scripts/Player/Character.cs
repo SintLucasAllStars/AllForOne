@@ -54,6 +54,10 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
         defaultWeapon.Init(damage, GetEnemyTag());
+
+        UnityEngine.UI.Image image = GetComponentInChildren<UnityEngine.UI.Image>(true);
+        GameManager.instance.StartRound += delegate { image.enabled = false; };
+        GameManager.instance.EndRound += delegate { image.enabled = true; };
     }
 
     private void Update()
@@ -85,6 +89,7 @@ public class Character : MonoBehaviour
                     activePowerUp = null;
                 }
             }
+            SetPowerUpImage();
         }
         else if(activePowerUp != null && activePowerUp.CheckActivity())
         {
@@ -97,7 +102,8 @@ public class Character : MonoBehaviour
                 defaultWeapon.SetDamage(damage);
                 if(currentWeapon != null) currentWeapon.SetDamage(damage);
             }
-            activePowerUp = null;
+            Destroy(activePowerUp);
+            SetPowerUpImage();
         }
     }
 
@@ -121,7 +127,7 @@ public class Character : MonoBehaviour
             {
                 GameManager.instance.KillCharacter(tag);
                 animator.Play("Death");
-                Destroy(gameObject,3);
+                Destroy(gameObject, 3);
             }
         }
         GameManager.instance.EndRound -= EndRound;
@@ -141,6 +147,7 @@ public class Character : MonoBehaviour
             GameManager.instance.EndRound += EndRound;
             gameObject.layer = 2;//Set player to ignoreRaycast
             playerCollider.radius = .2f;
+            SetPowerUpImage();
         }
         else
         {
@@ -228,6 +235,29 @@ public class Character : MonoBehaviour
         }
     }
 
+    private void SetPowerUpImage()
+    {
+        Debug.Log("Set" + activePowerUp);
+        if(activePowerUp == null)
+        {
+            if(powerUps.Count == 0)
+            {
+                GameUi.instance.powerUp.enabled = false;
+                return;
+            }
+            Debug.Log("Wrong");
+            GameUi.instance.powerUp.sprite = powerUps[currentPowerUp].sprite;
+            GameUi.instance.powerUp.rectTransform.localScale = Vector3.one / 2;
+        }
+        else
+        {
+            Debug.Log("Here");
+            GameUi.instance.powerUp.sprite = activePowerUp.sprite;
+            GameUi.instance.powerUp.rectTransform.localScale = Vector3.one;
+        }
+        GameUi.instance.powerUp.enabled = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Trigger"))
@@ -236,9 +266,9 @@ public class Character : MonoBehaviour
         }
         else if(other.CompareTag("PickUp"))
         {
-            Debug.Log(other.GetComponent<PowerUp>());
             powerUps.Add(other.GetComponent<PowerUp>());
-            Destroy(other.gameObject);
+            Destroy(other.GetComponent<MeshRenderer>());
+            SetPowerUpImage();
         }
         else if(other.CompareTag("Weapon"))
         {

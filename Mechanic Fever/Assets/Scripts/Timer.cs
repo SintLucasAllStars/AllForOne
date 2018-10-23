@@ -10,8 +10,6 @@ public class Timer
     private float timer;
     private bool frozen = false;
 
-    [SerializeField] private GameUi gameUi;
-
     public void Initialize()
     {
         GameManager.instance.StartRound += SetTimer;
@@ -28,7 +26,7 @@ public class Timer
             return;
 
         timer -= Time.deltaTime;
-        gameUi.SetTimer(timer);
+        GameUi.instance.SetTimer(timer);
 
         if(timer <= 0)
             GameManager.instance.RunEvent(false);
