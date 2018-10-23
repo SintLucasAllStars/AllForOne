@@ -21,6 +21,7 @@ public class GameControl : MonoBehaviour
     public MapManager map;
     public UnitMapUI mapUnitUI;
     public CameraController camControl;
+    public CharacterUI characterUI;
 
 
     public GameObject objectPlacement;
@@ -112,6 +113,7 @@ public class GameControl : MonoBehaviour
     public void GameStartTurn ()
     {
         currentTurnCharacterPlay.isPlaying = true;
+        characterUI.UIEnable(currentTurnCharacterPlay.playerNormalStats, currentTurnCharacterPlay.currentHealth);
         camControl.CameraCurrentControl = CameraController.CameraControlEnum.playerThirdPerson;
         timeSinceStartTurn = Time.time;
         startTurn = true;
@@ -120,6 +122,7 @@ public class GameControl : MonoBehaviour
     public void GameEndTurn ()
     {
         startTurn = false;
+        characterUI.UIDisable();
         currentTurnCharacterPlay.isPlaying = false;
         GameNextTurn();
     }
@@ -165,9 +168,6 @@ public class GameControl : MonoBehaviour
             {
                 GameEndTurn();
             }
-
-
-           // Debug.Log("Time left: " + timeLeftTurn);
         }
     }
 

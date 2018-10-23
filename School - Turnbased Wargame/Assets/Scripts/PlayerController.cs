@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
 
     public float speed;
+    public ushort defaultStrength;
 
 
     private void Start()
@@ -38,7 +39,7 @@ public class PlayerController : MonoBehaviour
                 Character enemy = hit.collider.GetComponent<Character>();
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(10);
+                    enemy.TakeDamage(defaultStrength);
                     Debug.Log("Enemy found!");
                 }
             }

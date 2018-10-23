@@ -12,7 +12,6 @@ public class Character : MonoBehaviour
     public Soldier playerNormalStats { get; private set; }
     public ushort currentHealth { get; private set; }
 
-
     public PlayerController controller;
 
 
@@ -31,6 +30,7 @@ public class Character : MonoBehaviour
         }
     }
 
+    
 
     private void OnEnable()
     {
@@ -53,13 +53,10 @@ public class Character : MonoBehaviour
 
         controller.speed = uDefaultType.speed;
         currentHealth = uDefaultType.health;
+        controller.defaultStrength = uDefaultType.strength;
 
-        /*   
-        playerType.name = uType.name;
-        playerType.health = uType.health;
-        playerType.strength = uType.strength;
-        playerType.speed = uType.speed;
-        playerType.defense = uType.defense; */
+        GetComponentInChildren<MeshRenderer>().material.color =
+            (isBlueCharacter ? PlayerManager.instance.playerBlue : PlayerManager.instance.playerRed).playerColor;
     }
 
     public void TakeDamage (ushort damage)
@@ -70,9 +67,8 @@ public class Character : MonoBehaviour
             Destroy(gameObject);
         } else
         {
-            currentHealth -= damage;
+            currentHealth -= (ushort) (damage /  Mathf.Clamp((playerNormalStats.defense) / 5, 1, int.MaxValue));
         }
     }
-
 
 }

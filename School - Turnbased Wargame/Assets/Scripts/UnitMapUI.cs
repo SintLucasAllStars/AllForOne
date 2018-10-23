@@ -24,7 +24,7 @@ public class UnitMapUI : MonoBehaviour
                 GameObject unitUI = Instantiate(unitIcon, p.transform) as GameObject;
                 unitUI.GetComponent<SpriteRenderer>().color = PlayerManager.instance.playerRed.playerUIColor;
 
-                unitUI.AddComponent<UnitGameObjectInteractable>().unitGameObject = p;
+                unitUI.GetComponent<UnitGameObjectInteractable>().unitGameObject = p;
                 unitUI.GetComponent<UnitGameObjectInteractable>().unitIndex = i;
 
                 playerRedUI.Add(unitUI);
@@ -37,7 +37,7 @@ public class UnitMapUI : MonoBehaviour
                 GameObject unitUI = Instantiate(unitIcon, p.transform) as GameObject;
                 unitUI.GetComponent<SpriteRenderer>().color = PlayerManager.instance.playerBlue.playerUIColor;
 
-                unitUI.AddComponent<UnitGameObjectInteractable>().unitGameObject = p;
+                unitUI.GetComponent<UnitGameObjectInteractable>().unitGameObject = p;
                 unitUI.GetComponent<UnitGameObjectInteractable>().unitIndex = i;
 
                 playerBlueUI.Add(unitUI);
@@ -57,23 +57,11 @@ public class UnitMapUI : MonoBehaviour
 
     public void ShowUnitUI (bool isPlayerblue)
     {
-        List<GameObject> removeObjects = new List<GameObject>(); 
         foreach(GameObject o in isPlayerblue ? playerBlueUI : playerRedUI)
         {
-            try
+            if (o != null)
             {
                 o.SetActive(true);
-            }
-            catch
-            {
-                removeObjects.Add (o);
-            }
-        }
-        if (removeObjects.Count > 0)
-        {
-            foreach (GameObject d in removeObjects)
-            {
-                (isPlayerblue ? playerBlueUI : playerRedUI).Remove(d);
             }
         }
 
@@ -88,24 +76,11 @@ public class UnitMapUI : MonoBehaviour
     }
     public void HideUnitUI(bool isPlayerblue)
     {
-        List<GameObject> removeObjects = new List<GameObject>();
         foreach (GameObject o in isPlayerblue ? playerBlueUI : playerRedUI)
         {
-            try
-            {
+            if (o != null)
                 o.SetActive(false);
-            } catch
-            {
-                removeObjects.Add(o);
-            }
-        }
-
-        if (removeObjects.Count > 0)
-        {
-            foreach (GameObject d in removeObjects)
-            {
-                (isPlayerblue ? playerBlueUI : playerRedUI).Remove(d);
-            }
+        
         }
         checkClickUI = false;
     }
