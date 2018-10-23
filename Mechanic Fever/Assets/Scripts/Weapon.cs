@@ -10,9 +10,16 @@ public class Weapon : MonoBehaviour
     int damage;
     string enemyTag;
 
-    public void Init(float playerDamage, string enemyTag)
+    public void Start()
     {
-        damage = Mathf.RoundToInt(playerDamage * stats.damageMultiplier);
+        if(transform.root == gameObject)
+            GameManager.instance.EndRound += Destroy;
+    }
+
+    public void Init(float strength, string enemyTag)
+    {
+        GameManager.instance.EndRound -= Destroy;
+        damage = Mathf.RoundToInt(strength * stats.damageMultiplier);
         this.enemyTag = enemyTag;
     }
 
@@ -20,6 +27,11 @@ public class Weapon : MonoBehaviour
     {
         if(!collider.enabled)
             StartCoroutine(EnableCollider());
+    }
+
+    public void SetDamage(float damage)
+    {
+        damage = Mathf.RoundToInt(damage * stats.damageMultiplier);
     }
 
     private IEnumerator EnableCollider()
@@ -30,6 +42,12 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(stats.attackPeriod.y - stats.attackPeriod.x);
         collider.enabled = false;
         Debug.Log("Disabled");
+    }
+
+    private void Destroy()
+    {
+        GameManager.instance.EndRound -= Destroy;
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 using System.Collections;
+using System.Collections.Generic;
+
 public class Character : MonoBehaviour
 {
     private const int maxPoints = 100;
@@ -16,6 +18,8 @@ public class Character : MonoBehaviour
     private float damage;
 
     private float defence;
+
+    private float speed;
 
     public bool isFortified = false;
 
@@ -34,7 +38,10 @@ public class Character : MonoBehaviour
 
     private bool isAttacking = false;
 
-    private PowerUp powerUp;
+    private List<PowerUp> powerUps = new List<PowerUp>();
+    private int currentPowerUp;
+
+    PowerUp activePowerUp;
 
     [SerializeField] bool isActive = false;
 
@@ -55,29 +62,71 @@ public class Character : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
             Attack();
-        if(Input.GetKey(KeyCode.F))
-            animator.Play("Death");
-        if(Input.GetKey(KeyCode.R))
+
+        if(Input.GetKeyDown(KeyCode.E))
         {
-            animator.Play("Damage");
+            if(powerUps.Count != 0)
+            {
+                activePowerUp = powerUps[currentPowerUp];
+                powerUps.Remove(activePowerUp);
+                Debug.Log(activePowerUp);
+                activePowerUp.Activate();
+                if(activePowerUp.currentType == PowerUp.PowerType.Adernaline)
+                {
+                    character.m_MoveSpeedMultiplier *= activePowerUp.boost;
+                }
+                else if(activePowerUp.currentType == PowerUp.PowerType.Rage)
+                {
+                    defaultWeapon.SetDamage(damage * activePowerUp.boost);
+                    if(currentWeapon != null) currentWeapon.SetDamage(damage * activePowerUp.boost);
+                }
+                else
+                {
+                    activePowerUp = null;
+                }
+            }
+        }
+        else if(activePowerUp != null && activePowerUp.CheckActivity())
+        {
+            if(activePowerUp.currentType == PowerUp.PowerType.Adernaline)
+            {
+                character.m_MoveSpeedMultiplier *= speed;
+            }
+            else if(activePowerUp.currentType == PowerUp.PowerType.Rage)
+            {
+                defaultWeapon.SetDamage(damage);
+                if(currentWeapon != null) currentWeapon.SetDamage(damage);
+            }
+            activePowerUp = null;
         }
     }
 
-    public void SetStats(float health, float damage, float speed, float defence)
+    public void SetStats(float health, float strength, float speed, float defence)
     {
         this.health = health;
-        this.damage = Mathf.Lerp(damageRange.x, damageRange.y, damage);
+        damage = Mathf.Lerp(damageRange.x, damageRange.y, strength);
         character.m_MoveSpeedMultiplier = speed;
+        this.speed = speed;
         this.defence = defence;
         playerCollider.enabled = true;
     }
 
     void EndRound()
     {
+        Debug.DrawRay(transform.position + Vector3.up, Vector3.down, Color.red, 10);
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity))
+        {
+            if(hit.collider.CompareTag("Finish"))
+            {
+                GameManager.instance.KillCharacter(tag);
+                animator.Play("Death");
+                Destroy(gameObject,3);
+            }
+        }
         GameManager.instance.EndRound -= EndRound;
         ActivateCharacter(false);
     }
-
 
     public void ActivateCharacter(bool activate)
     {
@@ -98,6 +147,8 @@ public class Character : MonoBehaviour
             playerCollider.radius = .3f;
             ResetAnimator();
             gameObject.layer = 10;//Set player layer;
+            activePowerUp = null;
+
         }
     }
 
@@ -185,7 +236,17 @@ public class Character : MonoBehaviour
         }
         else if(other.CompareTag("PickUp"))
         {
-            Debug.Log("PickUp");
+            Debug.Log(other.GetComponent<PowerUp>());
+            powerUps.Add(other.GetComponent<PowerUp>());
+            Destroy(other.gameObject);
+        }
+        else if(other.CompareTag("Weapon"))
+        {
+            if(currentWeapon != null)
+                Destroy(currentWeapon.gameObject);
+
+            currentWeapon = other.GetComponent<Weapon>();
+            currentWeapon.transform.parent = transform;
         }
     }
 

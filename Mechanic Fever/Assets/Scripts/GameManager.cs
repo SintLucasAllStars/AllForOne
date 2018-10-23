@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public bool IsTurnPlayerOne = true;
 
     //Game
-    [SerializeField] private Timer timer;
+    public Timer timer;
     public bool activeGame = false;
 
     // Use this for initialization
@@ -79,6 +79,14 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Game ended! Player: " + ((IsTurnPlayerOne) ? "Two" : "One") + " Won");
         }
+    }
+
+    public void KillCharacter(string character)
+    {
+        if(character == "PlayerOne")
+            playerOne.KillCharacter();
+        else if(character == "PlayerTwo")
+            playerTwo.KillCharacter();   
     }
 
     public Player GetCurrentPlayer()
