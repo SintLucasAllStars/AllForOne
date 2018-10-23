@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class CameraController : MonoBehaviour
 {
@@ -10,8 +11,10 @@ public class CameraController : MonoBehaviour
 	
 	private Vector3 _restPos;
 	private Quaternion _restRot;
+	private Camera _camera;
 
-	private Coroutine _currentRoutine;
+	public Coroutine CurrentRoutine { get; private set; }
+
 
 	[SerializeField] private float TopDownSpeed;
 	
@@ -24,6 +27,8 @@ public class CameraController : MonoBehaviour
 
 	private void Start()
 	{
+		_camera = GetComponent<Camera>();
+		
 		_restPos = transform.position;
 		_restRot = transform.rotation;
 
@@ -32,13 +37,16 @@ public class CameraController : MonoBehaviour
 
 	private void Update()
 	{
+		Debug.Log(CurrentRoutine);
 		switch (CurrentState)
 		{
 			case CameraState.TopDown:
+				_camera.cullingMask |= 1 << LayerMask.NameToLayer("TeamMarkers");
 				Vector3 movement = new Vector3(Input.GetAxis("Vertical"),0, -Input.GetAxis("Horizontal")) * TopDownSpeed;
 				transform.position += movement;
 				break;
 			case CameraState.ThirdPerson:
+				_camera.cullingMask &=  ~(1 << LayerMask.NameToLayer("TeamMarkers"));
 				return;
 			case CameraState.Static:
 				return;
@@ -59,14 +67,14 @@ public class CameraController : MonoBehaviour
 
 	public void MoveCameraToPosition(float time, Vector3 position, Quaternion rotation)
 	{
-		if(_currentRoutine != null) StopCoroutine(_currentRoutine);
-		_currentRoutine = StartCoroutine(MoveToPosition(time, position, rotation));
+		if(CurrentRoutine != null) StopCoroutine(CurrentRoutine);
+		CurrentRoutine = StartCoroutine(MoveToPosition(time, position, rotation));
 	}
 
 	public void ResetCameraPosition(float time)
 	{
-		if(_currentRoutine != null) StopCoroutine(_currentRoutine);
-		_currentRoutine = StartCoroutine(MoveToPosition(time, _restPos, _restRot));
+		if(CurrentRoutine != null) StopCoroutine(CurrentRoutine);
+		CurrentRoutine = StartCoroutine(MoveToPosition(time, _restPos, _restRot));
 	}
 
 	public void SetCameraState(CameraState state)
@@ -85,8 +93,9 @@ public class CameraController : MonoBehaviour
 			transform.localRotation = Quaternion.Lerp(startRot, rotation , t);
 			yield return new WaitForEndOfFrame();
 		}
+
+		CurrentRoutine = null;
 	}
-	
 }
 
 public enum CameraState

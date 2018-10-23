@@ -12,15 +12,31 @@ using UnityStandardAssets.Characters.ThirdPerson;
         private float _attackTimeout;
         private Animator _animator;
         public Transform CamPoint;
+        public float _movementSpeed = 1f;
 
-        private Unit _unit;
+        public Unit Unit { get; private set; }
 
         private void OnEnable()
         {
-            if (_unit == null) _unit = GetComponent<Unit>();
+            if (Unit == null) Unit = GetComponent<Unit>();
             if (_cam == null && Camera.main != null) _cam = Camera.main.transform;
             if(_character == null) _character = GetComponent<ThirdPersonCharacter>();
             if (_animator == null) _animator = GetComponent<Animator>();
+
+            _movementSpeed = 0.5f + 1f-(1f / Unit.GetStat(PlayerStats.Speed));
+        }
+
+        private void OnDisable()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -transform.up, out hit))
+            {
+                if (!hit.collider.CompareTag("PlaceAble"))
+                {
+                    if(CameraController.Instance.transform.parent == transform) CameraController.Instance.transform.SetParent(null);
+                    Unit.ChangeStat(PlayerStats.Health, -1000);
+                }
+            }
         }
 
 
@@ -36,7 +52,28 @@ using UnityStandardAssets.Characters.ThirdPerson;
                 if (Time.time >= _attackTimeout)
                 {
                     _attackTimeout = Time.time + 1;
-                    _animator.CrossFade("Attack", 0f);
+                    Attack();
+                }
+            }
+        }
+
+        private void Attack()
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position, transform.forward);
+            
+            _animator.CrossFade("Attack", 0f);
+            
+            if (Physics.Raycast(ray, out hit, 5))
+            {
+                if (hit.collider.CompareTag("Unit"))
+                {
+                    Unit otherUnit = hit.collider.GetComponent<Unit>();
+                    if (otherUnit.Player != Unit.Player)
+                    {
+                        otherUnit.ChangeStat(PlayerStats.Health,
+                            -(Unit.GetStat(PlayerStats.Strength) - (otherUnit.GetStat(PlayerStats.Defense)/2)));
+                    }
                 }
             }
         }
@@ -50,7 +87,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
             if (_cam != null)
             {
                 _camForward = Vector3.Scale(_cam.forward, new Vector3(1, 0, 1)).normalized;
-                _move = v*_camForward + h*_cam.right;
+                _move = (v * _movementSpeed) * _camForward + (h*_movementSpeed) * _cam.right;
             }
 
             _character.Move(_move, crouch, _jump);

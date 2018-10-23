@@ -9,13 +9,9 @@ public class GameManager : MonoBehaviour
 	
 	public delegate void StartSetup();
 	public delegate void StartGame();
-	public delegate void StartRound(int player);
 
 	public static event StartSetup OnStartSetup ;
 	public static event StartGame OnStartGame ;
-	public static event StartRound OnStartRound;
-
-	private int currentPlayer = 0;
 	private void Awake()
 	{
 		if(Instance != this && Instance != null) Destroy(this);
@@ -39,18 +35,12 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		StartNewGame();
-		if (OnStartGame != null) OnStartGame();
 	}
 
 	public void EndSetup()
 	{
+		Debug.Log("EndSetup");
 		GameState.CurrentState = State.Playing;
-		StartNewRound();
 		if (OnStartGame != null) OnStartGame();
-	}
-
-	private void StartNewRound()
-	{
-		if (OnStartRound != null) OnStartRound(currentPlayer);
 	}
 }

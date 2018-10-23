@@ -17,18 +17,9 @@ public class UnitSelector : MonoBehaviour
 		_cameraController = CameraController.Instance;
 	}
 
-	private void OnEnable()
+	public void SelectUnit(int player)
 	{
-		GameManager.OnStartRound += OnStartRound;
-	}
-
-	private void OnDisable()
-	{
-		GameManager.OnStartRound -= OnStartRound;
-	}
-
-	private void OnStartRound(int player)
-	{
+		Debug.Log("Select: " + player);
 		_currentPlayer = player;
 		_canSelect = true;
 	}
@@ -55,15 +46,15 @@ public class UnitSelector : MonoBehaviour
 	{
 		_currentUnit = unit.GetComponent<UnitController>();
 		_currentUnit.enabled = true;
-		_cameraController.SetCameraState(CameraState.TopDown);
 		_cameraController.ParentTo(unit.transform);
 		_cameraController.SetCameraState(CameraState.ThirdPerson);
 		_cameraController.MoveCameraToPosition(100, unit.transform.position - (unit.transform.forward * 2) + (Vector3.up * 3),Quaternion.Euler(Vector3.zero));
+		RoundManager.Instance.SelectedUnit(_currentUnit.Unit);
 	}
 
 
 
-	private void ClearCurrentUnit()
+	public void ClearCurrentUnit()
 	{
 		_currentUnit.enabled = false;
 		_currentUnit = null;

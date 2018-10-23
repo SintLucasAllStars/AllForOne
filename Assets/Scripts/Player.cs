@@ -16,5 +16,15 @@ public class Player
 		PlayerNumber = playerNumber;
 		Color = color;
 	}
+
+	public void RemoveUnit(Unit unit)
+	{
+		Units.Remove(unit);
+	}
+
+	public void AddUnit(Unit unit)
+	{
+		Units.Add(unit);
+	}
 }
 

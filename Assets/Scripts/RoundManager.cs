@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour
 {
@@ -8,30 +9,83 @@ public class RoundManager : MonoBehaviour
 
 	private UnitSelector _unitSelector;
 	
-	private int _currentPlayer;
+	private int _currentPlayer = 0;
+	private Unit _currentUnit;
+
+	[SerializeField]
+	private Image _counterImage;
+
+	public bool IsPaused;
+	
+	public delegate void StartRound(int player);
+	public delegate void EndRound();
+
+	public static event EndRound OnEndRound;
+	public static event StartRound OnStartRound;
 
 	private void Awake()
 	{
 		Instance = this;
 	}
-
+	
 	private void Start()
 	{
 		_unitSelector = FindObjectOfType<UnitSelector>();
 	}
-
+	
 	private void OnEnable()
 	{
-		GameManager.OnStartRound += OnStartRound;
-	}
-	
-	private void OnDisable()
-	{
-		GameManager.OnStartRound -= OnStartRound;
+		GameManager.OnStartGame += StartNewRound;
 	}
 
-	private void OnStartRound(int player)
+	private void OnDisable()
 	{
-		_currentPlayer = player;
+		GameManager.OnStartGame -= StartNewRound;
+	}
+
+
+
+	private void StartNewRound()
+	{
+		_unitSelector.SelectUnit(_currentPlayer);
+		_counterImage.color = GameManager.GameState.Players[_currentPlayer].Color;
+	}
+
+	public void SelectedUnit(Unit unit)
+	{
+		StartCoroutine(Round(10));
+		if (OnStartRound != null) OnStartRound(_currentPlayer);
+		_currentUnit = unit;
+	}
+
+	public void EndCurrentRound()
+	{
+		if (OnEndRound != null) OnEndRound();
+		_currentUnit = null;
+		_unitSelector.ClearCurrentUnit();
+		_currentPlayer = (_currentPlayer + 1) % GameManager.GameState.Players.Length;
+		StartNewRound();
+	}
+
+	IEnumerator Round(int roundLength)
+	{
+		while (CameraController.Instance.CurrentRoutine != null)
+		{
+			yield return new WaitForEndOfFrame();
+		}
+		
+		int count = roundLength;
+		while (count > 0)
+		{
+			while (IsPaused)
+			{
+				yield return new WaitForSeconds(0.1f);
+			}
+			count--;
+			_counterImage.fillAmount = (float)count / (float)roundLength;
+			yield return new WaitForSeconds(1f);
+		}
+		
+		EndCurrentRound();
 	}
 }

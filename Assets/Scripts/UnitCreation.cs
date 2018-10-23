@@ -98,7 +98,7 @@ public class UnitCreation : MonoBehaviour
 		GameObject newUnit = Instantiate(_unitPrefab, Vector3.one*100,Quaternion.identity);
 		newUnit.GetComponent<Unit>().SetValues(_currentPlayer, (int)_healthSlider.value, (int)_speedSlider.value, (int)_strengthSlider.value, (int)_defenseSlider.value);
 		UnitPlacer.Instance.PlaceObject(newUnit);
-		_currentState.Players[_currentPlayer].Units.Add(newUnit.GetComponent<Unit>());
+		_currentState.Players[_currentPlayer].AddUnit(newUnit.GetComponent<Unit>());
 		_rectTransform.anchoredPosition = Vector2.up * 1000;
 	}
 }
