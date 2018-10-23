@@ -10,7 +10,7 @@ public class RoundManager : MonoBehaviour
 	private UnitSelector _unitSelector;
 	
 	private int _currentPlayer = 0;
-	private Unit _currentUnit;
+	public Unit CurrentUnit { get; private set; }
 
 	[SerializeField]
 	private Image _counterImage;
@@ -55,13 +55,14 @@ public class RoundManager : MonoBehaviour
 	{
 		StartCoroutine(Round(10));
 		if (OnStartRound != null) OnStartRound(_currentPlayer);
-		_currentUnit = unit;
+		CurrentUnit = unit;
 	}
 
 	public void EndCurrentRound()
 	{
 		if (OnEndRound != null) OnEndRound();
-		_currentUnit = null;
+		_counterImage.fillAmount = 1;
+		CurrentUnit = null;
 		_unitSelector.ClearCurrentUnit();
 		_currentPlayer = (_currentPlayer + 1) % GameManager.GameState.Players.Length;
 		StartNewRound();

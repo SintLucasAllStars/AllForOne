@@ -12,7 +12,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
         private float _attackTimeout;
         private Animator _animator;
         public Transform CamPoint;
-        public float _movementSpeed = 1f;
+        private float _movementSpeed = 1f;
 
         public Unit Unit { get; private set; }
 
@@ -28,6 +28,8 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
         private void OnDisable()
         {
+            _character.Move(Vector3.zero, false, false);
+            
             RaycastHit hit;
             if (Physics.Raycast(transform.position, -transform.up, out hit))
             {

@@ -8,8 +8,7 @@ public class PowerUp : ScriptableObject
 	public Sprite Image;
 
 	public virtual void Activate(Unit unit)
-	{
-		
+	{		
 	}
 	
 }

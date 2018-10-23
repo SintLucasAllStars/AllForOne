@@ -37,7 +37,6 @@ public class CameraController : MonoBehaviour
 
 	private void Update()
 	{
-		Debug.Log(CurrentRoutine);
 		switch (CurrentState)
 		{
 			case CameraState.TopDown:
