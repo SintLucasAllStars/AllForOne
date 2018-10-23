@@ -1452,7 +1452,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1492480479442776}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.67218447, y: 0.1817454, z: 0.9503224}
+  m_LocalPosition: {x: 0.5269798, y: 0.1817454, z: 0.65275776}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_Children:
   - {fileID: 4246530910666232}
@@ -1841,6 +1841,7 @@ MonoBehaviour:
   pivot: {fileID: 4150869222252610}
   cameraLocation: {x: 0, y: 0, z: -4}
   defaultWeapon: {fileID: 114907431252190308}
+  weaponSlot: {fileID: 4787307637777120}
   isActive: 0
 --- !u!114 &114907431252190308
 MonoBehaviour:
@@ -1855,11 +1856,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     damageMultiplier: 1
-    range: 1
     animationName: Punch
-    animationLength: 0
-    attackPeriod: {x: 0, y: 0.5}
+    attackPeriod: {x: 0, y: 0.8}
   collider: {fileID: 135752273083656534}
+  triger: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
 --- !u!135 &135752273083656534
 SphereCollider:
   m_ObjectHideFlags: 1

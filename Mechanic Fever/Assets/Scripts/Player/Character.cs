@@ -22,6 +22,7 @@ public class Character : MonoBehaviour
     private float speed;
 
     public bool isFortified = false;
+    private float fortifyTime;
 
     private Rigidbody playeRigidbody;
     private CapsuleCollider playerCollider;
@@ -35,11 +36,12 @@ public class Character : MonoBehaviour
     [Header("Weapon Stats")]
     [SerializeField] Weapon defaultWeapon;
     Weapon currentWeapon;
+    [SerializeField] private Transform weaponSlot;
 
     private bool isAttacking = false;
 
     private List<PowerUp> powerUps = new List<PowerUp>();
-    private int currentPowerUp;
+    private int currentPowerUp = 0;
 
     PowerUp activePowerUp;
 
@@ -53,7 +55,7 @@ public class Character : MonoBehaviour
         playeRigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
-        defaultWeapon.Init(damage, GetEnemyTag());
+        defaultWeapon.Init(damage, GetEnemyTag(), weaponSlot);
 
         UnityEngine.UI.Image image = GetComponentInChildren<UnityEngine.UI.Image>(true);
         GameManager.instance.StartRound += delegate { image.enabled = false; };
@@ -63,6 +65,10 @@ public class Character : MonoBehaviour
     private void Update()
     {
         if(!isActive) return;
+
+        if(isFortified && Input.anyKeyDown)
+            isFortified = false;
+
 
         if(Input.GetMouseButtonDown(0))
             Attack();
@@ -105,6 +111,18 @@ public class Character : MonoBehaviour
             Destroy(activePowerUp);
             SetPowerUpImage();
         }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            const int requiredFortifyTime = 3;
+            fortifyTime = Time.time + requiredFortifyTime;
+        }
+        else if(Input.GetKeyUp(KeyCode.F))
+        {
+            isFortified = Time.time > fortifyTime;
+            if(isFortified)
+                Debug.Log("Fortified");
+        }
     }
 
     public void SetStats(float health, float strength, float speed, float defence)
@@ -143,7 +161,7 @@ public class Character : MonoBehaviour
 
         if(activate)
         {
-            defaultWeapon.Init(damage, GetEnemyTag());
+            defaultWeapon.Init(damage, GetEnemyTag(), weaponSlot);
             GameManager.instance.EndRound += EndRound;
             gameObject.layer = 2;//Set player to ignoreRaycast
             playerCollider.radius = .2f;
@@ -219,8 +237,8 @@ public class Character : MonoBehaviour
 
     public void Damage(int damage, float angle)
     {
-        Debug.Log((isFortified) ? damage - damage / 2 * (1 - defence) : damage);
-        health -= (isFortified) ? damage - damage / 2 * (1 - defence) : damage;
+        Debug.Log(damage / 2 * defence + " " + damage);
+        health -= (isFortified) ? damage - damage / 2 * defence : damage;
         if(health <= 0)
         {
             animator.Play("Death");
@@ -267,7 +285,7 @@ public class Character : MonoBehaviour
         else if(other.CompareTag("PickUp"))
         {
             powerUps.Add(other.GetComponent<PowerUp>());
-            Destroy(other.GetComponent<MeshRenderer>());
+            Destroy(other.GetComponent<SpriteRenderer>());
             SetPowerUpImage();
         }
         else if(other.CompareTag("Weapon"))
@@ -276,7 +294,7 @@ public class Character : MonoBehaviour
                 Destroy(currentWeapon.gameObject);
 
             currentWeapon = other.GetComponent<Weapon>();
-            currentWeapon.transform.parent = transform;
+            currentWeapon.Init(damage, GetEnemyTag(), weaponSlot);
         }
     }
 

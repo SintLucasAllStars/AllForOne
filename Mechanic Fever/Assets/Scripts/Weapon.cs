@@ -3,12 +3,15 @@ using System.Collections;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Stats")]
     public WeaponStats stats;
 
     [SerializeField] new Collider collider;
+    [SerializeField] Collider triger;
     int damage;
     string enemyTag;
+
+    [SerializeField] Vector3 position;
+    [SerializeField] Vector3 rotation;
 
     public void Start()
     {
@@ -16,11 +19,19 @@ public class Weapon : MonoBehaviour
             GameManager.instance.EndRound += Destroy;
     }
 
-    public void Init(float strength, string enemyTag)
+    public void Init(float strength, string enemyTag, Transform parent)
     {
         GameManager.instance.EndRound -= Destroy;
         damage = Mathf.RoundToInt(strength * stats.damageMultiplier);
         this.enemyTag = enemyTag;
+
+        transform.parent = parent;
+        transform.localPosition = position;
+        transform.localRotation = Quaternion.Euler(rotation);
+
+
+        if(triger != null)
+            Destroy(triger);
     }
 
     public void Attack()
@@ -67,13 +78,10 @@ public class Weapon : MonoBehaviour
 [System.Serializable]
 public struct WeaponStats
 {
-    [Header("Stats")]
     public int damageMultiplier;
-    public int range;
 
     [Header("Animation")]
     public string animationName;
-    public float animationLength;
     public Vector2 attackPeriod;
 
 }
