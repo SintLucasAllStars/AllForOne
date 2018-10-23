@@ -37,6 +37,11 @@ public class CharacterPanel : MonoBehaviour
     [SerializeField] private Animator _animator;
 
     [SerializeField] private GameObject _showCaseObject;
+    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRendererOne;
+    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRendererTwo;
+
+    private MaterialPropertyBlock _materialProperty;
+    private Color _currentCharacterColor;
 
 
     private enum ValuesEnum
@@ -57,6 +62,14 @@ public class CharacterPanel : MonoBehaviour
         InitializePercentage();
         InitializeDictionary();
         SetCurrentPlayerText();
+        InitializePropertyBlock();
+    }
+
+    private void InitializePropertyBlock()
+    {
+        _materialProperty = new MaterialPropertyBlock();
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
+        _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty);
     }
 
     private void InitializeDictionary()
@@ -155,13 +168,23 @@ public class CharacterPanel : MonoBehaviour
         ResetSliders();
         _pointsLeft =  PlayerManager.Instance.GetCurrentlyActivePlayer().GetPoints() - GetTotalValue();
         _originalPoints = PlayerManager.Instance.GetCurrentlyActivePlayer().GetPoints();
-        
+        SetCharacterColor();
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
         _panelTexts.PointsLeft.text = _pointsLeft.ToString("0.00");
         if (_pointsLeft <= 0)
         {
             _hireButton.interactable = false;
         }
         SetCurrentPlayerText();
+    }
+
+    private void SetCharacterColor()
+    {
+        _currentCharacterColor = GameManager.Instance.GetRandomColor(PlayerManager.Instance.GetCurrentlyActivePlayer().PlayerNumber);
+        _materialProperty.SetColor("_Color", _currentCharacterColor);
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
+        _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty, 0);
+        
     }
 
 
@@ -194,7 +217,7 @@ public class CharacterPanel : MonoBehaviour
 
     public void AddCharacter()
     {
-        PlayerManager.Instance.AddCharacterToCurrentPlayerAndInstansiate(_strength, _defence, _speed, _health, PlayerManager.Instance.GetCurrentlyActivePlayer().PlayerNumber);
+        PlayerManager.Instance.AddCharacterToCurrentPlayerAndInstansiate(_strength, _defence, _speed, _health, PlayerManager.Instance.GetCurrentlyActivePlayer().PlayerNumber, _currentCharacterColor);
         _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
     }
 

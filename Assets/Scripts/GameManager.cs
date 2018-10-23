@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using System.Linq;
+using MathExt;
 using Players;
 using Tools;
 using UnityEngine;
@@ -32,10 +34,14 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private PowerUpPanel _powerUpPanel;
 
+    public ColorRanges MyColorRanges;
 
     private bool _powerUpActive = false;
 
     private bool _pauseTimer;
+
+    private List<Color> PlayerOneColors = new List<Color>();
+    private List<Color> PlayerTwoColors = new List<Color>();
     
 
     protected override void Awake()
@@ -49,13 +55,35 @@ public class GameManager : Singleton<GameManager>
         ResetMaterial();
         //TimerActive = true;
         _healthSlider.gameObject.SetActive(false);
-        _timeLeft = 1000f;
+        _timeLeft = 10f;
+        InitializeColorLists();
+    }
+
+    private void InitializeColorLists()
+    {
+        PlayerOneColors = MyColorRanges.PlayerOne.ToList();
+        PlayerTwoColors = MyColorRanges.PlayerTwo.ToList();
+    }
+
+    public Color GetRandomColor(int playerNumber)
+    {
+        if (playerNumber == 1)
+        {
+            var randomColor1 = PlayerOneColors.GetRandomElement_List();
+            PlayerOneColors.Remove(randomColor1);
+            return randomColor1;
+        }
+
+        var randomColor2 = PlayerTwoColors.GetRandomElement_List();
+        PlayerTwoColors.Remove(randomColor2);
+        return randomColor2;
+
     }
     
     
     
 
-
+        
     private void ResetMaterial()
     {
         _resetMaterial.color = Color.white;
@@ -94,24 +122,45 @@ public class GameManager : Singleton<GameManager>
         }
         else if (_waitingForCoroutine && setParent)
         {
-            TimerActive = true;
-            PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.EnableUserControl();
+
+            if (!PlayerManager.Instance.GetCurrentlyActiveCharacter().Fortified)
+            {
+                TimerActive = true;
+                PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.EnableUserControl();
+            }
+            else
+            {
+                PlayerManager.Instance.GetCurrentlyActiveCharacter().EndFortify();
+                StartCoroutine(IEDelayedEnableCharCall());
+            }
+
         }
     }
 
-    private void TurnFinished()
+    private void TurnFinished(bool fortify)
     {
-        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.DisableUserControl();
-//        if (currentCharacter + 1 < PlayerManager.Instance.GetCurrentlyActivePlayer().Characters.Count())
-//        {
-//            PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter++;
-//        }
-//        else
-//        {
-//            PlayerManager.Instance.GetCurrentlyActivePlayer().CurrentlyActiveCharacter =
-//        }
-        PlayerManager.Instance.SetCurrentlyActivePlayer();
+        _healthSlider.gameObject.SetActive(false);
+        if (PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.OnFloor() && !fortify)
+        {
+            PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.DisableUserControl();
+            _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
+        }
+        else if (fortify)
+        {
+            PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.DisableUserControl();
+            StartCoroutine(IEDelayedCameraCall());
+
+        }
+        else
+        {
+            PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.Die();
+            StartCoroutine(IEDelayedCameraCall());
+
+        }
         _timeLeft = 10.0f;
+        _timeLeftText.text = _timeLeft.ToString("F");
+        PlayerManager.Instance.SetCurrentlyActivePlayer();  
+
     }
 
     public void SetCameraMovement(Transform transformLocal, bool setParent)
@@ -153,8 +202,29 @@ public class GameManager : Singleton<GameManager>
 
 
     }
-    
-    
+
+    private IEnumerator IEDelayedCameraCall()
+    {
+        yield return  new  WaitForSeconds(3);
+        _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
+    }
+
+    private IEnumerator IEDelayedEnableCharCall()
+    {
+        yield return new WaitForSeconds(3);
+        TimerActive = true;
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.EnableUserControl();
+        
+    }
+
+    public void Fortify()
+    {
+        TimerActive = false;
+        _timeLeft = 0;
+        _timeLeftText.text = _timeLeft.ToString("F");
+        PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().Fortify();
+        TurnFinished(true);
+    }
     
 
     private void Update()
@@ -167,13 +237,20 @@ public class GameManager : Singleton<GameManager>
             {
                 TimerActive = false;
 
-                _healthSlider.gameObject.SetActive(false);
-                _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
+
                 _timeLeft = 0.0f;
-                TurnFinished();
+                TurnFinished(false);
             }
 
             _timeLeftText.text = _timeLeft.ToString("F");
         }
     }
+}
+
+
+[Serializable]
+public class ColorRanges
+{
+    public Color[] PlayerOne;
+    public Color[] PlayerTwo;
 }

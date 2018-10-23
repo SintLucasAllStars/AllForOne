@@ -114,6 +114,7 @@ public class CharacterPlacement : MonoBehaviour
         _thirdPersonCharacter.enabled = true;
         _userControl.enabled = true;
         _rigidbody.useGravity = true;
+        GameManager.Instance.CharacterPlaced();
         enabled = false;
 
     }

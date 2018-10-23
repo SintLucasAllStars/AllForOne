@@ -12,7 +12,7 @@ public class CameraMovement : MonoBehaviour
     public Transform TopView;
     public Transform CharacterView;
 
-    [SerializeField] private float _turnSpeed = .25f;
+    [SerializeField] private float _turnSpeed = .25f;       
     [SerializeField] private float _movementSpeed = .25f;
 
     private Animator _animator;

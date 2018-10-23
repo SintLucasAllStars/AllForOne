@@ -94,9 +94,10 @@ namespace Players
         {
             _currentlyActive = Random.Range(1, _playersArray.Length + 1);
             Debug.Log("Player " + _currentlyActive + " Chosen");
-
-
         }
+        
+        
+   
 
         private bool StillChoosing()
         {
@@ -104,15 +105,26 @@ namespace Players
         }
 
 
-        public void AddCharacterToCurrentPlayerAndInstansiate(float strength, float defence, float speed, float health, int ownedByPlayer)
+        public void AddCharacterToCurrentPlayerAndInstansiate(float strength, float defence, float speed, float health, int ownedByPlayer, Color characterColor)
         {
             Character character = new Character(strength,defence,speed,health, _currentlyActive);
             GetCurrentlyActivePlayer().AddCharacter(character);
             GameObject go =Instantiate(Prefabs.SmallTeddyBear, transform.position, Quaternion.identity);
             go.GetComponent<CharacterMono>().MyCharacter = character;
             character.MyCharacterMono = go.GetComponent<CharacterMono>();
+            character.MyCharacterMono.SetPropertyColor(characterColor);
         }
 
+        public Vector3 GetCurrentCharacterForwardPosition()
+        {
+            return GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.transform.forward;
+        }
+
+
+        public Character GetCurrentlyActiveCharacter()
+        {
+            return GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter();
+        }
 
 
         private void Start()

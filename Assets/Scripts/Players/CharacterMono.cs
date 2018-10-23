@@ -30,7 +30,12 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     private PowerUpInventory _powerUpInventory;
 
 
-
+    private RaycastHit _raycastHit;        
+    
+    
+    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRendererOne;
+    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRendererTwo;
+    private MaterialPropertyBlock _materialProperty;
 
     private void Awake()
     {
@@ -40,6 +45,21 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         _powerUpInventory = GetComponent<PowerUpInventory>();
                 
         MyCharacter = new Character(10,10,10,10,10);
+        InitializePropertyBlock();
+    }
+
+    private void InitializePropertyBlock()
+    {
+        _materialProperty = new MaterialPropertyBlock();
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
+        _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty);
+    }
+
+    public void SetPropertyColor(Color color)
+    {
+        _materialProperty.SetColor("_Color", color);
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
+        _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty, 0);
     }
 
     public int OwnedBy()
@@ -103,9 +123,17 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         {
             if (GameManager.Instance.FriendlyFire)
             {
-                hitChar.SetHealth(MyCharacter.Strength / 100 * _weaponMono.MyWeapon.Damage);
+                hitChar.SetHealth((MyCharacter.Strength / 50)    * (_weaponMono.MyWeapon.Damage + MyCharacter.Defence / 50));
             }
         }
+    }
+
+
+
+    public void FortifyAnimation(bool value)
+    {
+        _thirdPersonAnimation.Fortify(value);
+        
     }
 
     public int GetCurrentAmountOfAdrenaline()
@@ -147,17 +175,22 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     {
         if (GameManager.Instance.InSelectionState() && MyCharacter.OwnedByPlayer == PlayerManager.Instance.GetCurrentlyActivePlayer().PlayerNumber)
         {
+            
             Debug.Log("Click");
             GameManager.Instance.SetCameraMovement(CameraTransform, true);
             _slider.gameObject.SetActive(false);
             GameManager.Instance.EnableHealthSlider();
         }
     }
+    
+    public bool OnFloor()
+    {
+        Ray myRay = new Ray(transform.position, -transform.up);
+        if (!Physics.Raycast(myRay, out _raycastHit, 50f)) return false;
+        return _raycastHit.collider.CompareTag("Terrain");
+    }
 
-//    public IEnumerator IEPowerUp(float speedBoost, float strengthBoost,bool freezeTime, float length)
-//    {
-//        
-//    }
+
 
 
 

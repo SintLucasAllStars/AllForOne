@@ -30,6 +30,9 @@ namespace Players.Animation
         //when character dies
         [SerializeField] private float _colliderCenterOffsetY;
 
+        [SerializeField] private AnimatorController _animatorGun;
+        [SerializeField] private AnimatorController _animatorAxe;
+
         private RaycastHit _raycastHit;
 
 
@@ -89,24 +92,36 @@ namespace Players.Animation
             switch (weaponEnum)
             {
                 case Weapon.WeaponEnum.Fists:
-                    break;
+                    break;        
                 case Weapon.WeaponEnum.Gloves:
                     break;
                 case Weapon.WeaponEnum.Knife:
-                    break;
+                    _clipOverrides["Uppercut"] = Clips.KnifeAttackAnimationClip;
+                    _clipOverrides["idleLoco"] = Clips.KnifeIdleAnimationClip;
+
+                     break;
                 case Weapon.WeaponEnum.WarHammer:
+                    _animator.runtimeAnimatorController = _animatorAxe;
+                    InitializeAnimatorOverrideController();
                     break;
                 case Weapon.WeaponEnum.Gun:
-                    _clipOverrides["HumanoidIdle"] = Clips.CrosbowIdleAnimationClip;
-                    _clipOverrides["HumanoidRun"] = Clips.CrosbowRunAnimationClip;
-                    _clipOverrides["Punch"] = Clips.CrossbowAttackAnimationClip;
-                    _animatorOverrideController.ApplyOverrides(_clipOverrides);
+                    _animator.runtimeAnimatorController = _animatorGun;
+                    InitializeAnimatorOverrideController();
 
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("weaponEnum", weaponEnum, null);
             }
+            _animatorOverrideController.ApplyOverrides(_clipOverrides);
         }
+
+
+        public void Fortify(bool value)
+        {
+            _animator.SetBool("Fortify", value);
+        }
+        
+           
 
 
 
@@ -157,13 +172,13 @@ namespace Players.Animation
     public class AnimationCLips
     {
         public AnimationClip HangAnimationClip;
-        public AnimationClip PunchAnimationClip;
+        public AnimationClip KnifeAttackAnimationClip;
+        public AnimationClip KnifeIdleAnimationClip;
+        
         public AnimationClip DieAnimationClip;
 
 
-        public AnimationClip CrosbowIdleAnimationClip;
-        public AnimationClip CrosbowRunAnimationClip;
-        public AnimationClip CrossbowAttackAnimationClip;
+
 
     }
 }
