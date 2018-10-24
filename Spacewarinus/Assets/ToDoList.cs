@@ -1,0 +1,13 @@
+﻿// ToDo List
+// Starting top view [X]
+// Buying system with stats [50%]
+// 4 Stats [X]
+// Colors of teams []
+// Strategic buying - Balancing [X]
+// Start game when units placed []
+// Turns []
+// Spawn weapons []
+// Powerups []
+// Game ending []
+// Level design inside out []
+// Damage / PVP []
