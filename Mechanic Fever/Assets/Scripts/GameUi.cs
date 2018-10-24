@@ -12,6 +12,8 @@ public class GameUi : MonoBehaviour
     [SerializeField] private Image background;
     [SerializeField] private Text winnerText;
 
+    public Image fortified;
+
     public Image powerUp;
 
     private Canvas canvas;

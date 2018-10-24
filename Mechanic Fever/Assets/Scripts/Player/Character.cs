@@ -67,7 +67,10 @@ public class Character : MonoBehaviour
         if(!isActive || GameManager.instance.gameOver) return;
 
         if(isFortified && Input.anyKeyDown)
+        {
             isFortified = false;
+            GameUi.instance.fortified.enabled = false;
+        }
 
 
         if(Input.GetMouseButtonDown(0))
@@ -112,8 +115,6 @@ public class Character : MonoBehaviour
             SetPowerUpImage();
         }
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Debug.Log(scroll);
         if(Input.GetKeyDown(KeyCode.Q))
         {
             currentPowerUp++;
@@ -121,7 +122,6 @@ public class Character : MonoBehaviour
                 currentPowerUp = 0;
             SetPowerUpImage();
         }
-
 
         if(Input.GetKeyDown(KeyCode.F))
         {
@@ -131,8 +131,7 @@ public class Character : MonoBehaviour
         else if(Input.GetKeyUp(KeyCode.F))
         {
             isFortified = Time.time > fortifyTime;
-            if(isFortified)
-                Debug.Log("Fortified");
+            GameUi.instance.fortified.enabled = isFortified;
         }
     }
 
@@ -178,6 +177,7 @@ public class Character : MonoBehaviour
 
         if(activate)
         {
+            GameUi.instance.fortified.enabled = isFortified;
             defaultWeapon.Init(damage, GetEnemyTag(), weaponSlot);
             GameManager.instance.EndRound += EndRound;
             gameObject.layer = 2;//Set player to ignoreRaycast
