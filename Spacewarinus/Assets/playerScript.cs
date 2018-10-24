@@ -25,7 +25,7 @@ public class playerScript : MonoBehaviour
         GameManager _gameManager = ScriptHolder.GetComponent<GameManager>();
         Debug.Log(_gameManager.currentChar);
 
-        Script = GetComponent<Rigid>
+        
     }
 	
 	// Update is called once per frame
@@ -39,6 +39,10 @@ public class playerScript : MonoBehaviour
     public void OnDisable()
     {
         
+    }
+    public void CameraPosition()
+    {
+
     }
 
     public void CreateCharacter()

@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
         currentChar = 0;
         Turn1();
         timer = 0;
+        PointsP1 = 100;
+        PointsP2 = 100;
     }
     void GameStart()
     {
@@ -51,16 +53,7 @@ public class GameManager : MonoBehaviour
         GameStart();
         UpdateUI();
         //TESTING HERE
-        if (Points <= 0)
-        {
-            Turn2();
-            playerTurn = 1;
-        }
 
-        if (Points <= 0 && playerTurn == 1)
-        {
-            GameStart();
-        }
 
 
 
@@ -76,11 +69,12 @@ public class GameManager : MonoBehaviour
         {
 
             Vector3 clickedPosition = hit.point;
+            Vector3 target = new Vector3(hit.point.x, 1, hit.point.z);
 
-            players[currentChar].transform.position = Vector3.Lerp(player.transform.position, clickedPosition, 1f);
+            players[currentChar].transform.position = target;
             if(hit.collider.CompareTag("Player") && Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Y'all");
+                hit.collider.GetComponent<playerScript>().OnEnable();
             }
         }
 
@@ -95,33 +89,51 @@ public class GameManager : MonoBehaviour
     }
     public void CreateCharacter()
     {
+        StatsUI.SetActive(false);
         if (playerTurn == 0)
         {
             selection = true;
             players.Add((GameObject)Instantiate(player));
-            Points += minusPoints;
+            PointsP1 += minusPoints;
             minusPoints = 0;
-        } else if(playerTurn == 1)
+            Debug.Log("playerturn 1");
+        }
+        if (playerTurn == 1)
         {
             selection = true;
             players.Add((GameObject)Instantiate(player2));
-            Points += minusPoints;
+            PointsP2 += minusPoints;
             minusPoints = 0;
+            Debug.Log("playerturn 2");
         }
-        
+        if (playerTurn == 1)
+        {
+            playerTurn = 0;
+        }
+        else
+        {
+            playerTurn = 1;
+        }
     }
     void Turn1()
     {
-        Points = 90;
+        //check waar dit gecalled word
     }
 
     void Turn2()
     {
-        Points = 90;
+        
     }
     void UpdateUI()
     {
-        PointsUI.text = Points.ToString();
+        if (playerTurn == 0)
+        {
+            PointsUI.text = PointsP1.ToString();
+        }
+        if (playerTurn == 1)
+        {
+            PointsUI.text = PointsP2.ToString();
+        }
         texts[0].text = speed[currentChar].ToString();
         texts[1].text = health[currentChar].ToString();
         texts[2].text = defense[currentChar].ToString();
@@ -129,9 +141,10 @@ public class GameManager : MonoBehaviour
 
     }
 
-   
+
     //ButtonMethods
-    private int Points;
+    private int PointsP1;
+    private int PointsP2;
     private int minusPoints;
     public void SpeedUp()
     {
@@ -179,5 +192,9 @@ public class GameManager : MonoBehaviour
     {
         strength[currentChar] -= 3;
         minusPoints += 3;
+    }
+    public void Done()
+    {
+        StatsUI.SetActive(false);
     }
 }
