@@ -11,7 +11,7 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
 
 	float lerp;
 	bool lerpUp = true;
-
+    
 	public override void OnStart()
 	{
 		if (AbilityPermitted)
@@ -33,7 +33,7 @@ public class CharacterAnimationAbility : Ability, IPlayerAbilitys
         }
 	}
 	void Update(){
-		if (GameController.Instance.pickingPlayer)
+		if (GameController.Instance.pickingPlayer&&!_characterController.dead)
 		{
 			animator.SetBool("Idle", true);
 			animator.SetBool("Moving", false);

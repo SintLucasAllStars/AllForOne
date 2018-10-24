@@ -31,18 +31,18 @@ public class CharacterController : MonoBehaviour
 	float groundedRayLength = 1;
 	[SerializeField]
 	LayerMask thingsToGroundWith;
+	public bool outside;
 
+	public float health = 100;
 
-    public float health = 100;
-
-	public enum PlayerStates { idle, moving, jump, die,attacking,fortified,fortifying};
+	public enum PlayerStates { idle, moving, jump, die, attacking, fortified, fortifying };
 	public PlayerStates currentPlayerState;
 	[HideInInspector]
 	public bool stateLocked = false;
 	[HideInInspector]
 	public float playerSpeed;
 	[HideInInspector]
-    public float playerTurnSpeed;
+	public float playerTurnSpeed;
 	Vector3 oldPos;
 	[HideInInspector]
 	public bool dead = false;
@@ -51,9 +51,9 @@ public class CharacterController : MonoBehaviour
 	public bool lockPlayer = true; //lock player so he can't be controlled
 
 	public delegate void CallEveryFrame();
-	public  CallEveryFrame callEveryFrame;
+	public CallEveryFrame callEveryFrame;
 	public delegate void Died();
-    public Died characterDied;
+	public Died characterDied;
 	bool died;
 	// Use this for initialization
 	void Start()
@@ -71,11 +71,15 @@ public class CharacterController : MonoBehaviour
 		if (!lockPlayer)
 		{
 			EveryFrame();
-		}else{
+		}
+		else
+		{
 			if (!dead)
 			{
 				currentPlayerState = PlayerStates.idle;
-			}else{
+			}
+			else
+			{
 				EveryFrame();
 			}
 		}
@@ -94,7 +98,7 @@ public class CharacterController : MonoBehaviour
 			//	a.EveryFrame();
 			//}
 
-			if (!stateLocked && (transform.position.x >= oldPos.x - 0.01f && transform.position.x <= oldPos.x + 0.01f) && (transform.position.z >= oldPos.z - 0.01f && transform.position.x <= oldPos.x + 0.01f) && playerSpeed ==0 && playerTurnSpeed == 0&& grounded && !stateLocked)
+			if (!stateLocked && (transform.position.x >= oldPos.x - 0.01f && transform.position.x <= oldPos.x + 0.01f) && (transform.position.z >= oldPos.z - 0.01f && transform.position.x <= oldPos.x + 0.01f) && playerSpeed == 0 && playerTurnSpeed == 0 && grounded && !stateLocked)
 			{
 				if (currentPlayerState != PlayerStates.fortifying && currentPlayerState != PlayerStates.fortified)
 				{
@@ -105,14 +109,18 @@ public class CharacterController : MonoBehaviour
 			{
 				oldPos = transform.position;
 			}
-		}else{
+		}
+		else
+		{
 			if (!died)
 			{
 				gameObject.layer = 12;
 				currentPlayerState = PlayerStates.die;
 				characterDied();
-				for (int i = 0; i < GameController.Instance.teams[team].teamUnits.Count;i++){
-					if(GameController.Instance.teams[team].teamUnits[i].unit == this){
+				for (int i = 0; i < GameController.Instance.teams[team].teamUnits.Count; i++)
+				{
+					if (GameController.Instance.teams[team].teamUnits[i].unit == this)
+					{
 						GameController.Instance.teams[team].teamUnits.RemoveAt(i);
 					}
 				}
@@ -123,7 +131,7 @@ public class CharacterController : MonoBehaviour
 				}
 				died = true;
 			}
-           // this.gameObject.SetActive(false);
+			// this.gameObject.SetActive(false);
 		}
 	}
 	void CastRayCastToSides()
@@ -191,6 +199,14 @@ public class CharacterController : MonoBehaviour
 		Debug.DrawRay(startRayPoint, -transform.up, Color.yellow, groundedRayLength, false);
 		if (Physics.Raycast(rayDown, out hit, groundedRayLength, thingsToGroundWith))
 		{
+			if (hit.transform.gameObject.layer == LayerMask.NameToLayer("outSideGround"))
+			{
+				outside = true;
+			}
+			else
+			{
+				outside = false;
+			}
 			grounded = true;
 		}
 		else

@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class GameController : Singleton<GameController>
 {
     public CharacterController currentPlayer;   // current Player Who Can Be controlled
 	public List<Team> teams;
 	public Camera thirdPersonCamera;
 	public Camera topDownViewCamera;
-
+	public Text winText;
 	public int currentTeam;
 
 	[HideInInspector]
@@ -60,6 +60,7 @@ public class GameController : Singleton<GameController>
 			if (teams.Count == 1)
 			{
 				currentPlayer.lockPlayer = true;
+				winText.text = "team: " + teams[0].teamName + " Wins";
 				Debug.Log("team: " + teams[0].teamName + " Wins");
 			}
         }
