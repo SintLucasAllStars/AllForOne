@@ -97,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1951205167424116}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5243207, y: 2.192, z: 6.5260534}
+  m_LocalPosition: {x: -4.1513596, y: 0.19205621, z: 13.696235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4177313632081106}
@@ -120,7 +120,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100002, guid: 5f79c38ff7d10e947af2643b38a15397, type: 3}
+  - {fileID: 2100000, guid: 8782085a89f5c73448dc1e9b32fcfa4b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -155,7 +155,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 5f79c38ff7d10e947af2643b38a15397, type: 3}
+  - {fileID: 2100000, guid: c8487bb4ea4ac3648ac724615d1b300a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -181,14 +181,14 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1034295593156198}
-  m_Mesh: {fileID: 4300000, guid: 5f79c38ff7d10e947af2643b38a15397, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 8bde042be99c4eb4cb0df9a51bb928ab, type: 3}
 --- !u!33 &33799473768534638
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1484282005496834}
-  m_Mesh: {fileID: 4300002, guid: 5f79c38ff7d10e947af2643b38a15397, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 8bde042be99c4eb4cb0df9a51bb928ab, type: 3}
 --- !u!54 &54312908626208636
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -214,8 +214,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.05387616, y: 0.13112521, z: 0.2850008}
-  m_Center: {x: 0.0030425787, y: 0.009505153, z: 0.0020723343}
+  m_Size: {x: 0.05387616, y: 0.07735515, z: 0.14497805}
+  m_Center: {x: 0.0030425787, y: 0.036390185, z: 0.07208371}
 --- !u!65 &65800546036852626
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -242,7 +242,7 @@ MonoBehaviour:
   stats:
     damageMultiplier: 3
     animationName: Punch
-    attackPeriod: {x: 0, y: 0.8}
+    attackPeriod: {x: 0, y: 0.9}
   collider: {fileID: 65301461733651196}
   triger: {fileID: 65800546036852626}
   position: {x: 0.093, y: 0.026, z: -0.073}

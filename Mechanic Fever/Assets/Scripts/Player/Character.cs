@@ -58,8 +58,8 @@ public class Character : MonoBehaviour
         defaultWeapon.Init(damage, GetEnemyTag(), weaponSlot);
 
         UnityEngine.UI.Image image = GetComponentInChildren<UnityEngine.UI.Image>(true);
-        GameManager.instance.StartRound += delegate { image.enabled = false; };
-        GameManager.instance.EndRound += delegate { image.enabled = true; };
+        GameManager.instance.StartRound += delegate { if(image != null) image.enabled = false; };
+        GameManager.instance.EndRound += delegate { if(image != null) image.enabled = true; };
     }
 
     private void Update()
@@ -112,6 +112,17 @@ public class Character : MonoBehaviour
             SetPowerUpImage();
         }
 
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        Debug.Log(scroll);
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            currentPowerUp++;
+            if(currentPowerUp >= powerUps.Count)
+                currentPowerUp = 0;
+            SetPowerUpImage();
+        }
+
+
         if(Input.GetKeyDown(KeyCode.F))
         {
             const int requiredFortifyTime = 3;
@@ -135,7 +146,7 @@ public class Character : MonoBehaviour
         playerCollider.enabled = true;
     }
 
-    void EndRound()
+    private void EndRound()
     {
         Debug.DrawRay(transform.position + Vector3.up, Vector3.down, Color.red, 10);
         RaycastHit hit;
@@ -147,6 +158,12 @@ public class Character : MonoBehaviour
                 animator.Play("Death");
                 Destroy(gameObject, 3);
             }
+        }
+        else
+        {
+            GameManager.instance.KillCharacter(tag);
+            animator.Play("Death");
+            Destroy(gameObject, 3);
         }
         GameManager.instance.EndRound -= EndRound;
         ActivateCharacter(false);
@@ -195,35 +212,7 @@ public class Character : MonoBehaviour
         weapon.Attack();
 
         animator.Play(weapon.stats.animationName);
-        //StartCoroutine(AnimationEnd());
-        //isAttacking = true;
     }
-
-    //private IEnumerator AnimationEnd()
-    //{
-    //    yield return new WaitForSeconds(GetWeapon().stats.animationLength);
-    //    isAttacking = false;
-    //}
-
-    //private IEnumerator AttackDelay()
-    //{
-    //    WeaponStats stats = GetWeaponStats();
-    //    Debug.Log(stats);
-    //    animator.Play(stats.animationName);
-
-    //    yield return new WaitForSeconds(stats.attackDelay);
-
-    //    int damage = Mathf.RoundToInt(Mathf.Lerp(damageRange.x, damageRange.y, strength)) + stats.damageMultiplier;
-
-    //    RaycastHit hit;
-    //    if(Physics.Raycast(transform.position + transform.up, transform.forward, out hit, stats.range))
-    //        if(hit.collider.CompareTag("Player" + (GameManager.instance.IsTurnPlayerOne ? "Two" : "One")))
-    //            hit.collider.GetComponent<Character>().Damage(damage, 0);
-
-    //    yield return new WaitForSeconds(stats.resetDelay);
-    //    isAttacking = false;
-    //    Debug.Log("ATTACK");
-    //}
 
     public Weapon GetWeapon()
     {

@@ -15,7 +15,7 @@ public class Weapon : MonoBehaviour
 
     public void Start()
     {
-        if(transform.root == gameObject)
+        if(transform.root == transform)
             GameManager.instance.EndRound += Destroy;
     }
 
@@ -57,6 +57,7 @@ public class Weapon : MonoBehaviour
 
     private void Destroy()
     {
+        Debug.Log("Bye");
         GameManager.instance.EndRound -= Destroy;
         Destroy(gameObject);
     }
