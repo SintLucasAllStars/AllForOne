@@ -16,14 +16,16 @@ public class PowerUpPanel : MonoBehaviour
     public Text TimeMachineText;
     public Text RageText;
 
-    public Text AdrenalineTimeText;
+    public Text AdrenalineTimeText;        
     public Text TimeMachineTimeText;
-    public Text RageTimeText;
+    public Text RageTimeText;        
 
 
     private int _currentlyAtPosition = 0;
 
     private float _currentPowerUpTime;
+
+    public GameObject ParentPanel;
     
     
 

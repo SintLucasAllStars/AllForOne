@@ -32,6 +32,11 @@ public class Player
         return Characters[CurrentlyActiveCharacter];
     }
 
+    public void SetActiveCharacter(int characterIndex)
+    {
+        CurrentlyActiveCharacter = characterIndex;
+    }
+
     public void RemoveCharacter(Character character)
     {
         Characters.Remove(character);

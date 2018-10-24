@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Players;
 using Players.Animation;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class WeaponMono : WeaponInformation
 
     private CharacterMono _characterMono;
     private ThirdPersonAnimation _thirdPersonAnimation;
+    private RaycastHit _raycastHit;
 
     private void Awake()
     {
@@ -27,6 +29,18 @@ public class WeaponMono : WeaponInformation
     public bool RestrictAnimationRotation()
     {
         return MyWeapon.RestrictAnimationRotation();
+    }
+
+   
+
+    public void ShootGun()
+    {
+        Transform crossHair = GameManager.Instance.GetCrosshairPosition();
+        Ray myRay = Camera.main.ScreenPointToRay(crossHair.position);
+        if (Physics.Raycast(myRay, out _raycastHit, Range))
+        {
+            _characterMono.HandleAttack(_raycastHit);
+        }
     }
 
     public void TransferWeapons(Weapon weapon, GameObject left, GameObject right)

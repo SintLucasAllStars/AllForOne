@@ -85,7 +85,7 @@ public class CharacterPlacement : MonoBehaviour
 
         for (int i = 0; i < _skinnedMeshRenderers.Length ; i++)
         {
-            _skinnedMeshRenderers[i].GetPropertyBlock(_materialPropertyBlocks[i]);
+            _skinnedMeshRenderers[i].GetPropertyBlock(_materialPropertyBlocks[i]);        
             if (!onFloor)
             {
                 if (_materialPropertyBlocks[i].GetColor("_Color") != Color.white)
@@ -140,7 +140,7 @@ public class CharacterPlacement : MonoBehaviour
         // ReSharper disable once Unity.InefficientCameraMainUsage
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(currentScreenPoint);
 
-        _mousePosition = curPosition;
+        _mousePosition = curPosition;        
         _mousePosition.x = Mathf.Clamp(_mousePosition.x, _xClamp.x, _xClamp.y);
         _mousePosition.y = Mathf.Clamp(_mousePosition.y, _yClamp.x, _yClamp.y);
         _mousePosition.z = Mathf.Clamp(_mousePosition.z, _zClamp.x, _zClamp.y);

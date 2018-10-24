@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 114641531551102856}
   - component: {fileID: 114303468356490852}
   - component: {fileID: 114938593259870848}
+  - component: {fileID: 114630822452877840}
   m_Layer: 0
   m_Name: swat
   m_TagString: Player
@@ -931,7 +932,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1808915096885102
 GameObject:
   m_ObjectHideFlags: 1
@@ -2126,7 +2127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1458776669315544}
   m_LocalRotation: {x: 0.11979029, y: -0, z: -0, w: 0.9927993}
-  m_LocalPosition: {x: 0, y: 2.53, z: -3.62}
+  m_LocalPosition: {x: 0, y: 2.01, z: -1.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4838097806174590}
@@ -2308,7 +2309,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: af20447897ad7ff43bd5c7a6ffe99b94, type: 3}
   m_Controller: {fileID: 9100000, guid: 9e89f000556e6654492af824da733980, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -2409,8 +2410,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
+  m_MovingTurnSpeed: 200
+  m_StationaryTurnSpeed: 90
   m_JumpPower: 4
   m_GravityMultiplier: 1
   m_RunCycleLegOffset: 0.2
@@ -2427,6 +2428,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521b611700410be45810047f0a74e899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
+--- !u!114 &114630822452877840
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1083670820036032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14b2639f34f5aa4fbdb99ce32a6ac3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114641531551102856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2439,16 +2452,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Clips:
-    HangAnimationClip: {fileID: 7400000, guid: 7419f369a3cf1ac41bb303e3deaff9d3, type: 3}
     KnifeAttackAnimationClip: {fileID: 7400000, guid: bd9d54620a8c67944817ae12b6d04b76,
       type: 3}
     KnifeIdleAnimationClip: {fileID: 7400000, guid: dbfed741c12d282429d71699c64eed28,
       type: 3}
-    DieAnimationClip: {fileID: 7400000, guid: c307e8960f14ae145ba46f10ea5b29c7, type: 3}
   _root: {fileID: 1808544299471572}
   _colliderCenterOffsetY: 0.3
   _animatorGun: {fileID: 9100000, guid: b51ae6f95ad920348a2b91f33c7a0295, type: 2}
   _animatorAxe: {fileID: 9100000, guid: 9389b68ce04494047be3515cb1b68576, type: 2}
+  _ogAnimator: {fileID: 9100000, guid: 9e89f000556e6654492af824da733980, type: 2}
 --- !u!114 &114693923514601050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2551,7 +2563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb359838f3f17943959e69cb36812bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 10
+  Damage: 1
   Range: 10
   Speed: 10
   Left: {fileID: 0}
@@ -2830,8 +2842,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.47}
-  m_SizeDelta: {x: 160, y: 20}
+  m_AnchoredPosition: {x: 0, y: 2.39}
+  m_SizeDelta: {x: 70, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224554508649760314
 RectTransform:
@@ -2846,8 +2858,8 @@ RectTransform:
   m_Father: {fileID: 224705962497097910}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2884,7 +2896,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 4.999999, y: 0}
   m_SizeDelta: {x: 20.000002, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

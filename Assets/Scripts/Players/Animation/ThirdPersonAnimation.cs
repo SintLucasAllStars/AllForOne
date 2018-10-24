@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace Players.Animation
 {
@@ -30,8 +31,15 @@ namespace Players.Animation
         //when character dies
         [SerializeField] private float _colliderCenterOffsetY;
 
-        [SerializeField] private AnimatorController _animatorGun;
-        [SerializeField] private AnimatorController _animatorAxe;
+ 
+
+        public RuntimeAnimatorController _animatorGun;
+        public RuntimeAnimatorController _animatorAxe;
+        public RuntimeAnimatorController _ogAnimator;
+        
+        
+        private ThirdPersonCharacter _thirdPersonCharacter;
+        private ThirdPersonUserControl _thirdPersonUserControl;
 
         private RaycastHit _raycastHit;
 
@@ -43,6 +51,9 @@ namespace Players.Animation
             _characterMono = GetComponent<CharacterMono>();
             _capsuleCollider = GetComponent<CapsuleCollider>();
             _rigidbody = GetComponent<Rigidbody>();
+            _thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
+            _thirdPersonUserControl = GetComponent<ThirdPersonUserControl>();
+
 
         }
 
@@ -50,7 +61,6 @@ namespace Players.Animation
         private void Start()
         {
             InitializeAnimatorOverrideController();
-            ApplyAnimations();
         }
 
         private void InitializeAnimatorOverrideController()
@@ -61,52 +71,53 @@ namespace Players.Animation
             _animatorOverrideController.GetOverrides(_clipOverrides);
         }
 
-        public void FootL()
-        {
-            
-        }
-
-        public void FootR()
-        {
-            
-        }
+ 
         
 
-        private void ApplyAnimations()
-        {
-//            _clipOverrides["HangAnimation"] = Clips.HangAnimationClip;
-//            _clipOverrides["Punch"] = Clips.PunchAnimationClip;
-//            _clipOverrides["Die"] = Clips.DieAnimationClip;
-//            _animatorOverrideController.ApplyOverrides(_clipOverrides);
-        }
+     
 
 
-
-        private void Update()
-        {
-
-        }
+    
 
         public void WeaponChanged(Weapon.WeaponEnum weaponEnum)
         {
             switch (weaponEnum)
             {
                 case Weapon.WeaponEnum.Fists:
+                    GetComponent<Animator>().runtimeAnimatorController = _ogAnimator;
+                    InitializeAnimatorOverrideController();
+
+                    _thirdPersonCharacter.ChangeAnimator();
+                    _thirdPersonUserControl.ChangeAnimator();
                     break;        
                 case Weapon.WeaponEnum.Gloves:
+                    GetComponent<Animator>().runtimeAnimatorController = _ogAnimator;
+                    InitializeAnimatorOverrideController();
+
+                    _thirdPersonCharacter.ChangeAnimator();
+                    _thirdPersonUserControl.ChangeAnimator();
                     break;
                 case Weapon.WeaponEnum.Knife:
+                    GetComponent<Animator>().runtimeAnimatorController = _ogAnimator;
+                    
+                    InitializeAnimatorOverrideController();
+
+                    _thirdPersonCharacter.ChangeAnimator();
+                    _thirdPersonUserControl.ChangeAnimator();
                     _clipOverrides["Uppercut"] = Clips.KnifeAttackAnimationClip;
                     _clipOverrides["idleLoco"] = Clips.KnifeIdleAnimationClip;
-
                      break;
                 case Weapon.WeaponEnum.WarHammer:
-                    _animator.runtimeAnimatorController = _animatorAxe;
+                    GetComponent<Animator>().runtimeAnimatorController = _animatorAxe;                    
                     InitializeAnimatorOverrideController();
+                    _thirdPersonCharacter.ChangeAnimator();
+                    _thirdPersonUserControl.ChangeAnimator();
                     break;
                 case Weapon.WeaponEnum.Gun:
-                    _animator.runtimeAnimatorController = _animatorGun;
+                    GetComponent<Animator>().runtimeAnimatorController = _animatorGun;    
                     InitializeAnimatorOverrideController();
+                    _thirdPersonCharacter.ChangeAnimator();
+                    _thirdPersonUserControl.ChangeAnimator();
 
                     break;
                 default:
@@ -136,16 +147,17 @@ namespace Players.Animation
 
                 _characterMono.HandleAttack(_raycastHit);
 
-            }
+            }    
         }
 
         public void Die()
         {
+            GetComponent<Animator>().runtimeAnimatorController = _ogAnimator;
             _animator.SetTrigger("Die");
             _capsuleCollider.enabled = false;
             _rigidbody.useGravity = false;
             _rigidbody.isKinematic = true;
-
+                
         }
 
         public void SetPunchTrigger()
@@ -171,11 +183,11 @@ namespace Players.Animation
     [System.Serializable]
     public class AnimationCLips
     {
-        public AnimationClip HangAnimationClip;
+
         public AnimationClip KnifeAttackAnimationClip;
         public AnimationClip KnifeIdleAnimationClip;
         
-        public AnimationClip DieAnimationClip;
+
 
 
 

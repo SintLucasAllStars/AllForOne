@@ -31,7 +31,7 @@ public class CharacterPanel : MonoBehaviour
     [SerializeField] private Button _hireButton;
 
 
-    //Temp
+    
     private CameraMovement _cameraMovement;
 
     [SerializeField] private Animator _animator;
@@ -63,6 +63,7 @@ public class CharacterPanel : MonoBehaviour
         InitializeDictionary();
         SetCurrentPlayerText();
         InitializePropertyBlock();
+        SetCharacterColor();
     }
 
     private void InitializePropertyBlock()
@@ -120,7 +121,7 @@ public class CharacterPanel : MonoBehaviour
         }
     }
 
-    private void ResetSliders()
+    private void ResetSliders()        
     {
         for (int i = 0; i < _sliderDictionary.Count; i++)
         {
@@ -134,19 +135,19 @@ public class CharacterPanel : MonoBehaviour
         {
             case ValuesEnum.Speed:
                 _speed = _speedCost + (value * _speedPercentage);
-                _panelTexts.Speed.text = value.ToString();
+                _panelTexts.Speed.text = value.ToString("0.00");
                 break;
             case ValuesEnum.Defence:
                 _defence = _defenceCost + value * _defencePercentage;
-                _panelTexts.Defence.text = value.ToString();
+                _panelTexts.Defence.text = value.ToString("0.00");
                 break;
             case ValuesEnum.Health:
                 _health = _healthCost + value * _healthPercentage;
-                _panelTexts.Health.text = value.ToString();
+                _panelTexts.Health.text = value.ToString("0.00");
                 break;
             case ValuesEnum.Strength:
                 _strength = _strengthCost + value * _strengthPercentage;
-                _panelTexts.Strength.text = value.ToString();
+                _panelTexts.Strength.text = value.ToString("0.00");
                 break;
             default:
                 throw new ArgumentOutOfRangeException("enumValue", enumValue, null);
@@ -196,10 +197,15 @@ public class CharacterPanel : MonoBehaviour
     
     public void OnDone()
     {
-        _showCaseObject.SetActive(false);
-        PlayerManager.Instance.GetCurrentlyActivePlayer().SetPoints((int)_pointsLeft);
-        _animator.SetBool("MoveIn", false);    
-        AddCharacter();
+        //easy fix for 2 char on double press :\)
+        if (_showCaseObject.activeSelf)
+        {
+            _showCaseObject.SetActive(false);
+            PlayerManager.Instance.GetCurrentlyActivePlayer().SetPoints((int)_pointsLeft);
+            _animator.SetBool("MoveIn", false);    
+            AddCharacter();
+        }
+ 
     }
 
     public float GetTotalValue()

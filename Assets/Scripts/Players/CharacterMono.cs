@@ -14,8 +14,8 @@ public class CharacterMono : MonoBehaviour ,ICharacter
 {
 
     public Character MyCharacter;
-    public Transform CameraTransform;
-
+    public Transform CameraTransform;        
+         
 
     private ThirdPersonAnimation _thirdPersonAnimation;
     private ThirdPersonUserControl _thirdPersonUserControl;
@@ -26,7 +26,7 @@ public class CharacterMono : MonoBehaviour ,ICharacter
  
 
     private WeaponMono _weaponMono;
-
+    private Rigidbody _rigidbody;
     private PowerUpInventory _powerUpInventory;
 
 
@@ -43,22 +43,20 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         _thirdPersonAnimation = GetComponent<ThirdPersonAnimation>();
         _weaponMono = GetComponent<WeaponMono>();
         _powerUpInventory = GetComponent<PowerUpInventory>();
-                
-        MyCharacter = new Character(10,10,10,10,10);
-        InitializePropertyBlock();
+        _rigidbody = GetComponent<Rigidbody>();
+
+
     }
 
-    private void InitializePropertyBlock()
-    {
-        _materialProperty = new MaterialPropertyBlock();
-        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
-        _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty);
-    }
+
 
     public void SetPropertyColor(Color color)
     {
+        _materialProperty = new MaterialPropertyBlock();
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty, 0);
+        _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty, 0);
         _materialProperty.SetColor("_Color", color);
-        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty);
+        _skinnedMeshRendererOne.SetPropertyBlock(_materialProperty, 0);
         _skinnedMeshRendererTwo.SetPropertyBlock(_materialProperty, 0);
     }
 
@@ -76,20 +74,24 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     public void SetSliderValue()
     {
         Debug.Log(MyCharacter.Health);
-        
+        if (_slider.maxValue < _slider.value)
+        {
+            _slider.maxValue = _slider.value;
+        }
         _slider.value = MyCharacter.Health;
     }
 
     public void Die()
     {
         _thirdPersonAnimation.Die();
-        PlayerManager.Instance.GetCurrentlyActivePlayer().RemoveCharacter(MyCharacter);
+        DisableUserControl();
+        PlayerManager.Instance.RemoveCharacter(MyCharacter);
         RemoveSlider();
     }
     
     
     //[0] = leftHand, [1] = rightHand
-    
+            
     public Transform[] GetRightAndLeftHand()
     {
         return new[] {_leftHand, _rightHand};
@@ -118,12 +120,18 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     public void HandleAttack(RaycastHit hit)
     {
         var hitChar = hit.collider.GetComponent<ICharacter>();
-
+        Debug.Log(hitChar);
         if (hitChar != null)
         {
             if (GameManager.Instance.FriendlyFire)
             {
-                hitChar.SetHealth((MyCharacter.Strength / 50)    * (_weaponMono.MyWeapon.Damage + MyCharacter.Defence / 50));
+                hitChar.SetHealth((MyCharacter.Strength / 50)    * (_weaponMono.MyWeapon.Damage + MyCharacter.Defence / 10));
+            }
+            else if (hitChar.OwnedBy() != OwnedBy())
+            {
+                hitChar.SetHealth((MyCharacter.Strength / 50)    * (_weaponMono.MyWeapon.Damage + MyCharacter.Defence / 10));
+                Debug.Log("Hit");
+
             }
         }
     }
@@ -162,12 +170,14 @@ public class CharacterMono : MonoBehaviour ,ICharacter
     {
         _thirdPersonUserControl.enabled = false;
         _thirdPersonAnimation.ResetForward();
+        _rigidbody.isKinematic = true;
         _slider.gameObject.SetActive(true);
 
     }
 
     public void EnableUserControl()
     {
+        _rigidbody.isKinematic = false;
         _thirdPersonUserControl.enabled = true;
     }
 
@@ -177,6 +187,7 @@ public class CharacterMono : MonoBehaviour ,ICharacter
         {
             
             Debug.Log("Click");
+            PlayerManager.Instance.GetCurrentlyActivePlayer().SetActiveCharacter(MyCharacter.CharacterID);
             GameManager.Instance.SetCameraMovement(CameraTransform, true);
             _slider.gameObject.SetActive(false);
             GameManager.Instance.EnableHealthSlider();

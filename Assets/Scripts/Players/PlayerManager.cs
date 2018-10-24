@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Tools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace Players
@@ -27,6 +29,8 @@ namespace Players
 
         }
 
+        private int _characterCountPlayerOne;        
+        private int _characterCountPlayerTwo;
 
         public  float GetTotalCost()
         {
@@ -42,7 +46,19 @@ namespace Players
 
         public void RemoveCharacter(Character character)
         {
-            GetCurrentlyActivePlayer().RemoveCharacter(character);
+            _playersArray[character.OwnedByPlayer - 1].RemoveCharacter(character);
+            
+            if (_playersArray[character.OwnedByPlayer -1].Characters.Count == 0)
+            {
+
+                StartCoroutine(IEDelayCall());
+            }
+        }
+
+        private IEnumerator IEDelayCall()
+        {
+            yield return new WaitForSeconds(3);
+            SceneManager.LoadScene("HouseScene");
         }
 
         public bool SetCurrentlyActivePlayerSelection()
@@ -107,17 +123,36 @@ namespace Players
 
         public void AddCharacterToCurrentPlayerAndInstansiate(float strength, float defence, float speed, float health, int ownedByPlayer, Color characterColor)
         {
-            Character character = new Character(strength,defence,speed,health, _currentlyActive);
+            Character character = new Character(strength,defence,speed,health, _currentlyActive,GetCharacterCount(ownedByPlayer));
             GetCurrentlyActivePlayer().AddCharacter(character);
             GameObject go =Instantiate(Prefabs.SmallTeddyBear, transform.position, Quaternion.identity);
             go.GetComponent<CharacterMono>().MyCharacter = character;
             character.MyCharacterMono = go.GetComponent<CharacterMono>();
             character.MyCharacterMono.SetPropertyColor(characterColor);
+            SetCharacterCount(ownedByPlayer);
         }
 
         public Vector3 GetCurrentCharacterForwardPosition()
         {
             return GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.transform.forward;
+        }
+
+        private int GetCharacterCount(int ownedByPlayer)
+        {
+            return ownedByPlayer == 1 ? _characterCountPlayerOne : _characterCountPlayerTwo;
+        }
+
+        private void SetCharacterCount(int ownedByPlayer)
+        {
+            if (ownedByPlayer == 1)
+            {
+                _characterCountPlayerOne++;
+                
+            }
+            else
+            {
+                _characterCountPlayerTwo++;
+            }
         }
 
 
@@ -126,6 +161,7 @@ namespace Players
             return GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter();
         }
 
+        
 
         private void Start()
         {

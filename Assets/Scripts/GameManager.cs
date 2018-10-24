@@ -14,34 +14,22 @@ public class GameManager : Singleton<GameManager>
     public bool ChoosingCharacters = true;
     [SerializeField] private CharacterPanel _characterPanel;
     private CameraMovement _cameraMovement;
-
     private bool _inSelectionState;
-
     [SerializeField] private Text _timeLeftText;
-
     private float _timeLeft;
-
     private bool _waitingForCoroutine;
-
     [HideInInspector] public bool TimerActive;
-
     [SerializeField] private Slider _healthSlider;
-
-    [SerializeField] private Material _resetMaterial;
-
-
     public bool FriendlyFire = false;
-
     [SerializeField] private PowerUpPanel _powerUpPanel;
-
     public ColorRanges MyColorRanges;
-
     private bool _powerUpActive = false;
-
     private bool _pauseTimer;
-
     private List<Color> PlayerOneColors = new List<Color>();
     private List<Color> PlayerTwoColors = new List<Color>();
+    [SerializeField] private Crosshair _crosshair;
+    [SerializeField] private Text _playerTurn;
+    
     
 
     protected override void Awake()
@@ -52,12 +40,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        ResetMaterial();
-        //TimerActive = true;
         _healthSlider.gameObject.SetActive(false);
         _timeLeft = 10f;
         InitializeColorLists();
-    }
+    }      
 
     private void InitializeColorLists()
     {
@@ -79,18 +65,20 @@ public class GameManager : Singleton<GameManager>
         return randomColor2;
 
     }
+
+    public Transform GetCrosshairPosition()
+    {
+        return _crosshair.transform;
+    }
     
     
     
 
         
-    private void ResetMaterial()
-    {
-        _resetMaterial.color = Color.white;
-    }
+ 
 
     public void CharacterPlaced()
-    {
+    {        
         if (PlayerManager.Instance.SetCurrentlyActivePlayerSelection())
         {
             _characterPanel.OnNewCharacter();
@@ -99,6 +87,8 @@ public class GameManager : Singleton<GameManager>
         {
             _waitingForCoroutine = true;
             PlayerManager.Instance.SetRandomPlayer();
+            _playerTurn.transform.parent.gameObject.SetActive(true);
+            _playerTurn.text = "Player " + PlayerManager.Instance.GetCurrentlyActivePlayer().PlayerNumber;
             _cameraMovement.CameraSlerp(_cameraMovement.TopView, false);
         }
     }
@@ -115,6 +105,8 @@ public class GameManager : Singleton<GameManager>
 
     public void CameraCoroutineFinished(bool setParent)
     {
+        _playerTurn.text = "Player " + PlayerManager.Instance.GetCurrentlyActivePlayer().PlayerNumber;
+
         if (_waitingForCoroutine && !setParent)
         {
             _inSelectionState = true;
@@ -122,11 +114,11 @@ public class GameManager : Singleton<GameManager>
         }
         else if (_waitingForCoroutine && setParent)
         {
-
+            
             if (!PlayerManager.Instance.GetCurrentlyActiveCharacter().Fortified)
             {
                 TimerActive = true;
-                PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.EnableUserControl();
+                PlayerManager.Instance.GetCurrentlyActiveCharacter().MyCharacterMono.EnableUserControl();
             }
             else
             {
@@ -140,6 +132,8 @@ public class GameManager : Singleton<GameManager>
     private void TurnFinished(bool fortify)
     {
         _healthSlider.gameObject.SetActive(false);
+        _crosshair.gameObject.SetActive(false);
+        _powerUpPanel.ParentPanel.SetActive(false);
         if (PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.OnFloor() && !fortify)
         {
             PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().MyCharacterMono.DisableUserControl();
@@ -159,7 +153,7 @@ public class GameManager : Singleton<GameManager>
         }
         _timeLeft = 10.0f;
         _timeLeftText.text = _timeLeft.ToString("F");
-        PlayerManager.Instance.SetCurrentlyActivePlayer();  
+        PlayerManager.Instance.SetCurrentlyActivePlayer();              
 
     }
 
@@ -173,6 +167,8 @@ public class GameManager : Singleton<GameManager>
     public void EnableHealthSlider()
     {
         _healthSlider.gameObject.SetActive(true);
+        _crosshair.gameObject.SetActive(true);
+        _powerUpPanel.ParentPanel.SetActive(true);
         _healthSlider.value = PlayerManager.Instance.GetCurrentlyActivePlayer().GetCurrentlyActiveCharacter().Health;
     }
 

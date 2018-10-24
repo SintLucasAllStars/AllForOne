@@ -17,6 +17,8 @@ public class CameraMovement : MonoBehaviour
 
     private Animator _animator;
     public Animation Animation;
+
+    private CameraCollision _cameraCollision;
     
     
     
@@ -24,9 +26,9 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        
+        _cameraCollision = GetComponent<CameraCollision>();
 
-     
+
     }
     
     private void Start()
@@ -39,10 +41,17 @@ public class CameraMovement : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(IECameraSlerp(target, setParent));
         transform.SetParent(setParent ? target : null);
+ 
+    }
+
+    public void Update()
+    {
+        
     }
 
     private IEnumerator IECameraSlerp(Transform target, bool setParent)
     {
+        _cameraCollision.enabled = false;
         bool finished = false;
         yield return  new WaitForSeconds(1);
         Debug.Log("started");
@@ -52,12 +61,16 @@ public class CameraMovement : MonoBehaviour
             var distanceToLocation = Vector3.Distance(transform.position, target.position);
             transform.position = Vector3.Lerp(transform.position, target.position, _movementSpeed * Time.deltaTime);
             transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, target.eulerAngles, _turnSpeed * Time.deltaTime);
-            //transform.LookAt(target.eulerAngles);
             if (distanceToLocation < 0.1f)
             {
                 finished = true;
                 Debug.Log("finished");
                 GameManager.Instance.CameraCoroutineFinished(setParent);
+                if (setParent)
+                {
+                    //_cameraCollision.enabled = true;
+                    //_cameraCollision.SetValues();
+                }
             }
 
             yield return null;

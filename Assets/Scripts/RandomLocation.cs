@@ -14,21 +14,24 @@ public class RandomLocation : MonoBehaviour
 	public RandomLocationData[] RandomLocationDatas;
 
 
-	[SerializeField] private GameObject _objectToSpawn;
+	[SerializeField] private GameObject [] _objectToSpawn;
+    [SerializeField] private GameObject[] _weaponsToSpawn;
 	[SerializeField] private int _amountOfObjects;
+    [SerializeField] private int _amountOfWeapons;
 	[SerializeField] private GameObject _parent;
 
 
 
-	// Use this for initialization
+	// Use this for initialization        
 	void Start ()
 	{
-		SpawnObjects();
+		SpawnObjects(_amountOfObjects, _objectToSpawn);
+	    SpawnObjects(_amountOfWeapons, _weaponsToSpawn);
 	}
 
-	private void SpawnObjects()
+	private void SpawnObjects(int amount, GameObject[] gameObjects)
 	{
-		for (int i = 0; i < _amountOfObjects; i++)
+		for (int i = 0; i < amount; i++)
 		{
 			var locations = RandomLocationDatas.GetRandom_Array();
 			Vector2 sorted;
@@ -47,7 +50,7 @@ public class RandomLocation : MonoBehaviour
 				zValue = Random.Range(sorted.x, sorted.y);
 			}
 
-			Instantiate(_objectToSpawn, new Vector3(xValue, yValue, zValue), Quaternion.identity, _parent.transform);
+			Instantiate(gameObjects.GetRandom_Array(), new Vector3(xValue, yValue, zValue), Quaternion.identity, _parent.transform);
 		}
 	}
 

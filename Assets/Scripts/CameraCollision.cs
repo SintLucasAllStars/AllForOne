@@ -11,8 +11,11 @@ public class CameraCollision : MonoBehaviour
     public Vector3 dollyDirAdjusted;
     public float distance;
 
-    // Use this for initialization
-    void Awake()
+    
+    
+   
+
+    public void SetValues()
     {
         dollyDir = transform.localPosition.normalized;
         distance = transform.localPosition.magnitude;
@@ -26,7 +29,7 @@ public class CameraCollision : MonoBehaviour
             Vector3 desiredCameraPos = transform.parent.parent.TransformPoint(dollyDir * maxDistance);
             RaycastHit hit;
 
-            if (Physics.Linecast(transform.parent.position, desiredCameraPos, out hit))
+            if (Physics.Linecast(transform.parent.parent.position, desiredCameraPos, out hit))
             {
                 distance = Mathf.Clamp((hit.distance * 0.87f), minDistance, maxDistance);
             }
@@ -35,7 +38,8 @@ public class CameraCollision : MonoBehaviour
                 distance = maxDistance;
             }
 
-            transform.localPosition = Vector3.Lerp(transform.localPosition, dollyDir * distance, Time.deltaTime * smooth);
+            
+            transform.localPosition = Vector3.Lerp(transform.localPosition , dollyDir * distance, Time.deltaTime * smooth);
         }
     }
 }

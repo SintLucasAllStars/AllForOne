@@ -16,8 +16,20 @@ namespace Players
         public CharacterMono MyCharacterMono;
         public int OwnedByPlayer;
 
+        public int CharacterID;
 
         public bool Fortified;
+        
+        public Character(float strength, float defence, float speed, float health,int ownedByPlayer, int characterId)
+        {
+            Strength = strength;
+            Defence = defence;
+            Speed = speed;
+            Health = health;
+            OwnedByPlayer = ownedByPlayer;
+            CharacterID = characterId;
+
+        }
 
         
         public void Fortify()
@@ -84,15 +96,7 @@ namespace Players
         }
 
 
-        public Character(float strength, float defence, float speed, float health,int ownedByPlayer)
-        {
-            Strength = strength;
-            Defence = defence;
-            Speed = speed;
-            Health = health;
-            OwnedByPlayer = ownedByPlayer;
-
-        }
+  
 
     }
 
