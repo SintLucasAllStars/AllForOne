@@ -6,6 +6,7 @@ public class UnitPlacement : MonoBehaviour
 {
     [SerializeField] LayerMask placeLayer, InsideSpawnPlaceLayer;
     public GameObject selectObject;
+    private bool selectIsInsidePlace;
     private Camera cam;
 
     public SoldierAsset selectSoldier;
@@ -30,17 +31,22 @@ public class UnitPlacement : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 50f, placeLayer))
             {
+                if (selectIsInsidePlace != (hit.collider.gameObject.layer == Mathf.Log(InsideSpawnPlaceLayer.value, 2)))
+                {
+                    selectIsInsidePlace = !selectIsInsidePlace;
+
+                    foreach (MeshRenderer mr in selectObject.GetComponentsInChildren<MeshRenderer>())
+                    {
+                        mr.material.color = selectIsInsidePlace ? Color.green : Color.red;
+                    }
+                }
+             
                 selectObject.transform.position = hit.point;
 
-                if (hit.collider.gameObject.layer == Mathf.Log(InsideSpawnPlaceLayer.value, 2))
+                if (selectIsInsidePlace && Input.GetMouseButtonDown(0))
                 {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        SpawnUnit(hit.point);
-                    }
-                } else
-                {
-
+                    Destroy(selectObject);
+                    SpawnUnit(hit.point);
                 }
             }
         }
@@ -53,7 +59,7 @@ public class UnitPlacement : MonoBehaviour
 
     public void SpawnUnit (Vector3 point, bool nextTurn)
     {
-        Vector3 spawnHeight = new Vector3(5, 0, 0);
+        Vector3 spawnHeight = new Vector3(0, 2, 0);
         GameObject spawnUnit = Instantiate(selectSoldier.unitSoldier.objectMesh, point + spawnHeight, Quaternion.identity) as GameObject;
         spawnUnit.AddComponent<Character>().init(selectSoldier.unitSoldier, GameManager.instance.isPlayerBlue, PlayerManager.instance.playerCurrentTurn.playerGameObject.Count);
 

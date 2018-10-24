@@ -29,7 +29,7 @@ public class GameControl : MonoBehaviour
 
     public bool startTurn;
     private float timeSinceStartTurn;
-    [SerializeField] int timeTakeOneTurnSec  = 10;
+    public int timeTakeOneTurnSec  = 10;
     private Character currentTurnCharacterPlay; 
 
     public float timeLeftTurn
@@ -100,7 +100,15 @@ public class GameControl : MonoBehaviour
         map.MapDeck(true);
         mapUnitUI.ShowUnitUI(GameManager.instance.isPlayerBlue);
         Debug.Log("Turn: " + (GameManager.instance.isPlayerBlue ? "blue" : "red"));
+        camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
+        StartCoroutine(waitForSec(2));
         //UnitUIEvent.instance.GetComponentsInParent<Transform>()[1].gameObject.SetActive(false);
+    }
+
+    IEnumerator waitForSec (int sec)
+    {
+        yield return new WaitForSeconds(sec);
+        camControl.cameraAfterControl = true;
     }
 
     public void GameSelectUnit (GameObject unit)
@@ -123,6 +131,7 @@ public class GameControl : MonoBehaviour
     {
         startTurn = false;
         characterUI.UIDisable();
+        Debug.Log("Is player outside: " + currentTurnCharacterPlay.isPlayerOutside);
         currentTurnCharacterPlay.isPlaying = false;
         GameNextTurn();
     }

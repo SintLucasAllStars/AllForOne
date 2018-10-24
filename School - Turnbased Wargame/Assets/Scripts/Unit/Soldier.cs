@@ -6,7 +6,6 @@ using UnityEngine;
 public class Soldier : Unit
 {
     public ushort cost;
-    public WeaponAsset weapon;
 
     public override void Place()
     {

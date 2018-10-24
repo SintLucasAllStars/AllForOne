@@ -8,9 +8,26 @@ public class Character : MonoBehaviour
     public bool isBlueCharacter;
     public int characterIndex;
 
+    public bool isPlayerOutside
+    {
+        get
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -transform.up, out hit ,2f))
+            {
+                if (hit.collider.gameObject.layer == 13)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     public Soldier playerNormalStats { get; private set; }
     public ushort currentHealth { get; private set; }
+
+    public WeaponAsset currentWeapon;
 
     public PlayerController controller;
 
