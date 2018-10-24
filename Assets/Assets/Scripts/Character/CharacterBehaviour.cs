@@ -23,7 +23,7 @@ namespace Character
 
         private bool _attack;
 
-        private bool inCharacterSelect = false;
+        private bool inCharacterSelect = true;
 
         private bool canAttack = true;
 
@@ -34,13 +34,24 @@ namespace Character
         private GameObject ActiveWep;
 
         private bool hasWepEquipped;
+
+        private MouseAim mouseAim;
+
+        public GameObject ThirdCamera;
         // Use this for initialization
         void Start()
         {
             rb = GetComponent<Rigidbody>();
             animator = GetComponent<Animator>();
+            ThirdCamera.SetActive(false);
+            //ThirdCamera = Camera.current;
+
         }
 
+        void OnMouseOver()
+        {
+            Debug.Log("UnderMouse");
+        }
         // Update is called once per frame
         void Update()
         {
@@ -63,7 +74,7 @@ namespace Character
                  {
                      
                  }*/
-                if (Input.GetMouseButtonDown(0)&&canAttack)
+                if (Input.GetMouseButtonDown(0)&&canAttack&&_grounded)
                 {
                     Attack();
                 }
@@ -96,6 +107,16 @@ namespace Character
             canAttack = true;
         }
 
+        void SetActiveWepCollider()
+        {
+            ActiveWep.GetComponent<BoxCollider>().enabled=true;
+        }
+
+        void SetInactiveWepCollider()
+        {
+            ActiveWep.GetComponent<BoxCollider>().enabled =false;
+        }
+
         void ToggleOnFistCollider()
         {
             Debug.Log("Active");
@@ -114,6 +135,17 @@ namespace Character
             rb.AddForce(new Vector3(0, jumpPower, 0));
         }
 
+        public void EnableControls()
+        {
+            inCharacterSelect = false;
+        }
+
+        public void DisableControls()
+        {
+            inCharacterSelect = true;
+            animator.SetFloat("Forward", 0);
+            animator.SetFloat("Strafe", 0);
+        }
 
 
         void OnCollisionEnter(Collision coll)

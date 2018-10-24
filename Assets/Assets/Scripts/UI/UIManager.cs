@@ -52,6 +52,8 @@ namespace UI
         public Text Player;
 
         public Text Click;
+
+        public Text ClickOnUnit;
         // Use this for initialization
         private void Awake()
         {
@@ -67,7 +69,7 @@ namespace UI
         }
         void Start()
         {
-            //_material = CharacterRenderBG.GetComponent<Renderer>().material;
+            _material = CharacterRenderBG.GetComponent<Renderer>().material;
            // _material.color = Color.red;
             //SetColor(GameManager.instance.GetCurrentPlayer());
         }
@@ -95,13 +97,20 @@ namespace UI
         {
             Application.Quit();
         }
-        public void CharacterSelection()
+        public void ClickOnUnitInActive()
         {
-
+            ClickOnUnit.enabled = false;
         }
-        public void Options()
+        public void ClickOnUnitActive(int whichplayer)
         {
-
+            ClickOnUnit.enabled = true;
+            if (whichplayer == 1)
+            {
+                ClickOnUnit.text = "Player 1 Red click on a unit to move";
+            }else if (whichplayer ==2)
+            {
+                ClickOnUnit.text = "Player 2 blue click on a unit to move";
+            }
         }
 
         public void SetColor(int whichplayer)
@@ -203,7 +212,7 @@ namespace UI
                 ChangeTotalText();
                 GameManager.instance.ChangeMoney(Mathf.RoundToInt(totalvalue));
                 
-                GameManager.instance.AddPlayer(playerbody, health,Strength,Speed,Defense);
+                GameManager.instance.ActivatePlacer(health,Strength,Speed,Defense);
                 CharacterSelect.SetActive(false);
                 Click.enabled = true;
             }
