@@ -9,7 +9,8 @@ public class GameUi : MonoBehaviour
     [SerializeField] private Image clockTimer;
     [SerializeField] private RectTransform clockRectTransform;
 
-    [SerializeField] private Vector3 maxAngle;
+    [SerializeField] private Image background;
+    [SerializeField] private Text winnerText;
 
     public Image powerUp;
 
@@ -41,7 +42,16 @@ public class GameUi : MonoBehaviour
     {
         float percentage = 1 - seconds / 10;
 
-        clockRectTransform.localRotation = Quaternion.Euler(0,0, -360 * percentage);
+        clockRectTransform.localRotation = Quaternion.Euler(0, 0, -360 * percentage);
+    }
+
+    public void EndScreen(Player winner)
+    {
+        canvas.enabled = true;
+        background.enabled = true;
+        background.color = winner.color;
+        winnerText.enabled = true;
+        winnerText.text = winner.playerTag + winnerText.text;
     }
 
     void ToggleColor()

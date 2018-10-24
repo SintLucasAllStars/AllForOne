@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     //Game
     public Timer timer;
     public bool activeGame = false;
+    public bool gameOver = false;
 
     // Use this for initialization
     void Awake()
@@ -75,9 +76,10 @@ public class GameManager : MonoBehaviour
 
     public void KillCharacter()
     {
-        if(GetCurrentPlayer().KillCharacter())
+        if(GetOtherPlayer().KillCharacter())
         {
-            Debug.Log("Game ended! Player: " + ((IsTurnPlayerOne) ? "Two" : "One") + " Won");
+            gameOver = true;
+            GameUi.instance.EndScreen(GetCurrentPlayer());
         }
     }
 
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
         if(character == "PlayerOne")
             playerOne.KillCharacter();
         else if(character == "PlayerTwo")
-            playerTwo.KillCharacter();   
+            playerTwo.KillCharacter();
     }
 
     public Player GetCurrentPlayer()
@@ -94,8 +96,15 @@ public class GameManager : MonoBehaviour
         return (IsTurnPlayerOne) ? playerOne : playerTwo;
     }
 
+    public Player GetOtherPlayer()
+    {
+        return (IsTurnPlayerOne) ? playerTwo : playerOne;
+    }
+
     public void RunEvent(bool start)
     {
+        if(gameOver) return;
+
         if(!start)
             IsTurnPlayerOne = !IsTurnPlayerOne;
 

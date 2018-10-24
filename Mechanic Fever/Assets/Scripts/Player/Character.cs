@@ -64,7 +64,7 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
-        if(!isActive) return;
+        if(!isActive || GameManager.instance.gameOver) return;
 
         if(isFortified && Input.anyKeyDown)
             isFortified = false;
