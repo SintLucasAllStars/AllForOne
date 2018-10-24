@@ -22,11 +22,14 @@ using UnityStandardAssets.Characters.ThirdPerson;
             if (_cam == null && Camera.main != null) _cam = Camera.main.transform;
             if(_character == null) _character = GetComponent<ThirdPersonCharacter>();
             if (_animator == null) _animator = GetComponent<Animator>();
+
+            _character.enabled = true;
         }
 
         private void OnDisable()
         {
             _character.Move(Vector3.zero, false, false);
+            _character.enabled = false;
 
             
             RaycastHit hit;
@@ -43,6 +46,8 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
         private void Update()
         {
+            if(CameraController.Instance.IsMoving) return;
+            
             if (!_jump)
             {
                 _jump = Input.GetKeyDown(KeyCode.Space);
@@ -87,6 +92,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
         private void FixedUpdate()
         {
+            if(CameraController.Instance.IsMoving) return;
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);

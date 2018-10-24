@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
 
 	public Coroutine CurrentRoutine { get; private set; }
 
+	public bool IsMoving;
 
 	[SerializeField] private float TopDownSpeed;
 	
@@ -83,6 +84,7 @@ public class CameraController : MonoBehaviour
 
 	private IEnumerator MoveToPosition(float time, Vector3 position, Quaternion rotation)
 	{
+		IsMoving = true;
 		Vector3 startPos = transform.position;
 		Quaternion startRot = transform.localRotation;
 		for (int i = 0; i < time; i++)
@@ -93,6 +95,7 @@ public class CameraController : MonoBehaviour
 			yield return new WaitForEndOfFrame();
 		}
 
+		IsMoving = false;
 		CurrentRoutine = null;
 	}
 }

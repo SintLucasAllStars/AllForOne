@@ -70,7 +70,7 @@ public class RoundManager : MonoBehaviour
 
 	IEnumerator Round(int roundLength)
 	{
-		while (CameraController.Instance.CurrentRoutine != null)
+		while (CameraController.Instance.IsMoving)
 		{
 			yield return new WaitForEndOfFrame();
 		}
