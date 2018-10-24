@@ -43,7 +43,7 @@ public class Unit : MonoBehaviour
 	}
 
 	public void ChangeStat(PlayerStats stat, int amount)
-	{
+	{		
 		switch (stat)
 		{
 			case PlayerStats.Health:

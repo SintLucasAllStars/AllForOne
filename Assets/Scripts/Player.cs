@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -23,6 +24,10 @@ public class Player
 	public void RemoveUnit(Unit unit)
 	{
 		Units.Remove(unit);
+		if (Units.Count == 0)
+		{
+			GameManager.Instance.StopGame(PlayerNumber);
+		}
 	}
 
 	public void AddUnit(Unit unit)

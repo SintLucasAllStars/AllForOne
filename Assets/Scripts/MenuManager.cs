@@ -12,6 +12,11 @@ public class MenuManager : MonoBehaviour
 		GameManager.OnStartSetup += OnStartSetup;
 	}
 
+	private void OnDisable()
+	{
+		GameManager.OnStartSetup -= OnStartSetup;
+	}
+
 	private void OnStartSetup()
 	{
 		Instantiate(_unitCreationScreen, transform);

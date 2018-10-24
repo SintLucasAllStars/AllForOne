@@ -22,13 +22,12 @@ using UnityStandardAssets.Characters.ThirdPerson;
             if (_cam == null && Camera.main != null) _cam = Camera.main.transform;
             if(_character == null) _character = GetComponent<ThirdPersonCharacter>();
             if (_animator == null) _animator = GetComponent<Animator>();
-
-            _movementSpeed = 0.5f + 1f-(1f / Unit.GetStat(PlayerStats.Speed));
         }
 
         private void OnDisable()
         {
             _character.Move(Vector3.zero, false, false);
+
             
             RaycastHit hit;
             if (Physics.Raycast(transform.position, -transform.up, out hit))
@@ -57,6 +56,11 @@ using UnityStandardAssets.Characters.ThirdPerson;
                     Attack();
                 }
             }
+
+            if (Input.GetKeyUp(KeyCode.Q))
+            {
+                _movementSpeed = 0.5f + 1f-(1f / Unit.GetStat(PlayerStats.Speed));
+            }
         }
 
         private void Attack()
@@ -75,6 +79,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
                     {
                         otherUnit.ChangeStat(PlayerStats.Health,
                             -(Unit.GetStat(PlayerStats.Strength) - (otherUnit.GetStat(PlayerStats.Defense)/2)));
+                        otherUnit.GetComponentInChildren<HealthBar>().UpdateHealthBar();
                     }
                 }
             }

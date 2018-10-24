@@ -36,12 +36,12 @@ public class PowerUpUI : MonoBehaviour
 	}
 
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.RightArrow))
+		if (Input.GetKeyDown(KeyCode.E))
 		{
 			_selectedNumber = (_selectedNumber + 1) % _powerUps.Count;
 			SetCurrent();
 		}
-		else if (Input.GetKeyDown(KeyCode.LeftArrow))
+		else if (Input.GetKeyDown(KeyCode.R))
 		{
 			_selectedNumber = (_selectedNumber - 1) % _powerUps.Count;
 			SetCurrent();

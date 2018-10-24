@@ -35,6 +35,7 @@ public class UnitSelector : MonoBehaviour
 			{
 				if (hit.collider.CompareTag("Unit"))
 				{
+					_canSelect = false;
 					if(hit.transform.GetComponent<Unit>().Player != _currentPlayer) return;
 					SetCurrentUnit(hit.transform.gameObject);
 				}

@@ -9,6 +9,8 @@ public class GameState
 	public int Round;
 	public State CurrentState;
 
+	public int Winner;
+
 	public GameState(Player[] players)
 	{
 		Players = players;

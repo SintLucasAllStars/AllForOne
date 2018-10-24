@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,9 +10,12 @@ public class GameManager : MonoBehaviour
 	
 	public delegate void StartSetup();
 	public delegate void StartGame();
+	public delegate void EndGame();
 
 	public static event StartSetup OnStartSetup ;
 	public static event StartGame OnStartGame ;
+	public static event EndGame OnEndGame;
+	
 	private void Awake()
 	{
 		if(Instance != this && Instance != null) Destroy(this);
@@ -32,15 +36,44 @@ public class GameManager : MonoBehaviour
 		if (OnStartSetup != null) OnStartSetup();
 	}
 
-	private void Start()
+	private void OnEnable()
 	{
-		StartNewGame();
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
+	
+	private void OnDisable()
+	{
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
+	{
+		if (scene.name == "Game")
+		{
+			StartNewGame();
+		}
 	}
 
 	public void EndSetup()
 	{
-		Debug.Log("EndSetup");
 		GameState.CurrentState = State.Playing;
 		if (OnStartGame != null) OnStartGame();
+	}
+
+	public void StopGame(int losingPlayer)
+	{
+		RoundManager.Instance.EndCurrentRound();
+		RoundManager.Instance.IsPaused = true;
+		GameState.CurrentState = State.Finished;
+		CameraController.Instance.SetCameraState(CameraState.Static);
+		Debug.Log(losingPlayer);
+		GameState.Winner = (losingPlayer + 1) % GameState.Players.Length -1;
+		Debug.Log(GameState.Winner);
+		if (OnEndGame != null) OnEndGame();
+	}
+
+	public void ClearState()
+	{
+		GameState = null;
 	}
 }
