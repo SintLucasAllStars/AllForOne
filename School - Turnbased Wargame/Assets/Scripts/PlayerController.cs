@@ -8,9 +8,24 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
+    [HideInInspector]
     public float speed;
+    [HideInInspector]
     public ushort defaultStrength;
+    [HideInInspector]
+    public ushort weaponDamage = 1;
+    [HideInInspector]
+    public ushort weaponCooldown = 1;
+    [HideInInspector]
+    public ushort weaponDistance = 0;
+    [HideInInspector]
+    public float lastShotTime;
 
+
+
+    [HideInInspector]
+    public string pickUpName = "";
+    private PickUpWeapon pickUpWeapon;
 
     private void Start()
     {
@@ -24,14 +39,14 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, Input.GetAxis("Horizontal") * 130f * Time.deltaTime, 0);
 
 
-        Debug.DrawLine(transform.position, transform.position + transform.forward * 10);
+        //Debug.DrawLine(transform.position, transform.position + transform.forward * 10);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && lastShotTime + weaponCooldown < Time.time)
         {
-            //Check cooldown attack
+            lastShotTime = Time.time;
 
             RaycastHit hit;
-            if (Physics.Raycast (transform.position, transform.forward, out hit, 10f))
+            if (Physics.Raycast (transform.position, transform.forward, out hit, 1.5f + weaponDistance))
             {
 
               //  Debug.Log("Tag to " + hit.collider.name);
@@ -39,14 +54,41 @@ public class PlayerController : MonoBehaviour
                 Character enemy = hit.collider.GetComponent<Character>();
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(defaultStrength);
-                    Debug.Log("Enemy found! Give damage: " + defaultStrength);
+                    enemy.TakeDamage((ushort)((weaponDamage * 2f) + (defaultStrength / 5f)));
                 }
             }
 
 
         }
 
+        if (Input.GetKeyDown(KeyCode.E) && pickUpWeapon != null)
+        {
+            GameControl.instance.currentTurnCharacter.OnChangedWeapon (pickUpWeapon.ShowWeapon());
+            Destroy(pickUpWeapon.gameObject);
+            pickUpWeapon = null;
+            pickUpName = "";
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        PickUpWeapon puw = other.gameObject.GetComponent<PickUpWeapon>();
+
+        if (other.tag == "Weapon" && puw != null)
+        {
+            pickUpWeapon = puw;
+            pickUpName = puw.ShowWeapon().primaryWeapon.name;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Weapon")
+        {
+            pickUpWeapon = null;
+            pickUpName = "";
+        }
     }
 
 }

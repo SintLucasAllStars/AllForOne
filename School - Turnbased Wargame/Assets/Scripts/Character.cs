@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
     public Soldier playerNormalStats { get; private set; }
     public ushort currentHealth { get; private set; }
 
-    public WeaponAsset currentWeapon;
+    public WeaponAsset currentWeapon { get; private set; }
 
     public PlayerController controller;
 
@@ -60,6 +60,15 @@ public class Character : MonoBehaviour
         isPlaying = false;
     }
 
+    public void OnChangedWeapon (WeaponAsset wa)
+    {
+        currentWeapon = wa;
+
+        controller.weaponCooldown = currentWeapon.primaryWeapon.cooldown;
+        controller.weaponDamage = currentWeapon.primaryWeapon.damage;
+        controller.weaponDistance = currentWeapon.primaryWeapon.range;
+    }
+
 
     public void init (Unit uDefaultType, bool isPlayerBlue, int indexCharacter)
     {
@@ -78,14 +87,14 @@ public class Character : MonoBehaviour
 
     public void TakeDamage (ushort damage)
     {
-        if (damage >= currentHealth)
+        if ((ushort)Mathf.Clamp((damage - playerNormalStats.defense / 10f), 0, ushort.MaxValue) >= currentHealth)
         {
             (isBlueCharacter ? PlayerManager.instance.playerBlue : PlayerManager.instance.playerRed).playerGameObject[characterIndex] = null;
             GameControl.instance.SpawnParticle(transform.position, GameControl.ParticleEffect.Death);
             Destroy(gameObject);
         } else
         {
-            currentHealth -= (ushort) (damage /  Mathf.Clamp((playerNormalStats.defense) / 5, 1, int.MaxValue));
+            currentHealth -= (ushort) Mathf.Clamp((damage - playerNormalStats.defense / 10f), 0, ushort.MaxValue);
             GameControl.instance.SpawnParticle(transform.position, GameControl.ParticleEffect.Blood);
         }
     }

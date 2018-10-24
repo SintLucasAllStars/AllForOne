@@ -22,6 +22,7 @@ public class GameControl : MonoBehaviour
     public UnitMapUI mapUnitUI;
     public CameraController camControl;
     public CharacterUI characterUI;
+    public WeaponChestSpawn chestSpawn;
 
 
     public GameObject objectPlacement;
@@ -33,6 +34,9 @@ public class GameControl : MonoBehaviour
     [HideInInspector] public Character currentTurnCharacter;
     [SerializeField] GameObject bloodParticle, deathParticle;
 
+
+    [SerializeField] GameObject gameEndObject;
+    [SerializeField] UnityEngine.UI.Text victoryText;
 
     public float timeLeftTurn
     {
@@ -151,6 +155,8 @@ public class GameControl : MonoBehaviour
                 camControl.cameraAfterControl = false;
                 camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
                 Debug.Log("Player: " + (GM.isPlayerBlue ? "blue" : "red") + " won");
+                gameEndObject.SetActive(true);
+                victoryText.text = "Team " + (GM.isPlayerBlue ? "BLUE" : "RED");
                 return;
             }
         }
@@ -167,12 +173,15 @@ public class GameControl : MonoBehaviour
                 {
                     GM.PlayerSwitch();
                     Debug.Log("Player: " + (GM.isPlayerBlue ? "blue" : "red") + " won");
+                    gameEndObject.SetActive(true);
+                    victoryText.text = "Team " + (GM.isPlayerBlue ? "BLUE" : "RED");
                 }
                 else
                 {
                     camControl.cameraAfterControl = true;
                     camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
                     mapUnitUI.ShowUnitUI(GM.isPlayerBlue);
+                    chestSpawn.RandomSpawnChest();
                 }
 
                 break;

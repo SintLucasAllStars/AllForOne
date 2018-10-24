@@ -71,7 +71,7 @@ public class UnitUIEvent : MonoBehaviour
         for(int i = 0; i < standardUnit.Count; i++)
         {
             GameObject ui = Instantiate(unitUI, scrollContent.transform) as GameObject;
-            ui.transform.Translate(400 * i, 0, 0);
+            ui.transform.Translate(Screen.height / 1.75f * i, 0, 0);
 
             foreach(Text t in ui.GetComponentsInChildren<Text>())
             {
@@ -136,6 +136,9 @@ public class UnitUIEvent : MonoBehaviour
         {
 
             case CanvasNavigation.unitList:
+                unitListScroll.SetActive(false);
+                NavigaTo(CanvasNavigation.customUnit);
+                break;
                 unitListScroll.SetActive(enable);
                 if (enable)
                 {
@@ -158,6 +161,7 @@ public class UnitUIEvent : MonoBehaviour
                 {
                     CanvasUnit.SetActive(true);
                     titleText.text = "Create a unit";
+                    moneyText.text = "$" + PlayerManager.instance.playerCurrentTurn.playerMoney;
                     customUIColorCreateCanvas.color = PlayerManager.instance.playerCurrentTurn.playerUIColor;
                 }
                 break;
