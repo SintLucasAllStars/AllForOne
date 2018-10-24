@@ -30,7 +30,9 @@ public class GameControl : MonoBehaviour
     public bool startTurn;
     private float timeSinceStartTurn;
     public int timeTakeOneTurnSec  = 10;
-    private Character currentTurnCharacterPlay; 
+    [HideInInspector] public Character currentTurnCharacter;
+    [SerializeField] GameObject bloodParticle, deathParticle;
+
 
     public float timeLeftTurn
     {
@@ -101,7 +103,7 @@ public class GameControl : MonoBehaviour
         mapUnitUI.ShowUnitUI(GameManager.instance.isPlayerBlue);
         Debug.Log("Turn: " + (GameManager.instance.isPlayerBlue ? "blue" : "red"));
         camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
-        StartCoroutine(waitForSec(2));
+        StartCoroutine(waitForSec(1));
         //UnitUIEvent.instance.GetComponentsInParent<Transform>()[1].gameObject.SetActive(false);
     }
 
@@ -113,15 +115,15 @@ public class GameControl : MonoBehaviour
 
     public void GameSelectUnit (GameObject unit)
     {
-        currentTurnCharacterPlay = unit.GetComponent<Character>();
+        currentTurnCharacter = unit.GetComponent<Character>();
         camControl.playerTarget = unit;
         GameStartTurn();
     }
 
     public void GameStartTurn ()
     {
-        currentTurnCharacterPlay.isPlaying = true;
-        characterUI.UIEnable(currentTurnCharacterPlay.playerNormalStats, currentTurnCharacterPlay.currentHealth);
+        currentTurnCharacter.isPlaying = true;
+        characterUI.UIEnable(currentTurnCharacter.playerNormalStats, currentTurnCharacter.currentHealth);
         camControl.CameraCurrentControl = CameraController.CameraControlEnum.playerThirdPerson;
         timeSinceStartTurn = Time.time;
         startTurn = true;
@@ -131,8 +133,27 @@ public class GameControl : MonoBehaviour
     {
         startTurn = false;
         characterUI.UIDisable();
-        Debug.Log("Is player outside: " + currentTurnCharacterPlay.isPlayerOutside);
-        currentTurnCharacterPlay.isPlaying = false;
+        currentTurnCharacter.isPlaying = false;
+
+        //If player is outside
+        if (currentTurnCharacter.isPlayerOutside)
+        {
+            currentTurnCharacter.TakeDamage(ushort.MaxValue);
+            if (CheckAllUnitDeath())
+            {
+                GM.PlayerSwitch();
+                //If player kill self and other player already deadth
+                if (CheckAllUnitDeath())
+                {
+                    //Then player that kill self, won
+                    GM.PlayerSwitch();
+                }
+                camControl.cameraAfterControl = false;
+                camControl.CameraCurrentControl = GM.isPlayerBlue ? CameraController.CameraControlEnum.playerBlueView : CameraController.CameraControlEnum.playerRedView;
+                Debug.Log("Player: " + (GM.isPlayerBlue ? "blue" : "red") + " won");
+                return;
+            }
+        }
         GameNextTurn();
     }
 
@@ -168,6 +189,21 @@ public class GameControl : MonoBehaviour
         return true;
     }
 
+    public enum ParticleEffect { Blood, Death}
+    public void SpawnParticle (Vector3 pos, ParticleEffect pe)
+    {
+        switch (pe)
+        {
+            case ParticleEffect.Blood:
+                GameObject b = Instantiate(bloodParticle, pos, Quaternion.identity) as GameObject;
+                Destroy(b, 5);
+                break;
+            case ParticleEffect.Death:
+                GameObject d = Instantiate(deathParticle, pos, Quaternion.identity) as GameObject;
+                Destroy(d, 5);
+                break;
+        }
+    }
 
     public void Update()
     {

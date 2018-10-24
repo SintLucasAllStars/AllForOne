@@ -81,10 +81,12 @@ public class Character : MonoBehaviour
         if (damage >= currentHealth)
         {
             (isBlueCharacter ? PlayerManager.instance.playerBlue : PlayerManager.instance.playerRed).playerGameObject[characterIndex] = null;
+            GameControl.instance.SpawnParticle(transform.position, GameControl.ParticleEffect.Death);
             Destroy(gameObject);
         } else
         {
             currentHealth -= (ushort) (damage /  Mathf.Clamp((playerNormalStats.defense) / 5, 1, int.MaxValue));
+            GameControl.instance.SpawnParticle(transform.position, GameControl.ParticleEffect.Blood);
         }
     }
 

@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.TakeDamage(defaultStrength);
-                    Debug.Log("Enemy found!");
+                    Debug.Log("Enemy found! Give damage: " + defaultStrength);
                 }
             }
 

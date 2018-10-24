@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CharacterUI : MonoBehaviour
 {
     [SerializeField] GameObject canvasOnOff;
+    [SerializeField] GameObject outsideWarning;
     [SerializeField] List<Image> playerColorStyle;
     [SerializeField] Image healthBar;
     [SerializeField] Image timeBar;
@@ -34,6 +35,15 @@ public class CharacterUI : MonoBehaviour
         if (canvasOnOff.activeSelf)
         {
             timeBar.fillAmount = Mathf.Clamp(1f / GameControl.instance.timeTakeOneTurnSec * GameControl.instance.timeLeftTurn, 0, 1);
+
+            if (GameControl.instance.currentTurnCharacter.isPlayerOutside)
+            {
+                outsideWarning.SetActive(true);
+            }
+            else
+            {
+                outsideWarning.SetActive(false);
+            }
         }
     }
 
