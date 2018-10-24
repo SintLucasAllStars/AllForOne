@@ -24,7 +24,7 @@ public class Character : MonoBehaviour
     public bool isFortified = false;
     private float fortifyTime;
 
-    private Rigidbody playeRigidbody;
+    private Rigidbody playerRigidbody;
     private CapsuleCollider playerCollider;
 
     [Header("Camera")]
@@ -52,7 +52,7 @@ public class Character : MonoBehaviour
     {
         controller = GetComponent<ThirdPersonUserControl>();
         character = GetComponent<ThirdPersonCharacter>();
-        playeRigidbody = GetComponent<Rigidbody>();
+        playerRigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
         defaultWeapon.Init(damage, GetEnemyTag(), weaponSlot);
@@ -173,7 +173,7 @@ public class Character : MonoBehaviour
         isActive = activate;
         controller.enabled = activate;
         character.enabled = activate;
-        playeRigidbody.constraints = !activate ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.FreezeRotation;
+        playerRigidbody.constraints = !activate ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.FreezeRotation;
 
         if(activate)
         {
@@ -234,6 +234,8 @@ public class Character : MonoBehaviour
             GameManager.instance.KillCharacter();
             gameObject.layer = 0;
             Destroy(gameObject, 5);
+            playerRigidbody.isKinematic = true;
+            playerCollider.enabled = false;
         }
         else
         {

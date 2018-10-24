@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CharactarSelector : MonoBehaviour
 {
@@ -22,6 +23,12 @@ public class CharactarSelector : MonoBehaviour
     private void EndRound()
     {
         currentTag = GameManager.instance.GetCurrentPlayer().playerTag;
+        StartCoroutine(SelectCharacter());
+    }
+
+    private IEnumerator SelectCharacter()
+    {
+        yield return new WaitForEndOfFrame();
         selectingCharacter = true;
     }
 
