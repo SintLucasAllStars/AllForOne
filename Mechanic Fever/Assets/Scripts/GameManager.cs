@@ -86,9 +86,15 @@ public class GameManager : MonoBehaviour
     public void KillCharacter(string character)
     {
         if(character == "PlayerOne")
-            playerOne.KillCharacter();
+        {
+            if(playerOne.KillCharacter())
+                GameUi.instance.EndScreen(playerTwo);
+        }
         else if(character == "PlayerTwo")
-            playerTwo.KillCharacter();
+        {
+            if(playerTwo.KillCharacter())
+                GameUi.instance.EndScreen(playerOne);
+        }
     }
 
     public Player GetCurrentPlayer()
