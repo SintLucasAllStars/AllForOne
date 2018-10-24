@@ -81,10 +81,7 @@ public class InterfaceManager : MonoBehaviour
     public void SetCurrentSelectingPlayer()
     {
         if (_playerManager.GetCurrentPlayingPlayerIndex == 0)
-        {
             CurrentPlayerImage.color = Color.red;
-            Debug.Log("kek");
-        }
         else
             CurrentPlayerImage.color = Color.blue;
     }

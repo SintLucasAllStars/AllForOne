@@ -23,7 +23,6 @@ public class Unit : MonoBehaviour
 
     //private bool _isGrounded = true;
     private bool _freezeCounter = false;
-    private bool _isOutSide = false;
 
     public bool IsUnitActive { get; set; }
     public int UnitTeamId { get; private set; }
@@ -61,7 +60,7 @@ public class Unit : MonoBehaviour
     {
         _playerManager.GetOtherPlayer.RemoveUnit(this);
         Destroy(gameObject);
-        _playerManager.IsGameOver();
+        _playerManager.GameOver();
     }
 
     private void Update()
@@ -70,26 +69,28 @@ public class Unit : MonoBehaviour
         {
             if (!_freezeCounter)
             {
-                float time = GameManager.Instance.PlayerTime -= Time.unscaledDeltaTime;
+                GameManager.Instance.PlayerTime -= Time.unscaledDeltaTime;
 
-                if (time <= 0)
+                _unitInterface.SetGameTime((int)GameManager.Instance.PlayerTime);
+
+                if ((int)GameManager.Instance.PlayerTime <= 0)
                 {
                     IsUnitActive = false;
 
-                    GameManager.Instance.PlayerTime = 60f;
+                    GameManager.Instance.PlayerTime = 10f;
 
-                    _unitInterface.SetGameTime((int)time);
+                    _unitInterface.SetGameTime((int)GameManager.Instance.PlayerTime);
 
-                    if (_isOutSide)
-                        Die();
+                    IsOutside();
 
                     //Turn over, set next player turn.
                     _playerManager.SetNextPlayerIndex();
 
+                    _unitInterface.DisableUnitInterface();
+
                     StartCoroutine(_unitSelectionManager.UnitSelection());
                 }
 
-                _unitInterface.SetGameTime((int)time);
             }
 
             float translation = Input.GetAxis("Vertical") * UnitStats.Speed * 0.5f;
@@ -104,13 +105,6 @@ public class Unit : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Q))
                 StartCoroutine(UsePowerUp());
-
-            //if (Input.GetKeyDown(KeyCode.Space))
-            //{
-                
-            //    transform.Translate(Vector3.up * Time.deltaTime, Space.World);
-            //}
-
         }
     }
 
@@ -139,11 +133,6 @@ public class Unit : MonoBehaviour
 
                 Destroy(other.gameObject);
             }
-
-            if (other.CompareTag("Outside"))
-                _isOutSide = true;
-            else
-                _isOutSide = false;
         }
     }
 
@@ -176,7 +165,6 @@ public class Unit : MonoBehaviour
         UnitPowerUpInfo.PowerType = PowerUpType.None;
         _unitInterface.SetInterfacePowerUp(UnitPowerUpInfo);
     }
-
     public IEnumerator RayCastWeapon()
     {
         int unitLayerMask = LayerMask.GetMask("UnitLayer");
@@ -198,10 +186,29 @@ public class Unit : MonoBehaviour
                     unit.TakeDamage(CurrentUnitWeaponObject.WeaponInfo.Damage * UnitStats.Strenght);
                     yield return StartCoroutine(_unitInterface.RechargeInterfaceWeapon(CurrentUnitWeaponObject.WeaponInfo.Speed));
                 }
-
             }
 
             yield return null;
+        }
+    }
+
+    public void IsOutside()
+    {
+        Ray ray = new Ray(transform.position, -Vector3.up);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit)) {
+            if (hit.collider.CompareTag("Outside"))
+            {
+                Camera.main.transform.SetParent(_unitSelectionManager.CamTransform);
+                
+                _playerManager.GetCurrentPlayer.RemoveUnit(this);
+
+                Destroy(gameObject);
+
+                _playerManager.GameOver();
+            }
         }
     }
 }

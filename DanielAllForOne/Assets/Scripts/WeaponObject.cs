@@ -7,6 +7,7 @@ public enum WeaponTypes
     Punch,
     Knife,
     WarHammer,
+    Gun
 }
 
 public class WeaponObject : MonoBehaviour

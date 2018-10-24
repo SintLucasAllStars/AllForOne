@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject[] _powerUpsObjects;
     [SerializeField] private GameObject[] _weaponsObjects;
-    private int[,] _powerUpGrid = new int[20, 20];
+    private int[,] _powerUpGrid = new int[100, 100];
     public float PlayerTime;
 
     #endregion
@@ -27,13 +27,13 @@ public class GameManager : MonoBehaviour
         {
             for (int z = 0; z < _powerUpGrid.GetLength(1); z++)
             {
-                int randomPowerUp = Random.Range(0, 30);
-                int randomWeapon = Random.Range(0, 50);
+                int randomPowerUp = Random.Range(0, 100);
+                int randomWeapon = Random.Range(0, 100);
+
+                Vector3 pos = new Vector3(x + 0.5f - _powerUpGrid.GetLength(0) / 2, 0, z + 0.5f - _powerUpGrid.GetLength(1) / 2);
 
                 if (randomPowerUp == 1)
                 {
-                    Vector3 pos = new Vector3(x + 0.5f - _powerUpGrid.GetLength(0), 0, z + 0.5f - _powerUpGrid.GetLength(1));
-
                     int r2 = Random.Range(0, _powerUpsObjects.Length);
 
                     Instantiate(_powerUpsObjects[r2], pos, Quaternion.identity);
@@ -41,8 +41,6 @@ public class GameManager : MonoBehaviour
 
                 if (randomWeapon == 1)
                 {
-                    Vector3 pos = new Vector3(x + 0.5f - _powerUpGrid.GetLength(0), 0, z + 0.5f - _powerUpGrid.GetLength(1));
-
                     int r2 = Random.Range(0, _weaponsObjects.Length);
 
                     Instantiate(_weaponsObjects[r2], pos, Quaternion.identity);

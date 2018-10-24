@@ -15,13 +15,18 @@ public class UnitInterface : MonoBehaviour {
     public RectTransform UnitWeaponRechargeRect;
     public Slider PowerUpSlider;
 
-    public void InitializeCanvas(Unit unit)
+    public void InitializeUnitCanvas(Unit unit)
     {
         UnitInterfaceCanvas.SetActive(true);
 
         SetInterfacePowerUp(unit.UnitPowerUpInfo);
         SeInterfaceUnitWeapon(unit.CurrentUnitWeaponObject.WeaponInfo);
         SetInterfaceUnitStats(unit.UnitStats);
+    }
+
+    public void DisableUnitInterface()
+    {
+        UnitInterfaceCanvas.SetActive(false);
     }
 
     public void SetInterfacePowerUp(PowerUpInfo powerUpInfo)

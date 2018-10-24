@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     private UnitSelectionManager _unitSelectionManager;
     private UnitInterface _unitInterface;
+    private WinnerInterface _winnerInterface;
 
     private Player[] _PlayerArr;
 
@@ -15,8 +16,8 @@ public class PlayerManager : MonoBehaviour
     {
         _unitSelectionManager = FindObjectOfType<UnitSelectionManager>();
         _unitInterface = FindObjectOfType<UnitInterface>();
+        _winnerInterface = FindObjectOfType<WinnerInterface>();
         
-
         _PlayerArr = new[]{
             new Player(Color.red),
             new Player(Color.blue)
@@ -34,19 +35,16 @@ public class PlayerManager : MonoBehaviour
         _currentPlayingPlayer = _currentPlayingPlayer == 0 ? _currentPlayingPlayer += 1 : _currentPlayingPlayer -= 1;
     }
 
-    public void IsGameOver()
+    public void GameOver()
     {
         for (int i = 0; i < _PlayerArr.Length; i++)
         {
-            Debug.Log(_PlayerArr[i].GetUnitListCount);
-
             if (_PlayerArr[i].GetUnitListCount <= 0)
             {
-                if (i == 0)
-                    Debug.Log("Blue team won!");
+                if (i == 1)
+                    _winnerInterface.SetWinner(Color.red);
                 else
-                    Debug.Log("Red team won!");
-
+                    _winnerInterface.SetWinner(Color.blue);
             }
         }
     }

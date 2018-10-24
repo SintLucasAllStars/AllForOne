@@ -20,14 +20,7 @@ public class Player {
 
     public void RemoveUnit(Unit unit)
     {
-        if (_playerUnitList.Remove(unit))
-        {
-            Debug.Log("removing");
-        }
-        else
-        {
-            Debug.Log("Nope");
-        }
+        _playerUnitList.Remove(unit);
     }
 
     public int GetUnitListCount {

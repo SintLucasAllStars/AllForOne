@@ -82,9 +82,7 @@ public class UnitSelectionManager : MonoBehaviour
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
             if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
-            {
                 unitObject.transform.position = new Vector3(hit.point.x, 1, hit.point.z);
-            }
 
             yield return null;
         }
@@ -102,7 +100,7 @@ public class UnitSelectionManager : MonoBehaviour
 
         unit.InitializeUnit(_playerManager.GetCurrentPlayingPlayerIndex, unitStats);
 
-        unit.GetComponent<CapsuleCollider>().enabled = true;
+        unit.GetComponent<BoxCollider>().enabled = true;
 
         _playerManager.GetCurrentPlayer.AddUnit(unit);
 
@@ -163,15 +161,15 @@ public class UnitSelectionManager : MonoBehaviour
                     if (IsUnitSelectable(unit.UnitTeamId))
                     {
                         select = false;
-                        _unitInterfaceManager.InitializeCanvas(unit);
+                        _unitInterfaceManager.InitializeUnitCanvas(unit);
                         _playerManager.StartPlayerMovement(unit);
                     }
                 }
             }
 
-            _camMovement.IsCamAvailable = false;
-
             yield return null;
         }
+
+        _camMovement.IsCamAvailable = false;
     }
 }
