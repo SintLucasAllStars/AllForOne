@@ -3997,7 +3997,7 @@ MonoBehaviour:
   - {fileID: 1534598817414422, guid: fa0c44c0130570c47b778c1e61669328, type: 2}
   - {fileID: 1924266393061668, guid: 8705bbeb4f5dd654db474b2e969d22b2, type: 2}
   - {fileID: 1833656864566068, guid: 082a3a9f8fbe9b44c80343fa81845ef9, type: 2}
-  PlayerTime: 60
+  PlayerTime: 10
 --- !u!1 &538782100
 GameObject:
   m_ObjectHideFlags: 0
@@ -10274,7 +10274,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1289903114}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 203457397}
+        m_MethodName: PlayAgain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1289903114

@@ -130,18 +130,15 @@ public class UnitSelectionManager : MonoBehaviour
     {
         StartCoroutine(_camMovement.MoveCamera());
 
+        yield return new WaitForSeconds(1);
+
         bool select = true;
 
         int unitLayerMask = LayerMask.GetMask("UnitLayer");
 
         Camera.main.transform.SetParent(CamTransform);
-
-        //Move back to topdown view position.
-        while (Vector3.Distance(Camera.main.transform.position, CamTransform.position) > 0.01f)
-        {
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, CamTransform.position, Time.deltaTime * 3);
-            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, CamTransform.rotation, Time.deltaTime * 3);
-        }
+        Camera.main.transform.localPosition = Vector3.zero;
+        Camera.main.transform.rotation = CamTransform.rotation;
 
         //Start selecting units.
         while (select)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WinnerInterface : MonoBehaviour {
@@ -15,9 +16,9 @@ public class WinnerInterface : MonoBehaviour {
         _winnerImage.color = teamColor;
         _winnerText.text = teamColor == Color.blue ? "BLUE TEAM WON!" : "RED TEAM WON!";
     }
-
-    public void DisableWinner()
+    
+    public void PlayAgain()
     {
-        _winnerCanvas.SetActive(false);
+        SceneManager.LoadScene("Main");
     }
 }
