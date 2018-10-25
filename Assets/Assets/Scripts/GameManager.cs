@@ -10,18 +10,20 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public Camera topDownCamera;
-    public GameObject Floor;
     public List<GameObject> Player1Characters = new List<GameObject>();
     public List<GameObject> Player2Characters = new List<GameObject>();
+    public Transform[] KnifeTransforms = new Transform[5];
+    public GameObject weapons;
 
     public GameObject SpawnObject;
+    
     private GameObject ObjectToSpawn;
     public GameObject Unit;
     private GameObject selectedUnit;
 
-    public float _turnTimer = 10;
+    private float _turnTimer = 10;
 
-    public int _turn;
+    private int _turn;
 
     private int _whichPlayer = 1;
 
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviour
     private Vector3 mousePos;
     private bool _isPlacing = false;
     private GameObject go2;
-    public bool canSelectUnit;
+    private bool canSelectUnit;
     private void Awake()
     {
         if (instance == null)
@@ -50,16 +52,48 @@ public class GameManager : MonoBehaviour
 	    Cursor.lockState = CursorLockMode.Confined ;
 		//NextBuyTurn(_whichPlayer);
 
+
+	    for (int i = 0; i < KnifeTransforms.Length; i++)
+	    {
+	        if (Random.value < 0.5f)
+	        {
+	            Instantiate(weapons, KnifeTransforms[i].position, Quaternion.identity);
+	        }
+
+	       
+	    }
 	}
 
-    public void ActivatePlacer(float health, float strength, float speed, float defense)
+    public void CheckIfUnitsLeft()
+    {
+        if (Player1Characters.Count <= 0)
+        {
+            EndGame();
+            Debug.Log("Lose player 1");
+            UIManager.Instance.EndGame("Player 2 Blue Wins!", 2);
+        }
+        else if (Player2Characters.Count <= 0)
+        {
+            EndGame();
+            Debug.Log("Lose player 2");
+            UIManager.Instance.EndGame("Player 1 Red Wins!",1);
+        }
+    }
+
+    public void ActivatePlacer(float health, float strength, float speed, float defense, int whichSide)
     {
         _isPlacing = true;
         Unit.GetComponent<CharacterBehaviour>().Health = health;
         Unit.GetComponent<CharacterBehaviour>().Strength = strength;
         Unit.GetComponent<CharacterBehaviour>().AttackSpeed = speed;
         Unit.GetComponent<CharacterBehaviour>().Defense = defense;
+        Unit.GetComponent<CharacterBehaviour>().WhichSide = whichSide;
         go2 = Instantiate(SpawnObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+    }
+
+    void EndGame()
+    {
+        topDownCamera.enabled = true;
     }
     public void AddPlayer(GameObject go)
     {
@@ -81,6 +115,21 @@ public class GameManager : MonoBehaviour
         //Instantiate(Spawn,)
 
     }
+
+    public void RemovePlayer(GameObject go,int player)
+    {
+
+        if (player == 1)
+        {
+            Player1Characters.Remove(go);
+
+
+        }
+        else if (player == 2)
+        {
+            Player2Characters.Remove(go);
+        }
+    }
    
 
     public int GetCurrentPlayerMoney(int player)
@@ -100,6 +149,10 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (_isPlacing)
         {
             mousePos = Input.mousePosition;
@@ -118,7 +171,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && canSelectUnit)
         {
-            // if left button pressed...
+
             Ray ray = topDownCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
@@ -128,31 +181,49 @@ public class GameManager : MonoBehaviour
                     GameObject go = hit.collider.gameObject;
                     CheckIfCharacterIsYours(go);
                 }
-                
-                // the object identified by hit.transform was clicked
-                // do whatever you want
+
             }
 
         }
     }
 
-    IEnumerator PlayTimer()
+    public IEnumerator PlayTimer()
     {
-        yield return new WaitForSeconds(9999);
+        float timer = _turnTimer;
+        UIManager.Instance.EnableTimer(timer);
+        while (timer > 0)
+        {
+            yield return new WaitForSeconds(1);
+            
+            timer--;
+            UIManager.Instance.EnableTimer(timer);
+
+        }
+       
         Debug.Log("Timer has ended");
+        
         NextTurn(_whichPlayer);
     }
     public void NextTurn(int player)
     {
         _turn++;
+        StopAllCoroutines();
+        UIManager.Instance.DisableTimer();
+        CharacterBehaviour characterBehaviour = selectedUnit.GetComponent<CharacterBehaviour>();
+        if (characterBehaviour.IsOutside())
+        {
+            characterBehaviour.Die();
+        }
+
+        
+        characterBehaviour.ThirdCamera.SetActive(false);
+        characterBehaviour.DisableControls();
+
+
         canSelectUnit = true;
         topDownCamera.enabled = true;
         topDownCamera.GetComponent<CameraController>().enabled = true;
 
-        CharacterBehaviour characterBehaviour = selectedUnit.GetComponent<CharacterBehaviour>();
-        characterBehaviour.ThirdCamera.SetActive(false);
-        characterBehaviour.DisableControls();
-        
         if (player == 1)
         {
 
@@ -182,6 +253,8 @@ public class GameManager : MonoBehaviour
                     CharacterBehaviour characterBehaviour = selectedUnit.GetComponent<CharacterBehaviour>();
                     characterBehaviour.ThirdCamera.SetActive(true);
                     characterBehaviour.EnableControls();
+                    characterBehaviour.FortifyFalse();
+                    
                     StartCoroutine(PlayTimer());
                     UIManager.Instance.ClickOnUnitInActive();
                     Debug.Log("selected player 1 character");
@@ -205,6 +278,7 @@ public class GameManager : MonoBehaviour
                     CharacterBehaviour characterBehaviour = selectedUnit.GetComponent<CharacterBehaviour>();
                     characterBehaviour.ThirdCamera.SetActive(true);
                     characterBehaviour.EnableControls();
+                    characterBehaviour.FortifyFalse();
                     StartCoroutine(PlayTimer());
                     UIManager.Instance.ClickOnUnitInActive();
                     Debug.Log("selected player 2 character");
@@ -259,7 +333,6 @@ public class GameManager : MonoBehaviour
         {
             UIManager.Instance.CharacterSelect.SetActive(false);
             UIManager.Instance.Click.enabled = false;
-            Debug.Log("Start Game");
             _whichPlayer = 1;
             StartGame();
         }

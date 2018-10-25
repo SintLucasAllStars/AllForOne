@@ -33,24 +33,37 @@ namespace Character
 
         private GameObject ActiveWep;
 
-        private bool hasWepEquipped;
+        private bool hasWepEquipped = false;
 
         private MouseAim mouseAim;
 
         public GameObject ThirdCamera;
+
+        private bool isOutside = false;
+
+        private bool fortify;
+
+        private bool canFortify = true;
         // Use this for initialization
         void Start()
         {
             rb = GetComponent<Rigidbody>();
             animator = GetComponent<Animator>();
-            ThirdCamera.SetActive(false);
+           ThirdCamera.SetActive(false);
             //ThirdCamera = Camera.current;
 
         }
 
-        void OnMouseOver()
+        public void FortifyFalse()
         {
-            Debug.Log("UnderMouse");
+            fortify = false;
+            canFortify = true;
+            animator.SetBool("Fortify",false);
+        }
+
+        void SetHitFalse()
+        {
+            animator.SetBool("GetHit",false);
         }
         // Update is called once per frame
         void Update()
@@ -58,7 +71,7 @@ namespace Character
             
             if (!inCharacterSelect)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space) && !fortify)
                 {
 
                     animator.SetBool("jump", true);
@@ -70,24 +83,33 @@ namespace Character
 
                 }
 
-                /* if (expr)
-                 {
-                     
-                 }*/
-                if (Input.GetMouseButtonDown(0)&&canAttack&&_grounded)
+                if (Input.GetKeyDown(KeyCode.F)&&canFortify)
                 {
-                    Attack();
+                    canFortify = false;
+                    fortify = true;
+                    animator.SetBool("Fortify",true);
+                    GameManager.instance.NextTurn(GameManager.instance.GetCurrentPlayer());
+
                 }
-                
+
+                if (!fortify)
+                {
+                    if (Input.GetMouseButtonDown(0) && canAttack && _grounded)
+                    {
+                        Attack();
+                    }
+
+
+                    float Hor = Input.GetAxis("Horizontal") * MoveSpeed * Time.deltaTime;
+
+                    transform.position += transform.right * Hor;
+
+                    float Ver = Input.GetAxis("Vertical") * MoveSpeed * Time.deltaTime;
+                    animator.SetFloat("Forward", Ver);
+                    animator.SetFloat("Strafe", Hor);
+                    transform.position += transform.forward * Ver;
+                }
                
-                float Hor = Input.GetAxis("Horizontal") * MoveSpeed * Time.deltaTime;
-
-                transform.position += transform.right * Hor;
-
-                float Ver = Input.GetAxis("Vertical") * MoveSpeed * Time.deltaTime;
-                animator.SetFloat("Forward", Ver);
-                animator.SetFloat("Strafe", Hor);
-                transform.position += transform.forward * Ver;
             }
 
 
@@ -119,13 +141,13 @@ namespace Character
 
         void ToggleOnFistCollider()
         {
-            Debug.Log("Active");
+            
             CapColl.enabled = true;
         }
 
         void ToggleOffFistCollider()
         {
-            Debug.Log("Deactive");
+            
             CapColl.enabled = false;
             _attack = false;
         }
@@ -161,41 +183,76 @@ namespace Character
 
             if (coll.gameObject.CompareTag("WeaponPickup"))
             {
-                ActiveWep = weapons[1];
-                AddToHand(coll.gameObject);
-                hasWepEquipped = true;
-            }
-
-            if (coll.gameObject.CompareTag("Weapon"))
-            {
-                ChangeHealth(CheckWepDamage(coll.gameObject));
-               
-                    
-            }
-
-            if (coll.gameObject.CompareTag("Fist"))
-            {
+                if (!hasWepEquipped)
+                {
+                    ActiveWep = weapons[1];
+                    AddToHand(coll.gameObject);
+                    hasWepEquipped = true;
+                }
                 
             }
+
+            
+
+            
+        }
+
+        public void OnTriggerEnter(Collider coll)
+        {
+            if (coll.CompareTag("OutsideArea"))
+            {
+
+                isOutside = true;
+            }
+            if (coll.CompareTag("Weapon"))
+            {
+
+                ChangeHealth(CheckWepDamage(coll.gameObject));
+                animator.SetBool("GetHit", true);
+
+
+            }
+            if (coll.CompareTag("Fist"))
+            {
+                ChangeHealth(CheckWepDamage(coll.gameObject));
+                animator.SetBool("GetHit", true);
+
+            }
+        }
+
+        public void OnTriggerExit(Collider coll)
+        {
+            if (coll.CompareTag("OutsideArea"))
+            {
+
+                isOutside = false;
+            }
+        }
+
+        public bool IsOutside()
+        {
+            return isOutside;
+        }
+
+        public void Die()
+        {
+            GameManager.instance.RemovePlayer(gameObject,WhichSide);
+            
+            
+            Destroy(gameObject);
+            GameManager.instance.CheckIfUnitsLeft();
         }
 
         public int CheckWepDamage(GameObject go)
         {
             int Damage =0;
             int PlayerStrength = Mathf.RoundToInt(Strength);
-            int WepDamage = go.gameObject.GetComponent<WeaponBehaviour>().Damage;
 
-            Damage = (PlayerStrength* WepDamage)/2;
-            /*switch ()
-            {
-                case Weapon.WeaponType.Knife:
+                int WepDamage = go.gameObject.GetComponent<WeaponBehaviour>().Damage;
 
-                    break;
-                case Weapon.WeaponType.PowerPunch:
-                    break;
-                case Weapon.WeaponType.Warhammer:
-                    break;
-            }*/
+                Damage = (PlayerStrength * WepDamage) / 2;
+            
+
 
 
             Debug.Log(Damage);
@@ -209,24 +266,32 @@ namespace Character
             {
                 float WepSpeed = go.GetComponent<WeaponBehaviour>().Speed;
                 float CharacterSpeed = AttackSpeed;
-                Speed = 3 ;
+                Speed = (WepSpeed + AttackSpeed)/10 ;
             }
             else
             {
                 Speed = 1;
             }
-            
-
-            
-            
-            Debug.Log(Speed);
             return  Speed;
         }
 
         public void ChangeHealth(int value)
         {
-            Health += value;
-            Debug.Log(Health);
+            value -= Mathf.RoundToInt(Defense) ;
+            if (value < 10)
+            {
+                value = -10;
+            }
+
+            if (fortify)
+            {
+                value= value /2;
+            }
+           Health += value;
+            if (Health<= 0)
+            {
+                Die();
+            }
         }
 
         void AddToHand(GameObject go)
@@ -261,7 +326,7 @@ namespace Character
                     weapons[2].SetActive(true);
                     break;
             }
-            CheckWepDamage(ActiveWep);
+            //CheckWepDamage(ActiveWep);
         }
 
 

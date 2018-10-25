@@ -26,6 +26,7 @@ namespace Character
         }
 
         public float jumpPower;
+        public int WhichSide;
 
     }
 }

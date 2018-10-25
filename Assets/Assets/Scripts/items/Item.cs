@@ -15,7 +15,7 @@ namespace Item
 
         public enum WeaponType
         {
-            PowerPunch, Knife, Warhammer, Gun
+            PowerPunch, Knife, Warhammer, Gun,punch
         }
 
         public WeaponType Type;

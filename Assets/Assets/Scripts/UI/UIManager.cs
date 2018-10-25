@@ -6,6 +6,7 @@ using UnityEngine.Experimental.UIElements;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.Experimental.UIElements.Image;
 using Slider = UnityEngine.UI.Slider;
 
 namespace UI
@@ -15,6 +16,7 @@ namespace UI
     {
         public static UIManager Instance;
         public GameObject StartButton;
+        public Text Timer;
 
         public GameObject CharacterSelect;
 
@@ -29,7 +31,7 @@ namespace UI
         public Text TotalText;
         public GameObject playerbody;
 
-        public float totalvalue = 10;
+        private float totalvalue = 10;
 
         private float health = 1;
 
@@ -39,9 +41,9 @@ namespace UI
 
         private float Defense = 1;
 
-        public float expensivestats;
+        private float expensivestats;
 
-        public float cheapstats;
+        private float cheapstats;
 
         public GameObject BuyButton;
 
@@ -54,6 +56,10 @@ namespace UI
         public Text Click;
 
         public Text ClickOnUnit;
+
+        public Text WinText;
+
+        public GameObject winScreen;
         // Use this for initialization
         private void Awake()
         {
@@ -127,6 +133,16 @@ namespace UI
 
         }
 
+        public void EndGame(string winText,int whichplayer)
+        {
+            
+            winScreen.SetActive(true);
+           
+
+            WinText.text = winText;
+
+        }
+
         public void UpdateMoneyLeft(int player, int money)
         {
             if (player == 1)
@@ -156,6 +172,22 @@ namespace UI
             updateExpensiveStats();
 
 
+        }
+
+        public void EnableTimer(float timer)
+        {
+            Timer.enabled = true;
+            Timer.text = Mathf.RoundToInt(timer).ToString();
+        }
+
+        public void DisableTimer()
+        {
+            Timer.enabled = false;
+        }
+
+        public void Restart()
+        {
+            SceneManager.LoadScene(0);
         }
 
         public void updateExpensiveStats()
@@ -212,7 +244,7 @@ namespace UI
                 ChangeTotalText();
                 GameManager.instance.ChangeMoney(Mathf.RoundToInt(totalvalue));
                 
-                GameManager.instance.ActivatePlacer(health,Strength,Speed,Defense);
+                GameManager.instance.ActivatePlacer(health,Strength,Speed,Defense,GameManager.instance.GetCurrentPlayer());
                 CharacterSelect.SetActive(false);
                 Click.enabled = true;
             }
