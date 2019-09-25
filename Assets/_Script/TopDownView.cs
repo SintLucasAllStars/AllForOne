@@ -44,7 +44,9 @@ public class TopDownView : MonoBehaviour
 
     public void CheckPrice()
     {
-        if (points >= (health.value * 1.3f) + (speed.value * 1.3f) + strenght.value + defense.value))
+        float cost = (health.value * 1.3f) + (speed.value * 1.3f) + strenght.value + defense.value;
+        cost = Mathf.RoundToInt(cost);
+        if (points >= cost)
         {
             hiring = true;
             hireButton.interactable = true;
