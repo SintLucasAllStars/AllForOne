@@ -8,6 +8,8 @@ public class Warrior
     private int strength;
     private int speed;
     private int defense;
+
+    private bool isSelected;
     
     public Warrior()
     {
@@ -15,6 +17,7 @@ public class Warrior
         this.strength = 5;
         this.speed = 5;
         this.defense = 5;
+        this.isSelected = true;
     }
 
     public Warrior(int a_Health, int a_Strenth, int a_Speed, int a_Defense)
@@ -36,4 +39,7 @@ public class Warrior
 
     public void SetDefense(int a_Defence) { this.defense = a_Defence; }
     public int GetDefense() { return this.defense; }
+
+    public void SetIsSelected(bool a_IsSelected) { this.isSelected = a_IsSelected; }
+    public bool GetIsSelected() { return this.isSelected; }
 }
