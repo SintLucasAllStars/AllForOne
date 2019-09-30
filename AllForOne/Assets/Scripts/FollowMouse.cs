@@ -5,6 +5,7 @@ using UnityEngine;
 public class FollowMouse : MonoBehaviour
 {
     public static FollowMouse instance;
+    Vector3 hitpoint;
     // Start is called before the first frame update
     public void Awake()
     {
@@ -29,9 +30,26 @@ public class FollowMouse : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            Vector3 hitpoint = hit.point;
-            //hitpoint.y = 0.5f;
-            transform.position = hitpoint;
+            hitpoint = hit.point;
+        }
+        switch (GameManager.instance.gamestate)
+        {
+            case GameStates.Place:
+                transform.position = hitpoint;
+                break;
+            case GameStates.Select:
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    if (hit.collider.gameObject.CompareTag("Player1") && GameManager.instance.turn == TurnState.Player1)
+                    {
+                        GameManager.instance.SelectPlayer(hit.collider.gameObject);
+                    }
+                    if (hit.collider.gameObject.CompareTag("Player2") && GameManager.instance.turn == TurnState.Player2)
+                    {
+                        GameManager.instance.SelectPlayer(hit.collider.gameObject);
+                    }
+                }
+                break;
         }
     }
 }

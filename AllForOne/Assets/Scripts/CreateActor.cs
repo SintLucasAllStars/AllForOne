@@ -6,11 +6,14 @@ using UnityEngine.Events;
 public class CreateActor : MonoBehaviour
 {
     public static CreateActor instance;
+
     public Actor actorSettings;
     public float health, speed, strenght, defense;
     public Slider healthSlider, speedSlider, strenghtSlider, defenseSlider;
-    public GameObject actorObj;
+    public GameObject[] ActorObjects;
+    private GameObject actorObj;
     public Transform mouseObj;
+
     public Transform buyWindow;
     public GameObject actor;
     public float cost;
@@ -30,6 +33,7 @@ public class CreateActor : MonoBehaviour
 
     private void Start()
     {
+        cost = 10;
         healthSlider.onValueChanged.AddListener(ListenerMethod);
         speedSlider.onValueChanged.AddListener(ListenerMethod);
         defenseSlider.onValueChanged.AddListener(ListenerMethod);
@@ -65,7 +69,7 @@ public class CreateActor : MonoBehaviour
             GameManager.instance.curPlayer.removePoints(Mathf.RoundToInt(cost));
 
             actorSettings = new Actor(health, speed, strenght, defense);
-            actor = Instantiate(actorObj, mouseObj);
+            actor = Instantiate(ActorObject(), mouseObj);
             Character actorSetting = actor.GetComponent<Character>();
             if (actorSetting != null)
             {
@@ -75,4 +79,23 @@ public class CreateActor : MonoBehaviour
             GameManager.instance.SwitchState(GameStates.Place);
         }
     }
+
+    public GameObject ActorObject()
+    {
+        GameObject g;
+        if(GameManager.instance.turn == TurnState.Player1)
+        {
+            g = ActorObjects[0];
+            return g;
+        }
+        if (GameManager.instance.turn == TurnState.Player2)
+        {
+            g = ActorObjects[1];
+            return g;
+        }
+        else return actorObj;
+        
+    }
+
+
 }

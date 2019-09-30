@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     private float points;
     public Player curPlayer;
+    public GameObject selectedPlayer;
+
 
     public void Awake()
     {
@@ -27,10 +29,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(instance);
         }
-    }
-    void Start()
-    {
-        
     }
 
     void Update()
@@ -54,6 +52,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             CreateActor.instance.actor.transform.parent = characterParent;
+            CreateActor.instance.actor.layer = 0;
             SwitchState(GameStates.Create);
             NextTurn();
         }
@@ -65,16 +64,22 @@ public class GameManager : MonoBehaviour
         {
             case GameStates.Create:
                 UpdateBuyWindow(true);
+                if(player1.ready && player2.ready)
+                {
+                    SwitchState(GameStates.Select);
+                }
                 break;
             case GameStates.Place:
                 UpdateBuyWindow(false);
                 PlaceCharacter();
                 break;
             case GameStates.Select:
+                UpdateBuyWindow(false);
 
                 break;
             case GameStates.Move:
-
+                UpdateBuyWindow(false);
+                MoveSelectedPlayer(selectedPlayer);
                 break;
         }
     }
@@ -97,11 +102,45 @@ public class GameManager : MonoBehaviour
         switch (turn)
         {
             case TurnState.Player1:
-                turn = TurnState.Player2;
+                if (!player2.ready)
+                {
+                    turn = TurnState.Player2;
+                }
+                else
+                {
+                    //say something like player 2 is already ready blabla
+                }
                 break;
             case TurnState.Player2:
-                turn = TurnState.Player1;
+                if (!player1.ready)
+                {
+                    turn = TurnState.Player1;
+                }
+                else
+                {
+                    //say something like player 1 is already ready blabla
+                }
                 break;
         }
     }
+    public void ReadyUp()
+    {
+        curPlayer.ready = true;
+        NextTurn();
+    }
+
+    public void SelectPlayer(GameObject selectedPlayer)
+    {
+        this.selectedPlayer = selectedPlayer;
+        SwitchState(GameStates.Move);
+
+    }
+
+    public void MoveSelectedPlayer(GameObject selectedPlayer)
+    {
+        Character player = selectedPlayer.GetComponent<Character>();
+        player.Camera.SetActive(true);
+
+    }
+
 }

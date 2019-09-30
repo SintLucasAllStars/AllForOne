@@ -7,7 +7,7 @@ public class Player
     public int points;
     public string name;
     public List<Actor> actors;
-
+    public bool ready;
     public Player(int points, string name)
     {
         this.points = points;
@@ -17,5 +17,10 @@ public class Player
     public void removePoints(int amount)
     {
         points -= amount;
+    }
+
+    public void setReady(bool ready)
+    {
+        this.ready = ready;
     }
 }
