@@ -5,20 +5,29 @@ using UnityEngine.UI;
 
 public class TopDownView : MonoBehaviour
 {
+    public Text costText;
 
+    [Header("Sliders")]
     public Slider health;
     public Slider speed;
-
     public Slider strenght;
     public Slider defense;
 
-    public int points;
-    public int cost;
+    [Header("Stats")]
+    public float hp;
+    public float sp;
+    public float str;
+    public float de;
 
+    [Header("Price and Money")]
+    public int points;
+    public float cost;
+    
+    [Header("UI Elements")]
     public bool hiring;
     public Button hireButton;
     public GameObject hireMenu;
-
+    
     void Start()
     {
         
@@ -32,6 +41,14 @@ public class TopDownView : MonoBehaviour
         }
     }
 
+    void ResetMenu()
+    {
+        health.value = 0;
+        speed.value = 0;
+        strenght.value = 0;
+        defense.value = 0;
+    }
+
     public void Hire()
     {
         hireMenu.SetActive(false);
@@ -40,12 +57,18 @@ public class TopDownView : MonoBehaviour
     public void CancelHiring()
     {
         hireMenu.SetActive(true);
+        ResetMenu();
     }
 
     public void CheckPrice()
     {
-        float cost = (health.value * 1.3f) + (speed.value * 1.3f) + strenght.value + defense.value;
+        hp = health.value * 1.3f;
+        sp = speed.value * 1.3f;
+        str = strenght.value;
+        de = defense.value;
+        cost = hp + sp + str + de;
         cost = Mathf.RoundToInt(cost);
+        costText.text = cost.ToString();
         if (points >= cost)
         {
             hiring = true;
