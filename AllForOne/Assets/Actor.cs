@@ -1,11 +1,11 @@
 ﻿public class Actor
 {
-    public int health;
-    public int speed;
-    public int strenght;
-    public int defense;
+    public float health;
+    public float speed;
+    public float strenght;
+    public float defense;
 
-    public Actor(int health, int speed, int strenght, int defense)
+    public Actor(float health, float speed, float strenght, float defense)
     {
         this.health = health;
         this.speed = speed;
@@ -13,15 +13,17 @@
         this.strenght =strenght;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
     }
 
-    public void Heal(int healAmount)
+    public void Heal(float healAmount)
     {
         health += healAmount;
     }
+
+
 
  
 }
