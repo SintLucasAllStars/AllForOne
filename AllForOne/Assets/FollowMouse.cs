@@ -29,9 +29,8 @@ public class FollowMouse : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            // Find the direction to move in
             Vector3 hitpoint = hit.point;
-            hitpoint.y = 0.5f;
+            //hitpoint.y = 0.5f;
             transform.position = hitpoint;
         }
     }

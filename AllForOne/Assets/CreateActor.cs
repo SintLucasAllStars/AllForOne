@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 public class CreateActor : MonoBehaviour
 {
+    public static CreateActor instance;
     public List<Actor> actors;
     public List<GameObject> actorGameObjects;
     public float health, speed, strenght, defense;
@@ -12,8 +13,20 @@ public class CreateActor : MonoBehaviour
     public GameObject actorObj;
     public Transform mouseObj;
     public Transform buyWindow;
-    private float cost;
+    public float cost;
 
+    public void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(instance);
+        }
+    }
 
     private void Start()
     {
@@ -38,6 +51,7 @@ public class CreateActor : MonoBehaviour
         float cost1 = MathUtils.map(firstHalf, 0, 20, 0, 75);
         float cost2 = MathUtils.map(secondHalf, 0, 20, 0, 25);
         cost = cost1 + cost2;
+        cost = Mathf.RoundToInt(cost);
         return cost;
     }
  
@@ -53,6 +67,5 @@ public class CreateActor : MonoBehaviour
         buyWindow.gameObject.SetActive(false);
         GameObject actor = Instantiate(actorObj,mouseObj);
         actorGameObjects.Add(actor);
-
     }
 }
