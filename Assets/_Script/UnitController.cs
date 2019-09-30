@@ -30,7 +30,7 @@ public class UnitController : MonoBehaviour
         Movement();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.AddForce(Vector3.up * jumpHeight)
+            rb.AddForce(Vector3.up * jumpHeight);
         }
     }
 
