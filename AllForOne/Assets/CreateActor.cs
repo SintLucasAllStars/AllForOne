@@ -6,15 +6,19 @@ using UnityEngine.Events;
 public class CreateActor : MonoBehaviour
 {
     public List<Actor> actors;
-
+    public List<GameObject> actorGameObjects;
     public float health, speed, strenght, defense;
     public Slider healthSlider, speedSlider, strenghtSlider, defenseSlider;
+    public GameObject actorObj;
+    public Transform mouseObj;
+    public Transform buyWindow;
     private float cost;
 
 
     private void Start()
     {
         actors = new List<Actor>();
+        actorGameObjects = new List<GameObject>();
         healthSlider.onValueChanged.AddListener(ListenerMethod);
         speedSlider.onValueChanged.AddListener(ListenerMethod);
         defenseSlider.onValueChanged.AddListener(ListenerMethod);
@@ -45,6 +49,8 @@ public class CreateActor : MonoBehaviour
 
     public void CreateChacater()
     {
-        actors.Add(new Actor(health, speed, strenght, defense));   
+        actors.Add(new Actor(health, speed, strenght, defense));
+        buyWindow.gameObject.SetActive(false);
+        Instantiate(actorObj,mouseObj);
     }
 }
