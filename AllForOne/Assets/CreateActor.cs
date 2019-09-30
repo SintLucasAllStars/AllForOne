@@ -51,6 +51,8 @@ public class CreateActor : MonoBehaviour
     {
         actors.Add(new Actor(health, speed, strenght, defense));
         buyWindow.gameObject.SetActive(false);
-        Instantiate(actorObj,mouseObj);
+        GameObject actor = Instantiate(actorObj,mouseObj);
+        actorGameObjects.Add(actor);
+
     }
 }

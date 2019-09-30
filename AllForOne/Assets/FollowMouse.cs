@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class FollowMouse : MonoBehaviour
 {
+    public static FollowMouse instance;
     // Start is called before the first frame update
+    public void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(instance);
+        }
+        else
+        {
+            Destroy(instance);
+        }
+    }
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
