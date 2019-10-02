@@ -9,9 +9,13 @@ public class TopDownView : MonoBehaviour
 
     [Header("Sliders")]
     public Slider health;
+    public Text healthText;
     public Slider speed;
+    public Text speedText;
     public Slider strenght;
+    public Text strenghtText;
     public Slider defense;
+    public Text defenseText;
 
     [Header("Stats")]
     public float hp;
@@ -21,6 +25,7 @@ public class TopDownView : MonoBehaviour
 
     [Header("Price and Money")]
     public int points;
+    public Text pointsText;
     public float cost;
     
     [Header("UI Elements")]
@@ -30,7 +35,8 @@ public class TopDownView : MonoBehaviour
     
     void Start()
     {
-        
+        pointsText.text = points.ToString();
+        CheckPrice();
     }
     
     void Update()
@@ -47,17 +53,34 @@ public class TopDownView : MonoBehaviour
         speed.value = 0;
         strenght.value = 0;
         defense.value = 0;
+        CheckPrice();
     }
 
     public void Hire()
     {
+        hiring = true;
+        points -= Mathf.RoundToInt(cost);
+        pointsText.text = points.ToString();
         hireMenu.SetActive(false);
     }
 
-    public void CancelHiring()
+    public void BackToHiring()
     {
+        hiring = false;
         hireMenu.SetActive(true);
         ResetMenu();
+    }
+
+    void CheckTurn()
+    {
+        if (points < 10)
+        {
+            Debug.Log("No Money");
+        }
+        else
+        {
+            BackToHiring();
+        }
     }
 
     public void CheckPrice()
@@ -66,21 +89,24 @@ public class TopDownView : MonoBehaviour
         sp = speed.value * 1.3f;
         str = strenght.value;
         de = defense.value;
-        cost = hp + sp + str + de;
+        healthText.text = hp.ToString();
+        speedText.text = sp.ToString();
+        strenghtText.text = str.ToString();
+        defenseText.text = de.ToString();
+        cost = hp + sp + str + de + 5;
         cost = Mathf.RoundToInt(cost);
         costText.text = cost.ToString();
         if (points >= cost)
         {
-            hiring = true;
             hireButton.interactable = true;
         }
         else
         {
-            hiring = false;
             hireButton.interactable = false;
         }
     }
     
+    [Header("Unit Prefab")]
     public GameObject unit;
     void PlaceUnits()
     {
@@ -103,6 +129,7 @@ public class TopDownView : MonoBehaviour
                 unitref.defense = Mathf.RoundToInt(defense.value);
 
                 Debug.Log("PlaceUnit");
+                CheckTurn();
                 return;
             }
         }

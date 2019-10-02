@@ -14,6 +14,12 @@ public class UnitController : MonoBehaviour
 
     private Animator anim;
     private Rigidbody rb;
+    private bool canJump = true;
+    private bool attackReady = true;
+
+    [Header("CameraRef")]
+    public Transform cameraTransform;
+    public bool rotateToCamera;
 
     [Header("Weapon")]
     public weapons currentWeapon;
@@ -28,10 +34,59 @@ public class UnitController : MonoBehaviour
     private void Update()
     {
         Movement();
-        if (Input.GetKeyDown(KeyCode.Space))
+        Attack();
+        Jump();
+        if (rotateToCamera)
         {
-            rb.AddForce(Vector3.up * jumpHeight);
+            RotateTowardsCamera();
         }
+    }
+
+    void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && canJump && attackReady)
+        {
+            anim.Play("Jump");
+            canJump = false;
+        }
+    }
+    
+    void ResetJump()
+    {
+        canJump = true;
+    }
+
+    void Attack()
+    {
+        if (Input.GetMouseButtonDown(0) && attackReady && canJump)
+        {
+            switch (currentWeapon)
+            {
+                case weapons.noWeapon:
+                    anim.Play("Punch");
+                    break;
+                case weapons.powerPunch:
+                    anim.Play("PowerKick");
+                    break;
+                case weapons.knife:
+                    anim.Play("Knife");
+                    break;
+                case weapons.warHammer:
+                    anim.Play("Hammer");
+                    break;
+                case weapons.gun:
+                    anim.Play("Shoot");
+                    break;
+                default:
+                    break;
+            }
+            attackReady = false;
+        }
+    }
+
+    void ResetAttack()
+    {
+        attackReady = true;
     }
 
     void Movement()
@@ -41,6 +96,14 @@ public class UnitController : MonoBehaviour
 
         anim.SetFloat("Horizontal", x);
         anim.SetFloat("Vertical", z);
+    }
+
+    void RotateTowardsCamera()
+    {
+        var CharacterRotation = cameraTransform.transform.rotation;
+        CharacterRotation.x = 0;
+        CharacterRotation.z = 0;
+        transform.rotation = CharacterRotation;
     }
 
 }
