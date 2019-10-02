@@ -105,8 +105,9 @@ public class TopDownView : MonoBehaviour
             hireButton.interactable = false;
         }
     }
-    
+
     [Header("Unit Prefab")]
+    public LayerMask placeableLayer;
     public GameObject unit;
     void PlaceUnits()
     {
@@ -118,7 +119,7 @@ public class TopDownView : MonoBehaviour
             {
                 return;
             }
-            else if (Physics.Raycast(ray, out hit))
+            else if (Physics.Raycast(ray, out hit, placeableLayer))
             {
                 GameObject spawnedUnit = Instantiate(unit, hit.transform.position, hit.transform.rotation);
                 UnitController unitref = spawnedUnit.GetComponent<UnitController>();
