@@ -27,8 +27,8 @@ public class UnitPlacement : MonoBehaviour
  {
      //SetValues
      currentPoints = 100;
-     currentCost = 0;
-     
+     currentCost = 5;
+     Debug.Log(currentCost);
      //Start
      Statup();
      
@@ -48,7 +48,7 @@ public class UnitPlacement : MonoBehaviour
      SelectPlayer(player);
      player = 0;
      value = new int[4];
-     currentCost = 5;
+     
      for (int i = 0; i < value.Length; i++)
      {
          value[i] = 0;
@@ -64,7 +64,7 @@ public class UnitPlacement : MonoBehaviour
 
  private void setValues(int points, int cost)
  {
-     this.cost.text = cost+ "";
+     this.cost.text = cost + "";
      this.points.text = points + "";
  }
 
@@ -90,19 +90,25 @@ public class UnitPlacement : MonoBehaviour
  private void Update()
  {
      int thisValue;
+     int thisValue2;
+     int thisValue3;
+     
      if (player == 0 && currentPoints >= 100)
      {
+         currentPlayer.text = "Player" + 1;
          value[0] = ((int) healthSlider.value);
          value[1] = ((int) strengthSlider.value);
          value[2] = ((int) speedSlider.value);
          value[3] = ((int) defenceSlider.value);
          thisValue = value[0] + value[1] + value[2] + value[3];
-         Debug.Log(thisValue);
-         currentCost = currentCost * thisValue;
-         cost.text = currentCost.ToString();
+         thisValue2 = currentCost * thisValue;
+         thisValue3 = currentPoints - currentCost;
+         points.text = thisValue3.ToString();
+         cost.text = thisValue2.ToString();
      }
      else if (player == 1 && currentPoints >= 100)
      {
+         currentPlayer.text = "Player" + 2;
          value[0] = ((int) healthSlider.value);
          value[1] = ((int) strengthSlider.value);
          value[2] = ((int) speedSlider.value);
