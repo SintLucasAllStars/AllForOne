@@ -5,41 +5,59 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     [Header("Stats")]
+    public bool inControl = false;
     public int health;
     public int speed;
     public int strenght;
     public int defense;
 
-    public float jumpHeight;
-
     private Animator anim;
-    private Rigidbody rb;
+    private CharacterController cc;
     private bool canJump = true;
     private bool attackReady = true;
 
     [Header("CameraRef")]
-    public Transform cameraTransform;
+    public GameObject cameraObject;
     public bool rotateToCamera;
 
     [Header("Weapon")]
     public weapons currentWeapon;
     public enum weapons { noWeapon, powerPunch, knife, warHammer, gun }
 
+    [Header("Team")]
+    public Team currentTeam;
+    public enum Team { BlueTeam, RedTeam }
+
     private void Start()
     {
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
+        cc = GetComponent<CharacterController>();
     }
 
     private void Update()
     {
-        Movement();
-        Attack();
-        Jump();
-        if (rotateToCamera)
+        if (inControl == true)
         {
-            RotateTowardsCamera();
+            Movement();
+            Attack();
+            Jump();
+            if (rotateToCamera)
+            {
+                RotateTowardsCamera();
+            }
         }
+    }
+
+    public void GainControl()
+    {
+        inControl = true;
+        cameraObject.GetComponent<Camera>().enabled = true;
+    }
+
+    public void TimersUp()
+    {
+        inControl = false;
+        cameraObject.GetComponent<Camera>().enabled = false;
     }
 
     void Jump()
@@ -100,10 +118,20 @@ public class UnitController : MonoBehaviour
 
     void RotateTowardsCamera()
     {
-        var CharacterRotation = cameraTransform.transform.rotation;
+        var CharacterRotation = cameraObject.transform.rotation;
         CharacterRotation.x = 0;
         CharacterRotation.z = 0;
         transform.rotation = CharacterRotation;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health < 1)
+        {
+            anim.Play("Death");
+            cc.enabled = false;
+        }
     }
 
 }

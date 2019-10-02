@@ -833,14 +833,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 114d254002513ed4a9b60a35781cc2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  inControl: 0
+  health: 100
   speed: 0
   strenght: 0
   defense: 0
-  jumpHeight: 0
-  cameraTransform: {fileID: 634026770770541129}
-  rotateToCamera: 0
-  currentWeapon: 0
+  cameraObject: {fileID: 634026770770541134}
+  rotateToCamera: 1
+  currentWeapon: 2
+  currentTeam: 0
 --- !u!1 &634026771118257302
 GameObject:
   m_ObjectHideFlags: 0
@@ -3979,31 +3980,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.093
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.056
+      value: -0.022
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.082
+      value: -0.058
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.87041533
+      value: 0.21121618
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.08979188
+      value: 0.8491603
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.42454734
+      value: -0.17057176
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.23253879
+      value: 0.45301205
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_RootOrder
@@ -4019,7 +4020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e19449855fd0141924899092707fd5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -2.6889954
+      value: 193.467
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18e19449855fd0141924899092707fd5, type: 3}
