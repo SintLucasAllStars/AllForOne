@@ -6,8 +6,10 @@ public class Warrior
 {
     private int health;
     private int strength;
-    private int speed;
+    private float speed;
     private int defense;
+
+    public GameObject hand;
 
     private bool isSelected;
     
@@ -15,9 +17,9 @@ public class Warrior
     {
         this.health = 5;
         this.strength = 5;
-        this.speed = 5;
+        this.speed = 0.5f;
         this.defense = 5;
-        this.isSelected = true;
+        this.isSelected = false;
     }
 
     public Warrior(int a_Health, int a_Strenth, int a_Speed, int a_Defense)
@@ -26,6 +28,7 @@ public class Warrior
         this.strength = a_Strenth;
         this.speed = a_Speed;
         this.defense = a_Defense;
+        this.isSelected = false;
     }
 
     public void SetHealth(int a_Health) { this.health = a_Health; }
@@ -35,7 +38,7 @@ public class Warrior
     public int GetStrenth() { return this.strength; }
 
     public void SetSpeed(int a_Speed) { this.speed = a_Speed; }
-    public int GetSpeed() { return this.speed; }
+    public float GetSpeed() { return this.speed; }
 
     public void SetDefense(int a_Defence) { this.defense = a_Defence; }
     public int GetDefense() { return this.defense; }
