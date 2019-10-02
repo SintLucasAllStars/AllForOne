@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UnitPlacement : MonoBehaviour
 {
-    public Text points, cost;
+    public Text points, cost, currentPlayer;
     public Slider healthSlider, strengthSlider, speedSlider, defenceSlider;
     public Image background;
     public Button ready, place;
@@ -16,8 +16,9 @@ public class UnitPlacement : MonoBehaviour
  //Select player 1 or 2;
     private int player;
     private int currentPoints, currentCost;
+    private int[] value;
     
-    //Player ready
+    //Players ready
     private bool canStart;
     
  //   public GameManager unitPrefab;
@@ -41,6 +42,17 @@ public class UnitPlacement : MonoBehaviour
      DisplayButtons();
      DisplayBackground();
      setValues(currentPoints, currentCost);
+     
+     
+
+     SelectPlayer(player);
+     player = 0;
+     value = new int[4];
+     currentCost = 5;
+     for (int i = 0; i < value.Length; i++)
+     {
+         value[i] = 0;
+     }
 
  }
 
@@ -73,5 +85,57 @@ public class UnitPlacement : MonoBehaviour
  private void DisplayBackground()
  {
      background.gameObject.SetActive(true);
+ }
+
+ private void Update()
+ {
+     int thisValue;
+     if (player == 0 && currentPoints >= 100)
+     {
+         value[0] = ((int) healthSlider.value);
+         value[1] = ((int) strengthSlider.value);
+         value[2] = ((int) speedSlider.value);
+         value[3] = ((int) defenceSlider.value);
+         thisValue = value[0] + value[1] + value[2] + value[3];
+         Debug.Log(thisValue);
+         currentCost = currentCost * thisValue;
+         cost.text = currentCost.ToString();
+     }
+     else if (player == 1 && currentPoints >= 100)
+     {
+         value[0] = ((int) healthSlider.value);
+         value[1] = ((int) strengthSlider.value);
+         value[2] = ((int) speedSlider.value);
+         value[3] = ((int) defenceSlider.value);
+         currentCost = currentCost * value[0] + value[1] + value[2] + value [3];
+         cost.text = currentCost + ""; 
+     }
+ 
+     if (currentPoints <= 0)
+     {
+       DisableSliders();
+     }
+ }
+
+ private void DisableSliders()
+ {
+     healthSlider.gameObject.SetActive(false);
+     strengthSlider.gameObject.SetActive(false);
+     speedSlider.gameObject.SetActive(false);
+     defenceSlider.gameObject.SetActive(false);
+ }
+
+
+ private void SelectPlayer(int playernum)
+ {
+     playernum = player;
+     if (playernum == 0)
+     {
+         player = 0;
+     }
+     else if (playernum == 1)
+     {
+         player = 1;
+     }
  }
 }
