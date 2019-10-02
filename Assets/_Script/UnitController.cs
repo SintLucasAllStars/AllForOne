@@ -52,12 +52,14 @@ public class UnitController : MonoBehaviour
     {
         inControl = true;
         cameraObject.GetComponent<Camera>().enabled = true;
+        rotateToCamera = true;
     }
 
     public void TimersUp()
     {
         inControl = false;
         cameraObject.GetComponent<Camera>().enabled = false;
+        rotateToCamera = true;
     }
 
     void Jump()
