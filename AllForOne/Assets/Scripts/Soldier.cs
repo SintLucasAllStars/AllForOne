@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class Soldier : MonoBehaviour
 {
+    [SerializeField]
+    private Camera _camera;
+
     public int _health = 1;
     public int _strenght = 1;
     public int _speed = 1;
     public int _defense = 1;
     public TeamEnum _teamEnum;
     public WeaponEnum _weaponEnum;
+
+    public void ControleUnit()
+    {
+        _camera.gameObject.SetActive(true);
+    }
 }

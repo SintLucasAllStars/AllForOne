@@ -179,11 +179,29 @@ public class GameControler : MonoBehaviour
         _soldier._teamEnum = _currentTeam;
     }
 
+    private void PlayAsUnit()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+        {
+            Soldier soldier = hit.collider.GetComponent<Soldier>();
+            if (soldier != null && soldier._teamEnum == _currentTeam)
+            {
+                soldier.ControleUnit();
+                _camera.gameObject.SetActive(false);
+            }
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && _placing)
         {
             SpawnUnit();
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !_placing)
+        {
+            PlayAsUnit();
         }
 
         if (Input.GetKey(KeyCode.Mouse1))
