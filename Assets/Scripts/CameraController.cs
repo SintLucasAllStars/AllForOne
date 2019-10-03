@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    // #region Singleton
-    // public CameraController instance;
-    // void Awake()
-    // {
-    //     if (instance == null)
-    //     {
-    //         instance = this;
-    //         DontDestroyOnLoad(this.gameObject);
-    //     }
-    // }
-    // #endregion
+    #region Singleton
+    public CameraController instance;
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    #endregion
+
+
     // Use this for initialization
     void Start()
     {
@@ -26,4 +32,5 @@ public class CameraController : MonoBehaviour
     {
 
     }
+
 }
