@@ -7,13 +7,16 @@ public class Weapon
 
     public TypeOfWeapon typeOfWeapon;
 
-    public Weapon(int damage, int speed, float range)
+    public Weapon(int _damage, int _speed, float _range, TypeOfWeapon _typeOfWeapon)
     {
-
+        this.damage = _damage;
+        this.speed = _speed;
+        this.range = _range;
+        this.typeOfWeapon = _typeOfWeapon;
     }
 
     /// <summary>
-    /// 
+    /// Calculates the play area for the gun
     /// </summary>
     /// <param name="width">width of the playarea</param>
     /// <param name="depth">depth of the playarea</param>

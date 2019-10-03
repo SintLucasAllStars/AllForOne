@@ -4,12 +4,12 @@ using SimpleJSON;
 
 class WeaponController : Weapon
 {
-
-    public WeaponController() : base(0, 0, 0) { }
-
     private static string filePath = "./Assets/Scripts/Weapon/WeaponStats.json";
 
     public Dictionary<TypeOfWeapon, Weapon> WeaponDict = new Dictionary<TypeOfWeapon, Weapon>();
+
+    private new TypeOfWeapon typeOfWeapon;
+    public WeaponController(int damage, int speed, float range, TypeOfWeapon typeOfWeapon) : base(damage, speed, range, typeOfWeapon) { }
 
     public void LoadIn()
     {
@@ -30,13 +30,13 @@ class WeaponController : Weapon
             if (range == "null")
             {
                 var _range = GetDiagonalSizePlayarea(gameController.width, gameController.depth);
-                Weapon weapon = new Weapon(damage, speed, _range);
+                Weapon weapon = new Weapon(damage, speed, _range, type);
                 WeaponDict.Add(type, weapon);
                 return;
             }
             else
             {
-                Weapon weapon = new Weapon(damage, speed, range);
+                Weapon weapon = new Weapon(damage, speed, range, type);
                 WeaponDict.Add(type, weapon);
             }
         }
