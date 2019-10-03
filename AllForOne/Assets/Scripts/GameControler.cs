@@ -56,6 +56,7 @@ public class GameControler : MonoBehaviour
     private int _pointCost = 0;
 
     private bool _placing;
+    private bool _isSelecting;
 
     void Start()
     {
@@ -69,6 +70,7 @@ public class GameControler : MonoBehaviour
         if (_pointTotal >= 10)
         {
             CalculatePoints();
+            _isSelecting = false;
             _normalCanvas.enabled = false;
             _unitCanvas.enabled = true;
         }
@@ -154,6 +156,12 @@ public class GameControler : MonoBehaviour
         _pointsLeftText.text = "Points left: " + pointsLeft;
     }
 
+    public void SelectUnit()
+    {
+        _isSelecting = true;
+        _placing = false;
+    }
+
     public void PlaceUnit()
     {
         _unitCanvas.enabled = false;
@@ -189,17 +197,18 @@ public class GameControler : MonoBehaviour
             {
                 soldier.ControleUnit();
                 _camera.gameObject.SetActive(false);
+                _isSelecting = false;
             }
         }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _placing)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _placing && !_isSelecting)
         {
             SpawnUnit();
         }
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !_placing)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !_placing && _isSelecting)
         {
             PlayAsUnit();
         }
