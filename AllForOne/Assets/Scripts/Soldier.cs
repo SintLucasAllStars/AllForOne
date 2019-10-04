@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Soldier : MonoBehaviour
 {
+    [SerializeField]
+    private Transform _barrle;
+
     [Header("Animator")]
     [SerializeField]
     private Animator _animator;
@@ -31,10 +34,10 @@ public class Soldier : MonoBehaviour
     [SerializeField]
     private float _currentHealth;
 
-    public int _health = 1;
-    public int _strenght = 1;
-    public int _speed = 1;
-    public int _defense = 1;
+    public float _health = 1;
+    public float _strenght = 1;
+    public float _speed = 1;
+    public float _defense = 1;
     public TeamEnum _teamEnum;
     public WeaponEnum _weaponEnum;
 
@@ -44,8 +47,18 @@ public class Soldier : MonoBehaviour
     private float _currentSpeed;
     private float _speedBuff = 10;
 
+    private string _weaponAnimationName;
+    private float _weaponDamage;
+    private float _weaponSpeed;
+    private float _weaponRange;
+    private bool _onCooldown;
+
     private void Start()
     {
+        _weaponAnimationName = "Punch";
+        _weaponDamage = 1;
+        _weaponSpeed = 10;
+        _weaponRange = 0;
         _currentHealth *= _health;
     }
 
@@ -67,6 +80,11 @@ public class Soldier : MonoBehaviour
         CameraManagement();
         AnimationManagement();
 
+        if (Input.GetMouseButton(0))
+        {
+            TriggerAttack();
+        }
+
         if (Input.GetAxisRaw("Vertical") == 0 && Input.GetAxisRaw("Horizontal") == 0)
         {
 
@@ -75,10 +93,18 @@ public class Soldier : MonoBehaviour
         }
         MovementManagement();
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetAxisRaw("Horizontal") == 0)
         {
             _currentSpeed = _defaultRunSpeed;
             _animator.SetInteger("Speed", 2);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _animator.SetBool("Jump", true);
+            }
+            else
+            {
+                _animator.SetBool("Jump", false);
+            }
         }
         else
         {
@@ -116,22 +142,56 @@ public class Soldier : MonoBehaviour
 
     private void AnimationManagement()
     {
-        if (Input.GetAxis("Horizontal") < 0)
-        {
-       
-        }
-        if (Input.GetAxis("Horizontal") > 0)
-        {
+        _animator.SetInteger("Horizontal", Mathf.RoundToInt(Input.GetAxisRaw("Horizontal")));
+        _animator.SetInteger("Vertical", Mathf.RoundToInt(Input.GetAxisRaw("Vertical")));
+    }
 
-        }
-        if (Input.GetAxis("Vertical") > 0)
-        {
 
-        }
-        if (Input.GetAxis("Vertical") < 0)
-        {
+    private void SelectWeapon(Weapon weapon)
+    {
+        _weaponAnimationName = weapon._animationName;
+        _weaponDamage = weapon._damage;
+        _weaponSpeed = weapon._speed;
+        _weaponRange = weapon._range + 1;
+    }
 
+    private void TriggerAttack()
+    {
+        if (!_onCooldown)
+        {
+            _onCooldown = true;
+            Debug.Log("cooldown");
+            _animator.Play(_weaponAnimationName);
         }
+    }
+
+    public void Attack()
+    {
+        Invoke("WeaponReset", (1 / _weaponSpeed) + 0.5f);
+
+        RaycastHit cameraHit;
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out cameraHit, Mathf.Infinity))
+        {
+            _barrle.LookAt(cameraHit.point);
+        }
+
+        RaycastHit weaponHit;
+        if (Physics.Raycast(_barrle.position, _barrle.forward, out weaponHit, _weaponRange))
+        {
+            Soldier soldier = weaponHit.collider.GetComponent<Soldier>();
+            if (soldier == null || soldier._teamEnum == _teamEnum)
+            {
+                return;
+            }
+
+            soldier.TakeDamage(_weaponDamage * _strenght);
+        }
+    }
+
+    private void WeaponReset()
+    {
+        _onCooldown = false;
+        Debug.Log("reset");
     }
 
     private void PlaytimeEnd()
@@ -140,4 +200,14 @@ public class Soldier : MonoBehaviour
         _controled = false;
         Cursor.lockState = CursorLockMode.None;
     }
+
+    public void TakeDamage(float damage)
+    {
+        _currentHealth -= damage / _defense;
+        if (_currentHealth <= 0)
+        {
+            Debug.Log("Dead");
+        }
+    }
 }
+
