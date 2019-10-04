@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameControler : MonoBehaviour
 {
-    public GameControler Instance;
+    public static GameControler Instance;
 
     public TeamEnum _currentTeam;
 
@@ -60,6 +60,7 @@ public class GameControler : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
         _currentTeam = 0;
         CalculatePoints();
         _unitCanvas.enabled = false;
@@ -143,6 +144,12 @@ public class GameControler : MonoBehaviour
         CalculatePoints();
     }
 
+    public void EndControlingUnit()
+    {
+        _normalCanvas.enabled = true;
+        _camera.gameObject.SetActive(true);
+
+    }
     private void CalculatePoints()
     {
         _pointCost = (_health * 3) + (_strenght * 2) + (_speed * 3) + (_defense * 2);
@@ -198,6 +205,7 @@ public class GameControler : MonoBehaviour
                 soldier.ControleUnit();
                 _camera.gameObject.SetActive(false);
                 _isSelecting = false;
+                _normalCanvas.enabled = false;
             }
         }
     }

@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Soldier : MonoBehaviour
 {
     [SerializeField]
     private Transform _barrle;
+
+    [SerializeField]
+    private GameObject _shield;
 
     [Header("Animator")]
     [SerializeField]
@@ -24,6 +28,13 @@ public class Soldier : MonoBehaviour
     [SerializeField]
     private float _cameraRange;
 
+    [Header("UI")]
+    [SerializeField]
+    private Canvas _canvas;
+
+    [SerializeField]
+    private Text _pickupWeaponText;
+
     [Header("Stats")]
     [SerializeField]
     private float _defaultWalkSpeed;
@@ -34,14 +45,16 @@ public class Soldier : MonoBehaviour
     [SerializeField]
     private float _currentHealth;
 
+    [SerializeField]
+    private List<GameObject> _weaponModels;
+
     public float _health = 1;
     public float _strenght = 1;
     public float _speed = 1;
     public float _defense = 1;
     public TeamEnum _teamEnum;
-    public WeaponEnum _weaponEnum;
 
-    private float _playTime = 1000;
+    private float _playTime = 10;
     private bool _controled;
 
     private float _currentSpeed;
@@ -52,6 +65,9 @@ public class Soldier : MonoBehaviour
     private float _weaponSpeed;
     private float _weaponRange;
     private bool _onCooldown;
+    public bool _isFortified;
+
+    private Weapon _weaponInReatch;
 
     private void Start()
     {
@@ -64,9 +80,12 @@ public class Soldier : MonoBehaviour
 
     public void ControleUnit()
     {
+        _isFortified = false;
+        _shield.SetActive(false);
         _currentSpeed = _defaultWalkSpeed;
         _camera.gameObject.SetActive(true);
         _controled = true;
+        _canvas.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         Invoke("PlaytimeEnd", _playTime);
     }
@@ -85,6 +104,18 @@ public class Soldier : MonoBehaviour
             TriggerAttack();
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            _isFortified = true;
+            _shield.SetActive(true);
+            PlaytimeEnd();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && _weaponInReatch != null)
+        {
+            SelectWeapon(_weaponInReatch);
+        }
+
         if (Input.GetAxisRaw("Vertical") == 0 && Input.GetAxisRaw("Horizontal") == 0)
         {
 
@@ -93,7 +124,7 @@ public class Soldier : MonoBehaviour
         }
         MovementManagement();
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetAxisRaw("Horizontal") == 0)
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetAxisRaw("Horizontal") == 0)
         {
             _currentSpeed = _defaultRunSpeed;
             _animator.SetInteger("Speed", 2);
@@ -112,7 +143,6 @@ public class Soldier : MonoBehaviour
             _animator.SetInteger("Speed", 1);
         }
     }
-
     private void CameraManagement()
     {
         float mouseX = Input.GetAxis("Mouse X");
@@ -149,10 +179,27 @@ public class Soldier : MonoBehaviour
 
     private void SelectWeapon(Weapon weapon)
     {
+        Debug.Log(weapon._weaponName);
+
         _weaponAnimationName = weapon._animationName;
         _weaponDamage = weapon._damage;
         _weaponSpeed = weapon._speed;
-        _weaponRange = weapon._range + 1;
+        _weaponRange = weapon._range;
+
+
+        for (int i = 0; i < _weaponModels.Count; i++)
+        {
+            _weaponModels[i].SetActive(false);
+
+            if (weapon._weaponNumber == i)
+            {
+                _weaponModels[i].SetActive(true);
+            }
+        }
+
+        Destroy(weapon.gameObject);
+        _pickupWeaponText.text = "";
+        _weaponInReatch = null;
     }
 
     private void TriggerAttack()
@@ -167,7 +214,7 @@ public class Soldier : MonoBehaviour
 
     public void Attack()
     {
-        Invoke("WeaponReset", (1 / _weaponSpeed) + 0.5f);
+        Invoke("WeaponReset", (1 / _weaponSpeed) * 5);
 
         RaycastHit cameraHit;
         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out cameraHit, Mathf.Infinity))
@@ -176,14 +223,21 @@ public class Soldier : MonoBehaviour
         }
 
         RaycastHit weaponHit;
-        if (Physics.Raycast(_barrle.position, _barrle.forward, out weaponHit, _weaponRange))
+        Debug.DrawRay(_barrle.position, _barrle.forward, Color.red, 5);
+        if (Physics.Raycast(_barrle.position, _barrle.forward, out weaponHit, _weaponRange + 1))
         {
+            Debug.Log(weaponHit.collider.gameObject.name);
             Soldier soldier = weaponHit.collider.GetComponent<Soldier>();
             if (soldier == null || soldier._teamEnum == _teamEnum)
             {
                 return;
             }
-
+            Debug.Log("Hit");
+            if (soldier._isFortified)
+            {
+                soldier.TakeDamage((_weaponDamage * _strenght) / soldier._defense);
+                return;
+            }
             soldier.TakeDamage(_weaponDamage * _strenght);
         }
     }
@@ -198,7 +252,9 @@ public class Soldier : MonoBehaviour
     {
         _camera.gameObject.SetActive(false);
         _controled = false;
+        _canvas.enabled = false;
         Cursor.lockState = CursorLockMode.None;
+        GameControler.Instance.EndControlingUnit();
     }
 
     public void TakeDamage(float damage)
@@ -207,6 +263,25 @@ public class Soldier : MonoBehaviour
         if (_currentHealth <= 0)
         {
             Debug.Log("Dead");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Weapon weapon = other.GetComponent<Weapon>();
+        if (weapon != null)
+        {
+            _pickupWeaponText.text = "Press E to puck up a " + weapon._weaponName;
+             _weaponInReatch = weapon;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Weapon>() != null)
+        {
+            _pickupWeaponText.text = "";
+            _weaponInReatch = null;
         }
     }
 }
