@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameControler : MonoBehaviour
 {
@@ -10,7 +11,21 @@ public class GameControler : MonoBehaviour
     public TeamEnum _currentTeam;
 
     [SerializeField]
+    private List<int> _teamPoints;
+
+    [Header("Powerups")]
+    [SerializeField]
+    private List<PowerUps> _powerups;
+
+    [SerializeField]
+    private List<Transform> _powerupSpawns;
+
+    [Header("Soldiers")]
+    [SerializeField]
     private Soldier _soldier;
+
+    public int _RedSoldiers;
+    public int _BlueSoldiers;
 
     [Header("Canvas")]
     [SerializeField]
@@ -39,6 +54,7 @@ public class GameControler : MonoBehaviour
     private LayerMask _layerMask;
 
     [Header("Text")]
+
     [SerializeField]
     private Text _healthText;
 
@@ -57,11 +73,13 @@ public class GameControler : MonoBehaviour
     [SerializeField]
     private Text _pointsLeftText;
 
+    [SerializeField]
+    private Text _noPointText;
+
     private int _health = 1;
     private int _strenght = 1;
     private int _speed = 1;
     private int _defense = 1;
-    private int _pointTotal = 100;
     private int _pointCost = 0;
 
     private bool _placing;
@@ -82,21 +100,28 @@ public class GameControler : MonoBehaviour
         _unitCanvas.enabled = false;
         _placeCanvas.enabled = false;
         _SelectCanvas.enabled = true;
+        SpawnPowerup();
     }
 
     public void OpenMenu()
     {
-        if (_pointTotal >= 10)
+        if (_teamPoints[(int)_currentTeam] >= 10)
         {
             CalculatePoints();
             _isSelecting = false;
             _placeCanvas.enabled = false;
             _unitCanvas.enabled = true;
+            return;
         }
+        _noPointText.enabled = true;
     }
 
     public void AddStats(int stat)
     {
+        if (_teamPoints[(int)_currentTeam] < _pointCost + 2)
+        {
+            return;
+        }
 
         switch (stat)
         {
@@ -166,31 +191,40 @@ public class GameControler : MonoBehaviour
     {
         SwitchTeam();
         _camera.enabled = true;
+        _SelectCanvas.enabled = true;
+        SpawnPowerup();
     }
 
     private void CalculatePoints()
     {
         _pointCost = (_health * 3) + (_strenght * 2) + (_speed * 3) + (_defense * 2);
 
+        if (_teamPoints[(int)_currentTeam] < _pointCost)
+        {
+            return;
+        }
+
         _healthText.text = "Health: " + _health;
         _strenghtText.text = "Strenght: " + _strenght;
         _speedText.text = "Speed: " + _speed;
         _defenseText.text = "Defense: " + _defense;
         _pointText.text = "Price: " + _pointCost;
-        int pointsLeft = _pointTotal - _pointCost;
+
+        int pointsLeft = _teamPoints[(int)_currentTeam] - _pointCost;
         _pointsLeftText.text = "Points left: " + pointsLeft;
     }
 
     public void SelectUnit()
     {
         _isSelecting = true;
+        _SelectCanvas.enabled = false;
         _placing = false;
     }
 
     public void PlaceUnit()
     {
         _unitCanvas.enabled = false;
-        _pointTotal -= _pointCost;
+        _teamPoints[(int)_currentTeam] -= _pointCost;
         _placing = true;
     }
 
@@ -201,8 +235,6 @@ public class GameControler : MonoBehaviour
             return;
         }
 
-        SwitchTeam();
-        Instantiate(_soldier, CastRay(), transform.rotation);
         _placeCanvas.enabled = true;
         _placing = false;
 
@@ -211,6 +243,21 @@ public class GameControler : MonoBehaviour
         _soldier._speed = _speed;
         _soldier._defense = _defense;
         _soldier._teamEnum = _currentTeam;
+
+        Soldier soldier = Instantiate(_soldier, CastRay(), transform.rotation);
+        SwitchTeam();
+
+        _health = 1;
+        _strenght = 1;
+        _speed = 1;
+        _defense = 1;
+
+        if (_currentTeam == TeamEnum.TeamRed)
+        {
+            _RedSoldiers++;
+            return;
+        }
+        _BlueSoldiers++;
     }
 
     private void PlayAsUnit()
@@ -255,7 +302,7 @@ public class GameControler : MonoBehaviour
     private Vector3 CastRay()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, _layerMask))
         {
             if (hit.collider.GetComponent<Floor>())
             {
@@ -278,5 +325,16 @@ public class GameControler : MonoBehaviour
         _currentTeam = TeamEnum.TeamRed;
         _teamCanvas[0].enabled = true;
         _teamCanvas[1].enabled = false;
+    }
+
+    private void SpawnPowerup()
+    {
+        Transform currentSpawn = _powerupSpawns[Random.Range(0, _powerupSpawns.Count - 1)];
+        Instantiate(_powerups[Random.Range(0, _powerups.Count - 1)],currentSpawn);
+    }
+
+    public void Victory(TeamEnum teamEnum)
+    {
+        SceneManager.LoadScene((int)teamEnum + 1);
     }
 }
