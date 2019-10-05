@@ -10,9 +10,6 @@ public class GameControler : MonoBehaviour
     public TeamEnum _currentTeam;
 
     [SerializeField]
-    private Camera _camera;
-
-    [SerializeField]
     private Soldier _soldier;
 
     [Header("Canvas")]
@@ -20,14 +17,26 @@ public class GameControler : MonoBehaviour
     private Canvas _unitCanvas;
 
     [SerializeField]
-    private Canvas _normalCanvas;
+    private Canvas _placeCanvas;
 
-    [Header("CameraPivots")]
+    [SerializeField]
+    private Canvas _SelectCanvas;
+
+    [SerializeField]
+    private List<Canvas> _teamCanvas;
+
+    [Header("Camera")]
+    [SerializeField]
+    private Camera _camera;
+
     [SerializeField]
     private Transform _cameraPivotX;
 
     [SerializeField]
     private Transform _cameraPivotY;
+
+    [SerializeField]
+    private LayerMask _layerMask;
 
     [Header("Text")]
     [SerializeField]
@@ -61,9 +70,18 @@ public class GameControler : MonoBehaviour
     void Start()
     {
         Instance = this;
-        _currentTeam = 0;
+        _currentTeam = TeamEnum.TeamBlue;
+        SwitchTeam();
         CalculatePoints();
         _unitCanvas.enabled = false;
+    }
+
+
+    public void FinnishPlacing()
+    {
+        _unitCanvas.enabled = false;
+        _placeCanvas.enabled = false;
+        _SelectCanvas.enabled = true;
     }
 
     public void OpenMenu()
@@ -72,7 +90,7 @@ public class GameControler : MonoBehaviour
         {
             CalculatePoints();
             _isSelecting = false;
-            _normalCanvas.enabled = false;
+            _placeCanvas.enabled = false;
             _unitCanvas.enabled = true;
         }
     }
@@ -146,10 +164,10 @@ public class GameControler : MonoBehaviour
 
     public void EndControlingUnit()
     {
-        _normalCanvas.enabled = true;
-        _camera.gameObject.SetActive(true);
-
+        SwitchTeam();
+        _camera.enabled = true;
     }
+
     private void CalculatePoints()
     {
         _pointCost = (_health * 3) + (_strenght * 2) + (_speed * 3) + (_defense * 2);
@@ -183,8 +201,9 @@ public class GameControler : MonoBehaviour
             return;
         }
 
+        SwitchTeam();
         Instantiate(_soldier, CastRay(), transform.rotation);
-        _normalCanvas.enabled = true;
+        _placeCanvas.enabled = true;
         _placing = false;
 
         _soldier._health = _health;
@@ -197,15 +216,15 @@ public class GameControler : MonoBehaviour
     private void PlayAsUnit()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, _layerMask))
         {
             Soldier soldier = hit.collider.GetComponent<Soldier>();
             if (soldier != null && soldier._teamEnum == _currentTeam)
             {
                 soldier.ControleUnit();
-                _camera.gameObject.SetActive(false);
+                _camera.enabled = false;
                 _isSelecting = false;
-                _normalCanvas.enabled = false;
+                _placeCanvas.enabled = false;
             }
         }
     }
@@ -245,5 +264,19 @@ public class GameControler : MonoBehaviour
             }
         }
         return Vector3.zero;
+    }
+
+    private void SwitchTeam()
+    {
+        if (_currentTeam == TeamEnum.TeamRed)
+        {
+            _currentTeam = TeamEnum.TeamBlue;
+            _teamCanvas[0].enabled = false;
+            _teamCanvas[1].enabled = true;
+            return;
+        }
+        _currentTeam = TeamEnum.TeamRed;
+        _teamCanvas[0].enabled = true;
+        _teamCanvas[1].enabled = false;
     }
 }

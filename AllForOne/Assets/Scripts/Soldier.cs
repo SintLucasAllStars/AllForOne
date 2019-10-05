@@ -11,6 +11,19 @@ public class Soldier : MonoBehaviour
     [SerializeField]
     private GameObject _shield;
 
+    [Header("Materials")]   
+    [SerializeField]
+    private List<Material> _teamMaterials;
+
+    [SerializeField]
+    private MeshRenderer _material;
+
+    [SerializeField]
+    private List<Color> _teamColors;
+
+    [SerializeField]
+    private Image _image;
+
     [Header("Animator")]
     [SerializeField]
     private Animator _animator;
@@ -34,6 +47,9 @@ public class Soldier : MonoBehaviour
 
     [SerializeField]
     private Text _pickupWeaponText;
+
+    [SerializeField]
+    private Slider _healthSlider;
 
     [Header("Stats")]
     [SerializeField]
@@ -61,6 +77,7 @@ public class Soldier : MonoBehaviour
     private float _speedBuff = 10;
 
     private string _weaponAnimationName;
+    private float _maxHealth;
     private float _weaponDamage;
     private float _weaponSpeed;
     private float _weaponRange;
@@ -76,6 +93,11 @@ public class Soldier : MonoBehaviour
         _weaponSpeed = 10;
         _weaponRange = 0;
         _currentHealth *= _health;
+        _material.material = _teamMaterials[(int)_teamEnum];
+        _image.color = _teamColors[(int)_teamEnum];
+        _maxHealth = _currentHealth;
+        _healthSlider.maxValue = _maxHealth;
+        _healthSlider.value = _currentHealth;
     }
 
     public void ControleUnit()
@@ -83,7 +105,7 @@ public class Soldier : MonoBehaviour
         _isFortified = false;
         _shield.SetActive(false);
         _currentSpeed = _defaultWalkSpeed;
-        _camera.gameObject.SetActive(true);
+        _camera.enabled = true;
         _controled = true;
         _canvas.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
@@ -250,7 +272,7 @@ public class Soldier : MonoBehaviour
 
     private void PlaytimeEnd()
     {
-        _camera.gameObject.SetActive(false);
+        _camera.enabled = false;
         _controled = false;
         _canvas.enabled = false;
         Cursor.lockState = CursorLockMode.None;
@@ -262,8 +284,9 @@ public class Soldier : MonoBehaviour
         _currentHealth -= damage / _defense;
         if (_currentHealth <= 0)
         {
-            Debug.Log("Dead");
+            Destroy(this.gameObject);
         }
+        _healthSlider.value = _currentHealth;
     }
 
     private void OnTriggerEnter(Collider other)
