@@ -82,6 +82,11 @@ public class GameControler : MonoBehaviour
     private int _defense = 1;
     private int _pointCost = 0;
 
+    private int _healthMotifier = 3;
+    private int _strenghtMotifier = 2;
+    private int _speedMotifier = 3;
+    private int _defenceMotifier = 2;
+
     private bool _placing;
     private bool _isSelecting;
 
@@ -197,7 +202,7 @@ public class GameControler : MonoBehaviour
 
     private void CalculatePoints()
     {
-        _pointCost = (_health * 3) + (_strenght * 2) + (_speed * 3) + (_defense * 2);
+        _pointCost = (_health * _healthMotifier) + (_strenght * _strenghtMotifier) + (_speed * _speedMotifier) + (_defense * _defenceMotifier);
 
         if (_teamPoints[(int)_currentTeam] < _pointCost)
         {

@@ -171,7 +171,7 @@ public class Soldier : MonoBehaviour
                 return;
             }
 
-            _powerupText.text += i +": " + _powerups[i]._name + "\n";
+            _powerupText.text += (i + 1) +": " + _powerups[i]._name + "\n";
         }
 
             if (Input.GetKeyDown(KeyCode.E))
@@ -410,8 +410,14 @@ public class Soldier : MonoBehaviour
         _timerText.text = "TIME: " + time;
         for (int i = 0; i < _playTime;)
         {
-            yield return new WaitForSeconds(1);
-            if (_controled && !_timeFreeze)
+            if (!_controled)
+            {
+                i = _playTime;
+                yield return null;
+            }
+
+                yield return new WaitForSeconds(1);
+            if (!_timeFreeze)
             {
                 i++;
                 time--;
