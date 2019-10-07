@@ -3,9 +3,9 @@ using System;
 
 public abstract class Unit : MonoBehaviour
 {
-    protected GameData _gameData = new GameData();
+    protected UnitData _gameData = new UnitData();
 
-    public GameData GameData
+    public UnitData GameData
     {
         get => _gameData;
         set => _gameData = value;

@@ -2,40 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class GameData
 {
     [SerializeField]
-    private string _guid = "";
+    protected string _guid = "";
     public string Guid => _guid;
+
     [SerializeField]
-    private Node _position = null;
-    public Node Position => _position;
-    [SerializeField]
-    private bool _isConnected = true, _isMasterClient = false, _isActive = true;
+    protected bool _isConnected = true;
     public bool IsConnected => _isConnected;
-    public bool IsActive => _isActive;
-    public bool IsMasterClient => _isMasterClient;
 
-    public GameData(string guid, Node position, string type, bool isConnected, bool isMasterClient, bool isActive)
+    public GameData(string guid, bool isConnected)
     {
-        _guid = guid;
-        _position = position;
         _isConnected = isConnected;
-        _isMasterClient = isMasterClient;
-        _isActive = isActive;
+        _guid = guid;
     }
 
-    public GameData(GameData other)
+    public GameData(GameData gameData)
     {
-        _guid = other._guid;
-        _position = other._position;
-        _isConnected = other._isConnected;
-        _isMasterClient = other._isMasterClient;
-        _isActive = other._isActive;
+        _isConnected = gameData._isConnected;
+        _guid = gameData._guid;
     }
-
-    public void SetPosition(Node node) => _position = node;
 
     public GameData()
     { }

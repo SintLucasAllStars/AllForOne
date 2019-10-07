@@ -4,14 +4,14 @@ using UnityEngine;
 [Serializable]
 public class Message
 {
-    public GameData GameData = new GameData();
+    public UnitData GameData = new UnitData();
 
-    public Message(string guid, Node position, string type, bool isConnected, bool isMasterClient, bool isActive)
+    public Message(string guid, Node position, string type, bool isConnected, bool isActive, PlayerSide playerSide)
     {
-        GameData = new GameData(guid, position, type, isConnected, isMasterClient, isActive);
+        GameData = new UnitData(guid, position, type, isConnected, isActive, playerSide);
     }
 
-    public Message(GameData gamedata) => GameData = new GameData(gamedata);
+    public Message(UnitData gamedata) => GameData = new UnitData(gamedata);
 
     public Message(Message other) => GameData = other.GameData;
 

@@ -8,10 +8,10 @@ public class Map : Singleton<Map>
     public int SizeY => _sizeY;
 
     [SerializeField]
-    private MapX[] _grid = new MapX[0];
-    public MapX[] Grid => _grid;
+    private Node[,] _grid = new Node[1, 1];
+    public Node[,] Grid => _grid;
 
-    public void SetMap(MapX[] map) => _grid = map;
+    public void SetMap(int x, int y) => _grid = new Node[x, y];
 
     public Node GetNode(int x, int y)
     {
@@ -27,13 +27,13 @@ public class Map : Singleton<Map>
                 y = _sizeY - 1;
         }
 
-        Grid[x].Columns[y].SetCollisionType(CollisionType.Occupied);
+        Grid[x, y].SetCollisionType(CollisionType.Occupied);
         Node n = new Node(x, y, 0);
 
         return n;
     }
 
-    public void ResetOldNode(int x, int y) => Grid[x].Columns[y].SetCollisionType(CollisionType.None);
+    public void ResetOldNode(int x, int y) => Grid[x, y].SetCollisionType(CollisionType.None);
 
     public bool IsValidNode(int x, int y)
     {
@@ -42,60 +42,13 @@ public class Map : Singleton<Map>
             return false;
 
         //WALL DETECTION
-        if (Grid[x].Columns[y].GetCollisionType() == CollisionType.Wall)
+        if (Grid[x, y].GetCollisionType() == CollisionType.Obstacle)
             return false;
 
         //UNIT DETECTION
-        if (Grid[x].Columns[y].GetCollisionType() == CollisionType.Occupied)
+        if (Grid[x, y].GetCollisionType() == CollisionType.Occupied)
             return false;
 
         return true;
     }
-}
-
-[System.Serializable]
-public class Node
-{
-    private int _x, _y, _z;
-    public int X => _x;
-    public int Y => _y;
-    public int Z => _z;
-
-    private CollisionType _collisionType;
-    public CollisionType CollisionType => _collisionType;
-
-    public Node(int x, int y, int z)
-    {
-        _x = x;
-        _y = y;
-        _z = z;
-    }
-
-    public Node(Node node)
-    {
-        _x = node._x;
-        _y = node._y;
-        _z = node._z;
-    }
-
-    public Vector3 GetPosition() => new Vector3(_x, _y);
-
-    public CollisionType GetCollisionType() => _collisionType;
-
-    public void SetCollisionType(CollisionType type) => _collisionType = type;
-
-    public static Node ConvertVector(Vector3 vector) => new Node(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y), Mathf.RoundToInt(vector.z));
-}
-
-public enum CollisionType
-{
-    None,
-    Wall,
-    Occupied
-}
-
-[System.Serializable]
-public class MapX
-{
-    public Node[] Columns;
 }

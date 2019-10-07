@@ -10,6 +10,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         if (Instance == null)
             Instance = gameObject.GetComponent<T>();
         else if (Instance.GetInstanceID() != GetInstanceID())
-            Destroy(gameObject);
+            Destroy(this);
     }
 }

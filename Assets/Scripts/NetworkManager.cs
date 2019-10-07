@@ -7,14 +7,6 @@ using UnityEngine.UI;
 
 public class NetworkManager : Singleton<NetworkManager>
 {
-    private string _playerName = "";
-
-    public string PlayerName
-    {
-        get => _playerName;
-        set => _playerName = value;
-    }
-
     [SerializeField]
     private bool _connectOnAwake = false;
 
