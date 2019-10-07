@@ -37,7 +37,8 @@ public class TopDownView : MonoBehaviour
     public bool hiring;
     public Button hireButton;
     public GameObject hireMenu;
-    public GameObject nextHireMenu;
+    public GameObject playerMenu;
+    public GameObject nextPlayerMenu;
 
     void Start()
     {
@@ -83,8 +84,9 @@ public class TopDownView : MonoBehaviour
         {
             if (nextTeam == true)
             {
-                nextHireMenu.SetActive(true);
+                nextPlayerMenu.SetActive(true);
                 hireMenu.SetActive(false);
+                playerMenu.SetActive(false);
             }
         }
         else
@@ -127,6 +129,7 @@ public class TopDownView : MonoBehaviour
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit))
             {
+                Debug.Log("HITNOTHING");
                 return;
             }
             else if (Physics.Raycast(ray, out hit, placeableLayer))
@@ -142,6 +145,10 @@ public class TopDownView : MonoBehaviour
                 Debug.Log("PlaceUnit");
                 CheckTurn();
                 return;
+            }
+            else
+            {
+                Debug.Log("Not allowed to place here");
             }
         }
     }
