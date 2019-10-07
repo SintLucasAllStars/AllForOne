@@ -334,8 +334,14 @@ public class GameControler : MonoBehaviour
 
     private void SpawnPowerup()
     {
+        if (_powerupSpawns.Count == 0)
+        {
+            return;
+        }
+
         Transform currentSpawn = _powerupSpawns[Random.Range(0, _powerupSpawns.Count - 1)];
-        Instantiate(_powerups[Random.Range(0, _powerups.Count - 1)],currentSpawn);
+        Instantiate(_powerups[Random.Range(0, _powerups.Count)],currentSpawn);
+        _powerupSpawns.Remove(currentSpawn);
     }
 
     public void Victory(TeamEnum teamEnum)

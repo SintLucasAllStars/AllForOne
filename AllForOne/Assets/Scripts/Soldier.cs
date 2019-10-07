@@ -14,6 +14,9 @@ public class Soldier : MonoBehaviour
     [SerializeField]
     private LayerMask _RooflayerMask;
 
+    [SerializeField]
+    private LayerMask _bulletLayerMask;
+
     [HideInInspector]
     public bool _timeFreeze;
 
@@ -132,14 +135,12 @@ public class Soldier : MonoBehaviour
         StartCoroutine(Timer());
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (!_controled)
         {
             return;
         }
-        CameraManagement();
-        AnimationManagement();
 
         if (Input.GetMouseButton(0))
         {
@@ -171,10 +172,10 @@ public class Soldier : MonoBehaviour
                 return;
             }
 
-            _powerupText.text += (i + 1) +": " + _powerups[i]._name + "\n";
+            _powerupText.text += (i + 1) + ": " + _powerups[i]._name + "\n";
         }
 
-            if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (_weaponInReatch != null)
             {
@@ -185,7 +186,16 @@ public class Soldier : MonoBehaviour
                 AddPowerup(_PowerupInReatch);
             }
         }
+    }
 
+    private void FixedUpdate()
+    {
+        if (!_controled)
+        {
+            return;
+        }
+        CameraManagement();
+        AnimationManagement();
 
         if (Input.GetAxisRaw("Vertical") == 0 && Input.GetAxisRaw("Horizontal") == 0)
         {
@@ -195,7 +205,7 @@ public class Soldier : MonoBehaviour
         }
         MovementManagement();
 
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetAxisRaw("Horizontal") == 0)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetAxisRaw("Horizontal") == 0)
         {
             _currentSpeed = _defaultRunSpeed;
             _animator.SetInteger("Speed", 2);
@@ -214,7 +224,8 @@ public class Soldier : MonoBehaviour
             _animator.SetInteger("Speed", 1);
         }
     }
-    private void CameraManagement()
+
+        private void CameraManagement()
     {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
@@ -292,14 +303,14 @@ public class Soldier : MonoBehaviour
         Invoke("WeaponReset", (1 / _weaponSpeed) * 5);
 
         RaycastHit cameraHit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out cameraHit, Mathf.Infinity))
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out cameraHit, Mathf.Infinity, _bulletLayerMask))
         {
             _barrle.LookAt(cameraHit.point);
         }
 
         RaycastHit weaponHit;
         Debug.DrawRay(_barrle.position, _barrle.forward, Color.red, 5);
-        if (Physics.Raycast(_barrle.position, _barrle.forward, out weaponHit, _weaponRange + 1))
+        if (Physics.Raycast(_barrle.position, _barrle.forward, out weaponHit, _weaponRange + 1, _bulletLayerMask))
         {
             Soldier soldier = weaponHit.collider.GetComponent<Soldier>();
             if (soldier == null || soldier._teamEnum == _teamEnum)
@@ -326,6 +337,8 @@ public class Soldier : MonoBehaviour
         {
             return;
         }
+        _animator.Play("Idle");
+        _onCooldown = false;
         _camera.enabled = false;
         _controled = false;
         _canvas.enabled = false;
