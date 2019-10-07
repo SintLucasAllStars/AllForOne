@@ -132,7 +132,7 @@ namespace FowlPlay
                 };
                 for (int y = 0; y < map.Grid[x].Columns.Length; y++)
                 {
-                    map.Grid[x].Columns[y] = new Node(x, y);
+                    map.Grid[x].Columns[y] = new Node(x, y, 0);
                 }
             }
             serializedObject.ApplyModifiedProperties();
