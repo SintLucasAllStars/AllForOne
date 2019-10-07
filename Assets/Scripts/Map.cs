@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-public class Map : MonoBehaviour
+public class Map : Singleton<Map>
 {
-    public static Map Instance = null;
-
     [SerializeField]
     private int _sizeX = 0, _sizeY = 0;
     public int SizeX => _sizeX;
@@ -14,14 +12,6 @@ public class Map : MonoBehaviour
     public MapX[] Grid => _grid;
 
     public void SetMap(MapX[] map) => _grid = map;
-
-    private void Awake()
-    {
-        if (!Instance)
-            Instance = this;
-        else if (Instance != this)
-            Destroy(this);
-    }
 
     public Node GetNode(int x, int y)
     {
