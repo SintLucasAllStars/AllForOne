@@ -26,16 +26,11 @@ public class NetworkManager : Singleton<NetworkManager>
 
     private bool _connectionCoroutine;
 
-    private Queue<Message> _messages = new Queue<Message>();
+    private Queue<string> _messages = new Queue<string>();
 
-    public Queue<Message> Messages
-    {
-        get => _messages;
-    }
-    public WebSocket WebSocket
-    {
-        get => _webSocket;
-    }
+    public Queue<string> Messages => _messages;
+
+    public WebSocket WebSocket => _webSocket;
 
     public void Connect()
     {
@@ -43,23 +38,19 @@ public class NetworkManager : Singleton<NetworkManager>
         StartCoroutine(HandleNetwork(ServerURL));
     }
 
-    public void Close(string reason, bool showModal = true)
-    {
-        WebSocket.Close(CloseStatusCode.Normal, reason);
-    }
+    public void Close(string reason, bool showModal = true) => WebSocket.Close(CloseStatusCode.Normal, reason);
 
     private void OnReceive(MessageEventArgs message)
     {
         try
         {
             if (message.IsText)
-                Messages.Enqueue(JsonUtility.FromJson<Message>(message.Data));
+                Messages.Enqueue(message.Data);
         }
         catch (Exception ex)
         {
             Debug.LogError(ex.Message);
         }
-
     }
 
     public void SendMessage(Message message)
@@ -70,7 +61,7 @@ public class NetworkManager : Singleton<NetworkManager>
         if (WebSocket.IsConnected == false)
             return;
 
-        WebSocket.Send(JsonUtility.ToJson(message));
+        WebSocket.Send(message.GameData);
     }
 
     new public void SendMessage(string message)
@@ -80,7 +71,7 @@ public class NetworkManager : Singleton<NetworkManager>
 
     private void OnClose(CloseEventArgs e)
     {
-        Debug.Log("Closed Connection. " + e.Reason);
+        Debug.Log("Closed Connection: " + e.Reason);
         _connectionCoroutine = false;
     }
 

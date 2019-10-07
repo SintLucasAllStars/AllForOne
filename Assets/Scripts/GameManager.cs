@@ -20,21 +20,28 @@ public class GameManager : Singleton<GameManager>
         {
             if (NetworkManager.Instance.Messages.Count > 0)
             {
-                Message message = NetworkManager.Instance.Messages.Dequeue();
+                string message = NetworkManager.Instance.Messages.Dequeue();
                 HandleMessage(message);
             }
             yield return null;
         }
     }
 
-    public void HandleMessage(Message message) => UpdateClients(message.GameData);
-
-    public void SendMessageToServer(UnitData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
-
-    private void UpdateClients(UnitData gameData)
+    public void HandleMessage(string message)
     {
-        //On player has disconnected.
-        if (!gameData.IsConnected)
+        UnitData data = JsonUtility.FromJson<UnitData>(message);
+        if(string.IsNullOrEmpty(data.Type))
+            UpdateClients(data);
+        else
+            UpdateUnits(data);
+    }
+
+    public void SendMessageToServer(GameData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
+
+    private void UpdateUnits(UnitData gameData)
+    {
+        //Unit has died.
+        if (!gameData.IsActive)
         {
             for (int i = 0; i < _players.Count; i++)
             {
@@ -60,13 +67,25 @@ public class GameManager : Singleton<GameManager>
         //Player did not exist and is new.
         else if (!string.IsNullOrEmpty(gameData.Guid))
         {
-            Unit p = Instantiate(Resources.Load<GameObject>("Prefabs/" + gameData/*.type*/), Map.Instance.transform).GetComponent<Unit>();
+            Player.Instance.GameData = new GameData(gameData);
+        }
+    }
+    private void UpdateClients(GameData gameData)
+    {
+        if(Player.Instance.GameData.Guid == gameData.Guid)
+        {
+            Player.Instance.GameData = gameData;
+        }
 
-            p.GameData = gameData;
-
-            p.SetPosition(gameData.Position);
-
-            _units.Add(p);
+        //On player has disconnected.
+        if (!gameData.IsConnected)
+        {
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if (_players[i].GameData.Guid == gameData.Guid)
+                    _players.Remove(_players[i]);
+            }
+            return;
         }
     }
     private bool DoesPlayerExist(string guid)

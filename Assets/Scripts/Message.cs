@@ -1,17 +1,13 @@
 ﻿using System;
 using UnityEngine;
+using System.IO;
 
 [Serializable]
 public class Message
 {
-    public UnitData GameData = new UnitData();
+    public string GameData = "";
 
-    public Message(string guid, Node position, string type, bool isConnected, bool isActive, PlayerSide playerSide)
-    {
-        GameData = new UnitData(guid, position, type, isConnected, isActive, playerSide);
-    }
-
-    public Message(UnitData gamedata) => GameData = new UnitData(gamedata);
+    public Message(GameData gamedata) => GameData = JsonUtility.ToJson(gamedata);
 
     public Message(Message other) => GameData = other.GameData;
 

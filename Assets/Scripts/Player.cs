@@ -1,21 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public enum PlayerSide
-{
-    Red,
-    Blu
-}
+using System;
 
 public class Player : Singleton<Player>
 {
-    private UnitData _gameData = new UnitData();
-    public UnitData GameData => _gameData;
+    private GameData _gameData = new GameData();
+    public GameData GameData
+    {
+        get => _gameData;
+        set => _gameData = value;
+    }
 
     private Wallet _wallet = new Wallet(100);
 
     private List<Unit> _units = new List<Unit>();
+
+    private void Start()
+    {
+        _gameData = new GameData(new Guid().ToString(), true, PlayerSide.Blu);
+        GameManager.Instance.SendMessageToServer(_gameData);
+    }
 
     public static Color32 GetColor(PlayerSide side)
     {
