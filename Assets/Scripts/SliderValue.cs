@@ -7,16 +7,39 @@ public class SliderValue : MonoBehaviour
 {
     public Slider sliderUI;
     private TMP_Text textSliderValue;
+    public TMP_Text textTotalPoints;
+
+    public int sliderValue;
+    public int totalPointsValue = 100;
 
     void Start()
     {
         textSliderValue = GetComponent<TMP_Text>();
-        ShowHealthValue();
+        //ShowValue();
     }
 
-    public void ShowHealthValue()
+    void Update()
     {
         string sliderMessage = sliderUI.value.ToString();
         textSliderValue.text = sliderMessage;
+        sliderValue = int.Parse(textSliderValue.text);
+
+        //totalPointsValue = (totalPointsValue - 1);
+        //textTotalPoints.text = totalPointsValue.ToString();
+    }
+
+    public void ShowValue()
+    {
+        //string sliderMessage = sliderUI.value.ToString();
+        //textSliderValue.text = sliderMessage;
+        //sliderValue = int.Parse(textSliderValue.text);
+
+        totalPointsValue = (totalPointsValue - 1);
+        textTotalPoints.text = totalPointsValue.ToString();
+    }
+
+    public void ShowTotalPoints()
+    {
+        
     }
 }
