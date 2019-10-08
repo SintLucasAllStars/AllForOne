@@ -137,10 +137,13 @@ public class Soldier : MonoBehaviour
 
     private void Update()
     {
+
         if (!_controled)
         {
             return;
         }
+        CameraManagement();
+        AnimationManagement();
 
         if (Input.GetMouseButton(0))
         {
@@ -194,8 +197,6 @@ public class Soldier : MonoBehaviour
         {
             return;
         }
-        CameraManagement();
-        AnimationManagement();
 
         if (Input.GetAxisRaw("Vertical") == 0 && Input.GetAxisRaw("Horizontal") == 0)
         {
