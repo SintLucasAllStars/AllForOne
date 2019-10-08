@@ -20,21 +20,16 @@ public class SliderValue : MonoBehaviour
 
     void Update()
     {
-        string sliderMessage = sliderUI.value.ToString();
-        textSliderValue.text = sliderMessage;
-        sliderValue = int.Parse(textSliderValue.text);
 
-        //totalPointsValue = (totalPointsValue - 1);
-        //textTotalPoints.text = totalPointsValue.ToString();
     }
 
     public void ShowValue()
     {
-        //string sliderMessage = sliderUI.value.ToString();
-        //textSliderValue.text = sliderMessage;
-        //sliderValue = int.Parse(textSliderValue.text);
+        string sliderMessage = sliderUI.value.ToString();
+        textSliderValue.text = sliderMessage;
+        sliderValue = int.Parse(textSliderValue.text);
 
-        totalPointsValue = (totalPointsValue - 1);
+        totalPointsValue -= sliderValue;
         textTotalPoints.text = totalPointsValue.ToString();
     }
 
