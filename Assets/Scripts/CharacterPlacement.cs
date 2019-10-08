@@ -9,7 +9,7 @@ public class CharacterPlacement : MonoBehaviour
     private GameObject testUnit;
 
     [SerializeField]
-    private KeyCode unitHotKey = KeyCode.A;
+    private KeyCode unitHotKey = KeyCode.Q;
 
     private GameObject currentTestUnit;
 

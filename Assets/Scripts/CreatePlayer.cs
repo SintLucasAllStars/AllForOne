@@ -33,6 +33,8 @@ public class CreatePlayer : MonoBehaviour
 
     public GameObject canvas;
 
+    public GameObject cam;
+
     void Start()
     {
         newPlayer = new BasePlayer();
@@ -42,6 +44,8 @@ public class CreatePlayer : MonoBehaviour
         defenseText.text = 1.ToString();
 
         pointsText.text = 90.ToString();
+
+        //cam.SetActive(false);
     }
 
     void Update()
@@ -157,6 +161,7 @@ public class CreatePlayer : MonoBehaviour
         //SceneManager.LoadScene(0);
 
         canvas.SetActive(false);
+        //cam.SetActive(true);
     }
 
     public void Animations()
