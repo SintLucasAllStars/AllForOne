@@ -26,14 +26,13 @@ public class TopDownView : MonoBehaviour
     public Text strText;
     public float de;
     public Text deText;
-
+    
     [Header("Price and Money")]
     public int points;
     public Text pointsText;
     public float cost;
     
     [Header("UI Elements")]
-    public bool nextTeam;
     public bool hiring;
     public Button hireButton;
     public GameObject hireMenu;
@@ -82,12 +81,9 @@ public class TopDownView : MonoBehaviour
     {
         if (points < 10)
         {
-            if (nextTeam == true)
-            {
                 nextPlayerMenu.SetActive(true);
                 hireMenu.SetActive(false);
                 playerMenu.SetActive(false);
-            }
         }
         else
         {

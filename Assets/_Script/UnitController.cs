@@ -21,12 +21,13 @@ public class UnitController : MonoBehaviour
     public bool rotateToCamera;
 
     [Header("Weapon")]
+    public int weaponDamage;
+    public int weaponRange;
     public weapons currentWeapon;
     public enum weapons { noWeapon, powerPunch, knife, warHammer, gun }
 
-    [Header("Team")]
-    public Team currentTeam;
-    public enum Team { BlueTeam, RedTeam }
+    [Header("TeamTag")]
+    public string teamName;
 
     private void Start()
     {
@@ -53,13 +54,23 @@ public class UnitController : MonoBehaviour
         inControl = true;
         cameraObject.GetComponent<Camera>().enabled = true;
         rotateToCamera = true;
+        StartCoroutine(Timer());
+    }
+
+    IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(10f);
+        TimersUp();
     }
 
     public void TimersUp()
     {
         inControl = false;
         cameraObject.GetComponent<Camera>().enabled = false;
-        rotateToCamera = true;
+        rotateToCamera = false;
+        anim.SetFloat("Horizontal", 0);
+        anim.SetFloat("Vertical", 0);
+        GameManager.instance.TurnEnded();
     }
 
     void Jump()
@@ -84,23 +95,53 @@ public class UnitController : MonoBehaviour
             {
                 case weapons.noWeapon:
                     anim.Play("Punch");
+                    weaponDamage = 2 + strenght;
+                    weaponRange = 1;
                     break;
                 case weapons.powerPunch:
                     anim.Play("PowerKick");
+                    weaponDamage = 8 + strenght;
+                    weaponRange = 1;
                     break;
                 case weapons.knife:
                     anim.Play("Knife");
+                    weaponDamage = 15 + strenght;
+                    weaponRange = 1;
                     break;
                 case weapons.warHammer:
                     anim.Play("Hammer");
+                    weaponDamage = 40 + strenght;
+                    weaponRange = 2;
                     break;
                 case weapons.gun:
                     anim.Play("Shoot");
+                    weaponDamage = 10 + strenght;
+                    weaponRange = 10;
                     break;
                 default:
                     break;
             }
             attackReady = false;
+        }
+    }
+
+    public void AttackRay()
+    {
+        RaycastHit hit;
+
+        Vector3 rayOrigin = transform.position + transform.forward * 0.5f + transform.up * 0.5f;
+        Debug.DrawRay(rayOrigin, transform.forward * weaponRange, Color.blue, 1);
+        if (Physics.Raycast(rayOrigin, transform.forward, out hit, weaponRange))
+        {
+            if (hit.collider.tag != teamName)
+            {
+                Debug.Log("Raycast hit " + hit.collider.name);
+                UnitController ut = hit.collider.GetComponent<UnitController>();
+                if (ut != null)
+                {
+                    ut.health -= weaponDamage;
+                }
+            }
         }
     }
 
@@ -111,8 +152,8 @@ public class UnitController : MonoBehaviour
 
     void Movement()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        var x = Input.GetAxis("Horizontal");
+        var z = Input.GetAxis("Vertical");
 
         anim.SetFloat("Horizontal", x);
         anim.SetFloat("Vertical", z);
@@ -135,5 +176,4 @@ public class UnitController : MonoBehaviour
             cc.enabled = false;
         }
     }
-
 }

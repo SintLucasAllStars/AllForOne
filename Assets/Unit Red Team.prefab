@@ -2378,7 +2378,7 @@ GameObject:
   - component: {fileID: 5597752821456181642}
   m_Layer: 11
   m_Name: Unit Red Team
-  m_TagString: Untagged
+  m_TagString: Red Team
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2455,9 +2455,11 @@ MonoBehaviour:
   strenght: 0
   defense: 0
   cameraObject: {fileID: 5597752821603455091}
-  rotateToCamera: 1
+  rotateToCamera: 0
+  weaponDamage: 0
+  weaponRange: 0
   currentWeapon: 0
-  currentTeam: 1
+  teamName: Red Team
 --- !u!1 &5597752821456281259
 GameObject:
   m_ObjectHideFlags: 0
@@ -5278,7 +5280,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5597752821603455092}
   - component: {fileID: 5597752821603455095}
-  - component: {fileID: 5597752821603455094}
   - component: {fileID: 5597752821603455093}
   m_Layer: 11
   m_Name: Camera
@@ -5286,7 +5287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5597752821603455092
 Transform:
   m_ObjectHideFlags: 0
@@ -5308,7 +5309,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5597752821603455091}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -5343,14 +5344,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5597752821603455094
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5597752821603455091}
-  m_Enabled: 1
 --- !u!114 &5597752821603455093
 MonoBehaviour:
   m_ObjectHideFlags: 0
