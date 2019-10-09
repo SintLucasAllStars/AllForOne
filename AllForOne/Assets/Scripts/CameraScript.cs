@@ -35,7 +35,7 @@ public class CameraScript : MonoBehaviour
 
     public void OnClick()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager._instance._canSpawn)
         {
             RaycastHit hit;
             if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))

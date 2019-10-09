@@ -28,6 +28,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Text _defenseText;
 
+    [SerializeField]
+    private Image _colorBlock;
+
+    [SerializeField]
+    private Canvas _unitCanvas;
+
+    [SerializeField]
+    private Camera _mainCamera;
+
     private int _health = 1;
     private int _strenght = 1;
     private int _speed = 1;
@@ -36,16 +45,32 @@ public class GameManager : MonoBehaviour
     private int _expensiveCostModifier = 3;
     private int _cheapCostModifier = 2;
 
-    private int _player1Points = 100;
-    private int _player2Points = 100;
+    private int _player1Points = 90;
+    private int _player2Points = 90;
 
-    private int _unitCost;
+    private int _unitCost = 10;
 
     private bool _player1Turn = true;
+
+    public bool _canSpawn;
 
     private void Awake()
     {
         _instance = this;
+
+        _unitCostText.text = "$" + _unitCost;
+        _playerCurrencyText.text = "$" + _player1Points;
+
+    }
+
+    public void PlaceUnit()
+    {
+        if ((_player1Turn && _player1Points >= 0) || (!_player1Turn && _player2Points >= 0))
+        {
+            _canSpawn = true;
+            _mainCamera.enabled = true;
+            _unitCanvas.enabled = false;
+        }
     }
 
     public void CreateUnit(Vector3 spawnPosition)
@@ -57,6 +82,45 @@ public class GameManager : MonoBehaviour
         unit._strenght = _strenght;
         unit._speed = _speed;
         unit._defense = _defense;
+
+        _canSpawn = false;
+        _mainCamera.enabled = false;
+        _unitCanvas.enabled = true;
+
+        SwitchTeam();
+    }
+
+    private void SwitchTeam()
+    {
+        if (_player1Turn)
+        {
+            _player1Points -= 10;
+            _player1Turn = false;
+            _colorBlock.color = new Color32(42, 87, 226, 255);
+            _playerCurrencyText.text = "$" + _player2Points;
+        }
+        else
+        {
+            _player2Points -= 10;
+            _player1Turn = true;
+            _colorBlock.color = new Color32(226, 42, 42, 255);
+            _playerCurrencyText.text = "$" + _player1Points;
+        }
+
+        _health = 1;
+        _healthText.text = _health.ToString();
+
+        _strenght = 1;
+        _strenghtText.text = _strenght.ToString();
+
+        _speed = 1;
+        _speedText.text = _speed.ToString();
+
+        _defense = 1;
+        _defenseText.text = _defense.ToString();
+
+        _unitCost = 10;
+        _unitCostText.text = "$" + _unitCost;
     }
 
     public void AddHealthPoints(int health)
@@ -70,9 +134,10 @@ public class GameManager : MonoBehaviour
         {
             _player1Points -= health * _expensiveCostModifier;
             _playerCurrencyText.text = "$" + _player1Points;
-            if (_player1Points < 0)
+            if (_player1Points < 0 && health > 0)
             {
                 _player1Points += health * _expensiveCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
@@ -80,10 +145,10 @@ public class GameManager : MonoBehaviour
         {
             _player2Points -= health * _expensiveCostModifier;
             _playerCurrencyText.text = "$" + _player2Points;
-            if (_player2Points < 0)
+            if (_player2Points < 0 && health > 0)
             {
                 _player2Points += health * _expensiveCostModifier;
-
+                _playerCurrencyText.text = "$" + _player2Points;
                 return;
             }
         }
@@ -106,9 +171,10 @@ public class GameManager : MonoBehaviour
         {
             _player1Points -= strenght * _cheapCostModifier;
             _playerCurrencyText.text = "$" + _player1Points;
-            if (_player1Points < 0)
+            if (_player1Points < 0 && strenght > 0)
             {
                 _player1Points += strenght * _cheapCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
@@ -116,9 +182,10 @@ public class GameManager : MonoBehaviour
         {
             _player2Points -= strenght * _cheapCostModifier;
             _playerCurrencyText.text = "$" + _player2Points;
-            if (_player2Points < 0)
+            if (_player2Points < 0 && strenght > 0)
             {
                 _player2Points += strenght * _cheapCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
@@ -141,9 +208,10 @@ public class GameManager : MonoBehaviour
         {
             _player1Points -= speed * _expensiveCostModifier;
             _playerCurrencyText.text = "$" + _player1Points;
-            if (_player1Points < 0)
+            if (_player1Points < 0 && speed > 0)
             {
                 _player1Points += speed * _expensiveCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
@@ -151,9 +219,10 @@ public class GameManager : MonoBehaviour
         {
             _player2Points -= speed * _expensiveCostModifier;
             _playerCurrencyText.text = "$" + _player2Points;
-            if (_player2Points < 0)
+            if (_player2Points < 0 && speed > 0)
             {
                 _player2Points += speed * _expensiveCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
@@ -176,9 +245,10 @@ public class GameManager : MonoBehaviour
         {
             _player1Points -= defense * _cheapCostModifier;
             _playerCurrencyText.text = "$" + _player1Points;
-            if (_player1Points < 0)
+            if (_player1Points < 0 && defense > 0)
             {
                 _player1Points += defense * _cheapCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
@@ -186,9 +256,10 @@ public class GameManager : MonoBehaviour
         {
             _player2Points -= defense * _cheapCostModifier;
             _playerCurrencyText.text = "$" + _player2Points;
-            if (_player2Points < 0)
+            if (_player2Points < 0 && defense > 0)
             {
                 _player2Points += defense * _cheapCostModifier;
+                _playerCurrencyText.text = "$" + _player1Points;
                 return;
             }
         }
