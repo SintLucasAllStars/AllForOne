@@ -1,10 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameControler : MonoBehaviour
 {
     private Camera _camera;
-    private GameObject _focusedUnit;
+    private Unit _focusedUnit;
 
     private void Start()
     {
@@ -28,7 +27,8 @@ public class GameControler : MonoBehaviour
                 HandleCameraMovement();
                 break;
             case GameManager.GameState.UnitControl:
-                // todo control unit
+                // control unit
+                HandleUnitControl();
                 break;
         }
         
@@ -46,24 +46,58 @@ public class GameControler : MonoBehaviour
                 return;
             }
 
-            _focusedUnit = hit.collider.gameObject;
+            _focusedUnit = (Unit) hit.collider.gameObject.GetComponent(typeof(Unit));
             GameManager.GetGameManager().SetGameState(GameManager.GameState.CameraMovement);
         }
     }
     
     private void HandleCameraMovement()
     {
-        Vector3 newLocation = Vector3.MoveTowards(_camera.transform.position, _focusedUnit.transform.position, 1);
-        Quaternion newRotation = Quaternion.RotateTowards(_camera.transform.rotation, _focusedUnit.transform.rotation, 1);
+        if (!MoveCameraToUnit(1))
+        {
+            GameManager.GetGameManager().SetGameState(GameManager.GameState.UnitControl);
+        }
+    }
+
+    private void HandleUnitControl()
+    {
+        float speed = _focusedUnit._speed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.W))
+        {
+            _focusedUnit.transform.Translate(0, 0, speed);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            _focusedUnit.transform.Translate(0, 0, -speed);
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            _focusedUnit.transform.Translate(-speed, 0, 0);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            _focusedUnit.transform.Translate(speed, 0, 0);
+        }
+        
+        _focusedUnit.transform.Rotate(Input.mousePosition);
+
+        MoveCameraToUnit(1);
+    }
+
+    private bool MoveCameraToUnit(float maxMovement)
+    {
+        Vector3 newLocation = Vector3.MoveTowards(_camera.transform.position, _focusedUnit.transform.position + new Vector3(0, 2, -10), maxMovement);
+        Quaternion newRotation = Quaternion.RotateTowards(_camera.transform.rotation, _focusedUnit.transform.rotation, maxMovement);
 
         if (newLocation == _camera.transform.position && newRotation == _camera.transform.rotation)
         {
             GameManager.GetGameManager().SetGameState(GameManager.GameState.UnitControl);
-            return;
+            return false;
         }
 
         _camera.transform.position = newLocation;
         _camera.transform.rotation = newRotation;
+        return true;
     }
     
 }
