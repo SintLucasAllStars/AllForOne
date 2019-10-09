@@ -32,8 +32,19 @@ public class CreatePlayer : MonoBehaviour
     public AudioSource ocarina;
 
     public GameObject canvas;
+    public GameObject canvas2;
+    public GameObject placer;
+    public GameObject placer2;
 
-    public GameObject cam;
+    public int state = 1;
+
+    public Button place;
+
+    public Button strengthMinusButton;
+    public Button healthMinusButton;
+    public Button speedMinusButton;
+    public Button defenseMinusButton;
+
 
     void Start()
     {
@@ -45,7 +56,7 @@ public class CreatePlayer : MonoBehaviour
 
         pointsText.text = 90.ToString();
 
-        //cam.SetActive(false);
+        placer.SetActive(false);
     }
 
     void Update()
@@ -53,9 +64,13 @@ public class CreatePlayer : MonoBehaviour
         curPlayerName = inputField.GetComponent<Text>().text;
         charName.GetComponent<TextMeshProUGUI>().text = curPlayerName;
 
-        if(pointsToSpend == 0)
+        if (pointsToSpend == 0)
         {
             Debug.Log("boohoo");
+            if (place.enabled)
+            {
+                //canvas.SetActive(false);
+            }
         }
     }
 
@@ -85,20 +100,30 @@ public class CreatePlayer : MonoBehaviour
 
     public void SetStrength(int amount)
     {
-        if(amount > 0 && pointsToSpend > 0)
+        if (amount > 0 && pointsToSpend > 0)
         {
             newPlayer.Strength += amount;
             pointsToSpend -= 2;
             UpdateUI();
-
         }
 
-        else if ( amount < 1)
+        else if (amount < 1)
         {
             newPlayer.Strength += amount;
             pointsToSpend += 2;
             UpdateUI();
         }
+
+        if (newPlayer.Strength > 1)
+        {
+            strengthMinusButton.gameObject.SetActive(true);
+        }
+
+        if (newPlayer.Strength <= 1)
+        {
+            strengthMinusButton.gameObject.SetActive(false);
+        }
+
     }
 
     public void SetHealth(int amount)
@@ -116,6 +141,16 @@ public class CreatePlayer : MonoBehaviour
             newPlayer.Health += amount;
             pointsToSpend += 3;
             UpdateUI();
+        }
+
+        if (newPlayer.Health >= 1)
+        {
+            healthMinusButton.gameObject.SetActive(true);
+        }
+
+        if (newPlayer.Health < 1)
+        {
+            healthMinusButton.gameObject.SetActive(false);
         }
     }
 
@@ -135,6 +170,16 @@ public class CreatePlayer : MonoBehaviour
             pointsToSpend += 3;
             UpdateUI();
         }
+
+        if (newPlayer.Speed >= 1)
+        {
+            speedMinusButton.gameObject.SetActive(true);
+        }
+
+        if (newPlayer.Speed < 1)
+        {
+            speedMinusButton.gameObject.SetActive(false);
+        }
     }
 
     public void SetDefense(int amount)
@@ -153,6 +198,16 @@ public class CreatePlayer : MonoBehaviour
             pointsToSpend += 2;
             UpdateUI();
         }
+
+        if (newPlayer.Defense >= 1)
+        {
+            defenseMinusButton.gameObject.SetActive(true);
+        }
+
+        if (newPlayer.Defense < 1)
+        {
+            defenseMinusButton.gameObject.SetActive(false);
+        }
     }
 
     public void LoadStuff()
@@ -161,7 +216,10 @@ public class CreatePlayer : MonoBehaviour
         //SceneManager.LoadScene(0);
 
         canvas.SetActive(false);
-        //cam.SetActive(true);
+        placer.SetActive(true);
+        placer2.SetActive(false);
+
+        state = 2;
     }
 
     public void Animations()
@@ -179,5 +237,15 @@ public class CreatePlayer : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         melee.UnPause();
         yield return null;
+    }
+
+    public static void SwitchTurn()
+    {
+
+    }
+
+    public void EndPlacing()
+    {
+        canvas.SetActive(false);  
     }
 }

@@ -18,7 +18,7 @@ public class Animations : MonoBehaviour
         {
             animator.SetBool("WPressed", true);
             WPressed = true;
-            //Debug.Log("yr");
+            Debug.Log("yr");
         }
 
         if (Input.GetKeyDown(KeyCode.W) && WPressed)

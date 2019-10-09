@@ -16,4 +16,9 @@ public class SaveInfo
         
         //Debug.Log(GameInfo.PlayerName);
     }
+
+    public static void OverWrite()
+    {
+        PlayerPrefs.SetInt("STRENGTH", 0);
+    }
 }

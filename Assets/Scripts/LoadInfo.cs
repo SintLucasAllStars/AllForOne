@@ -20,4 +20,14 @@ public class LoadInfo
         Debug.Log(GameInfo.Defense + " Defense");
         Debug.Log("Info Loaded");
     }  
+
+    public static void NukeAll()
+    {
+        GameInfo.PlayerName = ("");
+
+        GameInfo.Strength = 0;
+        GameInfo.Health = 0;
+        GameInfo.Speed = 0;
+        GameInfo.Defense = 0;
+    }
 }

@@ -11,7 +11,7 @@ public class ThirdPersonCharacterControl : MonoBehaviour
     public float defense;
 
 
-	void Update ()
+    void Update()
     {
         PlayerMovement();
 
@@ -36,6 +36,6 @@ public class ThirdPersonCharacterControl : MonoBehaviour
 
     void Attack()
     {
-        Debug.Log("ATTACK");
+        //Debug.Log("ATTACK");
     }
 }

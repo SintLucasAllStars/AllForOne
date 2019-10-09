@@ -9,7 +9,7 @@ public class CharacterPlacement : MonoBehaviour
     private GameObject testUnit;
 
     [SerializeField]
-    private KeyCode unitHotKey = KeyCode.Q;
+    private KeyCode unitHotKey = KeyCode.A;
 
     private GameObject currentTestUnit;
 
@@ -17,6 +17,12 @@ public class CharacterPlacement : MonoBehaviour
     private int health;
     private int speed;
     private int defense;
+
+    public GameObject canvas;
+    public GameObject canvas2;
+
+    public GameObject placer;
+    public GameObject placer2;
 
     // Start is called before the first frame update
     void Awake()
@@ -35,7 +41,7 @@ public class CharacterPlacement : MonoBehaviour
             ReleaseIfClicked();
         }
 
-        strength = GameInfo.Strength;
+        //strength = GameInfo.Strength;
 
     }
 
@@ -44,6 +50,7 @@ public class CharacterPlacement : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             currentTestUnit = null;
+            EndTurn1();
         }
     }
 
@@ -67,5 +74,16 @@ public class CharacterPlacement : MonoBehaviour
                 currentTestUnit = Instantiate(testUnit);
             }
         }
+    }
+
+    void EndTurn1()
+    {
+        canvas2.SetActive(true);
+        placer2.SetActive(true);
+        //canvas.SetActive(false);
+        //LoadInfo.NukeAll();
+        //CreatePlayer.SwitchTurn();
+
+        Debug.Log("KANKER OP");
     }
 }

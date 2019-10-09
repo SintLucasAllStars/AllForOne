@@ -10,7 +10,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
 
     public Transform Obstruction;
     float zoomSpeed = 2f;
-    
+
     void Start()
     {
         Obstruction = Target;
@@ -23,7 +23,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
         CamControl();
         ViewObstructed();
     }
-    
+
 
     void CamControl()
     {
@@ -35,7 +35,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-           // Target.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+            // Target.rotation = Quaternion.Euler(mouseY, mouseX, 0);
         }
         else
         {
@@ -43,7 +43,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
             Player.rotation = Quaternion.Euler(0, mouseX, 0);
         }
     }
-    
+
 
     void ViewObstructed()
     {
