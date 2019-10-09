@@ -27,8 +27,25 @@ public class CameraScript : MonoBehaviour
 
     private void Update()
     {
+        OnClick();
+
         CameraMovement();
         CameraZoom();
+    }
+
+    public void OnClick()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+            {
+                if (hit.collider.CompareTag("Ground"))
+                {
+                    GameManager._instance.CreateUnit(hit.point);
+                }
+            }
+        }
     }
 
     private void CameraMovement()
@@ -46,12 +63,12 @@ public class CameraScript : MonoBehaviour
 
     private void CameraZoom()
     {
-        if (Input.GetKey(KeyCode.Minus) && _camera.fieldOfView >= _minZoom)
+        if (Input.GetKey(KeyCode.Equals) && _camera.fieldOfView > _minZoom)
         {
             _camera.fieldOfView -= _zoomSpeed;
         }
 
-        if (Input.GetKey(KeyCode.Equals) && _camera.fieldOfView <= _maxZoom)
+        if (Input.GetKey(KeyCode.Minus) && _camera.fieldOfView < _maxZoom)
         {
             _camera.fieldOfView += _zoomSpeed;
         }
