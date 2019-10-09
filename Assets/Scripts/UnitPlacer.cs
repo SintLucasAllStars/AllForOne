@@ -12,6 +12,11 @@ public class UnitPlacer : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.GetGameManager().GetGameState() != GameManager.GameState.PreGame)
+        {
+            Destroy(this);
+        }
+        
         HandleUnitPlacing();
         HandleUI();
     }
