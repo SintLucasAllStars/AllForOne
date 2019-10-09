@@ -8,10 +8,7 @@ public class PowerUpController : PowerUp
 
     public Dictionary<TypeOfPowerUp, PowerUp> powerUpDict = new Dictionary<TypeOfPowerUp, PowerUp>();
 
-    public PowerUpController(string name, int duration) : base(name, duration)
-    {
-
-    }
+    public PowerUpController(TypeOfPowerUp typeOfPowerUp, int duration, int value) : base(typeOfPowerUp, duration, value) { }
 
     void LoadIn()
     {
@@ -24,8 +21,9 @@ public class PowerUpController : PowerUp
         {
             TypeOfPowerUp type = (TypeOfPowerUp)Enum.Parse(typeof(TypeOfPowerUp), item.ToString());
             var duration = jsonFile[item]["duration"];
-            var speed = jsonFile[item][type.ToString()];
-            PowerUp powerUp = new PowerUp(type.ToString(), duration);
+            var value = jsonFile[item][1];
+
+            PowerUp powerUp = new PowerUp(type, value, duration);
             powerUpDict.Add(type, powerUp);
         }
     }

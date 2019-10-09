@@ -6,7 +6,7 @@ class WeaponController : Weapon
 {
     private static string filePath = "./Assets/Scripts/Weapon/WeaponStats.json";
 
-    public Dictionary<TypeOfWeapon, Weapon> WeaponDict = new Dictionary<TypeOfWeapon, Weapon>();
+    public static Dictionary<TypeOfWeapon, Weapon> WeaponDict = new Dictionary<TypeOfWeapon, Weapon>();
 
     private new TypeOfWeapon typeOfWeapon;
     public WeaponController(int damage, int speed, float range, TypeOfWeapon typeOfWeapon) : base(damage, speed, range, typeOfWeapon) { }

@@ -1,13 +1,15 @@
 public class PowerUp
 {
     public int duration;
-    public string name;
+
+    public int value;
     public TypeOfPowerUp typeOfPowerUp;
 
-    public PowerUp(string _name, int _duration)
+    public PowerUp(TypeOfPowerUp _typeOfPowerUp, int _duration, int _value)
     {
+        this.typeOfPowerUp = _typeOfPowerUp;
         this.duration = _duration;
-        this.name = _name;
+        this.value = _value;
     }
     public enum TypeOfPowerUp
     {

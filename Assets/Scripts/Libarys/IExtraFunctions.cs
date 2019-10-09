@@ -6,11 +6,11 @@ namespace IExtraFunctions
 {
     public class WaitTimer : MonoBehaviour
     {
-        static public WaitTimer waitTimer;
+        static public WaitTimer _waitTimer;
         public static void Wait(float secondsToWait, Action action)
         {
-            waitTimer = new WaitTimer();
-            waitTimer.StartCoroutine(_wait(action, secondsToWait));
+            _waitTimer = new WaitTimer();
+            _waitTimer.StartCoroutine(_wait(action, secondsToWait));
         }
 
         static IEnumerator _wait(Action action, float secondsToWait)
@@ -22,9 +22,7 @@ namespace IExtraFunctions
 
     public class MathUtils
     {
-        public static float Map(float x, float in_min, float in_max, float out_min, float out_max)
-        {
-            return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-        }
+        public static float Map(float x, float in_min, float in_max, float out_min, float out_max) =>
+            (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 }
