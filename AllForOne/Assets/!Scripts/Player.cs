@@ -7,9 +7,11 @@ public class Player
 {
     List<Unit> Units;
     public int points;
+    public string name;
 
-    public Player(int _points)
+    public Player(int _points, string _name)
     {
         points = _points;
+        name = _name;
     }
 }

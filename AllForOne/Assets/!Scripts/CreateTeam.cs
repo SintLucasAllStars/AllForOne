@@ -6,9 +6,10 @@ using TMPro;
 
 public class CreateTeam : MonoBehaviour
 {
-    public TextMeshProUGUI healthTxt, speedTxt, defenceTxt, strengthTxt;
+    public Camera mainCamera;
+    public TextMeshProUGUI healthTxt, speedTxt, defenceTxt, strengthTxt, pointsTxt, playerNameTxt, playerPointsLeft;
     public Unit unitRed, unitBlue;
-    bool placeUnit = false;
+    public bool placeUnit = false;
     public GameObject UI;
 
     int health;
@@ -19,42 +20,9 @@ public class CreateTeam : MonoBehaviour
 
     private void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
         if (placeUnit)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (Physics.Raycast(ray, out hit, 100))
-                {
-                    if(hit.collider.CompareTag("Ground"))
-                    {
-                        if(Gamemanager.instance.currentplayer == Gamemanager.instance.player1)
-                        {
-                            Unit go = Instantiate(unitRed, hit.point, Quaternion.identity);
-                            go.health = this.health;
-                            go.speed = this.speed;
-                            go.defence = this.defence;
-                            go.strength = this.strength;
-                            placeUnit = false;
-                            UI.SetActive(true);
-                            Gamemanager.instance.SwitchCurrentPlayer();
-                        }
-                        else if (Gamemanager.instance.currentplayer == Gamemanager.instance.player2)
-                        {
-                            Unit go = Instantiate(unitBlue, hit.point, Quaternion.identity);
-                            go.health = this.health;
-                            go.speed = this.speed;
-                            go.defence = this.defence;
-                            go.strength = this.strength;
-                            placeUnit = false;
-                            UI.SetActive(true);
-                            Gamemanager.instance.SwitchCurrentPlayer();
-                        }
-
-                    }
-                }
-            }
+            PlacePlayer();
         }
     }
 
@@ -65,65 +33,92 @@ public class CreateTeam : MonoBehaviour
 
     public void ChangeHealth(int value)
     {
-        if(value == 1)
+        if (CheckPoints())
         {
-            health += value;
-            healthTxt.text = health.ToString();
-            Gamemanager.instance.currentplayer.points -= 3;
-        }
-        else
-        {
-            health += value;
-            healthTxt.text = health.ToString();
-            Gamemanager.instance.currentplayer.points += 3;
+            if(health >= 1)
+            {
+                if (value > 0)
+                {
+                    Gamemanager.instance.currentplayer.points -= 2;
+                    health += value;
+                }
+                else if(health > 1)
+                {
+                    Gamemanager.instance.currentplayer.points += 2;
+                    health += value;
+                }
+                updatePoints();
+
+                healthTxt.text = health.ToString();
+            }
         }
     }
 
     public void ChangeSpeed(int value)
     {
-        if (value == 1)
+        if (CheckPoints())
         {
-            speed += value;
-            speedTxt.text = speed.ToString();
-            Gamemanager.instance.currentplayer.points -= 3;
-        }
-        else
-        {
-            speed += value;
-            speedTxt.text = speed.ToString();
-            Gamemanager.instance.currentplayer.points += 3;
+            if(speed >= 1)
+            {
+                if (value > 0)
+                {
+                    Gamemanager.instance.currentplayer.points -= 2;
+                    speed += value;
+                }
+                else if (speed > 1)
+                {
+                    Gamemanager.instance.currentplayer.points += 2;
+                    speed += value;
+                }
+                updatePoints();
+                
+                speedTxt.text = speed.ToString();
+            }
         }
     }
 
     public void ChangeDefence(int value)
     {
-        if (value == 1)
+        if (CheckPoints())
         {
-            defence += value;
-            defenceTxt.text = defence.ToString();
-            Gamemanager.instance.currentplayer.points -= 2;
-        }
-        else
-        {
-            defence += value;
-            defenceTxt.text = defence.ToString();
-            Gamemanager.instance.currentplayer.points += 2;
+            if(defence >= 1)
+            {
+                if (value > 0)
+                {
+                    Gamemanager.instance.currentplayer.points -= 2;
+                    defence += value;
+                }
+                else if(defence > 1)
+                {
+                    Gamemanager.instance.currentplayer.points += 2;
+                    defence += value;
+                }
+                updatePoints();
+
+                defenceTxt.text = defence.ToString();
+            }
         }
     }
 
     public void ChangeStrength(int value)
     {
-        if (value == 1)
+        if (CheckPoints())
         {
-            strength += value;
-            strengthTxt.text = strength.ToString();
-            Gamemanager.instance.currentplayer.points -= 2;
-        }
-        else
-        {
-            strength += value;
-            strengthTxt.text = strength.ToString();
-            Gamemanager.instance.currentplayer.points -= 2;
+            if(strength >= 1)
+            {
+                if (value > 0)
+                {
+                    Gamemanager.instance.currentplayer.points -= 2;
+                    strength += value;
+                }
+                else if(strength > 1)
+                {
+                    Gamemanager.instance.currentplayer.points += 2;
+                    strength += value;
+                }
+                updatePoints();
+                strengthTxt.text = strength.ToString();
+            }
         }
     }
 
@@ -133,13 +128,23 @@ public class CreateTeam : MonoBehaviour
         int tSpeed = speed * 3;
         int tDefence = defence * 2;
         int tStrength = strength * 2;
-
-        Gamemanager.instance.currentplayer.points -= (tHealth + tSpeed + tDefence + tStrength);
-        UI.SetActive(false);
+        if(Gamemanager.instance.currentplayer.points - (tHealth + tSpeed + tDefence + tStrength) < 0)
+        {
+            Debug.Log("Player doesn't have enough points to hire this unit, you broke ass boi");
+        }
+        else
+        {
+            Gamemanager.instance.currentplayer.points -= (tHealth + tSpeed + tDefence + tStrength);
+            Debug.Log("curren players new points total = " + Gamemanager.instance.currentplayer.points);
+            placeUnit = true;
+            UI.SetActive(false);
+        }
     }
 
     void setDefaultValues()
     {
+        CheckPlayer();
+        Debug.Log("its now this players turn" + Gamemanager.instance.currentplayer);
         health = 1;
         speed = 1;
         defence = 1;
@@ -148,6 +153,85 @@ public class CreateTeam : MonoBehaviour
         speedTxt.text = speed.ToString();
         defenceTxt.text = defence.ToString();
         strengthTxt.text = strength.ToString();
+        playerPointsLeft.text = "Available points : " + Gamemanager.instance.currentplayer.points.ToString();
+        playerNameTxt.text = Gamemanager.instance.currentplayer.name;
         points = Gamemanager.instance.currentplayer.points;
+        updatePoints();
+    }
+
+    void updatePoints()
+    {
+        int tTotalPoints = (health * 3 + speed * 3 + defence * 2 + strength * 2);
+        pointsTxt.text = "Unit price " + tTotalPoints.ToString();
+        
+        Debug.Log(points);
+    }
+
+    public void PlacePlayer()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("moused clicked");
+            if (Physics.Raycast(ray, out hit, 100))
+            {
+                if (hit.collider.CompareTag("Ground"))
+                {
+                    Debug.Log("Hit the ground");
+                    if (Gamemanager.instance.currentplayer == Gamemanager.instance.player1)
+                    {
+                        InstantiateUnit(unitRed, hit.point, "Red");
+                    }
+                    else if (Gamemanager.instance.currentplayer == Gamemanager.instance.player2)
+                    {
+                        InstantiateUnit(unitBlue, hit.point, "Blue");
+                    }
+                    setDefaultValues();
+                }
+            }
+        }
+    }
+
+    void InstantiateUnit(Unit unit, Vector3 hit, string tagname)
+    {
+        Unit go = Instantiate(unit, hit, Quaternion.identity);
+        go.health = this.health;
+        go.speed = this.speed;
+        go.defence = this.defence;
+        go.strength = this.strength;
+        go.tag = tagname;
+        placeUnit = false;
+        UI.SetActive(true);
+        Gamemanager.instance.SwitchCurrentPlayer();
+    }
+
+    public void CheckPlayer()
+    {
+        if (Gamemanager.instance.currentplayer.points <= 10)
+        {
+            Gamemanager.instance.SwitchCurrentPlayer();
+        }
+    }
+
+    bool CheckPoints()
+    {
+        int tHealth = health * 3;
+        int tSpeed = speed * 3;
+        int tDefence = defence * 2;
+        int tStrength = strength * 2;
+
+        int tTotal = tHealth + tSpeed + tDefence + tStrength;
+        if(points - tTotal <= 0)
+        {
+            Debug.Log("No points left");
+            return false;
+        }
+        else
+        {
+            
+            return true;
+        }
+
     }
 }

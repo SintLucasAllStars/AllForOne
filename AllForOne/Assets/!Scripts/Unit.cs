@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    public enum Weapontype { punch, superPunch, knife, slash, gun}
+    public Weapontype weapontype;
+    [Header("Stats")]
     public int health;
     public int strength;
     public int defence;
     public int speed;
+    
 
-    public Unit(int _health, int _strength, int _defence, int _speed)
+    [Header("Refs")]
+    public Animator anim;
+
+    private void Start()
     {
-        health = _health;
-        strength = _strength;
-        defence = _defence;
-        speed = _speed;
+        anim = GetComponent<Animator>();
     }
 
     public void GetHit(int damage)
@@ -27,6 +31,77 @@ public class Unit : MonoBehaviour
         else
         {
             Debug.Log("Unit has no health left");
+        }
+    }
+
+    private void Update()
+    {
+        CharacterMovement();
+    }
+
+    void CharacterMovement()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+
+        anim.SetFloat("Horizontal", x);
+        anim.SetFloat("Vertical", y);
+    }
+
+    void Attack()
+    {
+        int tRange=0;
+        int tDamage=0;
+        int tSpeed=0;
+        switch (weapontype)
+        {
+            case Weapontype.punch:
+                tRange = 1;
+                tDamage = 1;
+                tSpeed = 10;
+                break;
+            case Weapontype.superPunch:
+                tRange = 1;
+                tDamage = 2;
+                tSpeed = 10;
+                break;
+            case Weapontype.knife:
+                tRange = 1;
+                tDamage = 3;
+                tSpeed = 8;
+                break;
+            case Weapontype.slash:
+                tRange = 1;
+                tDamage = 8;
+                tSpeed = 4;
+                break;
+            case Weapontype.gun:
+                tRange = 1;
+                tDamage = 5;
+                tSpeed = 3;
+                break;
+            default:
+                break;
+        }
+        AttackRay(tRange, tDamage);
+    }
+
+    public void AttackRay(int weaponRange, int Damage)
+    {
+        RaycastHit hit;
+
+        Vector3 rayOrigin = transform.position + transform.forward * 0.5f + transform.up * 0.5f;
+        Debug.DrawRay(rayOrigin, transform.forward * weaponRange, Color.blue, 1);
+        if (Physics.Raycast(rayOrigin, transform.forward, out hit, weaponRange))
+        {
+            if (hit.collider.tag != this.tag)
+            {
+                Unit unit = hit.collider.GetComponent<Unit>();
+                if (unit != null)
+                {
+                    unit.GetHit(Damage);
+                }
+            }
         }
     }
 }
