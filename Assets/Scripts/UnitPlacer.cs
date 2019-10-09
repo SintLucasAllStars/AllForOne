@@ -45,7 +45,7 @@ public class UnitPlacer : MonoBehaviour
             
             if (currentPlayer.Withdraw(price))
             {
-                Unit unit = Instantiate(unitPrefab, hit.point, Quaternion.identity);
+                Unit unit = Instantiate(unitPrefab, hit.point + new Vector3(0, 1, 0), Quaternion.identity);
                 unit.Initialize(
                     healthSlider.value/healthSlider.maxValue, 
                     strengthSlider.value/strengthSlider.maxValue, 

@@ -4,10 +4,12 @@ public class GameControler : MonoBehaviour
 {
     private Camera _camera;
     private Unit _focusedUnit;
+    private Vector3 _lastMousePos;
 
     private void Start()
     {
         _camera = Camera.main;
+        _lastMousePos = Vector3.zero;
     }
 
     private void Update()
@@ -78,15 +80,31 @@ public class GameControler : MonoBehaviour
         {
             _focusedUnit.transform.Translate(speed, 0, 0);
         }
-        
-        _focusedUnit.transform.Rotate(Input.mousePosition);
 
-        MoveCameraToUnit(1);
+        if (_lastMousePos.Equals(Vector3.zero))
+        {
+            _lastMousePos = Input.mousePosition;
+        }
+        else
+        {
+            Vector3 movement = Input.mousePosition - _lastMousePos;
+            _lastMousePos = Input.mousePosition;
+            
+            Debug.Log(movement);
+            
+            _focusedUnit.gameObject.transform.Rotate(0, movement.x, 0);
+        }
+        
+        MoveCameraToUnit(100);
     }
 
     private bool MoveCameraToUnit(float maxMovement)
     {
-        Vector3 newLocation = Vector3.MoveTowards(_camera.transform.position, _focusedUnit.transform.position + new Vector3(0, 2, -10), maxMovement);
+        Vector3 newLocation = Vector3.MoveTowards(
+            _camera.transform.position,
+            _focusedUnit.transform.localPosition + new Vector3(-10*_focusedUnit.transform.forward.x, 2, -10*_focusedUnit.transform.forward.z),
+            maxMovement
+            );
         Quaternion newRotation = Quaternion.RotateTowards(_camera.transform.rotation, _focusedUnit.transform.rotation, maxMovement);
 
         if (newLocation == _camera.transform.position && newRotation == _camera.transform.rotation)
