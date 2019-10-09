@@ -32,10 +32,13 @@ public class GameControler : MonoBehaviour
     private Canvas _unitCanvas;
 
     [SerializeField]
+    private Canvas _SelectCanvas;
+
+    [SerializeField]
     private Canvas _placeCanvas;
 
     [SerializeField]
-    private Canvas _SelectCanvas;
+    private Image _doneButton;
 
     [SerializeField]
     private List<Canvas> _teamCanvas;
@@ -257,12 +260,13 @@ public class GameControler : MonoBehaviour
         _speed = 1;
         _defense = 1;
 
-        if (_currentTeam == TeamEnum.TeamRed)
+        if (_currentTeam == TeamEnum.TeamBlue)
         {
             _RedSoldiers++;
             return;
         }
         _BlueSoldiers++;
+        _doneButton.gameObject.SetActive(true);
     }
 
     private void PlayAsUnit()
