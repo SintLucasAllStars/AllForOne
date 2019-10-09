@@ -62,6 +62,7 @@ public class UnitController : MonoBehaviour
 
     public void GainControl()
     {
+        attackReady = true;
         fortified = false;
         shield.SetActive(false);
         inControl = true;
@@ -159,6 +160,11 @@ public class UnitController : MonoBehaviour
     }
 
     void ResetAttack()
+    {
+        Invoke("AttackReset", 0.5f);
+    }
+
+    void AttackReset()
     {
         attackReady = true;
     }

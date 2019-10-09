@@ -57,14 +57,15 @@ public class GameManager : MonoBehaviour
 
     public void CheckIfWon()
     {
-        gameState = currentState.Won;
         if (teamBlue < 1)
         {
             whoseTurnText.text = "Team Red WON";
+            gameState = currentState.Won;
         }
-        else if (teamRed < 1)
+        if (teamRed < 1)
         {
             whoseTurnText.text = "Team Blue WON";
+            gameState = currentState.Won;
         }
     }
 

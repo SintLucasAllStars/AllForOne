@@ -133,7 +133,7 @@ public class TopDownView : MonoBehaviour
                 GameObject spawnedUnit = Instantiate(unit, hit.point, hit.transform.rotation);
                 UnitController unitref = spawnedUnit.GetComponent<UnitController>();
 
-                unitref.health = Mathf.RoundToInt(health.value);
+                unitref.health = Mathf.RoundToInt(health.value) + 20;
                 unitref.speed = Mathf.RoundToInt(speed.value);
                 unitref.strenght = Mathf.RoundToInt(strenght.value);
                 unitref.defense = Mathf.RoundToInt(defense.value);
