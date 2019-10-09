@@ -20,6 +20,10 @@ public class UnitController : MonoBehaviour
     public GameObject cameraObject;
     public bool rotateToCamera;
 
+    [Header("Fortify")]
+    public GameObject shield;
+    public bool fortified;
+
     [Header("Weapon")]
     public int weaponDamage;
     public int weaponRange;
@@ -46,15 +50,24 @@ public class UnitController : MonoBehaviour
             {
                 RotateTowardsCamera();
             }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                shield.SetActive(true);
+                fortified = true;
+                StopCoroutine("Timer");
+                TimersUp();
+            }
         }
     }
 
     public void GainControl()
     {
+        fortified = false;
+        shield.SetActive(false);
         inControl = true;
         cameraObject.GetComponent<Camera>().enabled = true;
         rotateToCamera = true;
-        StartCoroutine(Timer());
+        StartCoroutine("Timer");
     }
 
     IEnumerator Timer()
@@ -139,7 +152,7 @@ public class UnitController : MonoBehaviour
                 UnitController ut = hit.collider.GetComponent<UnitController>();
                 if (ut != null)
                 {
-                    ut.health -= weaponDamage;
+                    ut.TakeDamage(weaponDamage);
                 }
             }
         }
@@ -169,11 +182,37 @@ public class UnitController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        if (fortified == false)
+        {
+            health -= damage;
+        }
+        else
+        {
+            int calcDamaged = Mathf.RoundToInt(damage / defense);
+            health -= calcDamaged;
+        }
         if (health < 1)
         {
             anim.Play("Death");
             cc.enabled = false;
+            if (teamName == "Blue Team")
+            {
+                GameManager.instance.teamBlue--;
+                GameManager.instance.CheckIfWon();
+            }
+            else if (teamName == "Red Team")
+            {
+                GameManager.instance.teamRed--;
+                GameManager.instance.CheckIfWon();
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Death"))
+        {
+            TakeDamage(1000);
         }
     }
 }

@@ -7,14 +7,19 @@ public class GameManager : MonoBehaviour
 {
     [Header("PlayerTurn")]
     public playerTurn currentPlayer;
-    public enum playerTurn { RedTeam, BlueTeam}
+    public enum playerTurn { RedTeam, BlueTeam }
+
+    [Header("AmountOfAlivePlayers")]
+    public int teamBlue;
+    public int teamRed;
 
     [Header("GameState")]
     public currentState gameState;
-    public enum currentState { Picking, Playing }
+    public enum currentState { Picking, Playing, Won }
 
-    [Header("Text & Mask & Cam")]
+    [Header("References")]
     public GameObject overviewCam;
+    public Animator deathObject;
     public LayerMask roofIgnore;
     public Text whoseTurnText;
 
@@ -27,6 +32,18 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        UnitController[] unitcontrollers = UnityEngine.Object.FindObjectsOfType<UnitController>();
+        foreach (UnitController unit in unitcontrollers)
+        {
+            if (unit.teamName == "Red Team")
+            {
+                teamRed++;
+            }
+            if (unit.teamName == "Blue Team")
+            {
+                teamBlue++;
+            }
+        }
         TurnEnded();
     }
 
@@ -38,9 +55,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CheckIfWon()
+    {
+        gameState = currentState.Won;
+        if (teamBlue < 1)
+        {
+            whoseTurnText.text = "Team Red WON";
+        }
+        else if (teamRed < 1)
+        {
+            whoseTurnText.text = "Team Blue WON";
+        }
+    }
+
     public void TurnEnded()
     {
         overviewCam.SetActive(true);
+        deathObject.Play("Death");
         gameState = currentState.Picking;
         switch (currentPlayer)
         {
