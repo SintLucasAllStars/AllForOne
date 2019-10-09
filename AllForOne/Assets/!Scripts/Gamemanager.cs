@@ -37,6 +37,7 @@ public class Gamemanager : MonoBehaviour
         if (CheckPoints())
         {
             Debug.Log("Both players have points below 10");
+            currentplayer = player1;
             gameState = GameState.Game;
         }
         else

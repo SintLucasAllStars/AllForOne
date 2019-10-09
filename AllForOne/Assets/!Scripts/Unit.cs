@@ -11,6 +11,9 @@ public class Unit : MonoBehaviour
     public int strength;
     public int defence;
     public int speed;
+    public Camera cam;
+
+    public bool isSelected = false;
     
 
     [Header("Refs")]
@@ -34,9 +37,32 @@ public class Unit : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
-        CharacterMovement();
+        if (isSelected)
+        {
+            CharacterMovement();
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Attack();
+            }
+        }
+    }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnSelected();
+        }
+    }
+
+    public void OnSelected()
+    {
+        isSelected = true;
+        cam.enabled = true;
+        StartCoroutine(Timer());
     }
 
     void CharacterMovement()
@@ -83,6 +109,8 @@ public class Unit : MonoBehaviour
             default:
                 break;
         }
+        Debug.Log("weaponType = " + weapontype);
+        anim.Play(weapontype.ToString());
         AttackRay(tRange, tDamage);
     }
 
@@ -103,5 +131,11 @@ public class Unit : MonoBehaviour
                 }
             }
         }
+    }
+
+    IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(10);
+        isSelected = false;
     }
 }
