@@ -19,6 +19,10 @@ public class PlayerManager : MonoBehaviour
 
     public Text _countDown;
 
+    public GameObject _victoryUI;
+
+    private Coroutine _waitCoroutine = null;
+
     public GameStates CurrentGameState
     {
         get { return _currentGameState; }
@@ -109,6 +113,42 @@ public class PlayerManager : MonoBehaviour
         CurrentGameState = GameStates.CharacterPicking;
     }
 
+    public void Suicide(PlayableUnit unit)
+    {
+        StopCoroutine(_waitCoroutine);
+        EndUnitTurn(unit);
+    }
+
+    public void CheckVictory()
+    {
+        List<PlayableUnit> playableUnits = new List<PlayableUnit>();
+        playableUnits.AddRange(FindObjectsOfType<PlayableUnit>());
+
+        int p1Units = 0;
+        int p2Units = 0;
+
+        foreach (PlayableUnit unit in playableUnits)
+        {
+            if (unit._player._playerID == 1 && unit._isAlive)
+            {
+                p1Units++;
+            }
+            else if (unit._isAlive)
+            {
+                p2Units++;
+            }
+        }
+
+        if (p1Units == 0)
+        {
+            Victory(_players[1]._playerID);
+        }
+        else if (p2Units == 0)
+        {
+            Victory(_players[0]._playerID);
+        }
+    }
+
     private Player GetOtherPlayer()
     {
         foreach (Player player in _players)
@@ -124,10 +164,17 @@ public class PlayerManager : MonoBehaviour
     private void ActivateUnit(PlayableUnit unit)
     {
         unit.IsActive = true;
-        StartCoroutine(EndUnitTurn(unit));
+        _waitCoroutine = StartCoroutine(WaitUnitTurn(unit));
     }
 
-    private IEnumerator EndUnitTurn(PlayableUnit unit)
+    private void EndUnitTurn(PlayableUnit unit)
+    {
+        EndTurn();
+        _countDown.gameObject.SetActive(false);
+        CurrentGameState = GameStates.CharacterPicking;
+    }
+
+    private IEnumerator WaitUnitTurn(PlayableUnit unit)
     {
         CurrentGameState = GameStates.Movement;
         int timeRemaining = 10;
@@ -142,8 +189,12 @@ public class PlayerManager : MonoBehaviour
         }
 
         unit.IsActive = false;
-        EndTurn();
-        _countDown.gameObject.SetActive(false);
-        CurrentGameState = GameStates.CharacterPicking;
+        EndUnitTurn(unit);
+    }
+
+    private void Victory(int playerID)
+    {
+        _victoryUI.SetActive(true);
+        _victoryUI.GetComponentInChildren<Text>().text = "Victory for player " + playerID.ToString();
     }
 }
