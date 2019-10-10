@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -12,6 +13,11 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
 
         StartCoroutine(HandleMessages());
+    }
+
+    public void SpawnUnit(Node position)
+    {
+        SendMessageToServer(new UnitData(Guid.NewGuid().ToString(), position, "Test", true, true, Player.Instance.GameData.PlayerSide));
     }
 
     private IEnumerator HandleMessages()
@@ -64,14 +70,16 @@ public class GameManager : Singleton<GameManager>
                 }
             }
         }
-        //Player did not exist and is new.
-        else if (!string.IsNullOrEmpty(gameData.Guid))
+        else
         {
-            Player.Instance.GameData = new GameData(gameData);
+            Debug.Log("Spawned unit: " + gameData.Type);
+            Unit u = Instantiate(Resources.Load<GameObject>("Overlord")).GetComponent<Unit>();
+            u.SetPosition(gameData.Position);
         }
     }
     private void UpdateClients(GameData gameData)
     {
+        Debug.Log("Client joined");
         if(Player.Instance.GameData.Guid == gameData.Guid)
         {
             Player.Instance.GameData = gameData;

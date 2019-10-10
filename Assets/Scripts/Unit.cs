@@ -3,6 +3,7 @@ using System;
 
 public abstract class Unit : MonoBehaviour
 {
+    [SerializeField]
     protected UnitData _gameData = new UnitData();
 
     public UnitData GameData
@@ -11,6 +12,7 @@ public abstract class Unit : MonoBehaviour
         set => _gameData = value;
     }
 
+    [SerializeField]
     protected int _health, _strength, _speed, _defense;
     public int Health => _health;
     public int Strength => _strength;
@@ -38,7 +40,8 @@ public abstract class Unit : MonoBehaviour
 
     public void SetPosition(Node node)
     {
-        _gameData.SetPosition(node);
+        _gameData.SetPosition(Map.Instance.GetNode(node.X, node.Z));
+        Map.Instance.OccupieNode(node.X, node.Z);
 
         transform.localPosition = _gameData.Position.GetPosition();
     }

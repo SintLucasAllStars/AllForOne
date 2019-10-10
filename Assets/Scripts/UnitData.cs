@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class UnitData : GameData
 {
+    [SerializeField]
     private string _type = "";
     public string Type => _type;
 

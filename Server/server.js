@@ -58,7 +58,7 @@ var server = ws.createServer(function (conn)
 			
 			setPlayerColor(conn.id);
 
-			console.log("Client " + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
+			console.log("Client" + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
 
 			updateClient(JSON.stringify(players[conn.id]));
 		}
@@ -66,9 +66,11 @@ var server = ws.createServer(function (conn)
 		{
 			console.log("unit joined " + msg._type);
 			
-			units[msg._guid] = msg;	
+			console.log(msg);
 			
-			updateClient(msg);
+			units[msg._guid] = msg;
+			
+			updateClient(JSON.stringify(msg));
 		}
     });
 	
