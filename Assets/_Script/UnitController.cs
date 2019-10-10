@@ -62,6 +62,7 @@ public class UnitController : MonoBehaviour
 
     public void GainControl()
     {
+        anim.speed = 1 + (speed / 10);
         attackReady = true;
         fortified = false;
         shield.SetActive(false);
@@ -105,6 +106,7 @@ public class UnitController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && attackReady && canJump)
         {
+            anim.speed = 1;
             switch (currentWeapon)
             {
                 case weapons.noWeapon:
@@ -161,6 +163,7 @@ public class UnitController : MonoBehaviour
 
     void ResetAttack()
     {
+        anim.speed = 1 + (speed / 10);
         Invoke("AttackReset", 0.5f);
     }
 
