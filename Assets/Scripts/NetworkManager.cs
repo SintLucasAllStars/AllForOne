@@ -71,10 +71,6 @@ public class NetworkManager : Singleton<NetworkManager>
 
     private void OnClose(CloseEventArgs e)
     {
-        if(e.Code == 1006)
-        {
-            NativeWinAlert.Error("Cannot connect to server.", "No Connection");
-        }
         Debug.Log("Closed Connection: " + e.Reason);
         _connectionCoroutine = false;
     }

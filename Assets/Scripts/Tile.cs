@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Tile : MonoBehaviour
 {
@@ -10,9 +11,11 @@ public class Tile : MonoBehaviour
         switch (n.CollisionType)
         {
             case CollisionType.None:
-                Debug.Log("None");
-                Debug.Log(n.GetPosition());
-                GameManager.Instance.SpawnUnit(n);
+                if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
+                    return;
+
+                GameManager.Instance.SpawnUnit(new UnitData(Guid.NewGuid().ToString(), n, "UnitName", true, true, Player.Instance.GameData.PlayerSide));
+                TurnManager.Instance.NextTurn();
                 break;
             case CollisionType.Obstacle:
                 Debug.Log("Obstacle");

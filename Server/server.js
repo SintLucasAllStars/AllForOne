@@ -45,7 +45,7 @@ var server = ws.createServer(function (conn)
 	{
 		var msg = JSON.parse(str);
 		
-		if (msg._type == undefined)
+		if (msg._type == "Player")
 		{
 			conn.id = msg._guid;
 			

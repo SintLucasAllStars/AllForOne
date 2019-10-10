@@ -6,10 +6,6 @@ using UnityEngine;
 public class UnitData : GameData
 {
     [SerializeField]
-    private string _type = "";
-    public string Type => _type;
-
-    [SerializeField]
     private Node _position = null;
     public Node Position => _position;
 
@@ -17,16 +13,14 @@ public class UnitData : GameData
     private bool _isActive = true;
     public bool IsActive => _isActive;
 
-    public UnitData(string guid, Node position, string type, bool isConnected, bool isActive, PlayerSide playerSide) : base(guid, isConnected, playerSide)
+    public UnitData(string guid, Node position, string type, bool isConnected, bool isActive, PlayerSide playerSide) : base(type, guid, isConnected, playerSide)
     {
-        _type = type;
         _position = position;
         _isActive = isActive;
     }
 
     public UnitData(UnitData other) : base(other)
     {
-        _type = other._type;
         _position = other._position;
         _isActive = other._isActive;
     }

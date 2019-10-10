@@ -12,6 +12,10 @@ public enum PlayerSide
 public class GameData
 {
     [SerializeField]
+    private string _type = "";
+    public string Type => _type;
+
+    [SerializeField]
     protected string _guid = "";
     public string Guid => _guid;
 
@@ -23,8 +27,9 @@ public class GameData
     protected PlayerSide _playerSide = PlayerSide.Blu;
     public PlayerSide PlayerSide => _playerSide;
 
-    public GameData(string guid, bool isConnected, PlayerSide playerSide)
+    public GameData(string type, string guid, bool isConnected, PlayerSide playerSide)
     {
+        _type = type;
         _isConnected = isConnected;
         _guid = guid;
         _playerSide = playerSide;
@@ -32,6 +37,7 @@ public class GameData
 
     public GameData(GameData gameData)
     {
+        _type = gameData._type;
         _isConnected = gameData._isConnected;
         _guid = gameData._guid;
         _playerSide = gameData._playerSide;

@@ -18,15 +18,13 @@ public class Player : Singleton<Player>
 
     private void Start()
     {
-        Guid guid = Guid.NewGuid();
-        _gameData = new GameData(guid.ToString(), true, PlayerSide.Blu);
-        GameManager.Instance.SendMessageToServer(_gameData);
+        _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
+        GameManager.Instance.SendMessage(_gameData);
     }
 
     public void SetGameData(GameData gameData)
     {
         _gameData = gameData;
-        Debug.Log(_gameData.PlayerSide);
     }
 
     public static Color32 GetColor(PlayerSide side)

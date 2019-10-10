@@ -15,9 +15,9 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(HandleMessages());
     }
 
-    public void SpawnUnit(Node position)
+    public void SpawnUnit(UnitData data)
     {
-        SendMessageToServer(new UnitData(Guid.NewGuid().ToString(), position, "Test", true, true, Player.Instance.GameData.PlayerSide));
+        SendMessage(data);
     }
 
     private IEnumerator HandleMessages()
@@ -36,13 +36,15 @@ public class GameManager : Singleton<GameManager>
     public void HandleMessage(string message)
     {
         UnitData data = JsonUtility.FromJson<UnitData>(message);
-        if(string.IsNullOrEmpty(data.Type))
+        if (string.Equals(data.Type, "Player"))
             UpdateClients(data);
+        else if (string.Equals(data.Type, "Turn"))
+            TurnManager.Instance.SetTurn(data.PlayerSide);
         else
             UpdateUnits(data);
     }
 
-    public void SendMessageToServer(GameData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
+    public void SendMessage(GameData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
 
     private void UpdateUnits(UnitData gameData)
     {
