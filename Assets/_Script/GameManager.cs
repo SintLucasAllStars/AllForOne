@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     public LayerMask roofIgnore;
     public Text whoseTurnText;
 
+    [Header("PowerUp & Spawn")]
+    public GameObject[] powerups;
+    public Transform[] spawnlocations;
+
     public static GameManager instance;
 
     private void Awake()
@@ -74,6 +78,7 @@ public class GameManager : MonoBehaviour
         overviewCam.SetActive(true);
         deathObject.Play("Death");
         gameState = currentState.Picking;
+        Instantiate(powerups[Random.Range(0, powerups.Length)], spawnlocations[Random.Range(0, spawnlocations.Length)]);
         switch (currentPlayer)
         {
             case playerTurn.RedTeam:
