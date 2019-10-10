@@ -99,6 +99,8 @@ MonoBehaviour:
   strength: 2
   defence: 2
   speed: 2
+  cam: {fileID: 0}
+  isSelected: 0
   anim: {fileID: 0}
 --- !u!1001 &7837301888946562404
 PrefabInstance:
@@ -168,6 +170,10 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 37ac25c247de85e42a32d4aea3fc2291, type: 3}
+    - target: {fileID: 9500000, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 60f05292357ebed4e98918a92af1c111, type: 2}
@@ -182,6 +188,10 @@ PrefabInstance:
         ...\n\tFrom animation clip 'mixamo.com'\n\tFrom animation clip 'mixamo.com'\n\tFrom
         animation clip 'mixamo.com'\n\tFrom animation clip 'mixamo.com'"
       objectReference: {fileID: 0}
+    - target: {fileID: 13700006, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4c4c7a54ae5bf854585e2b29f9e58a67, type: 2}
     - target: {fileID: 13700000, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -190,18 +200,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3290e58ce3c23e14eabb00e2a924a357, type: 2}
-    - target: {fileID: 13700006, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4c4c7a54ae5bf854585e2b29f9e58a67, type: 2}
-    - target: {fileID: 13700008, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: d0da1409c2a626f41ab51f1310315e2f, type: 2}
     - target: {fileID: 13700012, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ddd8330b4e3510a46a17a29696bb291d, type: 2}
+    - target: {fileID: 13700008, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d0da1409c2a626f41ab51f1310315e2f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36eabaaa84b21ff448f28c78256b7c30, type: 3}
 --- !u!1 &7837301888946660240 stripped

@@ -21624,6 +21624,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc400d9cb6f0cb140bae5d831c78f2aa, type: 3}
+--- !u!20 &1136934884 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1554886958, guid: 920e16f96c2c036469ee6dbe946dcc37,
+    type: 3}
+  m_PrefabInstance: {fileID: 5544286296618466865}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1138923260 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 0a9752c1f6a421e40ba27af05d1bea71,
@@ -30771,6 +30777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc068054b8a1b364d9b5d3030c0caed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameState: 0
   currentplayer:
     points: 0
     name: 
@@ -39900,6 +39907,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mario
       objectReference: {fileID: 0}
+    - target: {fileID: 7837301888946660241, guid: 920e16f96c2c036469ee6dbe946dcc37,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1136934884}
     - target: {fileID: 7837301888946962352, guid: 920e16f96c2c036469ee6dbe946dcc37,
         type: 3}
       propertyPath: m_LocalPosition.x
