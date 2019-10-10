@@ -35,8 +35,8 @@ public class UnitPlacer : MonoBehaviour
             {
                 GameObject newUnit = Instantiate(unitP1, hit.point, Quaternion.identity);
                 newUnit.transform.parent = UnitListP1.transform;
-                svScript.switchTurn = !switchTurn;
-                svScript.NextButtonClick();
+                //svScript.switchTurn = !switchTurn;
+                svScript.SwitchAvatar();
             }
             else
             {
