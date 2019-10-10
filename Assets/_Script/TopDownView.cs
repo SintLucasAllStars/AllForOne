@@ -43,6 +43,8 @@ public class TopDownView : MonoBehaviour
     {
         pointsText.text = points.ToString();
         CheckPrice();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     
     void Update()

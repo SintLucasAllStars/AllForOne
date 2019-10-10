@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class UnitController : MonoBehaviour
     private bool attackReady = true;
 
     [Header("CameraRef")]
+    public Text timerText;
     public GameObject cameraObject;
     public bool rotateToCamera;
 
@@ -62,6 +64,9 @@ public class UnitController : MonoBehaviour
 
     public void GainControl()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        timerText = GameObject.Find("TimerText").GetComponent<Text>();
         anim.speed = 1 + (speed / 10);
         attackReady = true;
         fortified = false;
@@ -74,12 +79,21 @@ public class UnitController : MonoBehaviour
 
     IEnumerator Timer()
     {
-        yield return new WaitForSeconds(10f);
+        int timeLeft = 10;
+        timerText.text = timeLeft.ToString();
+        for (int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds(1f);
+            timeLeft--;
+            timerText.text = timeLeft.ToString();
+        }
         TimersUp();
     }
 
     public void TimersUp()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         inControl = false;
         cameraObject.GetComponent<Camera>().enabled = false;
         rotateToCamera = false;
@@ -145,7 +159,7 @@ public class UnitController : MonoBehaviour
     {
         RaycastHit hit;
 
-        Vector3 rayOrigin = transform.position + transform.forward * 0.5f + transform.up * 0.5f;
+        Vector3 rayOrigin = transform.position + transform.forward * 0.2f + transform.up * 0.5f;
         Debug.DrawRay(rayOrigin, transform.forward * weaponRange, Color.blue, 1);
         if (Physics.Raycast(rayOrigin, transform.forward, out hit, weaponRange))
         {

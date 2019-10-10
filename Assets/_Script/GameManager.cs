@@ -59,23 +59,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CheckIfWon()
+    public bool CheckIfWon()
     {
         if (teamBlue < 1)
         {
             whoseTurnText.text = "Team Red WON";
             gameState = currentState.Won;
+            return true;
         }
-        if (teamRed < 1)
+        else if (teamRed < 1)
         {
             whoseTurnText.text = "Team Blue WON";
             gameState = currentState.Won;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
     public void TurnEnded()
     {
         overviewCam.SetActive(true);
+        if (CheckIfWon())
+        {
+            return;
+        }
         deathObject.Play("Death");
         gameState = currentState.Picking;
         Instantiate(powerups[Random.Range(0, powerups.Length)], spawnlocations[Random.Range(0, spawnlocations.Length)]);
