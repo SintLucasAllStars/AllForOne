@@ -52,7 +52,7 @@ public class Unit : MonoBehaviour
 
     public void Die()
     {
-
+        
     }
 
     private void OnMouseOver()
