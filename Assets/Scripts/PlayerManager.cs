@@ -17,6 +17,8 @@ public class PlayerManager : MonoBehaviour
 
     public Camera _topDownCamera;
 
+    public Animator _playerKiller;
+
     public Text _countDown;
 
     public GameObject _victoryUI;
@@ -36,6 +38,7 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case GameStates.CharacterPicking:
                     _characterCreator.SetActive(false);
+                    CheckOutsideUnits();
                     break;
                 case GameStates.Movement:
                     break;
@@ -88,7 +91,7 @@ public class PlayerManager : MonoBehaviour
             case GameStates.Hiring:
                 if (_activePlayer._currency <= 10)
                 {
-                    EndTurn();
+                    _activePlayer = GetOtherPlayer();
                 }
                 break;
             case GameStates.CharacterPicking:
@@ -115,7 +118,6 @@ public class PlayerManager : MonoBehaviour
 
     public void Suicide(PlayableUnit unit)
     {
-        StopCoroutine(_waitCoroutine);
         EndUnitTurn(unit);
     }
 
@@ -167,8 +169,9 @@ public class PlayerManager : MonoBehaviour
         _waitCoroutine = StartCoroutine(WaitUnitTurn(unit));
     }
 
-    private void EndUnitTurn(PlayableUnit unit)
+    public void EndUnitTurn(PlayableUnit unit)
     {
+        StopCoroutine(_waitCoroutine);
         EndTurn();
         _countDown.gameObject.SetActive(false);
         CurrentGameState = GameStates.CharacterPicking;
@@ -196,5 +199,18 @@ public class PlayerManager : MonoBehaviour
     {
         _victoryUI.SetActive(true);
         _victoryUI.GetComponentInChildren<Text>().text = "Victory for player " + playerID.ToString();
+    }
+
+    private void CheckOutsideUnits()
+    {
+        _playerKiller.Play("SunBurn");
+
+        List<PlayableUnit> allUnits = new List<PlayableUnit>();
+        allUnits.AddRange(FindObjectsOfType<PlayableUnit>());
+
+        foreach (PlayableUnit unit in allUnits)
+        {
+            unit.CheckIndoor();
+        }
     }
 }

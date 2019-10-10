@@ -113,7 +113,6 @@ public class CharacterCreator : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            Debug.Log(hit.collider.gameObject.tag);
             if (hit.collider.gameObject.CompareTag("Floor"))
             {
                 GameObject newUnit = Instantiate(_unit, hit.point, Quaternion.identity);
@@ -123,7 +122,6 @@ public class CharacterCreator : MonoBehaviour
                 _isPlacing = false;
                 _UI.SetActive(true);
                 PlayerManager.Instance.CheckMoneyForRemainingMoney();
-                //^vgm zorgt dit voor stack overflow als al het geld op is
                 PlayerManager.Instance.EndTurn();
                 UpdateUIValues();
             }

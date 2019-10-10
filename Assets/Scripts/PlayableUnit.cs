@@ -12,12 +12,16 @@ public class PlayableUnit : MonoBehaviour
     public int _defense;
 
     public bool _isAlive = true;
+    public bool _isFortified = false;
 
     public GameObject _thirdPersonCamera;
+    public GameObject _fortifyBarrier;
 
     private float _rotationSpeed = 100f;
 
     private float _minJumpHeight = 3f;
+
+    private float _animationLength = 1.2f;
 
     private bool isActive = false;
 
@@ -44,6 +48,20 @@ public class PlayableUnit : MonoBehaviour
         }
     }
 
+    public bool IsFortified
+    {
+        get
+        {
+            return _isFortified;
+        }
+        set
+        {
+            _isFortified = value;
+
+            _fortifyBarrier.SetActive(_isFortified);
+        }
+    }
+
     public bool IsActive
     {
         get
@@ -62,8 +80,11 @@ public class PlayableUnit : MonoBehaviour
 
             if (!isActive)
             {
-                _animator.SetBool("IsFalling", false);
-                _animator.SetFloat("ForwardMovement", 0);
+                ResetAnimations();
+            }
+            else
+            {
+                IsFortified = false;
             }
         }
     }
@@ -91,12 +112,20 @@ public class PlayableUnit : MonoBehaviour
 
         _thirdPersonCamera = GetComponentInChildren<Camera>().gameObject;
         _thirdPersonCamera.SetActive(false);
+
+        _fortifyBarrier = transform.Find("FortifyBarrier").gameObject;
+        _fortifyBarrier.SetActive(false);
     }
 
     private void Update()
     {
+        Debug.DrawRay(transform.position + new Vector3(0, 1, 0), transform.forward);
         if (isActive)
         {
+            if (_isAttacking)
+            {
+                return;
+            }
             float forwardMovement = Input.GetAxis("Vertical");
             _animator.SetFloat("ForwardMovement", forwardMovement);
 
@@ -119,6 +148,14 @@ public class PlayableUnit : MonoBehaviour
                     {
                         Jump();
                     }
+                    else if (Input.GetButtonDown("Fire1"))
+                    {
+                        Attack();
+                    }
+                    else if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        Fortify();
+                    }
                 }
             }
             else
@@ -126,6 +163,18 @@ public class PlayableUnit : MonoBehaviour
                 _animator.SetBool("IsFalling", true);
             }
         }
+    }
+
+    public void CheckIndoor()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, Vector3.up);
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            return;
+        }
+        Die();
     }
 
     private void Run(float forwardMovement)
@@ -145,11 +194,56 @@ public class PlayableUnit : MonoBehaviour
         _rigidbody.AddForce(Vector3.up * _speed * _minJumpHeight, ForceMode.Impulse);
     }
 
+    private void Attack()
+    {
+        _isAttacking = true;
+        _animator.SetBool("IsAttacking", _isAttacking);
+        StartCoroutine(EndPunch());
+
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position + new Vector3(0, 1, 0), transform.forward);
+        
+        if (Physics.Raycast(ray, out hit, 1.5f))
+        {
+            if (hit.collider != null)
+            {
+                PlayableUnit enemy = hit.collider.gameObject.GetComponent<PlayableUnit>();
+                if (enemy != null && enemy._player != PlayerManager.Instance._activePlayer)
+                {
+                    if (IsFortified)
+                    {
+                        int damage = Mathf.RoundToInt(_strength / enemy._defense);
+                        Mathf.Clamp(damage, 1, 11);
+                        enemy.Health -= damage;
+                    }
+                    else
+                    {
+                        enemy.Health -= _strength;
+                    }
+                }
+            }
+        }
+    }
+
+    private void Fortify()
+    {
+        IsFortified = true;
+        IsActive = false;
+        PlayerManager.Instance.EndUnitTurn(this);
+    }
+
     private void Die()
     {
         _isAlive = false;
         PlayerManager.Instance.CheckVictory();
         Destroy(gameObject);
+    }
+
+    private void ResetAnimations()
+    {
+        _animator.SetBool("IsFalling", false);
+        _animator.SetFloat("ForwardMovement", 0);
+        _animator.SetBool("IsAttacking", false);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -160,5 +254,12 @@ public class PlayableUnit : MonoBehaviour
             PlayerManager.Instance.Suicide(this);
             Die();
         }
+    }
+
+    private IEnumerator EndPunch()
+    {
+        yield return new WaitForSeconds(_animationLength);
+        _isAttacking = false;
+        _animator.SetBool("IsAttacking", _isAttacking);
     }
 }
