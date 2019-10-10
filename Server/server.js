@@ -47,12 +47,12 @@ var server = ws.createServer(function (conn)
 		
 		if (msg._type == undefined)
 		{
-			//Kick out player when it has reached the player limit.
-			if(Object.keys(players).length + 1 > maxConnections)
-			{
-				conn.close(1000, "Player limit reached.");
-				return;
-			}
+			conn.id = msg._guid;
+			
+			console.log(conn.id);
+
+			for (var index in units)
+				conn.sendText(JSON.stringify(units[index]));
 
 			players[conn.id] = msg;
 			
@@ -65,8 +65,6 @@ var server = ws.createServer(function (conn)
 		else
 		{
 			console.log("unit joined " + msg._type);
-			
-			console.log(msg);
 			
 			units[msg._guid] = msg;
 			

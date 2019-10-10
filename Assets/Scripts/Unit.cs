@@ -38,10 +38,11 @@ public abstract class Unit : MonoBehaviour
     }
     public virtual void MoveTo(Vector2 vector) => MoveTo(Node.ConvertVector(vector));
 
-    public void SetPosition(Node node)
+    public void SetGameData(UnitData data)
     {
-        _gameData.SetPosition(Map.Instance.GetNode(node.X, node.Z));
-        Map.Instance.OccupieNode(node.X, node.Z);
+        _gameData = data;
+        _gameData.SetPosition(Map.Instance.GetNode(data.Position.X, data.Position.Z));
+        Map.Instance.OccupieNode(data.Position.X, data.Position.Z);
 
         transform.localPosition = _gameData.Position.GetPosition();
     }

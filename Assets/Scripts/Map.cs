@@ -28,6 +28,7 @@ public class Map : Singleton<Map>
                     tile = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity).GetComponent<Tile>();
             }
         }
+        Screen.fullScreen = false;
     }
     public Node GetNode(int x, int y)
     {

@@ -35,6 +35,8 @@ public class UnitData : GameData
 
     public void SetActive(bool active) => _isActive = active;
 
+    public void SetSide(PlayerSide side) => _playerSide = side;
+
     public UnitData()
     { }
 }

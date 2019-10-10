@@ -11,6 +11,7 @@ public class Tile : MonoBehaviour
         {
             case CollisionType.None:
                 Debug.Log("None");
+                Debug.Log(n.GetPosition());
                 GameManager.Instance.SpawnUnit(n);
                 break;
             case CollisionType.Obstacle:

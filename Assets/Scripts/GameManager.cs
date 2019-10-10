@@ -74,7 +74,7 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("Spawned unit: " + gameData.Type);
             Unit u = Instantiate(Resources.Load<GameObject>("Overlord")).GetComponent<Unit>();
-            u.SetPosition(gameData.Position);
+            u.SetGameData(gameData);
         }
     }
     private void UpdateClients(GameData gameData)
@@ -82,7 +82,7 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("Client joined");
         if(Player.Instance.GameData.Guid == gameData.Guid)
         {
-            Player.Instance.GameData = gameData;
+            Player.Instance.SetGameData(gameData);
         }
 
         //On player has disconnected.
