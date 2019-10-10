@@ -10,6 +10,8 @@ public class Gamemanager : MonoBehaviour
     public Player currentplayer;
     public Player player1;
     public Player player2;
+    public GameObject canvas;
+    public GameObject topview;
 
     private void Awake()
     {
@@ -38,7 +40,8 @@ public class Gamemanager : MonoBehaviour
         {
             Debug.Log("Both players have points below 10");
             currentplayer = player1;
-            gameState = GameState.Game;
+            canvas.SetActive(false);
+            topview.SetActive(true);
         }
 
         else

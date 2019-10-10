@@ -57,7 +57,7 @@ public class Unit : MonoBehaviour
 
     private void OnMouseOver()
     {
-        Debug.Log("is hovering nigger");
+        
         if (Input.GetMouseButtonDown(0))
         {
 
@@ -162,5 +162,7 @@ public class Unit : MonoBehaviour
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
         CheckIfInside();
+        this.cam.enabled = false;
+        TopView.instance.EnableTopView();
     }
 }

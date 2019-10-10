@@ -39,12 +39,12 @@ public class CreateTeam : MonoBehaviour
             {
                 if (value > 0)
                 {
-                    Gamemanager.instance.currentplayer.points -= 2;
+                    points -= 2;
                     health += value;
                 }
                 else if(health > 1)
                 {
-                    Gamemanager.instance.currentplayer.points += 2;
+                    points += 2;
                     health += value;
                 }
                 updatePoints();
@@ -62,12 +62,12 @@ public class CreateTeam : MonoBehaviour
             {
                 if (value > 0)
                 {
-                    Gamemanager.instance.currentplayer.points -= 2;
+                    points -= 2;
                     speed += value;
                 }
                 else if (speed > 1)
                 {
-                    Gamemanager.instance.currentplayer.points += 2;
+                    points += 2;
                     speed += value;
                 }
                 updatePoints();
@@ -85,12 +85,12 @@ public class CreateTeam : MonoBehaviour
             {
                 if (value > 0)
                 {
-                    Gamemanager.instance.currentplayer.points -= 2;
+                    points -= 2;
                     defence += value;
                 }
                 else if(defence > 1)
                 {
-                    Gamemanager.instance.currentplayer.points += 2;
+                    points += 2;
                     defence += value;
                 }
                 updatePoints();
@@ -108,12 +108,12 @@ public class CreateTeam : MonoBehaviour
             {
                 if (value > 0)
                 {
-                    Gamemanager.instance.currentplayer.points -= 2;
+                    points -= 2;
                     strength += value;
                 }
                 else if(strength > 1)
                 {
-                    Gamemanager.instance.currentplayer.points += 2;
+                    points += 2;
                     strength += value;
                 }
                 updatePoints();
@@ -132,7 +132,7 @@ public class CreateTeam : MonoBehaviour
         {
             Debug.Log("Player doesn't have enough points to hire this unit, you broke ass boi");
         }
-        else
+        else if(Gamemanager.instance.currentplayer.points - (tHealth + tSpeed + tDefence + tStrength) >= 0)
         {
             Gamemanager.instance.currentplayer.points -= (tHealth + tSpeed + tDefence + tStrength);
             Debug.Log("curren players new points total = " + Gamemanager.instance.currentplayer.points);
@@ -222,7 +222,9 @@ public class CreateTeam : MonoBehaviour
         int tStrength = strength * 2;
 
         int tTotal = tHealth + tSpeed + tDefence + tStrength;
-        if(points - tTotal <= 0)
+        Debug.Log("the total points are " + points);
+        Debug.Log("The total cost = " + tTotal);
+        if(Gamemanager.instance.currentplayer.points - tTotal <= 0)
         {
             Debug.Log("No points left");
             return false;
