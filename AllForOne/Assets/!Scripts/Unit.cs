@@ -110,7 +110,7 @@ public class Unit : MonoBehaviour
                 break;
         }
         Debug.Log("weaponType = " + weapontype);
-        anim.Play("punch");
+        anim.Play(weapontype.ToString());
         AttackRay(tRange, tDamage);
     }
 
