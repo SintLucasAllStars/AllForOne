@@ -40,6 +40,7 @@ public class Gamemanager : MonoBehaviour
             currentplayer = player1;
             gameState = GameState.Game;
         }
+
         else
         {
             if (currentplayer == player1)

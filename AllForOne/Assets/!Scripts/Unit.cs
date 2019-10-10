@@ -50,10 +50,17 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+
+    }
+
     private void OnMouseOver()
     {
+        Debug.Log("is hovering nigger");
         if (Input.GetMouseButtonDown(0))
         {
+
             OnSelected();
         }
     }
@@ -133,9 +140,27 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void CheckIfInside()
+    {
+        RaycastHit hit;
+
+        Vector3 rayOrigin = transform.position + transform.forward * 0.5f + transform.up * 0.5f;
+        Debug.DrawRay(rayOrigin, transform.up * 10, Color.blue, 1);
+        if (Physics.Raycast(rayOrigin, transform.forward, out hit))
+        {
+            if (hit.collider.tag != "Roof")
+            {
+                Die();
+            }
+        }
+    }
+
     IEnumerator Timer()
     {
         yield return new WaitForSeconds(10);
         isSelected = false;
+        anim.SetFloat("Horizontal", 0);
+        anim.SetFloat("Vertical", 0);
+        CheckIfInside();
     }
 }
