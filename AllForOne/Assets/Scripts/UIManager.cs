@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public Text mouseText;
+    public TMP_Text descriptionText;
 
     public bool mouseTextActive = true;
 
@@ -14,7 +15,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void SetMouseText(string textString)
     {
-        mouseText.text = textString;
+        descriptionText.text = textString;
 
         if (textString == "")
         {
@@ -24,16 +25,5 @@ public class UIManager : MonoBehaviour
         {
             mouseTextActive = true;
         }
-    }
-
-    private void Update()
-    {
-        if (mouseTextActive)
-            MouseTextOnMouse();
-    }
-
-    private void MouseTextOnMouse()
-    {
-        mouseText.rectTransform.position = Input.mousePosition;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UnitStore : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class UnitStore : MonoBehaviour
     private int unitPointCost;
     private int unitPointAvailable;
 
-    [SerializeField] private Text unitPointCostText;
-    [SerializeField] private Text unitPointAvailableText;
+    [SerializeField] private TMP_Text unitPointCostText;
+    [SerializeField] private TMP_Text unitPointAvailableText;
 
 
     //Weapon Data
@@ -23,8 +24,8 @@ public class UnitStore : MonoBehaviour
     enum Weapons { None, Knuckles, Knife, Gun }
     private Weapons chosenWeapon = Weapons.Knuckles;
 
-    [SerializeField] private Text weaponText;
-    [SerializeField] private Text weaponDescription;
+    [SerializeField] private TMP_Text weaponText;
+    [SerializeField] private TMP_Text weaponDescription;
 
 
     //Feature Data
@@ -38,13 +39,13 @@ public class UnitStore : MonoBehaviour
 
     //Slider Data
     [SerializeField] private Slider speedSlider;
-    [SerializeField] private Text speedText;
+    [SerializeField] private TMP_Text speedText;
 
     [SerializeField] private Slider strengthSlider;
-    [SerializeField] private Text strengthText;
+    [SerializeField] private TMP_Text strengthText;
 
     [SerializeField] private Slider defenseSlider;
-    [SerializeField] private Text defenseText;
+    [SerializeField] private TMP_Text defenseText;
 
     private void Awake()
     {
@@ -118,6 +119,14 @@ public class UnitStore : MonoBehaviour
     {
         string description;
         description = features[i].description;
+        uiManager.SetMouseText(description);
+        Debug.Log("Entered Pointer");
+    }
+
+    public void ButtonOnPointerGetFeature(int i)
+    {
+        string description;
+        description = features[i].featureDescription;
         uiManager.SetMouseText(description);
         Debug.Log("Entered Pointer");
     }
@@ -202,14 +211,14 @@ public class UnitStore : MonoBehaviour
     {
         features = new Feature[6];
         //Attribute Feature
-        features[0] = FillFeature(0, "Quick Feet", 40, 0, 20, 5, BonusFeatures.None);
-        features[1] = FillFeature(1, "Heavy Armor", 0, 20, 40, 5, BonusFeatures.None);
-        features[2] = FillFeature(2, "apt fitness", 20, 40, 0, 5, BonusFeatures.None);
+        features[0] = FillFeature(0, "Quick Feet", 40, 0, 20, 5, BonusFeatures.None, "None");
+        features[1] = FillFeature(1, "Heavy Armor", 0, 20, 40, 5, BonusFeatures.None, "None");
+        features[2] = FillFeature(2, "apt fitness", 20, 40, 0, 5, BonusFeatures.None, "None");
 
         //Special Features
-        features[3] = FillFeature(3, "Driveby Shooter", 30, 0, 0, 10, BonusFeatures.Driveby);
-        features[4] = FillFeature(4, "Opportunity Attacker", 0, 30, 0, 10, BonusFeatures.Opportunist);
-        features[5] = FillFeature(5, "Towershield Expert", 0, 0, 30, 10, BonusFeatures.TowerShield);
+        features[3] = FillFeature(3, "Driveby Shooter", 30, 0, 0, 10, BonusFeatures.Driveby, "When making an attack with you can move at double speed for the remaining turn.");
+        features[4] = FillFeature(4, "Opportunity Attacker", 0, 30, 0, 10, BonusFeatures.Opportunist, "When an enemy leaves the range of your Knuckles, Knife or warhammer you automatically make one attack against them.");
+        features[5] = FillFeature(5, "Towershield Expert", 0, 0, 30, 10, BonusFeatures.TowerShield, "You can stop your turn outside without any penalty.");
     }
 
 
@@ -231,7 +240,7 @@ public class UnitStore : MonoBehaviour
     /// <summary>
     /// returns a Feature. int i is the Freature on the features array.
     /// </summary>
-    private Feature FillFeature(int i, string name, int speed, int strength, int defense, int cost, BonusFeatures feat)
+    private Feature FillFeature(int i, string name, int speed, int strength, int defense, int cost, BonusFeatures feat, string featureDescription)
     {
         string changedOptions = "";
         if (speed != 0)
@@ -243,7 +252,7 @@ public class UnitStore : MonoBehaviour
 
         string description = "Price: " + cost + " " + name + ":" + changedOptions + " Feature: " + feat.ToString();
 
-        Feature feature = new Feature(name, speed, strength, defense, cost, feat, description);
+        Feature feature = new Feature(name, speed, strength, defense, cost, feat, description, featureDescription);
         return feature;
     }
 

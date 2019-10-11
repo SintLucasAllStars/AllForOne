@@ -9,9 +9,10 @@
     public UnitStore.BonusFeatures feat;
 
     public string description;
+    public string featureDescription;
 
     //constructor
-    public Feature(string name, int speed, int strength, int defense, int cost, UnitStore.BonusFeatures feat, string description)
+    public Feature(string name, int speed, int strength, int defense, int cost, UnitStore.BonusFeatures feat, string description, string featureDescription)
     {
         this.name = name;
 
@@ -22,5 +23,6 @@
         this.feat = feat;
 
         this.description = description;
+        this.featureDescription = featureDescription;
     }
 }

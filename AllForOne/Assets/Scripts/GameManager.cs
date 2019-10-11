@@ -30,4 +30,24 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+
+    private void SwitchGameState()
+    {
+        switch (currentGameState)
+        {
+            case GameState.MenuState:
+
+                break;
+            case GameState.BuyState:
+
+                break;
+            case GameState.OverlookState:
+
+                break;
+            case GameState.PlayState:
+
+                break;
+        }
+    }
 }
