@@ -120,13 +120,12 @@ public class UnitStore : MonoBehaviour
         string description;
         description = features[i].description;
         uiManager.SetMouseText(description);
-        Debug.Log("Entered Pointer");
     }
 
     public void ButtonOnPointerGetFeature(int i)
     {
         string description;
-        description = features[i].featureDescription;
+        description = features[i].feat.ToString() + ": " + features[i].featureDescription;
         uiManager.SetMouseText(description);
         Debug.Log("Entered Pointer");
     }
@@ -216,9 +215,9 @@ public class UnitStore : MonoBehaviour
         features[2] = FillFeature(2, "apt fitness", 20, 40, 0, 5, BonusFeatures.None, "None");
 
         //Special Features
-        features[3] = FillFeature(3, "Driveby Shooter", 30, 0, 0, 10, BonusFeatures.Driveby, "When making an attack with you can move at double speed for the remaining turn.");
-        features[4] = FillFeature(4, "Opportunity Attacker", 0, 30, 0, 10, BonusFeatures.Opportunist, "When an enemy leaves the range of your Knuckles, Knife or warhammer you automatically make one attack against them.");
-        features[5] = FillFeature(5, "Towershield Expert", 0, 0, 30, 10, BonusFeatures.TowerShield, "You can stop your turn outside without any penalty.");
+        features[3] = FillFeature(3, "Driveby Shooter", 30, 0, 0, 10, BonusFeatures.Driveby, "When making an attack with this unit you can move at double speed for the rest of your turn.");
+        features[4] = FillFeature(4, "Opportunity Attacker", 0, 30, 0, 10, BonusFeatures.Opportunist, "When an enemy is close to this unit the unit make one attack against them.");
+        features[5] = FillFeature(5, "Towershield Expert", 0, 0, 30, 10, BonusFeatures.TowerShield, "With this unit you can stop your turn outside without any penalty.");
     }
 
 
