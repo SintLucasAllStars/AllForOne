@@ -114,7 +114,7 @@ public class CreatePlayer : MonoBehaviour
             UpdateUI();
         }
 
-        if (newPlayer.Strength > 1)
+        if (newPlayer.Strength >= 1)
         {
             strengthMinusButton.gameObject.SetActive(true);
         }
@@ -148,7 +148,7 @@ public class CreatePlayer : MonoBehaviour
             healthMinusButton.gameObject.SetActive(true);
         }
 
-        if (newPlayer.Health < 1)
+        if (newPlayer.Health <= 1)
         {
             healthMinusButton.gameObject.SetActive(false);
         }
@@ -176,7 +176,7 @@ public class CreatePlayer : MonoBehaviour
             speedMinusButton.gameObject.SetActive(true);
         }
 
-        if (newPlayer.Speed < 1)
+        if (newPlayer.Speed <= 1)
         {
             speedMinusButton.gameObject.SetActive(false);
         }
@@ -204,7 +204,7 @@ public class CreatePlayer : MonoBehaviour
             defenseMinusButton.gameObject.SetActive(true);
         }
 
-        if (newPlayer.Defense < 1)
+        if (newPlayer.Defense <= 1)
         {
             defenseMinusButton.gameObject.SetActive(false);
         }
