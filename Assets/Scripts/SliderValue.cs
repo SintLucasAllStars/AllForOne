@@ -7,11 +7,11 @@ public class SliderValue : MonoBehaviour
 {
     public Slider[] sliderUI;
     public TMP_Text[] textSliderValue;
-    public TMP_Text textTotalPoints;
+    public TMP_Text textTotalPoints, textTotalPointsValue;
 
     public int[] sliderValue3;
     public int[] sliderValue2;
-    public int totalPointsValue = 100;
+    public int totalPriceValue;
 
     public Button next;
 
@@ -19,20 +19,15 @@ public class SliderValue : MonoBehaviour
 
     public int playerOnePoints, playerTwoPoints = 100;
 
-    public bool switchTurn;
+    public bool switchTurn, playerOneDone;
+
+    public bool playerTwoDone;
 
     public MeshCollider groundCollider;
 
-    int whichAvatarIsOn = 1;
-
-    void Start()
-    {
-
-    }
-
     void Update()
     {
-        if(sliderValue2[0] == 0 || sliderValue2[1] == 0 || sliderValue3[0] == 0 || sliderValue3[0] == 0)
+        if (sliderValue2[0] == 0 || sliderValue2[1] == 0 || sliderValue3[0] == 0 || sliderValue3[0] == 0)
         {
             next.interactable = false;
         }
@@ -41,16 +36,36 @@ public class SliderValue : MonoBehaviour
             next.interactable = true;
         }
 
-        playerOnePoints = 0;
+        if ((!switchTurn) || (switchTurn && playerTwoDone == true))
+        {
+            playerOnePoints = int.Parse(textTotalPointsValue.text);
+            playerOnePoints = (playerOnePoints - +totalPriceValue);
+        }
+        else
+        {
+            playerTwoPoints = int.Parse(textTotalPointsValue.text);
+            playerTwoPoints = (playerTwoPoints - +totalPriceValue);
+        }
+
+        totalPriceValue = 0;
         for (int i = 0; i < sliderValue3.Length; i++)
         {
-            playerOnePoints += (-sliderValue3[i] * 3 + 50);
+            totalPriceValue += (sliderValue3[i] * 3);
         }
         for (int i = 0; i < sliderValue2.Length; i++)
         {
-            playerOnePoints += (-sliderValue2[i] * 2);
+            totalPriceValue += (sliderValue2[i] * 2);
         }
-        textTotalPoints.text = playerOnePoints.ToString();
+        textTotalPoints.text = totalPriceValue.ToString();
+
+        if (playerOnePoints < 0)
+        {
+            next.interactable = false;
+        }
+        if (playerTwoPoints < 0)
+        {
+            next.interactable = false;
+        }
     }
 
     public void ShowValue()
@@ -78,98 +93,59 @@ public class SliderValue : MonoBehaviour
         sliderValue2[1] = int.Parse(textSliderValue[3].text);
     }
 
-    //public void NextButtonClick()
-    //{
-    //    for (int i = 0; i < sliderUI.Length; i++)
-    //    {
-    //        sliderUI[i].value = 0;
-    //    }
-
-    //    //switchTurn = !switchTurn;
-
-    //    if (!switchTurn)
-    //    {
-    //        playerOnePoints = totalPointsValue;
-    //        optionsMenu.gameObject.GetComponentInChildren<Image>().color = new Color32(45, 136, 221, 100);
-    //        optionsMenu.gameObject.transform.GetChild(14).GetComponent<Image>().color = new Color32(45, 136, 221, 100);
-    //        optionsMenu.SetActive(false);
-    //        groundCollider.enabled = true;
-    //    }
-    //    else
-    //    {
-    //        totalPointsValue = playerTwoPoints;
-    //        textTotalPoints.text = totalPointsValue.ToString();
-    //        optionsMenu.SetActive(true);
-    //        optionsMenu.gameObject.GetComponentInChildren<Image>().color = new Color32(250, 56, 48, 100);
-    //        optionsMenu.gameObject.transform.GetChild(14).GetComponent<Image>().color = new Color32(250, 56, 48, 100);
-    //        groundCollider.enabled = false;
-    //        totalPointsValue = playerTwoPoints;
-    //        playerTwoPoints = totalPointsValue;
-    //        switchTurn = !switchTurn;
-    //    }
-    //}
-
-    public void SwitchAvatar()
+    public void NextButtonClick()
     {
+        optionsMenu.SetActive(false);
+        groundCollider.enabled = true;
+        PointsSaver();
+    }
+
+    public void SwitchPlayer()
+    {
+        if (playerOneDone == true && playerTwoDone == true)
+        {
+            optionsMenu.gameObject.SetActive(false);
+            return;
+        }
+
         for (int i = 0; i < sliderUI.Length; i++)
         {
             sliderUI[i].value = 0;
         }
-
-        // processing whichAvatarIsOn variable
-        switch (whichAvatarIsOn)
+        if ((!switchTurn) || (switchTurn && playerTwoDone == true))
         {
+            textTotalPointsValue.text = playerOnePoints.ToString();
 
-            // if the first avatar is on
-            case 1:
+            optionsMenu.gameObject.GetComponentInChildren<Image>().color = new Color32(45, 136, 221, 100);
+            optionsMenu.gameObject.transform.GetChild(14).GetComponent<Image>().color = new Color32(45, 136, 221, 100);
+            optionsMenu.gameObject.transform.GetChild(17).GetComponent<Image>().color = new Color32(45, 136, 221, 100);
 
-                Debug.Log("1");
-                // then the second avatar is on now
-                whichAvatarIsOn = 2;
-
-                groundCollider.enabled = true;
-                playerOnePoints = totalPointsValue;
-                textTotalPoints.text = totalPointsValue.ToString();
-                optionsMenu.gameObject.SetActive(false);
-                break;
-
-            // if the second avatar is on
-            case 2:
-
-                Debug.Log("2");
-                // then the first avatar is on now
-                whichAvatarIsOn = 3;
-
-                groundCollider.enabled = false;
-                playerTwoPoints = totalPointsValue;
-                textTotalPoints.text = totalPointsValue.ToString();
-                optionsMenu.gameObject.SetActive(true);
-                break;
-
-            case 3:
-
-                Debug.Log("3");
-                // then the first avatar is on now
-                whichAvatarIsOn = 4;
-
-                groundCollider.enabled = true;
-                playerTwoPoints = totalPointsValue;
-                textTotalPoints.text = totalPointsValue.ToString();
-                optionsMenu.gameObject.SetActive(false);
-                break;
-
-            case 4:
-
-                Debug.Log("4");
-                // then the first avatar is on now
-                whichAvatarIsOn = 1;
-
-                groundCollider.enabled = false;
-                Debug.Log(playerOnePoints);
-                textTotalPoints.text = playerOnePoints.ToString();
-                optionsMenu.gameObject.SetActive(true);
-                break;
+            optionsMenu.SetActive(true);
+            groundCollider.enabled = false;
+            return;
         }
+        if (switchTurn || playerOneDone == true)
+        {
+            textTotalPointsValue.text = playerTwoPoints.ToString();
 
+            optionsMenu.gameObject.GetComponentInChildren<Image>().color = new Color32(250, 56, 48, 100);
+            optionsMenu.gameObject.transform.GetChild(14).GetComponent<Image>().color = new Color32(250, 56, 48, 100);
+            optionsMenu.gameObject.transform.GetChild(17).GetComponent<Image>().color = new Color32(250, 56, 48, 100);
+
+            optionsMenu.SetActive(true);
+            groundCollider.enabled = false;
+        }
+    }
+
+    public void PointsSaver()
+    {
+        if (!switchTurn && !playerOneDone)
+        {
+            playerOnePoints = (playerOnePoints - totalPriceValue);
+        }
+        if (switchTurn && !playerTwoDone)
+        {
+            playerTwoPoints = (playerTwoPoints - totalPriceValue);
+        }
     }
 }
