@@ -23,6 +23,8 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject _victoryUI;
 
+    public ItemSpawner _itemSpawner;
+
     private Coroutine _waitCoroutine = null;
 
     public GameStates CurrentGameState
@@ -37,6 +39,7 @@ public class PlayerManager : MonoBehaviour
                 case GameStates.Hiring:
                     break;
                 case GameStates.CharacterPicking:
+                    _itemSpawner.SpawnPowerUp();
                     _characterCreator.SetActive(false);
                     CheckOutsideUnits();
                     break;

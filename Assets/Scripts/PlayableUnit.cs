@@ -17,11 +17,20 @@ public class PlayableUnit : MonoBehaviour
     public GameObject _thirdPersonCamera;
     public GameObject _fortifyBarrier;
 
+    public List<GameObject> _weaponVisuals = new List<GameObject>();
+
+    private Weapons _currentWeapon = Weapons.Fists;
+
     private float _rotationSpeed = 100f;
 
     private float _minJumpHeight = 3f;
 
-    private float _animationLength = 1.2f;
+    private float _animationLengthFist = 1.2f;
+    private float _animationLengthKnife = 1;
+    private float _animationLengthHammer = 2.1f;
+    private float _animationLengthGun = 1f;
+
+    private float _attackRange = 1.5f;
 
     private bool isActive = false;
 
@@ -89,6 +98,49 @@ public class PlayableUnit : MonoBehaviour
         }
     }
 
+    public Weapons CurrentWeapon
+    {
+        get
+        {
+            return _currentWeapon;
+        }
+        set
+        {
+            _currentWeapon = value;
+
+            foreach (GameObject visual in _weaponVisuals)
+            {
+                visual.SetActive(false);
+            }
+            _attackRange = 1.5f;
+
+            switch (_currentWeapon)
+            {
+                case Weapons.Fists:
+                    break;
+                case Weapons.PowerPunch:
+                    _strength += 2;
+                    break;
+                case Weapons.Knife:
+                    _weaponVisuals[0].SetActive(true);
+                    _strength += 3;
+                    break;
+                case Weapons.Hammer:
+                    _weaponVisuals[1].SetActive(true);
+                    _attackRange = 2.5f;
+                    _strength += 8;
+                    break;
+                case Weapons.Gun:
+                    _weaponVisuals[2].SetActive(true);
+                    _attackRange = 15f;
+                    _strength += 5;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -109,6 +161,8 @@ public class PlayableUnit : MonoBehaviour
         {
             renderer.material.color = characterColor;
         }
+
+        FindWeapons();
 
         _thirdPersonCamera = GetComponentInChildren<Camera>().gameObject;
         _thirdPersonCamera.SetActive(false);
@@ -197,13 +251,37 @@ public class PlayableUnit : MonoBehaviour
     private void Attack()
     {
         _isAttacking = true;
-        _animator.SetBool("IsAttacking", _isAttacking);
-        StartCoroutine(EndPunch());
+
+        switch (_currentWeapon)
+        {
+            case Weapons.Fists:
+                _animator.Play("Punch");
+                StartCoroutine(EndPunch(_animationLengthFist));
+                break;
+            case Weapons.PowerPunch:
+                _animator.Play("Punch");
+                StartCoroutine(EndPunch(_animationLengthFist));
+                break;
+            case Weapons.Knife:
+                _animator.Play("Knife");
+                StartCoroutine(EndPunch(_animationLengthKnife));
+                break;
+            case Weapons.Hammer:
+                _animator.Play("Hammer");
+                StartCoroutine(EndPunch(_animationLengthHammer));
+                break;
+            case Weapons.Gun:
+                _animator.Play("Gun");
+                StartCoroutine(EndPunch(_animationLengthGun));
+                break;
+            default:
+                break;
+        }
 
         RaycastHit hit;
         Ray ray = new Ray(transform.position + new Vector3(0, 1, 0), transform.forward);
         
-        if (Physics.Raycast(ray, out hit, 1.5f))
+        if (Physics.Raycast(ray, out hit, _attackRange))
         {
             if (hit.collider != null)
             {
@@ -246,6 +324,17 @@ public class PlayableUnit : MonoBehaviour
         _animator.SetBool("IsAttacking", false);
     }
 
+    private void FindWeapons()
+    {
+        GameObject weaponsParent = gameObject.GetComponentInChildren<HandLocator>().gameObject;
+
+
+        _weaponVisuals.Add(weaponsParent.transform.Find("Knife").gameObject);
+        _weaponVisuals.Add(weaponsParent.transform.Find("Hammer").gameObject);
+        _weaponVisuals.Add(weaponsParent.transform.Find("Gun").gameObject);
+
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("KillBox"))
@@ -256,9 +345,9 @@ public class PlayableUnit : MonoBehaviour
         }
     }
 
-    private IEnumerator EndPunch()
+    private IEnumerator EndPunch(float animationLength)
     {
-        yield return new WaitForSeconds(_animationLength);
+        yield return new WaitForSeconds(animationLength);
         _isAttacking = false;
         _animator.SetBool("IsAttacking", _isAttacking);
     }
