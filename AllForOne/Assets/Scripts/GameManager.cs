@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
     private Canvas _unitCanvas;
 
     [SerializeField]
+    private Camera _unitCamera;
+
+    [SerializeField]
     private Camera _mainCamera;
 
     private int _health = 1;
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
     private bool _player1Turn = true;
 
     public bool _canSpawn;
+    public bool _canSelect;
 
     private void Awake()
     {
@@ -268,5 +272,31 @@ public class GameManager : MonoBehaviour
 
         _defenseText.text = _defense.ToString();
         _unitCostText.text = "$" + _unitCost;
+    }
+
+    public void SelectingPhase()
+    {
+        _canSelect = true;
+        _mainCamera.enabled = true;
+        _unitCamera.enabled = false;
+        _unitCanvas.enabled = false;
+    }
+
+    public void ControlUnit(GameObject selectedUnit)
+    {
+        Unit unit = selectedUnit.GetComponent<Unit>();
+        if (unit._isPlayer1 == _player1Turn)
+        {
+            unit.StartControl();
+            _mainCamera.enabled = false;
+            _canSelect = false;
+        }
+    }
+
+    public void EndControlPhase()
+    {
+        _mainCamera.enabled = true;
+        _canSelect = true;
+        SwitchTeam();
     }
 }

@@ -35,14 +35,19 @@ public class CameraScript : MonoBehaviour
 
     public void OnClick()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager._instance._canSpawn)
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             RaycastHit hit;
             if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
-                if (hit.collider.CompareTag("Ground"))
+                if (hit.collider.CompareTag("Ground") && GameManager._instance._canSpawn)
                 {
                     GameManager._instance.CreateUnit(hit.point);
+                }
+
+                if (hit.collider.CompareTag("Player") && GameManager._instance._canSelect)
+                {
+                    GameManager._instance.ControlUnit(hit.collider.gameObject);
                 }
             }
         }
