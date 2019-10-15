@@ -7,7 +7,7 @@ public class UnitPlacer : MonoBehaviour
 
     public GameObject unitP1, unitP2;
     public GameObject UnitListP1, UnitListP2;
-
+    
     private int test,test2 = 0;
 
     public SliderValue svScript;
@@ -15,7 +15,7 @@ public class UnitPlacer : MonoBehaviour
     void OnMouseDown()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100) && svScript.raycastOn)
         {
             if(svScript.playerOnePoints < 10)
             {

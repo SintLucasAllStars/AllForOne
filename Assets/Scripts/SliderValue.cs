@@ -22,8 +22,11 @@ public class SliderValue : MonoBehaviour
     public bool switchTurn, playerOneDone;
 
     public bool playerTwoDone;
+    public bool raycastOn = true;
 
     public MeshCollider[] groundCollider;
+
+    public PlayerSwitcher psScript;
 
     void Update()
     {
@@ -100,7 +103,6 @@ public class SliderValue : MonoBehaviour
         {
             groundCollider[i].enabled = true;
         }
-        //groundCollider[i].enabled = true;
         PointsSaver();
     }
 
@@ -109,6 +111,9 @@ public class SliderValue : MonoBehaviour
         if (playerOneDone == true && playerTwoDone == true)
         {
             optionsMenu.gameObject.SetActive(false);
+            raycastOn = false;
+            psScript.scriptOn = true;
+            psScript.StartGame();
             return;
         }
 
