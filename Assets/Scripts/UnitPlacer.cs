@@ -33,6 +33,13 @@ public class UnitPlacer : MonoBehaviour
                     svScript.switchTurn = true;
                     GameObject newUnit = Instantiate(unitP1, hit.point, Quaternion.identity);
                     newUnit.transform.parent = UnitListP1.transform;
+
+                    UnitValues uvScript = newUnit.GetComponent<UnitValues>();
+                    uvScript.health = svScript.sliderValue3[0];
+                    uvScript.strength = svScript.sliderValue3[1];
+                    uvScript.speed = svScript.sliderValue2[0];
+                    uvScript.defense = svScript.sliderValue2[1];
+
                     svScript.switchTurn = true;
                     svScript.SwitchPlayer();
                     test = 2;
@@ -41,6 +48,13 @@ public class UnitPlacer : MonoBehaviour
                 {
                     GameObject newUnit = Instantiate(unitP1, hit.point, Quaternion.identity);
                     newUnit.transform.parent = UnitListP1.transform;
+
+                    UnitValues uvScript = newUnit.GetComponent<UnitValues>();
+                    uvScript.health = svScript.sliderValue3[0];
+                    uvScript.strength = svScript.sliderValue3[1];
+                    uvScript.speed = svScript.sliderValue2[0];
+                    uvScript.defense = svScript.sliderValue2[1];
+
                     if (svScript.playerTwoDone)
                     {
                         svScript.switchTurn = false;
@@ -62,6 +76,13 @@ public class UnitPlacer : MonoBehaviour
                     svScript.switchTurn = false;
                     GameObject newUnit = Instantiate(unitP2, hit.point, Quaternion.identity);
                     newUnit.transform.parent = UnitListP2.transform;
+
+                    UnitValues uvScript = newUnit.GetComponent<UnitValues>();
+                    uvScript.health = svScript.sliderValue3[0];
+                    uvScript.strength = svScript.sliderValue3[1];
+                    uvScript.speed = svScript.sliderValue2[0];
+                    uvScript.defense = svScript.sliderValue2[1];
+
                     svScript.SwitchPlayer();
                     test2 = 2;
                 }
@@ -69,6 +90,13 @@ public class UnitPlacer : MonoBehaviour
                 {
                     GameObject newUnit = Instantiate(unitP2, hit.point, Quaternion.identity);
                     newUnit.transform.parent = UnitListP2.transform;
+
+                    UnitValues uvScript = newUnit.GetComponent<UnitValues>();
+                    uvScript.health = svScript.sliderValue3[0];
+                    uvScript.strength = svScript.sliderValue3[1];
+                    uvScript.speed = svScript.sliderValue2[0];
+                    uvScript.defense = svScript.sliderValue2[1];
+
                     if (svScript.playerOneDone)
                     {
                         svScript.switchTurn = true;
