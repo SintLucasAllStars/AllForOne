@@ -23,6 +23,9 @@ public class UIController : Singleton<UIController>
     [SerializeField]
     private TextMeshPro countDownText;
 
+    [SerializeField] private RectTransform BuyRoot;
+    private bool IsBuyScreenShowing;
+
     private void Start()
     {
         AssignDropDown();
@@ -64,4 +67,21 @@ public class UIController : Singleton<UIController>
     }
 
     public void CountDownTimer(double _timer) => countDownText.text = _timer.ToString();
+
+    public void ShowBuyScreen()
+    {
+        float speed = 1f;
+        int[] pos;
+        pos = new int[2] { 0, -480 };
+        if (IsBuyScreenShowing)
+        {
+            LeanTween.moveY(BuyRoot, pos[1], speed);
+        }
+        else if (!IsBuyScreenShowing)
+        {
+            LeanTween.moveY(BuyRoot, pos[0], speed);
+        }
+        IsBuyScreenShowing = !IsBuyScreenShowing;
+    }
+
 }
