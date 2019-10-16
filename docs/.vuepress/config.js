@@ -3,6 +3,7 @@ module.exports = {
     description: "This is the documentation for the AllForOne project for the seconds years",
     plugins: [['vuepress-plugin-code-copy', true]],
     themeConfig: {
+        smoothScroll: true,
         nav: [
             { text: 'Home', link: '/' },
             { text: 'Docs', link: '/Scripts/' },
@@ -15,9 +16,17 @@ module.exports = {
                     'IExtraFunctions',
                     'Singleton'
                 ],
-            'HowToUse': [
-                ''
-            ]
+            '/HowToUse/':
+                [
+                    '',
+                    'Importing',
+                    'Usage',
+                    'NewConcepts',
+                    'Docker'
+                ]
         }
+    },
+    markdown: {
+        lineNumbers: true
     }
 }
