@@ -16,14 +16,14 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(100, "Henk", "Red");
-        player2 = new Player(100, "Roderik", "Blue");
+        player1 = new Player(11, "Henk", "Red");
+        player2 = new Player(11, "Roderik", "Blue");
         currentplayer = player1;
     }
 
     public bool CheckPoints()
     {
-        if(player1.points <10 && player2.points < 10)
+        if(player1.points <=9 && player2.points <=9)
         {
             return true;
         }
@@ -49,11 +49,32 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
+    public void CheckForUnits()
+    {
+        if(GameObject.FindGameObjectsWithTag("Red") == null)
+        {
+            Debug.Log("Blue team wins");
+        }
+        if (GameObject.FindGameObjectsWithTag("Blue") == null)
+        {
+            Debug.Log("Red team wins");
+        }
+
+    }
+
     public void SwitchPlayer()
     {
         if (currentplayer == player1)
             currentplayer = player2;
         else if (currentplayer == player2)
             currentplayer = player1;
+    }
+
+    public void TopViewTurnOn()
+    {
+        if (topview.activeInHierarchy == true)
+            topview.SetActive(false);
+        else if (topview.activeInHierarchy == false)
+            topview.SetActive(true);
     }
 }

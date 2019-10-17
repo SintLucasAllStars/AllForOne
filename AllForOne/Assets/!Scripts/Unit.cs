@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
     public enum Weapontype { punch, superPunch, knife, slash, gun}
     public Weapontype weapontype;
+    public List<Sprite> weapons;
+    public Image weaponImg;
     [Header("Stats")]
     public int health;
     public int strength;
@@ -63,7 +66,8 @@ public class Unit : MonoBehaviour
     public void Die()
     {
         Debug.Log("this player died there was no roof above him");
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
+        Gamemanager.instance.CheckForUnits();
     }
 
     private void OnMouseOver()
@@ -88,7 +92,8 @@ public class Unit : MonoBehaviour
     {
         anim.Play("Idle/Walk");
         isSelected = true;
-        cam.enabled = true;
+        cam.gameObject.SetActive(true);
+        Gamemanager.instance.TopViewTurnOn();
         anim.speed = speed;
         StartCoroutine(Timer());
     }
@@ -193,10 +198,10 @@ public class Unit : MonoBehaviour
         isSelected = false;
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
-        CheckIfInside();
-        this.cam.enabled = false;
+        cam.gameObject.SetActive(false);
         Gamemanager.instance.SwitchPlayer();
-        TopView.instance.EnableTopView();
+        Gamemanager.instance.TopViewTurnOn();
+        CheckIfInside();
     }
 
     public void SetFortify()
@@ -212,17 +217,22 @@ public class Unit : MonoBehaviour
         {
             case "powerPunch":
                 weapontype = Weapontype.superPunch;
+                weaponImg.sprite = weapons[1];
                 break;
             case "knife":
                 weapontype = Weapontype.knife;
+                weaponImg.sprite = weapons[2];
                 break;
             case "slash":
                 weapontype = Weapontype.slash;
+                weaponImg.sprite = weapons[3];
                 break;
             case "gun":
                 weapontype = Weapontype.gun;
+                weaponImg.sprite = weapons[4];
                 break;
             default:
+                weaponImg.sprite = weapons[0];
                 break;
         }
     }

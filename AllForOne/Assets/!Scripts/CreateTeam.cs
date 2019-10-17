@@ -33,92 +33,80 @@ public class CreateTeam : MonoBehaviour
 
     public void ChangeHealth(int value)
     {
-        if (CheckPoints())
+        if(health >= 1)
         {
-            if(health >= 1)
+            if (value > 0)
             {
-                if (value > 0)
-                {
-                    points -= 2;
-                    health += value;
-                }
-                else if(health > 1)
-                {
-                    points += 2;
-                    health += value;
-                }
-                updatePoints();
-
-                healthTxt.text = health.ToString();
+                points -= 2;
+                health += value;
             }
+            else if(health > 1)
+            {
+                points += 2;
+                health += value;
+            }
+            updatePoints();
+
+            healthTxt.text = health.ToString();
         }
     }
 
     public void ChangeSpeed(int value)
     {
-        if (CheckPoints())
+        if(speed >= 1)
         {
-            if(speed >= 1)
+            if (value > 0)
             {
-                if (value > 0)
-                {
-                    points -= 2;
-                    speed += value;
-                }
-                else if (speed > 1)
-                {
-                    points += 2;
-                    speed += value;
-                }
-                updatePoints();
-                
-                speedTxt.text = speed.ToString();
+                points -= 2;
+                speed += value;
             }
+            else if (speed > 1)
+            {
+                points += 2;
+                speed += value;
+            }
+            updatePoints();
+                
+            speedTxt.text = speed.ToString();
         }
     }
 
     public void ChangeDefence(int value)
     {
-        if (CheckPoints())
+        if(defence >= 1)
         {
-            if(defence >= 1)
+            if (value > 0)
             {
-                if (value > 0)
-                {
-                    points -= 2;
-                    defence += value;
-                }
-                else if(defence > 1)
-                {
-                    points += 2;
-                    defence += value;
-                }
-                updatePoints();
-
-                defenceTxt.text = defence.ToString();
+                points -= 2;
+                defence += value;
             }
+            else if(defence > 1)
+            {
+                points += 2;
+                defence += value;
+            }
+            updatePoints();
+
+            defenceTxt.text = defence.ToString();
         }
     }
 
     public void ChangeStrength(int value)
     {
-        if (CheckPoints())
+        if(strength >= 1)
         {
-            if(strength >= 1)
+            if (value > 0)
             {
-                if (value > 0)
-                {
-                    points -= 2;
-                    strength += value;
-                }
-                else if(strength > 1)
-                {
-                    points += 2;
-                    strength += value;
-                }
-                updatePoints();
-                strengthTxt.text = strength.ToString();
+                points -= 2;
+                strength += value;
             }
+            else if(strength > 1)
+            {
+                points += 2;
+                strength += value;
+            }
+            updatePoints();
+            strengthTxt.text = strength.ToString();
         }
     }
 
@@ -128,11 +116,11 @@ public class CreateTeam : MonoBehaviour
         int tSpeed = speed * 3;
         int tDefence = defence * 2;
         int tStrength = strength * 2;
-        if(Gamemanager.instance.currentplayer.points - (tHealth + tSpeed + tDefence + tStrength) < 0)
+        if(Gamemanager.instance.currentplayer.points < (tHealth + tSpeed + tDefence + tStrength))
         {
             Debug.Log("Player doesn't have enough points to hire this unit, you broke ass boi");
         }
-        else if(Gamemanager.instance.currentplayer.points - (tHealth + tSpeed + tDefence + tStrength) >= 0)
+        else if(Gamemanager.instance.currentplayer.points >= (tHealth + tSpeed + tDefence + tStrength))
         {
             Gamemanager.instance.currentplayer.points -= (tHealth + tSpeed + tDefence + tStrength);
             Debug.Log("curren players new points total = " + Gamemanager.instance.currentplayer.points);
@@ -208,32 +196,11 @@ public class CreateTeam : MonoBehaviour
 
     public void CheckPlayer()
     {
-        if (Gamemanager.instance.currentplayer.points <= 10)
+        if (Gamemanager.instance.currentplayer.points <= 9)
         {
             Gamemanager.instance.SwitchCurrentPlayer();
         }
     }
 
-    bool CheckPoints()
-    {
-        int tHealth = health * 3;
-        int tSpeed = speed * 3;
-        int tDefence = defence * 2;
-        int tStrength = strength * 2;
-
-        int tTotal = tHealth + tSpeed + tDefence + tStrength;
-        Debug.Log("the total points are " + points);
-        Debug.Log("The total cost = " + tTotal);
-        if(Gamemanager.instance.currentplayer.points - tTotal <= 0)
-        {
-            Debug.Log("No points left");
-            return false;
-        }
-        else
-        {
-            
-            return true;
-        }
-
-    }
+    
 }

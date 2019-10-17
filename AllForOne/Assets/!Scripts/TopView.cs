@@ -17,4 +17,9 @@ public class TopView : MonoBehaviour
     {
         topCam.SetActive(true);
     }
+
+    public void DisableTopView()
+    {
+        topCam.SetActive(false);
+    }
 }
