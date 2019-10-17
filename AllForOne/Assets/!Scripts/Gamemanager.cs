@@ -16,8 +16,8 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(11, "Henk", "Red");
-        player2 = new Player(11, "Roderik", "Blue");
+        player1 = new Player(100, "Henk", "Red");
+        player2 = new Player(100, "Roderik", "Blue");
         currentplayer = player1;
     }
 
