@@ -11,7 +11,9 @@ public class Unit : MonoBehaviour
     public int strength;
     public int defence;
     public int speed;
+    public int rotSpeed;
     public Camera cam;
+    bool fortify = false;
 
     public bool isSelected = false;
     
@@ -26,8 +28,12 @@ public class Unit : MonoBehaviour
 
     public void GetHit(int damage)
     {
-        health -= damage;
-        if(health > 0)
+        if (fortify)
+            health -= damage - defence;
+        else
+            health -= damage;
+
+        if (health > 0)
         {
             Debug.Log("Health left is = " + health);
         }
@@ -42,31 +48,46 @@ public class Unit : MonoBehaviour
     {
         if (isSelected)
         {
+            
             CharacterMovement();
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Attack();
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                SetFortify();
             }
         }
     }
 
     public void Die()
     {
-        
+        Debug.Log("this player died there was no roof above him");
+        //Gamemanager.instance.currentplayer.Units.Remove(this);
     }
 
     private void OnMouseOver()
     {
-        
-        if (Input.GetMouseButtonDown(0))
+        if(this.tag == Gamemanager.instance.currentplayer.teamColor)
         {
-
-            OnSelected();
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnSelected();
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("You cant control another players unit you cheater");
+            }
         }
     }
 
     public void OnSelected()
     {
+        anim.Play("Idle/Walk");
         isSelected = true;
         cam.enabled = true;
         StartCoroutine(Timer());
@@ -76,7 +97,7 @@ public class Unit : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
-
+        this.gameObject.transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * rotSpeed);
         anim.SetFloat("Horizontal", x);
         anim.SetFloat("Vertical", y);
     }
@@ -117,8 +138,14 @@ public class Unit : MonoBehaviour
                 break;
         }
         Debug.Log("weaponType = " + weapontype);
+        Debug.Log(anim.speed + "this is the speed of the animator");
+        anim.speed = 1;
         anim.Play(weapontype.ToString());
         AttackRay(tRange, tDamage);
+        if (this.anim.GetCurrentAnimatorStateInfo(0).IsName(weapontype.ToString()))
+        {
+            anim.speed = speed;
+        }
     }
 
     public void AttackRay(int weaponRange, int Damage)
@@ -158,11 +185,24 @@ public class Unit : MonoBehaviour
     IEnumerator Timer()
     {
         yield return new WaitForSeconds(10);
+        EndTurn();
+    }
+
+    public void EndTurn()
+    {
         isSelected = false;
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
         CheckIfInside();
         this.cam.enabled = false;
+        Gamemanager.instance.SwitchPlayer();
         TopView.instance.EnableTopView();
+    }
+
+    public void SetFortify()
+    {
+        anim.Play("Fortify");
+        StopAllCoroutines();
+        EndTurn();
     }
 }

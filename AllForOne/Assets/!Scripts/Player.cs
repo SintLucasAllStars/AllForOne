@@ -5,13 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class Player
 {
-    List<Unit> Units;
+    public List<Unit> Units;
     public int points;
     public string name;
+    public string teamColor;
 
-    public Player(int _points, string _name)
+    public Player(int _points, string _name, string _teamColor)
     {
         points = _points;
         name = _name;
+        teamColor = _teamColor;
     }
 }

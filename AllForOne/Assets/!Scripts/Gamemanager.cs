@@ -16,10 +16,9 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(100, "Henk");
-        player2 = new Player(100, "Roderik");
+        player1 = new Player(100, "Henk", "Red");
+        player2 = new Player(100, "Roderik", "Blue");
         currentplayer = player1;
-        gameState = GameState.CreatTeam;
     }
 
     public bool CheckPoints()
@@ -46,10 +45,15 @@ public class Gamemanager : MonoBehaviour
 
         else
         {
-            if (currentplayer == player1)
-                currentplayer = player2;
-            else if (currentplayer == player2)
-                currentplayer = player1;
+            SwitchPlayer();
         }
+    }
+
+    public void SwitchPlayer()
+    {
+        if (currentplayer == player1)
+            currentplayer = player2;
+        else if (currentplayer == player2)
+            currentplayer = player1;
     }
 }
