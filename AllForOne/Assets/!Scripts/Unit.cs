@@ -48,7 +48,6 @@ public class Unit : MonoBehaviour
     {
         if (isSelected)
         {
-            
             CharacterMovement();
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -64,7 +63,7 @@ public class Unit : MonoBehaviour
     public void Die()
     {
         Debug.Log("this player died there was no roof above him");
-        //Gamemanager.instance.currentplayer.Units.Remove(this);
+        Destroy(this.gameObject);
     }
 
     private void OnMouseOver()
@@ -90,6 +89,7 @@ public class Unit : MonoBehaviour
         anim.Play("Idle/Walk");
         isSelected = true;
         cam.enabled = true;
+        anim.speed = speed;
         StartCoroutine(Timer());
     }
 
@@ -204,5 +204,26 @@ public class Unit : MonoBehaviour
         anim.Play("Fortify");
         StopAllCoroutines();
         EndTurn();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "powerPunch":
+                weapontype = Weapontype.superPunch;
+                break;
+            case "knife":
+                weapontype = Weapontype.knife;
+                break;
+            case "slash":
+                weapontype = Weapontype.slash;
+                break;
+            case "gun":
+                weapontype = Weapontype.gun;
+                break;
+            default:
+                break;
+        }
     }
 }
