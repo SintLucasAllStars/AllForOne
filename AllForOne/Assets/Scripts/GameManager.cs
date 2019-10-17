@@ -32,13 +32,31 @@ public class GameManager : MonoBehaviour
     private Image _colorBlock;
 
     [SerializeField]
+    private Image _gameColorBlock;
+
+    [SerializeField]
+    private Transform _gamePlayerBlock;
+
+    [SerializeField]
+    private Transform _doneButton;
+
+    [SerializeField]
+    private Transform _victoryScreen;
+
+    [SerializeField]
     private Canvas _unitCanvas;
+
+    [SerializeField]
+    private Canvas _gameCanvas;
 
     [SerializeField]
     private Camera _unitCamera;
 
     [SerializeField]
     private Camera _mainCamera;
+
+    private Color _blue = new Color32(42, 87, 226, 255);
+    private Color _red = new Color32(226, 42, 42, 255);
 
     private int _health = 1;
     private int _strenght = 1;
@@ -54,6 +72,9 @@ public class GameManager : MonoBehaviour
     private int _unitCost = 10;
 
     private bool _player1Turn = true;
+
+    public int _player1Units = 0;
+    public int _player2Units = 0;
 
     public bool _canSpawn;
     public bool _canSelect;
@@ -74,6 +95,16 @@ public class GameManager : MonoBehaviour
             _canSpawn = true;
             _mainCamera.enabled = true;
             _unitCanvas.enabled = false;
+
+            if (_player1Turn)
+            {
+                _player1Units++;
+            }
+            else
+            {
+                _player2Points++;
+                _doneButton.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -100,15 +131,21 @@ public class GameManager : MonoBehaviour
         {
             _player1Points -= 10;
             _player1Turn = false;
-            _colorBlock.color = new Color32(42, 87, 226, 255);
             _playerCurrencyText.text = "$" + _player2Points;
+            _colorBlock.color = _blue;
+            _gameColorBlock.color = _blue;
+            _gamePlayerBlock.gameObject.SetActive(false);
+
         }
         else
-        {
+        { 
             _player2Points -= 10;
             _player1Turn = true;
-            _colorBlock.color = new Color32(226, 42, 42, 255);
             _playerCurrencyText.text = "$" + _player1Points;
+            _colorBlock.color = _red;
+            _gameColorBlock.color = _red;
+            _gamePlayerBlock.gameObject.SetActive(true);
+
         }
 
         _health = 1;
@@ -278,6 +315,8 @@ public class GameManager : MonoBehaviour
     {
         _canSelect = true;
         _mainCamera.enabled = true;
+        _gameCanvas.enabled = true;
+
         _unitCamera.enabled = false;
         _unitCanvas.enabled = false;
     }
@@ -289,6 +328,7 @@ public class GameManager : MonoBehaviour
         {
             unit.StartControl();
             _mainCamera.enabled = false;
+            _gameCanvas.enabled = false;
             _canSelect = false;
         }
     }
@@ -296,7 +336,14 @@ public class GameManager : MonoBehaviour
     public void EndControlPhase()
     {
         _mainCamera.enabled = true;
+        _gameCanvas.enabled = true;
         _canSelect = true;
         SwitchTeam();
+    }
+
+    public void EndGame(bool player1Lost)
+    {
+        _victoryScreen.gameObject.SetActive(true);
+        Debug.Log(player1Lost);
     }
 }
