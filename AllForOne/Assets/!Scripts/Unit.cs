@@ -94,6 +94,7 @@ public class Unit : MonoBehaviour
         isSelected = true;
         cam.gameObject.SetActive(true);
         Gamemanager.instance.TopViewTurnOn();
+        
         anim.speed = speed;
         StartCoroutine(Timer());
     }
