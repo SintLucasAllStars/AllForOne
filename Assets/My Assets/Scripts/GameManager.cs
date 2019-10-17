@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour
     //here are the phases of battle
     public enum Phase
     {
+        DummyPhase = -1,
         //set starting values and load level
-        StartLevel = 1,
+        StartGame = 0,
+        //start tutorial.
+        Tutorial = 1,
         //player unit creation and placing turn(do for both players)
         CreatePlayerCharacters = 2,
         PlacingUnits = 3,
@@ -33,8 +36,13 @@ public class GameManager : MonoBehaviour
     {
         LoadLevelAndSetValues = 1,
     }
-
+    
+    //game phase
     public Phase gamePhase;
+    
+    //turn based value holders
+    public GameObject randomClassPrefab;
+    
     //character prefab list
     public List<GameObject> charPrefabs = new List<GameObject>();
     
@@ -47,6 +55,7 @@ public class GameManager : MonoBehaviour
     { 
         //test
         turnHolder = "Red";
+        StartCoroutine(PhaseEnd(Phase.StartGame, Phase.DummyPhase));
     }
 
     // Update is called once per frame
@@ -55,11 +64,56 @@ public class GameManager : MonoBehaviour
         
     }
     
-    public void PhaseCheck(Phase currentPhase)
+    //After switching phase call this to start the phase. 
+    public void PhaseCheck(Phase nextPhase, Phase disengageTarget)
     {
+        DisengagePhases(disengageTarget);
+        gamePhase = nextPhase;
+        EngagePhases(gamePhase);
+    }
+
+    public void DisengagePhases(Phase phase)
+    {
+        if (phase == Phase.StartGame)
+        {
+            Debug.Log("===================\r" + "Phase: StartGame-End\r" + "===================");
+        }
+
+        if (phase == Phase.Tutorial)
+        {
+            Debug.Log("===================\r" + "Phase: Tutorial-End\r" + "===================");
+ 
+        }
+    }
+
+    public void EngagePhases(Phase phase)
+    {
+        // takes care of the start of the game. and only happens once per game.
+        // after StartGame comes Tutorial.
+        if (phase == Phase.StartGame)
+        {
+            GetRandomClass();
+            StartCoroutine(PhaseEnd(Phase.Tutorial, gamePhase));
+        }
+
+        // takes care of the tutorial portion of the game and only happens once per game
+        // after tutorial comes CreatePlayerCharacters
+        if (phase == Phase.Tutorial)
+        {
+            // this wil be gated later on rather than switch immediately in this if statement
+            StartCoroutine(PhaseEnd(Phase.CreatePlayerCharacters, gamePhase));
+            Debug.Log("===================\r" + "Phase: Tutorial-Start\r" + "===================");
+
+        }
+
+        if (phase == Phase.CreatePlayerCharacters)
+        {
+            // activate ui
+            Debug.Log("===================\r" + "Phase: CreatePlayerCharacters-Start\r" + "===================");
+        }
         
     }
-    
+
     public void AddUnitToTeam(GameObject unitToAdd)
     {
         if (turnHolder == "red")
@@ -70,6 +124,24 @@ public class GameManager : MonoBehaviour
         {
             bluePlayerUnits.Add(unitToAdd);
         }
+    }
+
+    public IEnumerator PhaseEnd(Phase newPhase, Phase endTarget)
+    {
+        yield return new WaitForSeconds(2f);
+        // game just started and this is the first thing my turn based system does.
+        PhaseCheck(newPhase, endTarget);
+    }
+    public IEnumerator PhaseGoAhead()
+    {
+        yield return new WaitForSeconds(1f);
+        // game just started and this is the first thing my turn based system does.
+    }
+
+    public void GetRandomClass()
+    {
+        var randomNumber = Random.Range(0, charPrefabs.Count);
+        randomClassPrefab = charPrefabs[randomNumber];
     }
 }
 
