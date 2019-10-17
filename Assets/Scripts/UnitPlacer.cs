@@ -31,7 +31,9 @@ public class UnitPlacer : MonoBehaviour
                 {
                     svScript.playerOneDone = true;
                     svScript.switchTurn = true;
-                    GameObject newUnit = Instantiate(unitP1, hit.point, Quaternion.identity);
+                    Vector3 targetLocation = hit.point;
+                    targetLocation += new Vector3(0, transform.localScale.y / 2, 0);
+                    GameObject newUnit = Instantiate(unitP1, targetLocation, Quaternion.identity);
                     newUnit.transform.parent = UnitListP1.transform;
 
                     UnitValues uvScript = newUnit.GetComponent<UnitValues>();
@@ -46,8 +48,10 @@ public class UnitPlacer : MonoBehaviour
                 }
                 else if (test == 0)
                 {
-                    GameObject newUnit = Instantiate(unitP1, hit.point, Quaternion.identity);
-                    newUnit.transform.parent = UnitListP1.transform;
+                    Vector3 targetLocation = hit.point;
+                    targetLocation += new Vector3(0, transform.localScale.y / 2, 0);
+                    GameObject newUnit = Instantiate(unitP1, targetLocation, Quaternion.identity);
+                    //newUnit.transform.parent = UnitListP1.transform;
 
                     UnitValues uvScript = newUnit.GetComponent<UnitValues>();
                     uvScript.health = svScript.sliderValue3[0];
@@ -74,7 +78,9 @@ public class UnitPlacer : MonoBehaviour
                 {
                     svScript.playerTwoDone = true;
                     svScript.switchTurn = false;
-                    GameObject newUnit = Instantiate(unitP2, hit.point, Quaternion.identity);
+                    Vector3 targetLocation = hit.point;
+                    targetLocation += new Vector3(0, transform.localScale.y / 2, 0);
+                    GameObject newUnit = Instantiate(unitP2, targetLocation, Quaternion.identity);
                     newUnit.transform.parent = UnitListP2.transform;
 
                     UnitValues uvScript = newUnit.GetComponent<UnitValues>();
@@ -88,7 +94,9 @@ public class UnitPlacer : MonoBehaviour
                 }
                 else if(test2 == 0)
                 {
-                    GameObject newUnit = Instantiate(unitP2, hit.point, Quaternion.identity);
+                    Vector3 targetLocation = hit.point;
+                    targetLocation += new Vector3(0, transform.localScale.y / 2, 0);
+                    GameObject newUnit = Instantiate(unitP2, targetLocation, Quaternion.identity);
                     newUnit.transform.parent = UnitListP2.transform;
 
                     UnitValues uvScript = newUnit.GetComponent<UnitValues>();

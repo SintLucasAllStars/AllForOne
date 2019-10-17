@@ -26,7 +26,8 @@ public class PlayerSwitcher : MonoBehaviour
                 if (hit.transform.tag == "u_Player1")
                 {
                     Debug.Log("yes");
-                }
+                    cmScript.objectToFollow = hit.transform.GetChild(0).gameObject;
+                    cmScript.CameraParent();                }
                 else
                 {
                     Debug.Log("Not your Unit");
@@ -38,6 +39,7 @@ public class PlayerSwitcher : MonoBehaviour
     public void StartGame()
     {
         cmScript.enabled = true;
+        //cmScript.CameraParent();
         gameUI.SetActive(true);
     }
 }
