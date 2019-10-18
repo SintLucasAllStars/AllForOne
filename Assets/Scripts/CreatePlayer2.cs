@@ -45,6 +45,9 @@ public class CreatePlayer2 : MonoBehaviour
     public Button speedMinusButton;
     public Button defenseMinusButton;
 
+    public Camera cam;
+    public Camera unitCam;
+
     void Start()
     {
         newPlayer = new BasePlayer();
@@ -69,6 +72,23 @@ public class CreatePlayer2 : MonoBehaviour
             if (place.enabled)
             {
                 //canvas.SetActive(false);
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.tag == "Player 2")
+                {
+                    //Debug.Log("CLICKED PLAYER 2 UNIT");
+                    cam.enabled = false;
+                    //unitCam.enabled = true;
+                    hit.collider.GetComponent<ThirdPersonCharacterControl>().ControlUnit();
+                    StartCoroutine(SwitchTime());
+                }
             }
         }
     }
@@ -250,5 +270,12 @@ public class CreatePlayer2 : MonoBehaviour
         {
             canvas2.SetActive(false);
         }
+    }
+
+    IEnumerator SwitchTime()
+    {
+        yield return new WaitForSeconds(10f);
+        cam.enabled = true;
+        yield return null;
     }
 }

@@ -35,7 +35,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            // Target.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+             Target.rotation = Quaternion.Euler(mouseY, mouseX, 0);
         }
         else
         {
@@ -51,7 +51,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
 
         if (Physics.Raycast(transform.position, Target.position - transform.position, out hit, 4.5f))
         {
-            /*if (hit.collider.gameObject.tag != "Player")
+            if (hit.collider.gameObject.tag != "Player")
             {
                 Obstruction = hit.transform;
                 Obstruction.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
@@ -64,7 +64,7 @@ public class ThirdPersonCameraControl : MonoBehaviour
                 Obstruction.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 if (Vector3.Distance(transform.position, Target.position) < 4.5f)
                     transform.Translate(Vector3.back * zoomSpeed * Time.deltaTime);
-            }*/
+            }
         }
     }
 }

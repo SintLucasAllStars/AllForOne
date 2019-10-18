@@ -29,5 +29,6 @@ public class LoadInfo
         GameInfo.Health = 0;
         GameInfo.Speed = 0;
         GameInfo.Defense = 0;
+
     }
 }

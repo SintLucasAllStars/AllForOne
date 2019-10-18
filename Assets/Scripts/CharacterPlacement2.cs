@@ -24,6 +24,9 @@ public class CharacterPlacement2 : MonoBehaviour
     public GameObject placer;
     public GameObject placer2;
 
+    [SerializeField]
+    private LayerMask layermask;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -40,18 +43,15 @@ public class CharacterPlacement2 : MonoBehaviour
             MoveCurrentUnitToMouse();
             ReleaseIfClicked();
         }
-
-        //strength = GameInfo.Strength;
-
     }
 
     private void ReleaseIfClicked()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            currentTestUnit.GetComponent<ThirdPersonCharacterControl>().col.enabled = true;
             currentTestUnit = null;
             EndTurn2();
-            Debug.Log("kanker canvas");
         }
     }
 
@@ -59,11 +59,9 @@ public class CharacterPlacement2 : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo))
+        if (Physics.Raycast(ray, out hitInfo, layermask))
         {
-
             currentTestUnit.transform.position = hitInfo.point;
-            //currentTestUnit.transform.rotation =
         }
     }
 
@@ -83,6 +81,6 @@ public class CharacterPlacement2 : MonoBehaviour
         canvas.SetActive(true);
         canvas2.SetActive(false);
         placer.SetActive(true);
-        Debug.Log("kanker canvas");
+        LoadInfo.NukeAll();
     }
 }

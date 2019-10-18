@@ -36,14 +36,16 @@ public class CreatePlayer : MonoBehaviour
     public GameObject placer;
     public GameObject placer2;
 
-    public int state = 1;
-
     public Button place;
 
     public Button strengthMinusButton;
     public Button healthMinusButton;
     public Button speedMinusButton;
     public Button defenseMinusButton;
+
+    public Camera cam;
+    public Camera unitCam;
+
 
 
     void Start()
@@ -72,6 +74,26 @@ public class CreatePlayer : MonoBehaviour
                 //canvas.SetActive(false);
             }
         }
+
+        if (Input.GetKey(KeyCode.P))
+        {
+            cam.enabled = true;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.tag == "Player 1")
+                {
+                    cam.enabled = false;
+                    hit.collider.GetComponent<ThirdPersonCharacterControl>().ControlUnit();
+                    StartCoroutine(SwitchTime());
+                }
+            }
+        }
     }
 
     public void CreateNewPlayer()
@@ -84,8 +106,6 @@ public class CreatePlayer : MonoBehaviour
         GameInfo.Defense = newPlayer.Defense;
 
         SaveInfo.SaveAll();
-
-        //SceneManager.LoadScene(0);
     }
 
     // Update is called once per frame
@@ -213,20 +233,17 @@ public class CreatePlayer : MonoBehaviour
     public void LoadStuff()
     {
         LoadInfo.LoadAll();
-        //SceneManager.LoadScene(0);
-
         canvas.SetActive(false);
         placer.SetActive(true);
         placer2.SetActive(false);
 
-        state = 2;
+        newPlayer.Strength = 1;
+        strengthText.text = newPlayer.Strength.ToString();
     }
 
     public void Animations()
     {
-        animator.SetTrigger("onBuyPress");
-        //melee.Stop();
-        //ocarina.Play();   
+        animator.SetTrigger("onBuyPress");  
         StartCoroutine("SwitchSound");
     }
 
@@ -239,13 +256,15 @@ public class CreatePlayer : MonoBehaviour
         yield return null;
     }
 
-    public static void SwitchTurn()
-    {
-
-    }
-
     public void EndPlacing()
     {
         canvas.SetActive(false);  
+    }
+
+    IEnumerator SwitchTime()
+    {
+        yield return new WaitForSeconds(10f);
+        cam.enabled = true;
+        yield return null;
     }
 }
