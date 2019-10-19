@@ -1,27 +1,30 @@
 ﻿using UnityEngine;
 
-public class Tile : MonoBehaviour
+namespace AllForOne
 {
-    private Node _position;
-    public Node Position => _position;
-
-    private void Awake()
+    public class Tile : MonoBehaviour
     {
-        _position = Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));
-    }
+        private Node _position;
+        public Node Position => _position;
 
-    private void OnMouseDown()
-    {
-        switch (_position.CollisionType)
+        private void Awake()
         {
-            case CollisionType.None:
-                break;
-            case CollisionType.Obstacle:
-                Debug.Log("Obstacle");
-                break;
-            case CollisionType.Occupied:
-                Debug.Log("Occupied");
-                break;
+            _position = Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));
+        }
+
+        private void OnMouseDown()
+        {
+            switch (_position.CollisionType)
+            {
+                case CollisionType.None:
+                    break;
+                case CollisionType.Obstacle:
+                    Debug.Log("Obstacle");
+                    break;
+                case CollisionType.Occupied:
+                    Debug.Log("Occupied");
+                    break;
+            }
         }
     }
 }

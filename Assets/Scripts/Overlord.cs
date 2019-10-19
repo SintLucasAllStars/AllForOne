@@ -1,19 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Overlord : Unit
+namespace AllForOne
 {
-    new protected void Start()
+    public class Overlord : Unit
     {
-        base.Start();
-
-        Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
-        for (int i = 0; i < cubeRenderer.Length; i++)
+        new protected void Start()
         {
-            for (int j = 0; j < cubeRenderer[i].materials.Length; j++)
+            base.Start();
+
+            Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
+            for (int i = 0; i < cubeRenderer.Length; i++)
             {
-                cubeRenderer[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
+                for (int j = 0; j < cubeRenderer[i].materials.Length; j++)
+                {
+                    cubeRenderer[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
+                }
             }
         }
     }

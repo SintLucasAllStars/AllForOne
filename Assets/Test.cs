@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test : MonoBehaviour
+namespace AllForOne
 {
-    public string UnitName;
-
-    private void Update()
+    public class Test : MonoBehaviour
     {
-        if(Input.GetKeyDown(KeyCode.D))
+        public string UnitName;
+
+        private void Update()
         {
-            UnitPlacementSystem.Instance.SetUnit(UnitName);
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                UnitPlacementSystem.Instance.SetUnit(UnitName);
+            }
         }
     }
 }

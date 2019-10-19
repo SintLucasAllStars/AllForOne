@@ -1,49 +1,52 @@
 ﻿using UnityEngine;
 using System;
 
-public class UnitPlacementSystem : Singleton<UnitPlacementSystem>
+namespace AllForOne
 {
-    private UnitData _currentUnit;
-    private bool HasUnit() => _currentUnit != null;
-
-    private bool _hasPlaced;
-
-    private void Update()
+    public class UnitPlacementSystem : Singleton<UnitPlacementSystem>
     {
-        if(HasUnit() && !_hasPlaced)
+        private UnitData _currentUnit;
+        private bool HasUnit() => _currentUnit != null;
+
+        private bool _hasPlaced;
+
+        private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (HasUnit() && !_hasPlaced)
             {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100.0f))
+                if (Input.GetMouseButtonDown(0))
                 {
-                    Tile t;
-                    if (t = hit.transform.GetComponent<Tile>())
+                    RaycastHit hit;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out hit, 100.0f))
                     {
-                        if (Map.Instance.IsValidNode(t.Position.X, t.Position.Z))
-                            PlaceUnit(t.Position);
+                        Tile t;
+                        if (t = hit.transform.GetComponent<Tile>())
+                        {
+                            if (Map.Instance.IsValidNode(t.Position.X, t.Position.Z))
+                                PlaceUnit(t.Position);
+                        }
                     }
                 }
             }
         }
-    }
 
-    public void SetUnit(string b)
-    {
-        if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
-            return;
+        public void SetUnit(string b)
+        {
+            if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
+                return;
 
-        _hasPlaced = false;
-        _currentUnit = new UnitData(Guid.NewGuid().ToString(), new Node(), b, true, true, Player.Instance.GameData.PlayerSide, 0);
-    }
+            _hasPlaced = false;
+            _currentUnit = new UnitData(Guid.NewGuid().ToString(), new Node(), b, true, true, Player.Instance.GameData.PlayerSide, 0);
+        }
 
-    private void PlaceUnit(Node node)
-    {
-        _currentUnit.SetPosition(node);
-        GameManager.Instance.SpawnUnit(_currentUnit);
-        _hasPlaced = true;
+        private void PlaceUnit(Node node)
+        {
+            _currentUnit.SetPosition(node);
+            GameManager.Instance.SpawnUnit(_currentUnit);
+            _hasPlaced = true;
 
-        TurnManager.Instance.NextTurn();
+            TurnManager.Instance.NextTurn();
+        }
     }
 }

@@ -1,110 +1,108 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class GameManager : Singleton<GameManager>
+namespace AllForOne
 {
-    private List<Unit> _units = new List<Unit>();
-    private List<Player> _players = new List<Player>();
-
-    new private void Awake()
+    public class GameManager : Singleton<GameManager>
     {
-        base.Awake();
+        private List<Unit> _units = new List<Unit>();
+        private List<Player> _players = new List<Player>();
 
-        StartCoroutine(HandleMessages());
-    }
-
-    public void SpawnUnit(UnitData data)
-    {
-        SendMessage(data);
-    }
-
-    private IEnumerator HandleMessages()
-    {
-        while (true)
+        new private void Awake()
         {
-            if (NetworkManager.Instance.Messages.Count > 0)
-            {
-                string message = NetworkManager.Instance.Messages.Dequeue();
-                HandleMessage(message);
-            }
-            yield return null;
-        }
-    }
-
-    public void HandleMessage(string message)
-    {
-        UnitData data = JsonUtility.FromJson<UnitData>(message);
-        if (string.Equals(data.Type, "Player"))
-            UpdateClients(data);
-        else if (string.Equals(data.Type, "Turn"))
-            TurnManager.Instance.SetTurn(data.PlayerSide);
-        else
-            UpdateUnits(data);
-    }
-
-    public void SendMessage(GameData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
-
-    private void UpdateUnits(UnitData gameData)
-    {
-        //Unit has died.
-        if (!gameData.IsActive)
-        {
-            for (int i = 0; i < _players.Count; i++)
-            {
-                if (_players[i].GameData.Guid == gameData.Guid)
-                    _players.Remove(_players[i]);
-            }
-            return;
+            base.Awake();
+            StartCoroutine(HandleMessages());
         }
 
-        //Player existed and just gets updated.
-        if (DoesPlayerExist(gameData.Guid))
+        public void SpawnUnit(UnitData data) => SendMessage(data);
+
+        public void SendMessage(GameData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
+
+        private IEnumerator HandleMessages()
         {
-            //Checks if any player moves.
-            for (int i = 0; i < _units.Count; i++)
+            while (true)
             {
-                if (gameData.Guid == _units[i].GameData.Guid)
+                if (NetworkManager.Instance.Messages.Count > 0)
                 {
-                    _units[i].MoveTo(gameData.Position);
-                    _units[i].SetGameData(gameData);
+                    string message = NetworkManager.Instance.Messages.Dequeue();
+                    HandleMessage(message);
+                }
+                yield return null;
+            }
+        }
+
+        public void HandleMessage(string message)
+        {
+            UnitData data = JsonUtility.FromJson<UnitData>(message);
+            if (string.Equals(data.Type, "Player"))
+                UpdateClients(data);
+            else if (string.Equals(data.Type, "Turn"))
+                TurnManager.Instance.SetTurn(data.PlayerSide);
+            else
+                UpdateUnits(data);
+        }
+
+        private void UpdateUnits(UnitData gameData)
+        {
+            //Unit has died.
+            if (!gameData.IsActive)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    if (_players[i].GameData.Guid == gameData.Guid)
+                        _players.Remove(_players[i]);
+                }
+                return;
+            }
+
+            //Unit existed and just gets updated.
+            if (DoesUnitExist(gameData.Guid))
+            {
+                //Checks if any player moves.
+                for (int i = 0; i < _units.Count; i++)
+                {
+                    if (gameData.Guid == _units[i].GameData.Guid)
+                    {
+                        _units[i].MoveTo(gameData.Position);
+                        _units[i].SetGameData(gameData);
+                    }
                 }
             }
-        }
-        else
-        {
-            Debug.Log("Spawned unit: " + gameData.Type);
-            Unit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Unit>();
-            u.SetGameData(gameData);
-        }
-    }
-    private void UpdateClients(GameData gameData)
-    {
-        Debug.Log("Client joined");
-        if(Player.Instance.GameData.Guid == gameData.Guid)
-        {
-            Player.Instance.SetGameData(gameData);
+            else //Unit did not exist and just got purchased.
+            {
+                Unit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Unit>();
+                u.SetGameData(gameData);
+            }
         }
 
-        //On player has disconnected.
-        if (!gameData.IsConnected)
+        private void UpdateClients(GameData gameData)
         {
-            for (int i = 0; i < _players.Count; i++)
+            if (Player.Instance.GameData.Guid == gameData.Guid)
             {
-                if (_players[i].GameData.Guid == gameData.Guid)
-                    _players.Remove(_players[i]);
+                Player.Instance.SetGameData(gameData);
             }
-            return;
+
+            //On player has disconnected.
+            if (!gameData.IsConnected)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    if (_players[i].GameData.Guid == gameData.Guid)
+                        _players.Remove(_players[i]);
+                }
+                return;
+            }
         }
-    }
-    private bool DoesPlayerExist(string guid)
-    {
-        for (int i = 0; i < _players.Count; i++)
+
+        private bool DoesUnitExist(string guid)
         {
-            if (guid == _players[i].GameData.Guid)
-                return true;
+            for (int i = 0; i < _units.Count; i++)
+            {
+                if (guid == _units[i].GameData.Guid)
+                    return true;
+            }
+            return false;
         }
-        return false;
     }
 }
