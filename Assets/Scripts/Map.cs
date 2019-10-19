@@ -23,9 +23,9 @@ public class Map : Singleton<Map>
             {
                 Tile tile;
                 if (Grid[x].Columns[z].CollisionType == CollisionType.None)
-                    tile = Instantiate(Tile, new Vector3(x, 0, z), Quaternion.identity).GetComponent<Tile>();
+                    tile = Instantiate(Tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
                 else
-                    tile = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity).GetComponent<Tile>();
+                    tile = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
             }
         }
         Screen.fullScreen = false;
@@ -57,6 +57,7 @@ public class Map : Singleton<Map>
 
     public bool IsValidNode(int x, int y)
     {
+        Debug.Log("[" + x + ", " + y + "]");
         //BORDERS
         if (x == _sizeX - 1 || y == _sizeZ - 1 || y == 0 || x == 0)
             return false;

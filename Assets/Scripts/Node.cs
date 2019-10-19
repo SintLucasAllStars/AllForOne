@@ -32,8 +32,6 @@ public class Node
     public Node()
     { }
 
-    public Vector3 GetPosition() => new Vector3(_x, _y, _z);
-
     public void SetPosition(Node node)
     {
         _x = node._x;
@@ -53,6 +51,8 @@ public class Node
     public CollisionType SetCollisionType(CollisionType type) => _collisionType = type;
 
     public static Node ConvertVector(Vector3 vector) => new Node(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y), Mathf.RoundToInt(vector.z));
+
+    public static Vector3 ToVector(Node node) => new Vector3(node.X, node.Y, node.Z);
 }
 
 public enum CollisionType

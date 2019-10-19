@@ -6,11 +6,7 @@ using System;
 public class Player : Singleton<Player>
 {
     private GameData _gameData = new GameData();
-    public GameData GameData
-    {
-        get => _gameData;
-        set => _gameData = value;
-    }
+    public GameData GameData => _gameData;
 
     private Wallet _wallet = new Wallet(100);
 
@@ -22,10 +18,7 @@ public class Player : Singleton<Player>
         GameManager.Instance.SendMessage(_gameData);
     }
 
-    public void SetGameData(GameData gameData)
-    {
-        _gameData = gameData;
-    }
+    public void SetGameData(GameData gameData) => _gameData = gameData;
 
     public static Color32 GetColor(PlayerSide side)
     {

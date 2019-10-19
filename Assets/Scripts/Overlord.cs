@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Overlord : Unit
 {
-    protected void Start()
+    new protected void Start()
     {
+        base.Start();
+
         Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
         for (int i = 0; i < cubeRenderer.Length; i++)
         {

@@ -5,7 +5,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace FowlPlay
+namespace AllForOne
 {
     [CustomEditor(typeof(Map))]
     public class CustomMapEditor : Editor

@@ -6,24 +6,26 @@ public abstract class Unit : MonoBehaviour
     [SerializeField]
     protected UnitData _gameData = new UnitData();
 
-    public UnitData GameData
-    {
-        get => _gameData;
-        set => _gameData = value;
-    }
+    public UnitData GameData => _gameData;
 
     [SerializeField]
-    protected int _health, _strength, _speed, _defense;
-    public int Health => _health;
+    protected int _strength, _speed, _defense, _startingHealth;
     public int Strength => _strength;
     public int Speed => _speed;
     public int Defense => _defense;
+    public int StartingHealth => _startingHealth;
 
     protected bool _isActive = true;
     public bool IsActive => _isActive;
 
     protected Node _currentPosition = new Node(0, 0, 0);
     public Node CurrentPosition => _currentPosition;
+
+    protected void Start()
+    {
+        _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
+        _gameData.SetHealth(_startingHealth);
+    }
 
     //Basic MoveTo method. Most classes inheriting from this class will override.
     public virtual void MoveTo(Node node)
@@ -34,8 +36,9 @@ public abstract class Unit : MonoBehaviour
 
         _gameData.SetPosition(node);
 
-        transform.localPosition = _gameData.Position.GetPosition();
+        transform.localPosition = Node.ToVector(_gameData.Position);
     }
+
     public virtual void MoveTo(Vector2 vector) => MoveTo(Node.ConvertVector(vector));
 
     public void SetGameData(UnitData data)
@@ -44,6 +47,6 @@ public abstract class Unit : MonoBehaviour
         _gameData.SetPosition(Map.Instance.GetNode(data.Position.X, data.Position.Z));
         Map.Instance.OccupieNode(data.Position.X, data.Position.Z);
 
-        transform.localPosition = _gameData.Position.GetPosition();
+        transform.localPosition = Node.ToVector(_gameData.Position);
     }
 }

@@ -68,14 +68,14 @@ public class GameManager : Singleton<GameManager>
                 if (gameData.Guid == _units[i].GameData.Guid)
                 {
                     _units[i].MoveTo(gameData.Position);
-                    _units[i].GameData = gameData;
+                    _units[i].SetGameData(gameData);
                 }
             }
         }
         else
         {
             Debug.Log("Spawned unit: " + gameData.Type);
-            Unit u = Instantiate(Resources.Load<GameObject>("Overlord")).GetComponent<Unit>();
+            Unit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Unit>();
             u.SetGameData(gameData);
         }
     }
