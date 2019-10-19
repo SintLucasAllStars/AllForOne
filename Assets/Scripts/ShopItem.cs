@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AllForOne
 {
-    public class Test : MonoBehaviour
+    public class ShopItem : MonoBehaviour
     {
         [SerializeField]
         private int _price;
@@ -18,13 +18,7 @@ namespace AllForOne
                 Debug.Log("Not enough money");
                 return;
             }
-            UnitPlacementSystem.Instance.SetUnit(_unitName);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-                Purchase();
+            UnitPlacementSystem.Instance.SetUnit(_unitName, _price);
         }
     }
 }

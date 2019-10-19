@@ -8,6 +8,8 @@ namespace AllForOne
         private UnitData _currentUnit;
         private bool HasUnit() => _currentUnit != null;
 
+        private int _priceToPay;
+
         private bool _hasPlaced;
 
         private void Update()
@@ -31,11 +33,12 @@ namespace AllForOne
             }
         }
 
-        public void SetUnit(string b)
+        public void SetUnit(string b, int price)
         {
             if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
                 return;
 
+            _priceToPay = price;
             _hasPlaced = false;
             _currentUnit = new UnitData(Guid.NewGuid().ToString(), new Node(), b, true, true, Player.Instance.GameData.PlayerSide, 0);
         }
@@ -45,8 +48,7 @@ namespace AllForOne
             _currentUnit.SetPosition(node);
             GameManager.Instance.SpawnUnit(_currentUnit);
             _hasPlaced = true;
-
-            TurnManager.Instance.NextTurn();
+            Player.Instance.Wallet.Withdraw(_priceToPay);
         }
     }
 }

@@ -8,21 +8,27 @@ var units = {};
 //Used only for players. Also used for checking how many players have joined the game.
 var players = {};
 
+var turn = 0;
+
 var maxConnections = 2;
 
-resetServer();
-
-function resetServer()
-{
-	units = {};
-	players = {};
-
-	//process.stdout.write('\033c');
-	console.log("Created server on port " + port + ".");
-}
+console.log("Created server on port " + port + ".");
 
 var server = ws.createServer(function (conn) 
 {
+	resetServer();
+
+	function resetServer()
+	{
+		units = {};
+		players = {};
+		turn = 0;
+
+		process.stdout.write('\033c');
+		console.log("Reset server.");
+		console.log("First turn: " + getPlayerSide(turn) + ".");
+	}
+	
 	//Simple function that checks what skins have not been picked yet. No double skins.
 	function setPlayerColor(id)
 	{
@@ -39,6 +45,14 @@ var server = ws.createServer(function (conn)
 		{
 			c.sendText(msg);
 		});				
+	}
+	
+	function getPlayerSide(playerSide)
+	{
+		if(playerSide == 0)
+			return "Red";
+		else
+			return "Blu";
 	}
 	
     conn.on("text", function (str) 
@@ -61,15 +75,21 @@ var server = ws.createServer(function (conn)
 			console.log("Client" + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
 
 			updateClient(JSON.stringify(players[conn.id]));
+			
+			return;
+		}
+		else if (msg._type == "Turn")
+		{
+			console.log("Next turn: " + getPlayerSide(msg._playerSide) + ".");
 		}
 		else
 		{
-			console.log("unit joined " + msg._type);
-			
-			units[msg._guid] = msg;
-			
-			updateClient(JSON.stringify(msg));
+			console.log("Unit moved: " + msg._type + ".");
 		}
+			
+		units[msg._guid] = msg;
+			
+		updateClient(JSON.stringify(msg));
     });
 	
     conn.on("close", function (code, reason) 
@@ -82,5 +102,7 @@ var server = ws.createServer(function (conn)
 		delete players[conn.id];
 		
         console.log("Client " + conn.id + " left the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
+		
+		resetServer();
     });
 }).listen(port);

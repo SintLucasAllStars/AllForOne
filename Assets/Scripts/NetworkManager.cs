@@ -39,7 +39,7 @@ namespace AllForOne
             StartCoroutine(HandleNetwork(ServerURL));
         }
 
-        public void Close(string reason, bool showModal = true) => WebSocket.Close(CloseStatusCode.Normal, reason);
+        public void Close(string reason) => WebSocket.Close(CloseStatusCode.Normal, reason);
 
         private void OnReceive(MessageEventArgs message)
         {
@@ -97,6 +97,11 @@ namespace AllForOne
                 while (_connectionCoroutine)
                     yield return null;
             }
+        }
+
+        private void OnApplicationQuit()
+        {
+            Close("Player closed");
         }
     }
 }

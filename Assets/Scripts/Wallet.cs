@@ -1,5 +1,6 @@
 ﻿namespace AllForOne
 {
+    [System.Serializable]
     public class Wallet
     {
         private int _money;
