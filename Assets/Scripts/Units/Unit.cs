@@ -26,6 +26,15 @@ namespace AllForOne
         {
             _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
             _gameData.SetHealth(_startingHealth);
+
+            Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
+            for (int i = 0; i < cubeRenderer.Length; i++)
+            {
+                for (int j = 0; j < cubeRenderer[i].materials.Length; j++)
+                {
+                    cubeRenderer[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
+                }
+            }
         }
 
         //Basic MoveTo method. Most classes inheriting from this class will override.
