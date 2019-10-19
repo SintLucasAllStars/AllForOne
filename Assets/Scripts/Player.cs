@@ -10,6 +10,7 @@ namespace AllForOne
         public GameData GameData => _gameData;
 
         private Wallet _wallet = new Wallet(100);
+        public Wallet Wallet => _wallet;
 
         private List<Unit> _units = new List<Unit>();
 

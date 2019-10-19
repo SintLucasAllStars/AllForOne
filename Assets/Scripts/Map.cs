@@ -9,6 +9,7 @@ namespace AllForOne
         public int SizeX => _sizeX;
         public int SizeZ => _sizeZ;
 
+        [SerializeField]
         private MapX[] _grid = new MapX[0];
         public MapX[] Grid => _grid;
 
@@ -23,7 +24,7 @@ namespace AllForOne
                 for (int z = 0; z < _sizeZ; z++)
                 {
                     Tile tile;
-                    if (Grid[x].Columns[z].CollisionType == CollisionType.None)
+                    if (_grid[x].Columns[z].CollisionType == CollisionType.None)
                         tile = Instantiate(Tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
                     else
                         tile = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
