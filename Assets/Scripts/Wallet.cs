@@ -10,7 +10,7 @@
         public Wallet()
         { }
 
-        public bool HasEnoughMoney(int money)
+        public bool CanWithdraw(int money)
         {
             if (_money - money < 0)
                 return false;

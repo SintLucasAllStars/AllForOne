@@ -13,7 +13,7 @@ namespace AllForOne
 
         public void Purchase()
         {
-            if(!Player.Instance.Wallet.HasEnoughMoney(_price))
+            if(!Player.Instance.Wallet.CanWithdraw(_price))
             {
                 Debug.Log("Not enough money");
                 return;

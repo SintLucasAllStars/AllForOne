@@ -66,6 +66,7 @@ namespace AllForOne
                     {
                         _units[i].MoveTo(gameData.Position);
                         _units[i].SetGameData(gameData);
+                        _units[i].SetPosition(gameData.Position);
                     }
                 }
             }
@@ -73,6 +74,7 @@ namespace AllForOne
             {
                 Unit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Unit>();
                 u.SetGameData(gameData);
+                u.SetPosition(gameData.Position);
             }
         }
 

@@ -35,20 +35,16 @@ namespace AllForOne
 
             Map.Instance.ResetOldNode(oldNode.X, oldNode.Y);
 
+            SetPosition(node);
+        }
+
+        public void SetPosition(Node node)
+        {
             _gameData.SetPosition(node);
 
             transform.localPosition = Node.ToVector(_gameData.Position);
         }
 
-        public virtual void MoveTo(Vector2 vector) => MoveTo(Node.ConvertVector(vector));
-
-        public void SetGameData(UnitData data)
-        {
-            _gameData = data;
-            _gameData.SetPosition(Map.Instance.GetNode(data.Position.X, data.Position.Z));
-            Map.Instance.OccupieNode(data.Position.X, data.Position.Z);
-
-            transform.localPosition = Node.ToVector(_gameData.Position);
-        }
+        public void SetGameData(UnitData data) => _gameData = data;
     }
 }
