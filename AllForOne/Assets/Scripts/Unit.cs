@@ -30,6 +30,9 @@ public class Unit : MonoBehaviour
     private List<GameObject> _player2Meshes;
 
     [SerializeField]
+    private MeshRenderer _teamIndicator;
+
+    [SerializeField]
     private Transform _rayPosition;
 
     [SerializeField]
@@ -48,6 +51,9 @@ public class Unit : MonoBehaviour
 
     private int _playTime = 10;
 
+    private Color _blue = new Color32(42, 87, 226, 255);
+    private Color _red = new Color32(226, 42, 42, 255);
+
     private float _mouseSensitivity = 40;
     private float _movementSpeed = 1.5f;
     private float _yRotation;
@@ -59,10 +65,12 @@ public class Unit : MonoBehaviour
         if (_isPlayer1)
         {
             _player1Meshes[Random.Range(0, _player1Meshes.Count)].SetActive(true);
+            _teamIndicator.material.color = _red;
         }
         else
         {
             _player2Meshes[Random.Range(0, _player2Meshes.Count)].SetActive(true);
+            _teamIndicator.material.color = _blue;
         }
     }
 

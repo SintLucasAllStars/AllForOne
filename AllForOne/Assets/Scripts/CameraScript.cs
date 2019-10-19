@@ -22,8 +22,8 @@ public class CameraScript : MonoBehaviour
     [SerializeField]
     private float _maxZoom;
 
-    private float _xRotation;
-    private float _yRotation;
+    private float _xRotation = 80f;
+    private float _yRotation = 0f;
 
     private void Update()
     {

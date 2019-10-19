@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
     private Image _gameColorBlock;
 
     [SerializeField]
+    private Transform _winScreenPlayerBlock;
+
+    [SerializeField]
     private Transform _gamePlayerBlock;
 
     [SerializeField]
@@ -42,6 +45,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private Transform _victoryScreen;
+
+    [SerializeField]
+    private Transform _selectingScreen;
 
     [SerializeField]
     private Canvas _unitCanvas;
@@ -99,11 +105,13 @@ public class GameManager : MonoBehaviour
             if (_player1Turn)
             {
                 _player1Units++;
+                Debug.Log(_player1Units);
             }
             else
             {
-                _player2Points++;
+                _player2Units++;
                 _doneButton.gameObject.SetActive(true);
+                Debug.Log(_player2Units);
             }
         }
     }
@@ -343,7 +351,18 @@ public class GameManager : MonoBehaviour
 
     public void EndGame(bool player1Lost)
     {
+        _selectingScreen.gameObject.SetActive(false);
         _victoryScreen.gameObject.SetActive(true);
+
+        if (!player1Lost)
+        {
+            _winScreenPlayerBlock.gameObject.SetActive(true);
+        }
+        else
+        {
+            _winScreenPlayerBlock.gameObject.SetActive(false);
+        }
+
         Debug.Log(player1Lost);
     }
 }
