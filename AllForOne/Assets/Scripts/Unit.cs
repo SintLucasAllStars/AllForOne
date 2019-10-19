@@ -30,13 +30,19 @@ public class Unit : MonoBehaviour
     private List<GameObject> _player2Meshes;
 
     [SerializeField]
+    private List<Image> _powerUpImages;
+
+    [SerializeField]
     private MeshRenderer _teamIndicator;
 
     [SerializeField]
     private Transform _rayPosition;
 
     [SerializeField]
-    private LayerMask _layer;
+    private LayerMask _attackLayer;
+
+    [SerializeField]
+    private LayerMask _powerUpLayer;
 
     [SerializeField]
     private float _attackCooldown;
@@ -48,11 +54,14 @@ public class Unit : MonoBehaviour
 
     public bool _activated;
     public bool _isPlayer1;
+    public bool _freeze;
 
     private int _playTime = 10;
 
     private Color _blue = new Color32(42, 87, 226, 255);
     private Color _red = new Color32(226, 42, 42, 255);
+
+    private List<PowerUp> _powerUps = new List<PowerUp>();
 
     private float _mouseSensitivity = 40;
     private float _movementSpeed = 1.5f;
@@ -98,6 +107,27 @@ public class Unit : MonoBehaviour
             _inAttackAnimation = true;
             Invoke("CooldownEnd", _attackCooldown);
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            Interact();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            UsePowerUp(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UsePowerUp(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UsePowerUp(2);
+        }
+
     }
 
     private void FixedUpdate()
@@ -112,8 +142,12 @@ public class Unit : MonoBehaviour
 
     private IEnumerator UnitControlTimer()
     {
-        for (int i = _playTime; i > 0; i--)
+        for (int i = _playTime; i > 0;)
         {
+            if (!_freeze)
+            {
+                i--;
+            }
             _timerText.text = i.ToString();
             yield return new WaitForSeconds(1);
         }
@@ -126,7 +160,7 @@ public class Unit : MonoBehaviour
         _animator.Play("Punch");
 
         RaycastHit hit;
-        if (Physics.Raycast(_rayPosition.position, _rayPosition.forward, out hit, 1.5f, _layer))
+        if (Physics.Raycast(_rayPosition.position, _rayPosition.forward, out hit, 1.5f, _attackLayer))
         {
             Unit unit = hit.collider.GetComponent<Unit>();
             Debug.Log(hit.collider.name);
@@ -134,6 +168,39 @@ public class Unit : MonoBehaviour
             {
                 unit.TakeDamage(_strenght);
             }
+        }
+    }
+
+    private void Interact()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(_rayPosition.position, _rayPosition.forward, out hit, 1.5f, _powerUpLayer))
+        {
+            if (_powerUps.Count == 3)
+            {
+                return;
+            }
+
+            PowerUp powerUp = hit.collider.GetComponent<PowerUp>();
+            _powerUps.Add(powerUp);
+            powerUp.gameObject.SetActive(false);
+            _powerUpImages[_powerUps.Count - 1].sprite = powerUp._powerUpImage;
+        }
+    }
+
+    private void UsePowerUp(int powerUpNum)
+    {
+        if (powerUpNum < _powerUps.Count)
+        {
+            _powerUps[powerUpNum].Use(this);
+            _powerUps.Remove(_powerUps[powerUpNum]);
+
+            for (int i = 0; i < _powerUps.Count; i++)
+            {
+                _powerUpImages[i].sprite = _powerUps[i]._powerUpImage;
+            }
+
+            _powerUpImages[_powerUps.Count].sprite = null;
         }
     }
 
