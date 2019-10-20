@@ -39,4 +39,9 @@ public class Actor : MonoBehaviour
         rb.MovePosition(transform.position + velocity * Time.deltaTime);
     }
 
+    public void SetWarrior(Warrior a_Warrior)
+    {
+        this.warrior = a_Warrior;
+    }
+
 }

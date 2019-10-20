@@ -31,18 +31,18 @@ public class Warrior
         this.isSelected = false;
     }
 
-    public void SetHealth(int a_Health) { this.health = a_Health; }
     public int GetHealth() { return this.health; }
+    public void SetHealth(int a_Health) { this.health = a_Health; }
 
-    public void SetStrength(int a_Strength) { this.strength = a_Strength; }
     public int GetStrenth() { return this.strength; }
+    public void SetStrength(int a_Strength) { this.strength = a_Strength; }
 
-    public void SetSpeed(int a_Speed) { this.speed = a_Speed; }
     public float GetSpeed() { return this.speed; }
+    public void SetSpeed(int a_Speed) { this.speed = a_Speed; }
 
-    public void SetDefense(int a_Defence) { this.defense = a_Defence; }
     public int GetDefense() { return this.defense; }
+    public void SetDefense(int a_Defence) { this.defense = a_Defence; }
 
-    public void SetIsSelected(bool a_IsSelected) { this.isSelected = a_IsSelected; }
     public bool GetIsSelected() { return this.isSelected; }
+    public void SetIsSelected(bool a_IsSelected) { this.isSelected = a_IsSelected; }
 }
