@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     public enum GameState {topview,gameplay};
     public GameState state;
 
@@ -15,11 +14,10 @@ public class GameManager : MonoBehaviour
 
     public Transform topViewPos;
 
-    #region Assignables
-
     public Camera mainCamera;
+    public GameObject purchaseUI;
+    public UIManager uiManager;
 
-    #endregion
 
     #region Singleton
     public static GameManager instance;
@@ -33,16 +31,43 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void StartPlaytime(GameObject entity) {
-
-
-
+    private void Start()
+    {
+        players = GameObject.FindObjectsOfType<Player>();
+        activePlayer = players[0];
     }
 
-    public void StartTopview() {
+    private void Update()
+    {
+        switch (state)
+        {
+            case GameState.topview:
+                if (uiManager.placing)
+                {
+                    uiManager.PlacingPhase();
+                }
+                break;
+            case GameState.gameplay:
+                mainCamera.enabled = false;
+                break;
+            default:
+                break;
+        }
+    }
 
-        mainCamera.transform.position = topViewPos.position;
+    public void EndTurn() {
+        activePlayer = SwitchPlayer();
+    }
 
+    public Player SwitchPlayer() {
+        foreach (Player p in players)
+        {
+            if (p != activePlayer)
+            {
+                return p;
+            }
+        }
+        return null;
     }
 
 }
