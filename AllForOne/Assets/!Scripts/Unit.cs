@@ -151,6 +151,7 @@ public class Unit : MonoBehaviour
         if (this.anim.GetCurrentAnimatorStateInfo(0).IsName(weapontype.ToString()))
         {
             anim.speed = speed;
+            Debug.Log("New animation speed = " + anim.speed);
         }
     }
 
@@ -219,21 +220,22 @@ public class Unit : MonoBehaviour
             case "powerPunch":
                 weapontype = Weapontype.superPunch;
                 weaponImg.sprite = weapons[1];
+                Destroy(collision.gameObject);
                 break;
             case "knife":
                 weapontype = Weapontype.knife;
                 weaponImg.sprite = weapons[2];
+                Destroy(collision.gameObject);
                 break;
             case "slash":
                 weapontype = Weapontype.slash;
                 weaponImg.sprite = weapons[3];
+                Destroy(collision.gameObject);
                 break;
             case "gun":
                 weapontype = Weapontype.gun;
                 weaponImg.sprite = weapons[4];
-                break;
-            default:
-                weaponImg.sprite = weapons[0];
+                Destroy(collision.gameObject);
                 break;
         }
     }

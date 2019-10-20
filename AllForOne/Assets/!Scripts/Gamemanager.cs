@@ -24,7 +24,6 @@ public class Gamemanager : MonoBehaviour
         player1 = new Player(100, "Henk", "Red");
         player2 = new Player(100, "Roderik", "Blue");
         currentplayer = player1;
-        //CreatePowerupLocations();
     }
 
     public bool CheckPoints()
@@ -47,6 +46,7 @@ public class Gamemanager : MonoBehaviour
             currentplayer = player1;
             canvas.SetActive(false);
             topview.SetActive(true);
+            SpawnWeapons();
         }
 
         else
@@ -93,12 +93,7 @@ public class Gamemanager : MonoBehaviour
         for (int i = 0; i < totalPowerups; i++)
         {
             Transform tempPos = ground[Random.Range(0, ground.Count)].transform;
-            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity);
+            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, transform.position.y + .3f, transform.position.z), Quaternion.identity);
         }
-    }
-
-    public void CreatePowerupLocations()
-    {
-        ground.AddRange(GameObject.FindGameObjectsWithTag("Ground"));
     }
 }

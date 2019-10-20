@@ -196,9 +196,7 @@ public class CreateTeam : MonoBehaviour
 
     public void CheckPlayer()
     {
-        
         if (Gamemanager.instance.currentplayer.points <= 9)
             Gamemanager.instance.SwitchCurrentPlayer();
-        
     }
 }
