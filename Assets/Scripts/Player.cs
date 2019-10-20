@@ -12,14 +12,16 @@ namespace AllForOne
         private Wallet _wallet = new Wallet(100);
         public Wallet Wallet => _wallet;
 
-        private List<Unit> _units = new List<Unit>();
+        private List<PlayerUnit> _units = new List<PlayerUnit>();
 
-        GameObject _playerUnit;
+        [SerializeField]
+        private UnitData _playerUnit;
+        public UnitData PlayerUnit => _playerUnit;
 
         private void Start()
         {
-            _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
-            GameManager.Instance.SendMessage(_gameData);
+            //_gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
+            //GameManager.Instance.SendMessage(_gameData);
         }
 
         public void SetGameData(GameData gameData) => _gameData = gameData;

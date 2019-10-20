@@ -1,32 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace AllForOne
 {
-    public abstract class Unit : MonoBehaviour
-    {
-        [SerializeField]
-        protected UnitData _gameData = new UnitData();
 
+    public class PlayerUnit : MonoBehaviour
+    {
+        private UnitData _gameData;
         public UnitData GameData => _gameData;
 
-        [SerializeField]
-        protected int _strength, _speed, _defense, _startingHealth;
-        public int Strength => _strength;
-        public int Speed => _speed;
-        public int Defense => _defense;
-        public int StartingHealth => _startingHealth;
-
-        protected bool _isActive = true;
-        public bool IsActive => _isActive;
-
-        protected Node _currentPosition = new Node(0, 0, 0);
-        public Node CurrentPosition => _currentPosition;
-
-        protected void Start()
+        private void Awake()
         {
-            _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
-            _gameData.SetHealth(_startingHealth);
-
             Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
             for (int i = 0; i < cubeRenderer.Length; i++)
             {
@@ -36,6 +21,8 @@ namespace AllForOne
                 }
             }
         }
+
+        protected void Start() => _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
 
         //Basic MoveTo method. Most classes inheriting from this class will override.
         public virtual void MoveTo(Node node)

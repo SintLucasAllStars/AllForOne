@@ -6,7 +6,7 @@ namespace AllForOne
 {
     public class GameManager : Singleton<GameManager>
     {
-        private List<Unit> _units = new List<Unit>();
+        private List<PlayerUnit> _units = new List<PlayerUnit>();
         private List<Player> _players = new List<Player>();
 
         new private void Awake()
@@ -72,7 +72,7 @@ namespace AllForOne
             }
             else //Unit did not exist and just got purchased.
             {
-                Unit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Unit>();
+                PlayerUnit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<PlayerUnit>();
                 u.SetGameData(gameData);
                 u.SetPosition(gameData.Position);
             }
