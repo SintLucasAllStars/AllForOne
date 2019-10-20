@@ -5,6 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public string turnHolder;
+    public int maxCreationPoints;
+    public int redPlayerCreationPoints;
+    public int bluePlayerCreationPoints;
+    public int turnHolderPoints;
+    private UiManager UiM;
     //here are the phases of battle
     public enum Phase
     {
@@ -52,9 +57,22 @@ public class GameManager : MonoBehaviour
     
     // Start is called before the first frame update
     void Start()
-    { 
+    {
+        UiM = GetComponent<UiManager>();
         //test
         turnHolder = "Red";
+        redPlayerCreationPoints = maxCreationPoints;
+        bluePlayerCreationPoints = maxCreationPoints;
+        if (turnHolder == "Red")
+        {
+            turnHolderPoints = redPlayerCreationPoints;
+        }
+        else
+        {
+            turnHolderPoints = bluePlayerCreationPoints;
+        }
+        //test
+
         StartCoroutine(PhaseEnd(Phase.StartGame, Phase.DummyPhase));
     }
 
@@ -84,7 +102,15 @@ public class GameManager : MonoBehaviour
             Debug.Log("===================\r" + "Phase: Tutorial-End\r" + "===================");
  
         }
+
+        if (phase == Phase.CreatePlayerCharacters)
+        {
+            Debug.Log("===================\r" + "Phase: CreatePlayerCharacters-End\r" + "===================");
+
+        }
     }
+
+    
 
     public void EngagePhases(Phase phase)
     {
@@ -92,6 +118,7 @@ public class GameManager : MonoBehaviour
         // after StartGame comes Tutorial.
         if (phase == Phase.StartGame)
         {
+            PlayerInitialization(maxCreationPoints);
             GetRandomClass();
             StartCoroutine(PhaseEnd(Phase.Tutorial, gamePhase));
         }
@@ -110,6 +137,7 @@ public class GameManager : MonoBehaviour
         {
             // activate ui
             Debug.Log("===================\r" + "Phase: CreatePlayerCharacters-Start\r" + "===================");
+            UiM.ActivateUi(UiManager.UiGroups.CreationUi);
         }
         
     }
@@ -142,6 +170,12 @@ public class GameManager : MonoBehaviour
     {
         var randomNumber = Random.Range(0, charPrefabs.Count);
         randomClassPrefab = charPrefabs[randomNumber];
+    }
+    
+    public void PlayerInitialization(int maxPoints)
+    {
+        bluePlayerCreationPoints = maxPoints;
+        redPlayerCreationPoints = maxPoints;
     }
 }
 

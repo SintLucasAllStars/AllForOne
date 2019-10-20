@@ -2202,14 +2202,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292645020fd9fc04ca8c9e7668200d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minimumStatPercentage: 1
+  maxPointsPerStat: 50
+  hpPortion: 3
+  strengthPortion: 6
+  speedPortion: 3
+  defensePortion: 6
+  costList: []
   ui: []
-  statUi: []
+  creationUi: {fileID: 1657175156}
+  creationUiText: []
   charCreateUi:
   - {fileID: 851180990}
   - {fileID: 1599574956}
   - {fileID: 27119320}
   - {fileID: 483724357}
   - {fileID: 1566472937}
+  - {fileID: 1721786061}
 --- !u!114 &547522472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2223,6 +2232,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnHolder: 
+  maxCreationPoints: 100
+  redPlayerCreationPoints: 0
+  bluePlayerCreationPoints: 0
+  turnHolderPoints: 0
   gamePhase: 0
   randomClassPrefab: {fileID: 0}
   charPrefabs:
@@ -9530,6 +9543,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sans
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778274402433090013, guid: 566952b6a41dce847a17e0f595fa2c8b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5731371312249254862, guid: 566952b6a41dce847a17e0f595fa2c8b,
         type: 3}

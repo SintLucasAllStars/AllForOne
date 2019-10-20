@@ -9,15 +9,13 @@ public class PlayerCharacter : MonoBehaviour
     
 
 
-    public void SetStats(StatList stats)
-    {
-        
-    }
+    
 
     
     // Start is called before the first frame update
     void Start()
     {
+        stats.DebugStats();
     }
 
     
