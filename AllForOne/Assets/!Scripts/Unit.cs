@@ -239,9 +239,9 @@ public class Unit : MonoBehaviour
                 weaponImg.sprite = weapons[4];
                 Destroy(collision.gameObject);
                 break;
-            case "Lava":
-                Die();
-                break;
+            //case "Lava":
+            //    Die();
+            //    break;
         }
     }
 }
