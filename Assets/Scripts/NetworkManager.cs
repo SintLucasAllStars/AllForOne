@@ -8,38 +8,33 @@ namespace AllForOne
 {
     public class NetworkManager : Singleton<NetworkManager>
     {
-        [SerializeField]
-        private bool _connectOnAwake = false;
-
         private bool _hasConnected = false;
-
-        new private void Awake()
-        {
-            base.Awake();
-
-            if (_connectOnAwake)
-                Connect();
-        }
 
         public string ServerURL = "ws://localhost:25565/";
 
         private WebSocket _webSocket;
 
-        private bool _connectionCoroutine;
+        private Coroutine _connectionCoroutine;
 
         private Queue<string> _messages = new Queue<string>();
 
         public Queue<string> Messages => _messages;
 
-        public WebSocket WebSocket => _webSocket;
+        public delegate void OnConnectionSuccessful();
+        public static OnConnectionSuccessful ConnectionSuccessful;
+
+        public delegate void OnConnectionFailed(string reason);
+        public static OnConnectionFailed ConnectionFailed;
+
+        public delegate void OnDisconnect(string reason);
+        public static OnDisconnect Disconnect;
 
         public void Connect()
         {
-            _connectionCoroutine = true;
-            StartCoroutine(HandleNetwork(ServerURL));
+            _connectionCoroutine = StartCoroutine(HandleNetwork(ServerURL));
         }
 
-        public void Close(string reason) => WebSocket.Close(CloseStatusCode.Normal, reason);
+        public void Close(string reason) => _webSocket.Close(CloseStatusCode.Normal, reason);
 
         private void OnReceive(MessageEventArgs message)
         {
@@ -56,29 +51,37 @@ namespace AllForOne
 
         public void SendMessage(Message message)
         {
-            if (WebSocket == null)
+            if (_webSocket == null)
                 return;
 
-            if (WebSocket.IsConnected == false)
+            if (_webSocket.IsConnected == false)
                 return;
 
-            WebSocket.Send(message.GameData);
+            _webSocket.Send(message.GameData);
         }
 
         new public void SendMessage(string message)
         {
-            WebSocket.Send(message);
+            _webSocket.Send(message);
         }
 
-        private void OnClose(CloseEventArgs e)
+        private void OnError(string reason)
         {
-            Debug.Log("Closed Connection: " + e.Reason);
-            _connectionCoroutine = false;
+            ConnectionFailed(reason);
+            StopCoroutine(_connectionCoroutine);
+            _connectionCoroutine = null;
+        }
+
+        private void OnClose(string reason)
+        {
+            Disconnect(reason);
+            StopCoroutine(_connectionCoroutine);
+            _connectionCoroutine = null;
         }
 
         private void OnConnectionSuccess()
         {
-            Debug.Log("Connection Successful.");
+            ConnectionSuccessful();
             _hasConnected = true;
         }
 
@@ -86,16 +89,22 @@ namespace AllForOne
         {
             using (_webSocket = new WebSocket(url))
             {
-                WebSocket.OnOpen += (sender, e) => OnConnectionSuccess();
-                WebSocket.OnError += (sender, e) => Debug.Log("Error: " + e.Message + ".");
-                WebSocket.OnMessage += (sender, e) => OnReceive(e);
-                WebSocket.OnClose += (sender, e) => OnClose(e);
+                _webSocket.OnOpen += (sender, e) => OnConnectionSuccess();
+                _webSocket.OnOpen += (sender, e) => Debug.Log("Connection successful.");
+
+                _webSocket.OnError += (sender, e) => OnError(e.Message);
+
+                _webSocket.OnMessage += (sender, e) => OnReceive(e);
+                _webSocket.OnClose += (sender, e) => OnClose(e.Reason);
 
                 Debug.Log("Connecting to + " + url + ".");
-                WebSocket.Connect();
+                _webSocket.Connect();
 
-                while (_connectionCoroutine)
+                while (_connectionCoroutine != null)
+                {
+                    Debug.Log("Still running");
                     yield return null;
+                }
             }
         }
 

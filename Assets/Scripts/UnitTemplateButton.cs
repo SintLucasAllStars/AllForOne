@@ -2,12 +2,12 @@
 
 namespace AllForOne
 {
-    public class ShopItem : MonoBehaviour
+    public class UnitTemplateButton : Button
     {
         [SerializeField]
         private UnitData _unitData;
 
-        public void SetPlayerUnit()
+        public override void Press()
         {
             CharacterCreationManager.Instance.UpdateValues(_unitData.Health, _unitData.Strength, _unitData.Speed, _unitData.Defense);
             //if(!Player.Instance.Wallet.CanWithdraw(_price))

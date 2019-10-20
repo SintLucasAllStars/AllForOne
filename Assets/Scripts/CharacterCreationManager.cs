@@ -13,6 +13,11 @@ namespace AllForOne
         [SerializeField]
         private Slider _healthSlider, _strengthSlider, _speedSlider, _defenseSlider;
 
+        private void Awake()
+        {
+
+        }
+
         public void UpdateValues()
         {
             UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value));

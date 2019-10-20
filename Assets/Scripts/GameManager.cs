@@ -9,9 +9,8 @@ namespace AllForOne
         private List<PlayerUnit> _units = new List<PlayerUnit>();
         private List<Player> _players = new List<Player>();
 
-        new private void Awake()
+        private void Awake()
         {
-            base.Awake();
             StartCoroutine(HandleMessages());
         }
 

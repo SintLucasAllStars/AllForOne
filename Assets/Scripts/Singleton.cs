@@ -8,7 +8,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     [SerializeField]
     private bool _dontDestroy;
 
-    protected virtual void Awake()
+    private void Awake()
     {
         if (Instance == null)
             Instance = gameObject.GetComponent<T>();
