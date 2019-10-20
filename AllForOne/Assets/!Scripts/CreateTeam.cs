@@ -11,6 +11,7 @@ public class CreateTeam : MonoBehaviour
     public Unit unitRed, unitBlue;
     public bool placeUnit = false;
     public GameObject UI;
+    public Image avatarImg;
 
     int health;
     int speed;
@@ -144,6 +145,7 @@ public class CreateTeam : MonoBehaviour
         playerPointsLeft.text = "Available points : " + Gamemanager.instance.currentplayer.points.ToString();
         playerNameTxt.text = Gamemanager.instance.currentplayer.name;
         points = Gamemanager.instance.currentplayer.points;
+        avatarImg.sprite = Gamemanager.instance.currentplayer.characterImg;
         updatePoints();
     }
 

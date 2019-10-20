@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Player
@@ -9,12 +10,14 @@ public class Player
     public int points;
     public string name;
     public string teamColor;
+    public Sprite characterImg;
 
-    public Player(int _points, string _name, string _teamColor)
+    public Player(int _points, string _name, string _teamColor, Sprite _characterImg)
     {
         points = _points;
         name = _name;
         teamColor = _teamColor;
+        characterImg = _characterImg;
     }
 
     public void RemoveUnit(Unit unit)

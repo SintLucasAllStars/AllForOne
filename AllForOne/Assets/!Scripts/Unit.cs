@@ -43,6 +43,7 @@ public class Unit : MonoBehaviour
         else
         {
             Debug.Log("Unit has no health left");
+            Die();
         }
     }
 
@@ -76,6 +77,7 @@ public class Unit : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                //Gamemanager.instance.topview.transform.localPosition = Vector3.MoveTowards(gameObject.transform.localPosition, new Vector3(cam.transform.localPosition.x, 0f, cam.transform.localPosition.z), 10 * Time.deltaTime);
                 OnSelected();
             }
         }
@@ -203,7 +205,7 @@ public class Unit : MonoBehaviour
         cam.gameObject.SetActive(false);
         Gamemanager.instance.SwitchPlayer();
         Gamemanager.instance.TopViewTurnOn();
-        CheckIfInside();
+        //CheckIfInside();
     }
 
     public void SetFortify()
@@ -236,6 +238,9 @@ public class Unit : MonoBehaviour
                 weapontype = Weapontype.gun;
                 weaponImg.sprite = weapons[4];
                 Destroy(collision.gameObject);
+                break;
+            case "Lava":
+                Die();
                 break;
         }
     }

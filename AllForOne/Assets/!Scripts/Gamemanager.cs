@@ -8,6 +8,7 @@ public class Gamemanager : MonoBehaviour
     public GameState gameState;
     public static Gamemanager instance;
     public Player currentplayer;
+    public Sprite luigi, mario;
     public Player player1;
     public Player player2;
     public GameObject canvas;
@@ -21,9 +22,10 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(100, "Henk", "Red");
-        player2 = new Player(100, "Roderik", "Blue");
+        player1 = new Player(100, "Henk", "Red", mario);
+        player2 = new Player(100, "Roderik", "Blue", luigi);
         currentplayer = player1;
+        SpawnWeapons();
     }
 
     public bool CheckPoints()
@@ -93,7 +95,7 @@ public class Gamemanager : MonoBehaviour
         for (int i = 0; i < totalPowerups; i++)
         {
             Transform tempPos = ground[Random.Range(0, ground.Count)].transform;
-            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, transform.position.y + .3f, transform.position.z), Quaternion.identity);
+            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, transform.position.y + .3f, transform.position.z + 1), Quaternion.identity);
         }
     }
 }
