@@ -11,6 +11,8 @@ public class PlayerSwitcher : MonoBehaviour
     public bool switchPlayer;
     public bool scriptOn;
 
+    public bool switchplayer;
+
     void Start()
     {
         
@@ -27,6 +29,7 @@ public class PlayerSwitcher : MonoBehaviour
                 {
                     Debug.Log("yes");
                     cmScript.objectToFollow = hit.transform.GetChild(0).gameObject;
+                    cmScript.pcScript = hit.transform.GetComponent<PlayerController>();
                     cmScript.CameraParent();                }
                 else
                 {
@@ -41,5 +44,10 @@ public class PlayerSwitcher : MonoBehaviour
         cmScript.enabled = true;
         //cmScript.CameraParent();
         gameUI.SetActive(true);
+    }
+
+    public void SwitchPlayer()
+    {
+        switchPlayer = !switchPlayer;
     }
 }
