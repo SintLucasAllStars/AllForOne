@@ -16,4 +16,14 @@ public class Player
         name = _name;
         teamColor = _teamColor;
     }
+
+    public void RemoveUnit(Unit unit)
+    {
+        Units.Remove(unit);
+    }
+
+    public void AddUnit(Unit unit)
+    {
+        Units.Add(unit);
+    }
 }

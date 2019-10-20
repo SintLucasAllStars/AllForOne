@@ -13,12 +13,18 @@ public class Gamemanager : MonoBehaviour
     public GameObject canvas;
     public GameObject topview;
 
+    [Header("PowerUps")]
+    public int totalPowerups;
+    public List<GameObject> ground;
+    public List<GameObject> weapons;
+
     private void Awake()
     {
         instance = this;
         player1 = new Player(100, "Henk", "Red");
         player2 = new Player(100, "Roderik", "Blue");
         currentplayer = player1;
+        //CreatePowerupLocations();
     }
 
     public bool CheckPoints()
@@ -59,6 +65,10 @@ public class Gamemanager : MonoBehaviour
         {
             Debug.Log("Red team wins");
         }
+        else
+        {
+            Debug.Log("There are still 2 teams in game");
+        }
 
     }
 
@@ -76,5 +86,19 @@ public class Gamemanager : MonoBehaviour
             topview.SetActive(false);
         else if (topview.activeInHierarchy == false)
             topview.SetActive(true);
+    }
+
+    public void SpawnWeapons()
+    {
+        for (int i = 0; i < totalPowerups; i++)
+        {
+            Transform tempPos = ground[Random.Range(0, ground.Count)].transform;
+            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity);
+        }
+    }
+
+    public void CreatePowerupLocations()
+    {
+        ground.AddRange(GameObject.FindGameObjectsWithTag("Ground"));
     }
 }

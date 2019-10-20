@@ -66,7 +66,7 @@ public class Unit : MonoBehaviour
     public void Die()
     {
         Debug.Log("this player died there was no roof above him");
-        //Destroy(this.gameObject);
+        Destroy(this.gameObject);
         Gamemanager.instance.CheckForUnits();
     }
 
@@ -147,7 +147,7 @@ public class Unit : MonoBehaviour
         Debug.Log(anim.speed + "this is the speed of the animator");
         anim.speed = 1;
         anim.Play(weapontype.ToString());
-        AttackRay(tRange, tDamage);
+        AttackRay(tRange, (tDamage * strength));
         if (this.anim.GetCurrentAnimatorStateInfo(0).IsName(weapontype.ToString()))
         {
             anim.speed = speed;
