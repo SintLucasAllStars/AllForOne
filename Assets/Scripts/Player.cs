@@ -24,7 +24,7 @@ namespace AllForOne
 
         private void Connect()
         {
-            _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
+            _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Red);
             NetworkManager.Instance.SendMessage(_gameData);
         }
 

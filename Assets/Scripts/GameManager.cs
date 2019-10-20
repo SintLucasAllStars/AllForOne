@@ -71,7 +71,7 @@ namespace AllForOne
             }
             else //Unit did not exist and just got purchased.
             {
-                PlayerUnit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<PlayerUnit>();
+                PlayerUnit u = Instantiate(Resources.Load<GameObject>("Overlord")).GetComponent<PlayerUnit>();
                 u.SetGameData(gameData);
                 u.SetPosition(gameData.Position);
             }

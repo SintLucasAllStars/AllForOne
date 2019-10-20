@@ -5,16 +5,11 @@ namespace AllForOne
 {
     public class UnitPlacementSystem : Singleton<UnitPlacementSystem>
     {
-        private UnitData _currentUnit;
-        private bool HasUnit() => _currentUnit != null;
-
-        private int _priceToPay;
-
         private bool _hasPlaced;
 
         private void Update()
         {
-            if (HasUnit() && !_hasPlaced)
+            if (!_hasPlaced)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -33,24 +28,21 @@ namespace AllForOne
             }
         }
 
-        public void SetUnit(string b, int price)
+        public void PurchaseUnit()
         {
             if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
                 return;
 
-            _priceToPay = price;
             _hasPlaced = false;
-            UnitData playerUnit = Player.Instance.PlayerUnit;
-            _currentUnit = new UnitData(Guid.NewGuid().ToString(), new Node(), playerUnit.Type, true, true, Player.Instance.GameData.PlayerSide, playerUnit.Health, playerUnit.Strength, playerUnit.Speed, playerUnit.Defense, playerUnit.Price);
         }
 
         private void PlaceUnit(Node node)
         {
-            _currentUnit.SetPosition(node);
-            _currentUnit = null;
-            GameManager.Instance.SpawnUnit(_currentUnit);
+            UnitData newUnit = Player.Instance.PlayerUnit;
+            newUnit.SetPosition(node);
+            GameManager.Instance.SpawnUnit(newUnit);
             _hasPlaced = true;
-            Player.Instance.Wallet.Withdraw(_priceToPay);
+            Player.Instance.Wallet.Withdraw(newUnit.Price);
         }
     }
 }

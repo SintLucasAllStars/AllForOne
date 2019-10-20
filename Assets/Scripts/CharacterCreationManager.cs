@@ -46,7 +46,7 @@ namespace AllForOne
         private void UpdatePlayerUnit()
         {
             int price = Player.Instance.CalculateUnitPrice(_health, _strength, _speed, _defense);
-            Player.Instance.SetPlayerUnit(new UnitData("", new Node(), "", true, true, PlayerSide.Blu, _health, _strength, _speed, _defense, price));
+            Player.Instance.SetPlayerUnit(new UnitData("", new Node(), "", true, true, PlayerSide.Red, _health, _strength, _speed, _defense, price));
         }
 
         private void UpdateText()

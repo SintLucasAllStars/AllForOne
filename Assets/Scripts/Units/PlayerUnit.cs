@@ -4,11 +4,12 @@ namespace AllForOne
 {
     public class PlayerUnit : MonoBehaviour
     {
-        private UnitData _gameData;
+        private UnitData _gameData = new UnitData();
         public UnitData GameData => _gameData;
 
-        private void Awake()
+        private void Start()
         {
+            _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
             Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
             for (int i = 0; i < cubeRenderer.Length; i++)
             {
@@ -18,8 +19,6 @@ namespace AllForOne
                 }
             }
         }
-
-        protected void Start() => _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
 
         //Basic MoveTo method. Most classes inheriting from this class will override.
         public virtual void MoveTo(Node node)
