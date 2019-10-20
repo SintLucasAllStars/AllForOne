@@ -41,7 +41,7 @@ namespace AllForOne
             _priceToPay = price;
             _hasPlaced = false;
             UnitData playerUnit = Player.Instance.PlayerUnit;
-            _currentUnit = new UnitData(Guid.NewGuid().ToString(), new Node(), playerUnit.Type, true, true, Player.Instance.GameData.PlayerSide, playerUnit.Health, playerUnit.Strength, playerUnit.Speed, playerUnit.Defense);
+            _currentUnit = new UnitData(Guid.NewGuid().ToString(), new Node(), playerUnit.Type, true, true, Player.Instance.GameData.PlayerSide, playerUnit.Health, playerUnit.Strength, playerUnit.Speed, playerUnit.Defense, playerUnit.Price);
         }
 
         private void PlaceUnit(Node node)

@@ -18,12 +18,13 @@ namespace AllForOne
         public int Health => _health;
 
         [SerializeField]
-        protected int _strength, _speed, _defense;
+        protected int _strength, _speed, _defense, _price;
         public int Strength => _strength;
         public int Speed => _speed;
         public int Defense => _defense;
+        public int Price => _price;
 
-        public UnitData(string guid, Node position, string type, bool isConnected, bool isActive, PlayerSide playerSide, int health, int strength, int speed, int defense) : base(type, guid, isConnected, playerSide)
+        public UnitData(string guid, Node position, string type, bool isConnected, bool isActive, PlayerSide playerSide, int health, int strength, int speed, int defense, int price) : base(type, guid, isConnected, playerSide)
         {
             _position = position;
             _isActive = isActive;
@@ -31,6 +32,7 @@ namespace AllForOne
             _strength = strength;
             _speed = speed;
             _defense = defense;
+            _price = price;
         }
 
         public UnitData(UnitData other) : base(other)
@@ -41,6 +43,7 @@ namespace AllForOne
             _strength = other._strength;
             _speed = other._speed;
             _defense = other._defense;
+            _price = other._price;
         }
 
         public void SetPosition(Node node) => _position = node;
@@ -50,6 +53,8 @@ namespace AllForOne
         public void SetSide(PlayerSide side) => _playerSide = side;
 
         public void SetHealth(int health) => _health = health;
+
+        public void SetPrice(int price) => _price = price;
 
         public UnitData()
         { }
