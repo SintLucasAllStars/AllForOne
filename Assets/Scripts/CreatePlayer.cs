@@ -30,6 +30,7 @@ public class CreatePlayer : MonoBehaviour
     public float pauseTime = 1.5f;
     public AudioSource melee;
     public AudioSource ocarina;
+    public AudioSource theme;
 
     public GameObject canvas;
     public GameObject canvas2;
@@ -46,6 +47,10 @@ public class CreatePlayer : MonoBehaviour
     public Camera cam;
     public Camera unitCam;
 
+
+    public float time = 10f;
+    public Text timeLeft;
+    public bool playing = false;
 
 
     void Start()
@@ -74,6 +79,16 @@ public class CreatePlayer : MonoBehaviour
                 //canvas.SetActive(false);
             }
         }
+        if (playing == true)
+        {
+            time -= Time.deltaTime;
+            timeLeft.text = (time).ToString();
+            if (time < 0)
+            {
+                time = 10;
+                playing = false;              
+            }
+        }
 
         if (Input.GetKey(KeyCode.P))
         {
@@ -91,6 +106,8 @@ public class CreatePlayer : MonoBehaviour
                     cam.enabled = false;
                     hit.collider.GetComponent<ThirdPersonCharacterControl>().ControlUnit();
                     StartCoroutine(SwitchTime());
+                    playing = true;
+                    SwitchSong();
                 }
             }
         }
@@ -239,6 +256,12 @@ public class CreatePlayer : MonoBehaviour
 
         newPlayer.Strength = 1;
         strengthText.text = newPlayer.Strength.ToString();
+        newPlayer.Health = 1;
+        healthText.text = newPlayer.Health.ToString();
+        newPlayer.Speed = 1;
+        speedText.text = newPlayer.Speed.ToString();
+        newPlayer.Defense = 1;
+        defenseText.text = newPlayer.Defense.ToString();
     }
 
     public void Animations()
@@ -258,7 +281,7 @@ public class CreatePlayer : MonoBehaviour
 
     public void EndPlacing()
     {
-        canvas.SetActive(false);  
+        canvas.SetActive(false);
     }
 
     IEnumerator SwitchTime()
@@ -266,5 +289,11 @@ public class CreatePlayer : MonoBehaviour
         yield return new WaitForSeconds(10f);
         cam.enabled = true;
         yield return null;
+    }
+
+    void SwitchSong()
+    {
+        melee.Stop();
+        theme.Play();
     }
 }

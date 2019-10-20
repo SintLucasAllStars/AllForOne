@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterPlacement : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class CharacterPlacement : MonoBehaviour
     [SerializeField]
     private LayerMask layermask;
 
+    public int activePlayers1 = 0;
+
+    public static int Players;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -52,6 +57,7 @@ public class CharacterPlacement : MonoBehaviour
             currentTestUnit.GetComponent<ThirdPersonCharacterControl>().col.enabled = true;
             currentTestUnit = null;
             EndTurn1();
+            activePlayers1++;
         }
     }
 
@@ -65,14 +71,13 @@ public class CharacterPlacement : MonoBehaviour
         }
     }
 
-    private void HandleUnitHotKey()
+    public void HandleUnitHotKey()
     {
         if (Input.GetKeyDown(unitHotKey))
         {
             if (currentTestUnit == null)
             {
                 currentTestUnit = Instantiate(testUnit);
-
             }
         }
     }

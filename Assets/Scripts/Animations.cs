@@ -18,5 +18,15 @@ public class Animations : MonoBehaviour
             animator.SetBool("WPressed", true);
         }
 
+        if (!Input.GetKey(KeyCode.W))
+        {
+            animator.SetBool("WPressed", false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetTrigger("Attack");
+        }
+
     }
 }

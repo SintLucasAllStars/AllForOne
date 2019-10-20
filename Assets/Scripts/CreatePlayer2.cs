@@ -30,6 +30,7 @@ public class CreatePlayer2 : MonoBehaviour
     public float pauseTime = 1.5f;
     public AudioSource melee;
     public AudioSource ocarina;
+    public AudioSource theme;
 
     public GameObject canvas;
     public GameObject canvas2;
@@ -47,6 +48,10 @@ public class CreatePlayer2 : MonoBehaviour
 
     public Camera cam;
     public Camera unitCam;
+
+    public float time = 10f;
+    public Text timeLeft;
+    public bool playing = false;
 
     void Start()
     {
@@ -75,6 +80,17 @@ public class CreatePlayer2 : MonoBehaviour
             }
         }
 
+        if (playing == true)
+        {
+            time -= Time.deltaTime;
+            timeLeft.text = (time).ToString();
+            if (time < 0)
+            {
+                time = 10;
+                playing = false;
+            }
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -88,6 +104,7 @@ public class CreatePlayer2 : MonoBehaviour
                     //unitCam.enabled = true;
                     hit.collider.GetComponent<ThirdPersonCharacterControl>().ControlUnit();
                     StartCoroutine(SwitchTime());
+                    playing = true;
                 }
             }
         }
@@ -238,7 +255,14 @@ public class CreatePlayer2 : MonoBehaviour
         placer.SetActive(false);
         placer2.SetActive(true);
 
-        state = 2;
+        newPlayer.Strength = 1;
+        strengthText.text = newPlayer.Strength.ToString();
+        newPlayer.Health = 1;
+        healthText.text = newPlayer.Health.ToString();
+        newPlayer.Speed = 1;
+        speedText.text = newPlayer.Speed.ToString();
+        newPlayer.Defense = 1;
+        defenseText.text = newPlayer.Defense.ToString();
     }
 
     public void Animations()
@@ -277,5 +301,11 @@ public class CreatePlayer2 : MonoBehaviour
         yield return new WaitForSeconds(10f);
         cam.enabled = true;
         yield return null;
+    }
+
+    void SwitchSong()
+    {
+        melee.Stop();
+        theme.Play();
     }
 }

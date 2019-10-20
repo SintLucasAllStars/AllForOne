@@ -27,6 +27,10 @@ public class CharacterPlacement2 : MonoBehaviour
     [SerializeField]
     private LayerMask layermask;
 
+    public int activePlayers2 = 0;
+
+    public static int Players;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -52,6 +56,7 @@ public class CharacterPlacement2 : MonoBehaviour
             currentTestUnit.GetComponent<ThirdPersonCharacterControl>().col.enabled = true;
             currentTestUnit = null;
             EndTurn2();
+            activePlayers2++;
         }
     }
 
