@@ -14,6 +14,8 @@ namespace AllForOne
 
         private List<Unit> _units = new List<Unit>();
 
+        GameObject _playerUnit;
+
         private void Start()
         {
             _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
