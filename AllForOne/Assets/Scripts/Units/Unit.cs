@@ -2,39 +2,77 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit
+public abstract class Unit : MonoBehaviour
 {
-    private enum UnitState {Idle, Attacking, Dead}
+    protected enum UnitState {Idle, Attacking, Dead}
 
-    private Weapon weapon;
+    //Unit Transform Variables
+    public Transform cameraTransform;
+    public Transform weaponTransform;
 
-    private readonly int HitPoints = 100;
-    private int speed;
-    private int strength;
-    private int defense;
+    //Standard Combat Variables
+    protected readonly int HitPoints = 100;
+    protected int speed = 10;
+    protected int strength = 10;
+    protected int defense = 10;
 
-    private int teamNumber;
+    protected int teamNumber;
 
-    private bool inCombat;
+    protected Weapon weapon;
 
-    //Special Features 
-    private bool hasDriveby = false;
-    private bool hasOpportunist = false;
-    private bool hasTowershield = false;
+    //Movement Variables
+    protected Rigidbody rb;
+    protected Vector3 direction;
 
+    //Active Turn Variables
+    protected bool isSelected;
 
-    public void CreateUnit(int speed, int strength, int defense, List<Feature> features, Weapon weapon)
+    //Special Features Variables
+    protected bool hasDriveby = false;
+    protected bool hasOpportunist = false;
+    protected bool hasTowershield = false;
+
+    /// <summary>
+    /// Places a unit on the map.
+    /// </summary>
+    public void CreateUnit(int speed, int strength, int defense, int teamNumber, List<Feature> features, Weapon weapon)
     {
         this.speed = speed;
         this.strength = strength;
         this.defense = defense;
+
+        this.teamNumber = teamNumber;
 
         this.weapon = weapon;
 
         CheckSpecialFeatures(features);
     }
 
-    private void CheckSpecialFeatures(List<Feature> feats)
+    /// <summary>
+    /// Called from GameManager, when this unit starts his turn.
+    /// </summary>
+    public void StartSelectedTurn()
+    {
+        isSelected = true;
+    }
+
+    /// <summary>
+    /// Lets the Unit move using the unit's speed. Is only active when it's the unit it's turn.
+    /// </summary>
+    protected void Movement()
+    {
+        rb.velocity = direction * speed * Time.deltaTime;
+
+        float horizontalMovement = Input.GetAxisRaw("Horizontal");
+        float verticalMovement = Input.GetAxisRaw("Vertical");
+
+        direction = (horizontalMovement * transform.right + verticalMovement * transform.forward).normalized;
+    }
+
+    /// <summary>
+    /// Activates the Special features that were bought in the UnitStore.
+    /// </summary>
+    protected void CheckSpecialFeatures(List<Feature> feats)
     {
         for (int i = 0; i < feats.Count - 1; i++)
         {

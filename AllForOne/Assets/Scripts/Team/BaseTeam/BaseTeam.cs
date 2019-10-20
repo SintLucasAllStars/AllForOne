@@ -8,8 +8,7 @@ public class BaseTeam
     protected int teamNumber;
 
     //Unit and UnitStore
-    protected UnitStore unitStore;
-
+    [SerializeField] private UnitStore unitStore;
     protected int unitPoints;
 
     protected List<Unit> teamUnits;
@@ -18,8 +17,15 @@ public class BaseTeam
     //Ingame
     protected bool yourTurn;
 
+    /// <summary>
+    /// Create a unit and Instantiate it on the map using the UnitStore.
+    /// </summary>
+    public void BuyUnit()
+    {
 
-    private void BuyUnit()
+    }
+
+    public void SelectUnit()
     {
 
     }

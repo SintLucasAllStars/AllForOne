@@ -7,7 +7,12 @@ using TMPro;
 public class UnitStore : MonoBehaviour
 {
     [SerializeField] private UIManager uiManager;
+    [SerializeField] private GameObject buyMenuObject;
 
+    // Bought Unit Data
+    private Vector3 boughtUnitPosition;
+    private GameObject boughtUnitObject;
+    private int teamNumber;
 
     //Economy Data
     private int weaponCost = 0;
@@ -37,7 +42,7 @@ public class UnitStore : MonoBehaviour
     [SerializeField] private GameObject[] featureImage = new GameObject[3];
 
 
-    //Slider Data
+    #region Slider Data
     [SerializeField] private Slider speedSlider;
     [SerializeField] private TMP_Text speedText;
 
@@ -46,6 +51,7 @@ public class UnitStore : MonoBehaviour
 
     [SerializeField] private Slider defenseSlider;
     [SerializeField] private TMP_Text defenseText;
+    #endregion
 
     private void Awake()
     {
@@ -55,16 +61,20 @@ public class UnitStore : MonoBehaviour
         ButtonChooseWeapon(false);
     }
 
+    #region All the UnitStore Buttons
+
     /// <summary>
     /// Button press function to buy the unit with all selected stats.
     /// </summary>
     public void ButtonBuyUnit()
-    { 
-        Vector3 position = Vector3.zero;
+    {
+        Weapon weapon = weapons[(int)chosenWeapon];
 
-        GameObject unit = null;
+        GameObject createdUnit = Instantiate(boughtUnitObject, boughtUnitPosition, Quaternion.identity);
+        createdUnit.GetComponent<Unit>().CreateUnit((int)speedSlider.value, (int)strengthSlider.value, (int)defenseSlider.value, teamNumber, chosenFeatures, weapon);
 
-        BuyUnit(position, unit, chosenFeatures, weapons[(int)chosenWeapon]);
+        ResetStoreData();
+        BuyMenu(true);
     }
 
     /// <summary>
@@ -139,41 +149,40 @@ public class UnitStore : MonoBehaviour
         Debug.Log("left Pointer");
     }
 
+    #endregion
+
     /// <summary>
     /// Instantiates a unit with the selected attributes given in the buy menu.
     /// </summary>
-    private void BuyUnit(Vector3 position, GameObject unit, List<Feature> features, Weapon weapon)
+    public void BuyUnit(Vector3 position, GameObject unit, int team)
     {
+        boughtUnitObject = unit;
+        boughtUnitPosition = position;
+        teamNumber = team;
 
-        GameObject createdUnit = Instantiate(unit, position, Quaternion.identity);
-        createdUnit.GetComponent<Unit>().CreateUnit((int)speedSlider.value, (int)strengthSlider.value, (int)defenseSlider.value, features, weapon);
+        BuyMenu(true);
     }
 
     /// <summary>
-    /// Set the chosenWeapon. set i to 1 if you want to cycle forward or -1 to cycle backwards.
+    /// Open or Close the Buy Menu when a Team buys or bought a unit.
     /// </summary>
-    private Weapons SetChosenWeapon(int i)
+    private void BuyMenu(bool open)
     {
-        Weapons weapon;
+        buyMenuObject.SetActive(open);
+    }
 
-        ChangeUnitCost(-weaponCost);
+    /// <summary>
+    /// Reset the UnitStore to default.
+    /// </summary>
+    private void ResetStoreData()
+    {
+        chosenFeatures.Clear();
+        chosenWeapon = Weapons.None;
 
-        int choice = (int)chosenWeapon + i;
-        if (choice > 3)
-        {
-            choice = 0;
-        }
-        else if (choice < 0)
-        {
-            choice = 3;
-        }
+        SetValueSliders(10);
 
-        weapon = (Weapons)choice;
-        weaponCost = weapons[choice].cost;
-
-        ChangeUnitCost(weaponCost);
-
-        return weapon;
+        boughtUnitObject = null;
+        boughtUnitPosition = Vector3.zero;
     }
 
     /// <summary>
@@ -201,7 +210,16 @@ public class UnitStore : MonoBehaviour
         defenseSlider.value = i;
     }
 
-    
+    /// <summary>
+    /// Changes the unitPointCost int and updates it with the unitPointCostText.
+    /// </summary>
+    private void ChangeUnitCost(int amount)
+    {
+        unitPointCost = unitPointCost + amount;
+        unitPointCostText.text = "Price: " + unitPointCost;
+    }
+
+    #region Setting the Features and Weapons
 
     /// <summary>
     /// Fills in all the Feature array of features;
@@ -267,11 +285,30 @@ public class UnitStore : MonoBehaviour
     }
 
     /// <summary>
-    /// Changes the unitPointCost int and updates it with the unitPointCostText.
+    /// Set the chosenWeapon. set i to 1 if you want to cycle forward or -1 to cycle backwards.
     /// </summary>
-    private void ChangeUnitCost(int amount)
+    private Weapons SetChosenWeapon(int i)
     {
-        unitPointCost = unitPointCost + amount;
-        unitPointCostText.text = "Price: " + unitPointCost;
+        Weapons weapon;
+
+        ChangeUnitCost(-weaponCost);
+
+        int choice = (int)chosenWeapon + i;
+        if (choice > 3)
+        {
+            choice = 0;
+        }
+        else if (choice < 0)
+        {
+            choice = 3;
+        }
+
+        weapon = (Weapons)choice;
+        weaponCost = weapons[choice].cost;
+
+        ChangeUnitCost(weaponCost);
+
+        return weapon;
     }
+    #endregion
 }
