@@ -9,7 +9,7 @@ namespace AllForOne
 
         public void SetPlayerUnit()
         {
-            Player.Instance.SetPlayerUnit(_unitData);
+            CharacterCreationManager.Instance.UpdateValues(_unitData.Health, _unitData.Strength, _unitData.Speed, _unitData.Defense);
             //if(!Player.Instance.Wallet.CanWithdraw(_price))
             //{
             //    Debug.Log("Not enough money");

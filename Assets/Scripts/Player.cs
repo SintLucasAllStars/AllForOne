@@ -28,10 +28,10 @@ namespace AllForOne
 
         public void SetPlayerUnit(UnitData gameData)
         {
-            _playerUnit = new UnitData(gameData.Guid, gameData.Position, gameData.Type, gameData.IsConnected, gameData.IsActive, _gameData.PlayerSide, gameData.Health, gameData.Strength, gameData.Speed, gameData.Defense, CalculateUnitPrice(gameData.Health, gameData.Strength, gameData.Speed, gameData.Defense));
+            _playerUnit = gameData;
         }
 
-        private int CalculateUnitPrice(int health, int strength, int speed, int defense)
+        public int CalculateUnitPrice(int health, int strength, int speed, int defense)
         {
             return health + strength + speed + defense;
         }
