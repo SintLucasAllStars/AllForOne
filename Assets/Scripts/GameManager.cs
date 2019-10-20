@@ -9,14 +9,14 @@ namespace AllForOne
         private List<PlayerUnit> _units = new List<PlayerUnit>();
         private List<Player> _players = new List<Player>();
 
-        private void Awake()
+        public int Connections => _players.Count;
+
+        private void Start()
         {
             StartCoroutine(HandleMessages());
         }
 
-        public void SpawnUnit(UnitData data) => SendMessage(data);
-
-        public void SendMessage(GameData gameData) => NetworkManager.Instance.SendMessage(new Message(gameData));
+        public void SpawnUnit(UnitData data) => NetworkManager.Instance.SendMessage(data);
 
         private IEnumerator HandleMessages()
         {

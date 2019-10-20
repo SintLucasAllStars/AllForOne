@@ -18,10 +18,14 @@ namespace AllForOne
         private UnitData _playerUnit;
         public UnitData PlayerUnit => _playerUnit;
 
-        private void Start()
+        private void OnEnable() => NetworkManager.ConnectionSuccessful += Connect;
+
+        private void OnDisable() => NetworkManager.ConnectionSuccessful -= Connect;
+
+        private void Connect()
         {
-            //_gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
-            //GameManager.Instance.SendMessage(_gameData);
+            _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Blu);
+            NetworkManager.Instance.SendMessage(_gameData);
         }
 
         public void SetGameData(GameData gameData) => _gameData = gameData;

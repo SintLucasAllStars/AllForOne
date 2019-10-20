@@ -6,10 +6,19 @@ namespace AllForOne
     {
         public override void Press()
         {
-            NetworkManager.ConnectionSuccessful += Debugs;
             NetworkManager.Instance.Connect();
         }
 
-        private void Debugs() => SceneManager.Instance.LoadScene(1);
+        private void LoadLevel() => SceneManager.Instance.LoadScene(1);
+
+        private void OnEnable()
+        {
+            NetworkManager.ConnectionSuccessful += LoadLevel;
+        }
+
+        private void OnDisable()
+        {
+            NetworkManager.ConnectionSuccessful -= LoadLevel;
+        }
     }
 }

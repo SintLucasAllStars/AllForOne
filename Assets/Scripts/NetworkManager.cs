@@ -8,13 +8,22 @@ namespace AllForOne
 {
     public class NetworkManager : Singleton<NetworkManager>
     {
+        [SerializeField]
+        private bool _connectOnAwake = false;
+
         private bool _hasConnected = false;
+
+        private void Start()
+        {
+            if (_connectOnAwake)
+                Connect();
+        }
 
         public string ServerURL = "ws://localhost:25565/";
 
         private WebSocket _webSocket;
 
-        private Coroutine _connectionCoroutine;
+        private bool _connectionCoroutine;
 
         private Queue<string> _messages = new Queue<string>();
 
@@ -23,30 +32,21 @@ namespace AllForOne
         public delegate void OnConnectionSuccessful();
         public static OnConnectionSuccessful ConnectionSuccessful;
 
-        public delegate void OnConnectionFailed(string reason);
-        public static OnConnectionFailed ConnectionFailed;
-
-        public delegate void OnDisconnect(string reason);
-        public static OnDisconnect Disconnect;
+        public delegate void OnError(string reason);
+        public static OnError Error;
 
         public void Connect()
         {
-            _connectionCoroutine = StartCoroutine(HandleNetwork(ServerURL));
+            _connectionCoroutine = true;
+            StartCoroutine(HandleNetwork(ServerURL));
         }
 
         public void Close(string reason) => _webSocket.Close(CloseStatusCode.Normal, reason);
 
         private void OnReceive(MessageEventArgs message)
         {
-            try
-            {
-                if (message.IsText)
-                    Messages.Enqueue(message.Data);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError(ex.Message);
-            }
+            if (message.IsText)
+                Messages.Enqueue(message.Data);
         }
 
         public void SendMessage(Message message)
@@ -65,46 +65,36 @@ namespace AllForOne
             _webSocket.Send(message);
         }
 
-        private void OnError(string reason)
+        private void OnClose(string e)
         {
-            ConnectionFailed(reason);
-            StopCoroutine(_connectionCoroutine);
-            _connectionCoroutine = null;
-        }
-
-        private void OnClose(string reason)
-        {
-            Disconnect(reason);
-            StopCoroutine(_connectionCoroutine);
-            _connectionCoroutine = null;
+            Debug.Log("Closed Connection: " + e);
+            Error(e);
+            _connectionCoroutine = false;
         }
 
         private void OnConnectionSuccess()
         {
+            Debug.Log("Connection Successful.");
             ConnectionSuccessful();
             _hasConnected = true;
         }
+
+        public void SendMessage(GameData gameData) => SendMessage(new Message(gameData));
 
         private IEnumerator HandleNetwork(string url)
         {
             using (_webSocket = new WebSocket(url))
             {
                 _webSocket.OnOpen += (sender, e) => OnConnectionSuccess();
-                _webSocket.OnOpen += (sender, e) => Debug.Log("Connection successful.");
-
-                _webSocket.OnError += (sender, e) => OnError(e.Message);
-
+                _webSocket.OnError += (sender, e) => Debug.Log("Error: " + e.Message + ".");
                 _webSocket.OnMessage += (sender, e) => OnReceive(e);
-                _webSocket.OnClose += (sender, e) => OnClose(e.Reason);
+                _webSocket.OnError += (sender, e) => OnClose(e.Message);
 
                 Debug.Log("Connecting to + " + url + ".");
                 _webSocket.Connect();
 
-                while (_connectionCoroutine != null)
-                {
-                    Debug.Log("Still running");
+                while (_connectionCoroutine)
                     yield return null;
-                }
             }
         }
 

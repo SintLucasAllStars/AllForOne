@@ -10,7 +10,7 @@ namespace AllForOne
         [SerializeField]
         private TextMeshProUGUI _notificationText;
 
-        private void Awake()
+        private void Start()
         {
             _animator = GetComponentInChildren<Animator>();
         }
@@ -25,14 +25,12 @@ namespace AllForOne
 
         private void OnEnable()
         {
-            NetworkManager.ConnectionFailed += ShowNotification;
-            NetworkManager.Disconnect += ShowNotification;
+            NetworkManager.Error += ShowNotification;
         }
 
         private void OnDisable()
         {
-            NetworkManager.ConnectionFailed -= ShowNotification;
-            NetworkManager.Disconnect -= ShowNotification;
+            NetworkManager.Error -= ShowNotification;
         }
     }
 }

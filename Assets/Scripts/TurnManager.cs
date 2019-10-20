@@ -17,7 +17,7 @@ namespace AllForOne
             int i = ((int)_currentTurn + 1) % Enum.GetNames(typeof(PlayerSide)).Length;
             _currentTurn = (PlayerSide)i;
 
-            GameManager.Instance.SendMessage(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
+            NetworkManager.Instance.SendMessage(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
         }
 
         public bool HasTurn(PlayerSide side) => side == _currentTurn;

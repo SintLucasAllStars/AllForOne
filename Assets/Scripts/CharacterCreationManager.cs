@@ -13,9 +13,9 @@ namespace AllForOne
         [SerializeField]
         private Slider _healthSlider, _strengthSlider, _speedSlider, _defenseSlider;
 
-        private void Awake()
+        private void Start()
         {
-
+            UpdateValues();
         }
 
         public void UpdateValues()

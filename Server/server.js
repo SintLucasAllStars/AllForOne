@@ -24,9 +24,9 @@ var server = ws.createServer(function (conn)
 		players = {};
 		turn = 0;
 
-		process.stdout.write('\033c');
-		console.log("Reset server.");
-		console.log("First turn: " + getPlayerSide(turn) + ".");
+		//process.stdout.write('\033c');
+		//console.log("Reset server.");
+		//console.log("First turn: " + getPlayerSide(turn) + ".");
 	}
 	
 	//Simple function that checks what skins have not been picked yet. No double skins.
@@ -82,7 +82,7 @@ var server = ws.createServer(function (conn)
 		{
 			console.log("Next turn: " + getPlayerSide(msg._playerSide) + ".");
 		}
-		else
+		else if(msg._type)
 		{
 			console.log("Unit moved: " + msg._type + ".");
 		}

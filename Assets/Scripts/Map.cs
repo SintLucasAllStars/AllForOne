@@ -32,6 +32,7 @@ namespace AllForOne
             }
             Screen.fullScreen = false;
         }
+
         public Node GetNode(int x, int y)
         {
             if (x < 0 || x > _sizeX - 1 || y < 0 || y > _sizeZ - 1)
