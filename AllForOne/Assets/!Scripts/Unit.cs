@@ -250,7 +250,7 @@ public class Unit : MonoBehaviour
     {
         switch (collision.gameObject.tag)
         {
-            case "powerPunch":
+            case "superPunch":
                 weapontype = Weapontype.superPunch;
                 weaponImg.sprite = weapons[1];
                 Destroy(collision.gameObject);

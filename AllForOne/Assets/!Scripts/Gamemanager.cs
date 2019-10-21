@@ -23,10 +23,9 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(20, PlayerPrefs.GetString("Name1"), "Red", mario);
-        player2 = new Player(20, PlayerPrefs.GetString("Name2"), "Blue", luigi);
+        player1 = new Player(100, PlayerPrefs.GetString("Name1"), "Red", mario);
+        player2 = new Player(100, PlayerPrefs.GetString("Name2"), "Blue", luigi);
         currentplayer = player1;
-        //SpawnWeapons();
     }
 
     public bool CheckPoints()
@@ -46,7 +45,7 @@ public class Gamemanager : MonoBehaviour
         if (CheckPoints())
         {
             Debug.Log("Both players have points below 10");
-            currentplayer = player2;
+            currentplayer = player1;
             canvas.SetActive(false);
             topview.SetActive(true);
         }
@@ -74,7 +73,6 @@ public class Gamemanager : MonoBehaviour
 
     public void SwitchPlayer()
     {
-        //CheckForUnits();
         if (currentplayer == player1)
             currentplayer = player2;
         else if (currentplayer == player2)
