@@ -15,8 +15,8 @@ namespace MechanicFever
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_sizeX"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_sizeZ"));
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Tile"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("RedTile"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_tile"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_obstacles"));
 
             serializedObject.ApplyModifiedProperties();
 
@@ -49,17 +49,17 @@ namespace MechanicFever
 
                         GUIStyle columnStyle = new GUIStyle
                         {
-                            fixedWidth = 65
+                            fixedWidth = 40
                         };
 
                         GUIStyle rowStyle = new GUIStyle
                         {
-                            fixedHeight = 65
+                            fixedHeight = 40
                         };
 
                         GUIStyle cornerLabelStyle = new GUIStyle
                         {
-                            fixedWidth = 42,
+                            fixedWidth = 35,
                             alignment = TextAnchor.MiddleRight,
                             fontStyle = FontStyle.BoldAndItalic,
                             fontSize = 14
@@ -69,9 +69,9 @@ namespace MechanicFever
                         GUIStyle normalStyle = new GUIStyle("popup")
                         {
                             fontStyle = FontStyle.Normal,
-                            fontSize = 12,
-                            fixedWidth = 52,
-                            fixedHeight = 52
+                            fontSize = 5,
+                            fixedWidth = 35,
+                            fixedHeight = 35
                         };
 
                         GUIStyle wallStyle = new GUIStyle(normalStyle)
@@ -97,7 +97,10 @@ namespace MechanicFever
 
                                 switch (map.Grid[x].Columns[z].CollisionType)
                                 {
-                                    case CollisionType.Obstacle:
+                                    case CollisionType.Obstacle_01:
+                                        styleToUse = wallStyle;
+                                        break;
+                                    case CollisionType.Obstacle_02:
                                         styleToUse = wallStyle;
                                         break;
                                     case CollisionType.Occupied:

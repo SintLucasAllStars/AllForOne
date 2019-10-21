@@ -5,7 +5,8 @@ namespace MechanicFever
     public enum CollisionType
     {
         None,
-        Obstacle,
+        Obstacle_01,
+        Obstacle_02,
         Occupied
     }
 

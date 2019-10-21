@@ -72,7 +72,7 @@ var server = ws.createServer(function (conn)
 			
 			setPlayerColor(conn.id);
 
-			console.log("Client" + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
+			console.log("Client " conn.id + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
 
 			updateClient(JSON.stringify(players[conn.id]));
 			

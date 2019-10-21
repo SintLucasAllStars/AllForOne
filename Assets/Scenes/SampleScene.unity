@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 207586931}
   - component: {fileID: 207586930}
   m_Layer: 5
-  m_Name: SpawnUnitButton
+  m_Name: SPAWN_UNIT_BUTTON
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,12 +153,12 @@ RectTransform:
   m_Children:
   - {fileID: 313017695}
   m_Father: {fileID: 868575665}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 25}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 90, y: -40}
+  m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &207586930
 MonoBehaviour:
@@ -232,8 +232,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e9f9795853741774d81d1750266e3429, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 313017697}
   - component: {fileID: 313017696}
   m_Layer: 5
-  m_Name: Text
+  m_Name: SPAWN_UNIT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,25 +300,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
+    m_FontSize: 26
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 53
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Spawn Unit
 --- !u!222 &313017697
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -360,14 +360,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dontDestroy: 0
-  _sizeX: 6
-  _sizeZ: 6
+  _sizeX: 25
+  _sizeZ: 25
   _grid:
   - Columns:
     - _x: 0
       _y: 0
       _z: 0
-      _collisionType: 0
+      _collisionType: 1
     - _x: 0
       _y: 0
       _z: 1
@@ -379,7 +379,7 @@ MonoBehaviour:
     - _x: 0
       _y: 0
       _z: 3
-      _collisionType: 0
+      _collisionType: 1
     - _x: 0
       _y: 0
       _z: 4
@@ -388,11 +388,87 @@ MonoBehaviour:
       _y: 0
       _z: 5
       _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 0
+      _y: 0
+      _z: 24
+      _collisionType: 0
   - Columns:
     - _x: 1
       _y: 0
       _z: 0
-      _collisionType: 0
+      _collisionType: 2
     - _x: 1
       _y: 0
       _z: 1
@@ -412,6 +488,82 @@ MonoBehaviour:
     - _x: 1
       _y: 0
       _z: 5
+      _collisionType: 1
+    - _x: 1
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 12
+      _collisionType: 1
+    - _x: 1
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 22
+      _collisionType: 1
+    - _x: 1
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 1
+      _y: 0
+      _z: 24
       _collisionType: 0
   - Columns:
     - _x: 2
@@ -438,6 +590,82 @@ MonoBehaviour:
       _y: 0
       _z: 5
       _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 10
+      _collisionType: 1
+    - _x: 2
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 2
+      _y: 0
+      _z: 24
+      _collisionType: 0
   - Columns:
     - _x: 3
       _y: 0
@@ -463,6 +691,82 @@ MonoBehaviour:
       _y: 0
       _z: 5
       _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 10
+      _collisionType: 1
+    - _x: 3
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 14
+      _collisionType: 2
+    - _x: 3
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 16
+      _collisionType: 1
+    - _x: 3
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 3
+      _y: 0
+      _z: 24
+      _collisionType: 0
   - Columns:
     - _x: 4
       _y: 0
@@ -479,7 +783,7 @@ MonoBehaviour:
     - _x: 4
       _y: 0
       _z: 3
-      _collisionType: 0
+      _collisionType: 2
     - _x: 4
       _y: 0
       _z: 4
@@ -487,6 +791,82 @@ MonoBehaviour:
     - _x: 4
       _y: 0
       _z: 5
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 8
+      _collisionType: 1
+    - _x: 4
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 20
+      _collisionType: 1
+    - _x: 4
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 4
+      _y: 0
+      _z: 23
+      _collisionType: 1
+    - _x: 4
+      _y: 0
+      _z: 24
       _collisionType: 0
   - Columns:
     - _x: 5
@@ -513,8 +893,2005 @@ MonoBehaviour:
       _y: 0
       _z: 5
       _collisionType: 0
-  Tile: {fileID: 5142870711898534456, guid: 0b53327b754b1c44db7ed5c90c093836, type: 3}
-  RedTile: {fileID: 6854759108224970665, guid: 2a91f83f07d3d83448723e3006173cc4, type: 3}
+    - _x: 5
+      _y: 0
+      _z: 6
+      _collisionType: 1
+    - _x: 5
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 19
+      _collisionType: 2
+    - _x: 5
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 5
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 6
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 16
+      _collisionType: 2
+    - _x: 6
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 21
+      _collisionType: 2
+    - _x: 6
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 6
+      _y: 0
+      _z: 24
+      _collisionType: 2
+  - Columns:
+    - _x: 7
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 16
+      _collisionType: 1
+    - _x: 7
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 7
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 8
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 10
+      _collisionType: 2
+    - _x: 8
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 8
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 9
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 5
+      _collisionType: 1
+    - _x: 9
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 12
+      _collisionType: 1
+    - _x: 9
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 18
+      _collisionType: 1
+    - _x: 9
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 22
+      _collisionType: 1
+    - _x: 9
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 9
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 10
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 9
+      _collisionType: 2
+    - _x: 10
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 12
+      _collisionType: 1
+    - _x: 10
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 10
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 11
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 12
+      _collisionType: 2
+    - _x: 11
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 16
+      _collisionType: 2
+    - _x: 11
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 11
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 12
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 1
+      _collisionType: 1
+    - _x: 12
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 16
+      _collisionType: 1
+    - _x: 12
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 22
+      _collisionType: 2
+    - _x: 12
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 12
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 13
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 1
+      _collisionType: 2
+    - _x: 13
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 12
+      _collisionType: 2
+    - _x: 13
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 13
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 14
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 1
+      _collisionType: 1
+    - _x: 14
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 19
+      _collisionType: 2
+    - _x: 14
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 22
+      _collisionType: 2
+    - _x: 14
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 14
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 15
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 9
+      _collisionType: 2
+    - _x: 15
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 15
+      _y: 0
+      _z: 23
+      _collisionType: 1
+    - _x: 15
+      _y: 0
+      _z: 24
+      _collisionType: 1
+  - Columns:
+    - _x: 16
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 5
+      _collisionType: 1
+    - _x: 16
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 16
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 17
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 5
+      _collisionType: 1
+    - _x: 17
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 20
+      _collisionType: 1
+    - _x: 17
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 17
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 18
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 5
+      _collisionType: 1
+    - _x: 18
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 12
+      _collisionType: 2
+    - _x: 18
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 16
+      _collisionType: 2
+    - _x: 18
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 18
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 19
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 7
+      _collisionType: 1
+    - _x: 19
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 16
+      _collisionType: 1
+    - _x: 19
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 21
+      _collisionType: 2
+    - _x: 19
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 19
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 20
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 7
+      _collisionType: 2
+    - _x: 20
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 16
+      _collisionType: 2
+    - _x: 20
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 20
+      _y: 0
+      _z: 23
+      _collisionType: 2
+    - _x: 20
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 21
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 7
+      _collisionType: 1
+    - _x: 21
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 9
+      _collisionType: 1
+    - _x: 21
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 13
+      _collisionType: 1
+    - _x: 21
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 21
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 22
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 16
+      _collisionType: 1
+    - _x: 22
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 22
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 23
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 16
+      _collisionType: 1
+    - _x: 23
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 23
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  - Columns:
+    - _x: 24
+      _y: 0
+      _z: 0
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 1
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 2
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 3
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 4
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 5
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 6
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 7
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 8
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 9
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 10
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 11
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 12
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 13
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 14
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 15
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 16
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 17
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 18
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 19
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 20
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 21
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 22
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 23
+      _collisionType: 0
+    - _x: 24
+      _y: 0
+      _z: 24
+      _collisionType: 0
+  _tile: {fileID: 5142870711898534456, guid: 0b53327b754b1c44db7ed5c90c093836, type: 3}
+  _obstacles:
+  - {fileID: 6854759108224970665, guid: 2a91f83f07d3d83448723e3006173cc4, type: 3}
+  - {fileID: 6854759108224970665, guid: 5709e1b68781f1c49a9b779a9609c194, type: 3}
 --- !u!4 &511159381
 Transform:
   m_ObjectHideFlags: 0
@@ -739,7 +3116,7 @@ GameObject:
   - component: {fileID: 862548790}
   - component: {fileID: 862548789}
   m_Layer: 5
-  m_Name: Button
+  m_Name: NEXT_TURN_BUTTON
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -758,12 +3135,12 @@ RectTransform:
   m_Children:
   - {fileID: 934468548}
   m_Father: {fileID: 868575665}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -100, y: -100}
-  m_SizeDelta: {x: 160, y: 160}
+  m_AnchoredPosition: {x: -90, y: -40}
+  m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &862548789
 MonoBehaviour:
@@ -837,8 +3214,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e9f9795853741774d81d1750266e3429, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -945,6 +3322,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 1096004634}
   - {fileID: 862548788}
   - {fileID: 207586929}
   m_Father: {fileID: 0}
@@ -967,7 +3345,7 @@ GameObject:
   - component: {fileID: 934468550}
   - component: {fileID: 934468549}
   m_Layer: 5
-  m_Name: Text
+  m_Name: NEXT_TURN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1005,15 +3383,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 43
-    m_FontStyle: 0
+    m_FontSize: 27
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 300
@@ -1043,6 +3421,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1108,10 +3487,141 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 2, y: 6, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28ef8c68bade09b41aca258d42a632f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastTab: 0
+  movementSettingsFoldout: 0
+  zoomingSettingsFoldout: 0
+  rotationSettingsFoldout: 0
+  heightSettingsFoldout: 0
+  mapLimitSettingsFoldout: 0
+  targetingSettingsFoldout: 0
+  inputSettingsFoldout: 0
+  useFixedUpdate: 0
+  keyboardMovementSpeed: 80
+  screenEdgeMovementSpeed: 50
+  followingSpeed: 5
+  rotationSped: 3
+  panningSpeed: 80
+  mouseRotationSpeed: 10
+  autoHeight: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  maxHeight: 2
+  minHeight: 5
+  heightDampening: 5
+  keyboardZoomingSensitivity: 25
+  scrollWheelZoomingSensitivity: 36
+  limitMap: 1
+  limitX: 50
+  limitY: 50
+  targetFollow: {fileID: 0}
+  targetOffset: {x: 0, y: 0, z: 0}
+  useScreenEdgeInput: 0
+  screenEdgeBorder: 25
+  useKeyboardInput: 1
+  horizontalAxis: Horizontal
+  verticalAxis: Vertical
+  usePanning: 1
+  panningKey: 325
+  useKeyboardZooming: 1
+  zoomInKey: 101
+  zoomOutKey: 113
+  useScrollwheelZooming: 1
+  zoomingAxis: Mouse ScrollWheel
+  useKeyboardRotation: 0
+  rotateRightKey: 120
+  rotateLeftKey: 122
+  useMouseRotation: 0
+  mouseRotationKey: 324
+--- !u!1 &1096004633
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1096004634}
+  - component: {fileID: 1096004636}
+  - component: {fileID: 1096004635}
+  m_Layer: 5
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1096004634
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096004633}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 868575665}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.0020142, y: 184.5}
+  m_SizeDelta: {x: 800.1, y: 81.1}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1096004635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096004633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.58431375}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1096004636
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096004633}
+  m_CullTransparentMesh: 0

@@ -56,6 +56,8 @@ namespace MechanicFever
 
         public void SetPrice(int price) => _price = price;
 
+        public void SetGuid(string guid) => _guid = guid;
+
         public UnitData()
         { }
     }

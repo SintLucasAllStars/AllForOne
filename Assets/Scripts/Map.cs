@@ -15,7 +15,11 @@ namespace MechanicFever
 
         private Tile[,] _tiles;
 
-        public GameObject Tile, RedTile;
+        [SerializeField]
+        private GameObject _tile;
+
+        [SerializeField]
+        private GameObject[] _obstacles;
 
         public void SetMap(MapX[] map) => _grid = map;
 
@@ -26,10 +30,20 @@ namespace MechanicFever
             {
                 for (int z = 0; z < _sizeZ; z++)
                 {
-                    if (_grid[x].Columns[z].CollisionType == CollisionType.None)
-                        _tiles[x, z] = Instantiate(Tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
-                    else
-                        _tiles[x, z] = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                    switch (_grid[x].Columns[z].CollisionType)
+                    {
+                        case CollisionType.None:
+                            _tiles[x, z] = Instantiate(_tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                            break;
+                        case CollisionType.Obstacle_01:
+                            _tiles[x, z] = Instantiate(_obstacles[0], new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                            break;
+                        case CollisionType.Obstacle_02:
+                            _tiles[x, z] = Instantiate(_obstacles[1], new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                            break;
+                        case CollisionType.Occupied:
+                            break;
+                    }
                 }
             }
             Screen.fullScreen = false;
@@ -64,7 +78,7 @@ namespace MechanicFever
         public bool IsValidNode(int x, int z)
         {
             //WALL DETECTION
-            if (Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle)
+            if (Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle_01 || Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle_02)
                 return false;
 
             //UNIT DETECTION

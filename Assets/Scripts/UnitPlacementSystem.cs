@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using System;
 
 namespace MechanicFever
 {
     public class UnitPlacementSystem : Singleton<UnitPlacementSystem>
     {
-        private bool _hasPlaced;
+        private bool _hasPlaced = true;
 
         private void Update()
         {
@@ -13,7 +14,7 @@ namespace MechanicFever
                 if (Input.GetMouseButtonDown(0))
                 {
                     RaycastHit hit;
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 100.0f))
                     {
                         Tile t;
@@ -39,6 +40,7 @@ namespace MechanicFever
         {
             UnitData newUnit = Player.Instance.PlayerUnit;
             newUnit.SetPosition(node);
+            newUnit.SetGuid(Guid.NewGuid().ToString());
             GameManager.Instance.SpawnUnit(newUnit);
             _hasPlaced = true;
             Player.Instance.Wallet.Withdraw(newUnit.Price);
