@@ -52,6 +52,8 @@ namespace MechanicFever
                     if (_players[i].GameData.Guid == gameData.Guid)
                         _players.Remove(_players[i]);
                 }
+                if (GetUnitCount(gameData.PlayerSide) == 0)
+                    Debug.Log(gameData.PlayerSide + " player loses.");
                 return;
             }
 
@@ -104,6 +106,17 @@ namespace MechanicFever
                     return true;
             }
             return false;
+        }
+
+        private int GetUnitCount(PlayerSide playerSide)
+        {
+            int numUnits = 0;
+            for (int i = 0; i < _units.Count; i++)
+            {
+                if (_units[i].GameData.PlayerSide == playerSide)
+                    numUnits++;
+            }
+            return numUnits;
         }
     }
 }

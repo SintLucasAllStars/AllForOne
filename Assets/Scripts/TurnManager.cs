@@ -1,11 +1,18 @@
 ﻿using System;
+using TMPro;
+using UnityEngine;
 
 namespace MechanicFever
 {
     public class TurnManager : Singleton<TurnManager>
     {
-        private PlayerSide _currentTurn;
+        private PlayerSide _currentTurn = PlayerSide.Red;
         public PlayerSide CurrentTurn => _currentTurn;
+
+        [SerializeField]
+        private TextMeshProUGUI _turnText = null;
+
+        private void Start() => ShowTurn();
 
         public void NextTurn()
         {
@@ -18,6 +25,8 @@ namespace MechanicFever
 
             NetworkManager.Instance.SendMessage(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
         }
+
+        private void ShowTurn() => _turnText.text = "Turn: " + _currentTurn;
 
         public bool HasTurn(PlayerSide side) => side == _currentTurn;
 
