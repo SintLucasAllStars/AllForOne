@@ -12,18 +12,17 @@ namespace MechanicFever
         [SerializeField]
         private Slider _healthSlider, _strengthSlider, _speedSlider, _defenseSlider;
 
-        private void Start()
+        private void Start() => SetRandomValues();
+
+        public void SetRandomValues()
         {
             UpdateValues(Mathf.RoundToInt(Random.Range(_healthSlider.minValue + (_healthSlider.maxValue / 4), _healthSlider.maxValue - (_healthSlider.maxValue / 4))),
-                Mathf.RoundToInt(Random.Range(_strengthSlider.minValue + (_strengthSlider.maxValue / 4), _strengthSlider.maxValue - (_strengthSlider.maxValue / 4))),
-                Mathf.RoundToInt(Random.Range(_speedSlider.minValue + (_speedSlider.maxValue / 4), _speedSlider.maxValue - (_speedSlider.maxValue / 4))),
-                Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))));
+    Mathf.RoundToInt(Random.Range(_strengthSlider.minValue + (_strengthSlider.maxValue / 4), _strengthSlider.maxValue - (_strengthSlider.maxValue / 4))),
+    Mathf.RoundToInt(Random.Range(_speedSlider.minValue + (_speedSlider.maxValue / 4), _speedSlider.maxValue - (_speedSlider.maxValue / 4))),
+    Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))));
         }
 
-        public void UpdateValues()
-        {
-            UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value));
-        }
+        public void UpdateValues() => UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value));
 
         public void UpdateValues(int health, int strength, int speed, int defense)
         {
@@ -43,6 +42,11 @@ namespace MechanicFever
             _strengthSlider.value = strength;
             _speedSlider.value = speed;
             _defenseSlider.value = defense;
+
+            _healthValueText.text = health.ToString();
+            _strengthValueText.text = strength.ToString();
+            _speedValueText.text = speed.ToString();
+            _defenseValueText.text = defense.ToString();
         }
 
         private void UpdatePlayerUnit()
@@ -57,10 +61,7 @@ namespace MechanicFever
             _priceText.text = price.ToString();
         }
 
-        public int CalculateUnitPrice(int health, int strength, int speed, int defense)
-        {
-            return (3 * health) + (3 * _speed) + (2 * strength) + (2 * defense);
-        }
+        public int CalculateUnitPrice(int health, int strength, int speed, int defense) => (3 * health) + (3 * _speed) + (2 * strength) + (2 * defense);
     }
 
 }
