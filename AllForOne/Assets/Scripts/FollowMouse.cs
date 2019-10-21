@@ -27,7 +27,7 @@ public class FollowMouse : MonoBehaviour
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        RaycastHit hit; 
         if (Physics.Raycast(ray, out hit))
         {
             hitpoint = hit.point;
@@ -36,8 +36,10 @@ public class FollowMouse : MonoBehaviour
         {
             case GameStates.Place:
                 transform.position = hitpoint;
+                CreateActor.instance.actor.layer = 2;
                 break;
             case GameStates.Select:
+                CreateActor.instance.actor.layer = 0;
                 if (Input.GetButtonDown("Fire1"))
                 {
                     if (hit.collider.gameObject.CompareTag("Player1") && GameManager.instance.turn == TurnState.Player1)

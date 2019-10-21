@@ -17,18 +17,18 @@ public class MouseLook : MonoBehaviour
         character = transform.parent.gameObject;
     }
 
-    void Update()
-    {
-        Vector2 md = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+    //void Update()
+    //{
+    //    Vector2 md = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-        md = Vector2.Scale(md, new Vector2(sensitivity * smoothing, sensitivity * smoothing));
-        smoothV.x = Mathf.Lerp(smoothV.x, md.x, 1f / smoothing);
-        smoothV.y = Mathf.Lerp(smoothV.y, md.y, 1f / smoothing);
+    //    md = Vector2.Scale(md, new Vector2(sensitivity * smoothing, sensitivity * smoothing));
+    //    smoothV.x = Mathf.Lerp(smoothV.x, md.x, 1f / smoothing);
+    //    smoothV.y = Mathf.Lerp(smoothV.y, md.y, 1f / smoothing);
 
-        mouseLook += smoothV;
+    //    mouseLook += smoothV;
 
-        transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
-        character.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, character.transform.up);
+    //    transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
+    //    character.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, character.transform.up);
 
-    }
+    //}
 }

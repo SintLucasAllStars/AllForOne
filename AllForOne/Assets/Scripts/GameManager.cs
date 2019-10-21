@@ -10,8 +10,8 @@ public class GameManager : MonoBehaviour
     public TurnState turn;
     public GameObject buyWindow;
     public Transform characterParent;
-    public Player player1 = new Player(100, "PLayer1");
-    public Player player2 = new Player(100, "PLayer2");
+    public Player player1 = new Player(100, "Player1");
+    public Player player2 = new Player(100, "Player2");
 
     private float points;
     public Player curPlayer;
@@ -102,24 +102,10 @@ public class GameManager : MonoBehaviour
         switch (turn)
         {
             case TurnState.Player1:
-                if (!player2.ready)
-                {
-                    turn = TurnState.Player2;
-                }
-                else
-                {
-                    //say something like player 2 is already ready blabla
-                }
+                turn = TurnState.Player2;
                 break;
             case TurnState.Player2:
-                if (!player1.ready)
-                {
-                    turn = TurnState.Player1;
-                }
-                else
-                {
-                    //say something like player 1 is already ready blabla
-                }
+                turn = TurnState.Player1;
                 break;
         }
     }
@@ -132,6 +118,7 @@ public class GameManager : MonoBehaviour
     public void SelectPlayer(GameObject selectedPlayer)
     {
         this.selectedPlayer = selectedPlayer;
+        CameraBehaviour.instance.target = selectedPlayer.transform;
         SwitchState(GameStates.Move);
 
     }
@@ -139,8 +126,7 @@ public class GameManager : MonoBehaviour
     public void MoveSelectedPlayer(GameObject selectedPlayer)
     {
         Character player = selectedPlayer.GetComponent<Character>();
-        player.Camera.SetActive(true);
-
+        player.characterState = CharacterStates.Moving;
     }
 
 }
