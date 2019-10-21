@@ -48,6 +48,7 @@ namespace MechanicFever
 
             if (sliders)
                 return;
+
             SetSliderValues(_health, _strength, _speed, _defense);
         }
 

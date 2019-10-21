@@ -7,8 +7,52 @@ namespace MechanicFever
         private UnitData _gameData = new UnitData();
         public UnitData GameData => _gameData;
 
+        private Camera _unitCamera;
+        public Camera UnitCamera => _unitCamera;
+
+        public void EnableUnitCamera(bool isEnabled) => _unitCamera.enabled = isEnabled;
+
+        private bool _canMove = false;
+
+        private Rigidbody _rigidbody;
+
+        [SerializeField]
+        private float mouseSensitivity = 100.0f, rotY = 0.0f;
+
+        [SerializeField]
+        private GameObject _rocket;
+
+        [SerializeField]
+        private Transform _cannon;
+
+        private void FixedUpdate()
+        {
+            if(_canMove)
+            {
+                _rigidbody.velocity = new Vector3(Input.GetAxis("Horizontal") * _gameData.Speed / 2, 0, Input.GetAxis("Vertical") * _gameData.Speed / 2);
+
+                _rigidbody.velocity = transform.forward * _rigidbody.velocity.magnitude;
+
+                float mouseX = Input.GetAxis("Mouse X");
+
+                rotY += mouseX * mouseSensitivity * Time.deltaTime;
+
+                Quaternion localRotation = Quaternion.Euler(0, rotY, 0);
+                transform.rotation = localRotation;
+
+                if (Input.GetMouseButtonDown(0))
+                    Instantiate(_rocket, _cannon.transform.position, _cannon.transform.rotation);
+            }
+        }
+
         private void Start()
         {
+            _unitCamera = GetComponentInChildren<Camera>();
+            _rigidbody = GetComponent<Rigidbody>();
+            EnableUnitCamera(false);
+
+            rotY = transform.localRotation.eulerAngles.y;
+
             //Check for the unit creation scene.
             if (!GameManager.Instance)
                 return;
@@ -44,5 +88,39 @@ namespace MechanicFever
         }
 
         public void SetGameData(UnitData data) => _gameData = data;
+
+        private void OnMouseDown()
+        {
+            //Check for the unit creation scene.
+            if (!GameManager.Instance)
+                return;
+
+            EnableMovement(true);
+        }
+
+        private void EnableMovement(bool isEnabled)
+        {
+            RTS_Camera.Instance.Camera.enabled = !isEnabled;
+
+            EnableCursor(!isEnabled);
+
+            EnableUnitCamera(isEnabled);
+
+            _canMove = isEnabled;
+        }
+
+        public void EnableCursor(bool isEnabled)
+        {
+            if(isEnabled)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
     }
 }
