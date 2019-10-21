@@ -2,16 +2,20 @@
 
 public class GameControler : MonoBehaviour
 {
+    private Transform _cameraHome;
     private Camera _camera;
     private Unit _focusedUnit;
     private Vector3 _lastMousePos;
     private float _controlTime;
+    private bool _moveToUnit;
 
     private void Start()
     {
         _camera = Camera.main;
+        _cameraHome = _camera.transform.parent;
         _lastMousePos = Vector3.zero;
         _controlTime = 0;
+        _moveToUnit = true;
     }
 
     private void Update()
@@ -51,15 +55,16 @@ public class GameControler : MonoBehaviour
             }
 
             _focusedUnit = (Unit) hit.collider.gameObject.GetComponent(typeof(Unit));
+            _moveToUnit = true;
             GameManager.GetGameManager().SetGameState(GameManager.GameState.CameraMovement);
         }
     }
     
     private void HandleCameraMovement()
     {
-        if (!MoveCameraToUnit(1))
+        if (!MoveCameraTo(_moveToUnit?_focusedUnit.transform:_cameraHome, 1))
         {
-            GameManager.GetGameManager().SetGameState(GameManager.GameState.UnitControl);
+            GameManager.GetGameManager().SetGameState(_moveToUnit?GameManager.GameState.UnitControl:GameManager.GameState.InGame);
         }
     }
 
@@ -94,26 +99,27 @@ public class GameControler : MonoBehaviour
             _focusedUnit.gameObject.transform.Rotate(0, movement.x, 0);
         }
         
-        MoveCameraToUnit(100);
+        MoveCameraTo(_focusedUnit.transform, 100);
         
         // check if time is up
         _controlTime += Time.deltaTime;
         if (_controlTime > 10)
         {
-            GameManager.GetGameManager().SetGameState(GameManager.GameState.InGame);
+            _moveToUnit = false;
+            GameManager.GetGameManager().SetGameState(GameManager.GameState.CameraMovement);
             _controlTime = 0;
             _lastMousePos = Vector3.zero;
         }
     }
 
-    private bool MoveCameraToUnit(float maxMovement)
+    private bool MoveCameraTo(Transform location, float maxMovement)
     {
         Vector3 newLocation = Vector3.MoveTowards(
             _camera.transform.position,
-            _focusedUnit.transform.localPosition + new Vector3(-10*_focusedUnit.transform.forward.x, 2, -10*_focusedUnit.transform.forward.z),
+            location.localPosition + new Vector3(-10*location.forward.x, 2, -10*location.forward.z),
             maxMovement
             );
-        Quaternion newRotation = Quaternion.RotateTowards(_camera.transform.rotation, _focusedUnit.transform.rotation, maxMovement);
+        Quaternion newRotation = Quaternion.RotateTowards(_camera.transform.rotation, location.rotation, maxMovement);
 
         if (newLocation == _camera.transform.position && newRotation == _camera.transform.rotation)
         {
