@@ -208,6 +208,7 @@ public class Unit : MonoBehaviour
         cam.gameObject.SetActive(false);
         Gamemanager.instance.SwitchPlayer();
         Gamemanager.instance.TopViewTurnOn();
+        Gamemanager.instance.CheckForUnits();
         //CheckIfInside();
     }
 

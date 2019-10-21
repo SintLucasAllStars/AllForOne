@@ -26,7 +26,7 @@ public class Gamemanager : MonoBehaviour
         player1 = new Player(100, PlayerPrefs.GetString("Name1"), "Red", mario);
         player2 = new Player(100, PlayerPrefs.GetString("Name2"), "Blue", luigi);
         currentplayer = player1;
-        SpawnWeapons();
+        //SpawnWeapons();
     }
 
     public bool CheckPoints()
@@ -75,7 +75,7 @@ public class Gamemanager : MonoBehaviour
 
     public void SwitchPlayer()
     {
-        CheckForUnits();
+        //CheckForUnits();
         if (currentplayer == player1)
             currentplayer = player2;
         else if (currentplayer == player2)

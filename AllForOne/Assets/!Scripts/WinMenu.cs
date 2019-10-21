@@ -25,7 +25,7 @@ public class WinMenu : MonoBehaviour
     public void LoadMenu()
     {
         Debug.Log("Button works");
-        //SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0);
     }
 
 }
