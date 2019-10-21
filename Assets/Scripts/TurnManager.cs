@@ -30,6 +30,10 @@ namespace MechanicFever
 
         public bool HasTurn(PlayerSide side) => side == _currentTurn;
 
-        public void SetTurn(PlayerSide playerSide) => _currentTurn = playerSide;
+        public void SetTurn(PlayerSide playerSide)
+        {
+            _currentTurn = playerSide;
+            ShowTurn();
+        }
     }
 }
