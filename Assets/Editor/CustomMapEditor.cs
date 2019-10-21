@@ -15,15 +15,120 @@ namespace MechanicFever
     {
         private Map map { get { return target as Map; } }
 
-        public static bool ShowGrid = true;
-
         public static EditMode EditMode = EditMode.CollisionMode;
 
         private TabsBlock tabs;
 
-        void CollisionMode() => EditMode = EditMode.CollisionMode;
+        private void CollisionMode()
+        {
+            EditMode = EditMode.CollisionMode;
+            Show();
+        }
 
-        void PropMode() => EditMode = EditMode.PropMode;
+        private void PropMode()
+        {
+            EditMode = EditMode.PropMode;
+            Show();
+        }
+
+        private void Show()
+        {
+            if (map.Grid[0] != null)
+            {
+                EditorGUI.indentLevel++;
+                for (ushort i = 0; i < 1; i++)
+                {
+                    EditorGUI.indentLevel = 0;
+
+                    GUIStyle tableStyle = new GUIStyle("box")
+                    {
+                        padding = new RectOffset(10, 10, 10, 10)
+                    };
+                    tableStyle.margin.left = 32;
+
+                    GUIStyle columnStyle = new GUIStyle
+                    {
+                        fixedWidth = 40
+                    };
+
+                    GUIStyle rowStyle = new GUIStyle
+                    {
+                        fixedHeight = 40
+                    };
+
+                    GUIStyle normalStyle = new GUIStyle("popup")
+                    {
+                        fontStyle = FontStyle.Normal,
+                        fontSize = 5,
+                        fixedWidth = 35,
+                        fixedHeight = 35
+                    };
+
+                    GUIStyle obstacleStyle = new GUIStyle(normalStyle)
+                    {
+                        fontStyle = FontStyle.BoldAndItalic
+                    };
+                    obstacleStyle.normal.textColor = Color.red;
+
+                    GUIStyle obstacleTypeStyle = new GUIStyle(normalStyle)
+                    {
+                        fontSize = 12,
+                        fontStyle = FontStyle.BoldAndItalic,
+                        fixedWidth = 35,
+                        fixedHeight = 35
+                    };
+
+                    GUIStyle occupiedStyle = new GUIStyle(normalStyle)
+                    {
+                        fontStyle = FontStyle.BoldAndItalic
+                    };
+                    occupiedStyle.normal.textColor = Color.yellow;
+
+                    EditorGUILayout.BeginHorizontal(tableStyle);
+                    for (int x = 0; x < map.Grid.Length; x++)
+                    {
+                        EditorGUILayout.BeginVertical(columnStyle);
+                        for (int z = 0; z < map.Grid[x].Columns.Length; z++)
+                        {
+                            Node n = map.Grid[x].Columns[z];
+
+                            EditorGUILayout.BeginHorizontal(rowStyle);
+                            GUIStyle styleToUse = normalStyle;
+
+                            switch (n.CollisionType)
+                            {
+                                case CollisionType.Obstacle:
+                                    styleToUse = obstacleStyle;
+                                    break;
+                                case CollisionType.Occupied:
+                                    styleToUse = occupiedStyle;
+                                    break;
+                            }
+
+                            EditorGUILayout.BeginVertical(columnStyle);
+
+                            if (EditMode == EditMode.CollisionMode)
+                            {
+                                n.SetCollisionType((CollisionType)EditorGUILayout.EnumPopup(n.CollisionType, styleToUse));
+                                n.SetPosition(x, 0, z);
+                            }
+
+                            EditorGUILayout.EndHorizontal();
+
+                            if (EditMode == EditMode.PropMode)
+                            {
+                                if (n.CollisionType == CollisionType.Obstacle)
+                                    n.SetProp(EditorGUILayout.IntField(n.Prop, obstacleTypeStyle));
+                            }
+
+                            EditorGUILayout.EndVertical();
+                        }
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+        }
 
         private void OnEnable()
         {
@@ -63,106 +168,7 @@ namespace MechanicFever
 
             EditorUtility.SetDirty(this.map);
 
-            if (map.Grid[0] != null)
-            {
-                ShowGrid = EditorGUILayout.Foldout(ShowGrid, "Map (Size: [" + map.Grid.Length + ", " + map.Grid[0].Columns.Length + "])");
-
-                if (ShowGrid)
-                {
-                    EditorGUI.indentLevel++;
-                    for (ushort i = 0; i < 1; i++)
-                    {
-                        EditorGUI.indentLevel = 0;
-
-                        GUIStyle tableStyle = new GUIStyle("box")
-                        {
-                            padding = new RectOffset(10, 10, 10, 10)
-                        };
-                        tableStyle.margin.left = 32;
-
-                        GUIStyle columnStyle = new GUIStyle
-                        {
-                            fixedWidth = 40
-                        };
-
-                        GUIStyle rowStyle = new GUIStyle
-                        {
-                            fixedHeight = 40
-                        };
-
-                        GUIStyle normalStyle = new GUIStyle("popup")
-                        {
-                            fontStyle = FontStyle.Normal,
-                            fontSize = 5,
-                            fixedWidth = 35,
-                            fixedHeight = 35
-                        };
-
-                        GUIStyle obstacleStyle = new GUIStyle(normalStyle)
-                        {
-                            fontStyle = FontStyle.BoldAndItalic
-                        };
-                        obstacleStyle.normal.textColor = Color.red;
-
-                        GUIStyle obstacleTypeStyle = new GUIStyle(normalStyle)
-                        {
-                            fontSize = 12,
-                            fontStyle = FontStyle.BoldAndItalic,
-                            fixedWidth = 35,
-                            fixedHeight = 35
-                        };
-
-                        GUIStyle occupiedStyle = new GUIStyle(normalStyle)
-                        {
-                            fontStyle = FontStyle.BoldAndItalic
-                        };
-                        occupiedStyle.normal.textColor = Color.yellow;
-
-                        EditorGUILayout.BeginHorizontal(tableStyle);
-                        for (int x = 0; x < map.Grid.Length; x++)
-                        {
-                            EditorGUILayout.BeginVertical(columnStyle);
-                            for (int z = 0; z < map.Grid[x].Columns.Length; z++)
-                            {
-                                Node n = map.Grid[x].Columns[z];
-
-                                EditorGUILayout.BeginHorizontal(rowStyle);
-                                GUIStyle styleToUse = normalStyle;
-
-                                switch (n.CollisionType)
-                                {
-                                    case CollisionType.Obstacle:
-                                        styleToUse = obstacleStyle;
-                                        break;
-                                    case CollisionType.Occupied:
-                                        styleToUse = occupiedStyle;
-                                        break;
-                                }
-
-                                EditorGUILayout.BeginVertical(columnStyle);
-
-                                if(EditMode == EditMode.CollisionMode)
-                                {
-                                    n.SetCollisionType((CollisionType)EditorGUILayout.EnumPopup(n.CollisionType, styleToUse));
-                                    n.SetPosition(x, 0, z);
-                                }
-
-                                EditorGUILayout.EndHorizontal();
-
-                                if (EditMode == EditMode.PropMode)
-                                {
-                                    if (n.CollisionType == CollisionType.Obstacle)
-                                        n.SetProp(EditorGUILayout.IntField(n.Prop, obstacleTypeStyle));
-                                }
-
-                                EditorGUILayout.EndVertical();
-                            }
-                            EditorGUILayout.EndVertical();
-                        }
-                        EditorGUILayout.EndHorizontal();
-                    }
-                }
-            }
+            
 
             serializedObject.ApplyModifiedProperties();
         }
