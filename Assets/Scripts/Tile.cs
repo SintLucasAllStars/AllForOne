@@ -10,6 +10,8 @@ namespace MechanicFever
         private PlayerUnit _occupiedBy;
         public PlayerUnit OccupiedBy => _occupiedBy;
 
+        public void SetNode(Node node) => _position = node;
+
         private void Awake()
         {
             _position = Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));

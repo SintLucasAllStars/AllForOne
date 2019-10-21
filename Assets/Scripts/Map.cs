@@ -23,6 +23,8 @@ namespace MechanicFever
 
         public void SetMap(MapX[] map) => _grid = map;
 
+        public int lastTab = 0;
+
         private void Start()
         {
             _tiles = new Tile[_sizeX, _sizeZ];
@@ -35,11 +37,8 @@ namespace MechanicFever
                         case CollisionType.None:
                             _tiles[x, z] = Instantiate(_tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
                             break;
-                        case CollisionType.Obstacle_01:
-                            _tiles[x, z] = Instantiate(_obstacles[0], new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
-                            break;
-                        case CollisionType.Obstacle_02:
-                            _tiles[x, z] = Instantiate(_obstacles[1], new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                        case CollisionType.Obstacle:
+                            _tiles[x, z] = Instantiate(_obstacles[_grid[x].Columns[z].Prop], new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
                             break;
                         case CollisionType.Occupied:
                             break;
@@ -78,7 +77,7 @@ namespace MechanicFever
         public bool IsValidNode(int x, int z)
         {
             //WALL DETECTION
-            if (Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle_01 || Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle_02)
+            if (Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle)
                 return false;
 
             //UNIT DETECTION

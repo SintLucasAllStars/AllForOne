@@ -1,12 +1,39 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace MechanicFever
 {
+    public enum EditMode
+    {
+        CollisionMode,
+        PropMode
+    };
+
     [CustomEditor(typeof(Map))]
     public class CustomMapEditor : Editor
     {
+        private Map map { get { return target as Map; } }
+
         public static bool ShowGrid = true;
+
+        public static EditMode EditMode = EditMode.CollisionMode;
+
+        private TabsBlock tabs;
+
+        void CollisionMode() => EditMode = EditMode.CollisionMode;
+
+        void PropMode() => EditMode = EditMode.PropMode;
+
+        private void OnEnable()
+        {
+            tabs = new TabsBlock(new Dictionary<string, System.Action>()
+            {
+                {"Collision", CollisionMode},
+                {"Props", PropMode}
+            });
+            tabs.SetCurrentMethod(map.lastTab);
+        }
 
         public override void OnInspectorGUI()
         {
@@ -27,13 +54,19 @@ namespace MechanicFever
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Generate Map"))
-            {
                 GenerateMap(map);
-            }
+
+            Undo.RecordObject(this.map, "Map");
+            tabs.Draw();
+            if (GUI.changed)
+                this.map.lastTab = tabs.curMethodIndex;
+
+            EditorUtility.SetDirty(this.map);
 
             if (map.Grid[0] != null)
             {
                 ShowGrid = EditorGUILayout.Foldout(ShowGrid, "Map (Size: [" + map.Grid.Length + ", " + map.Grid[0].Columns.Length + "])");
+
                 if (ShowGrid)
                 {
                     EditorGUI.indentLevel++;
@@ -57,15 +90,6 @@ namespace MechanicFever
                             fixedHeight = 40
                         };
 
-                        GUIStyle cornerLabelStyle = new GUIStyle
-                        {
-                            fixedWidth = 35,
-                            alignment = TextAnchor.MiddleRight,
-                            fontStyle = FontStyle.BoldAndItalic,
-                            fontSize = 14
-                        };
-                        cornerLabelStyle.padding.top = -5;
-
                         GUIStyle normalStyle = new GUIStyle("popup")
                         {
                             fontStyle = FontStyle.Normal,
@@ -74,11 +98,19 @@ namespace MechanicFever
                             fixedHeight = 35
                         };
 
-                        GUIStyle wallStyle = new GUIStyle(normalStyle)
+                        GUIStyle obstacleStyle = new GUIStyle(normalStyle)
                         {
                             fontStyle = FontStyle.BoldAndItalic
                         };
-                        wallStyle.normal.textColor = Color.red;
+                        obstacleStyle.normal.textColor = Color.red;
+
+                        GUIStyle obstacleTypeStyle = new GUIStyle(normalStyle)
+                        {
+                            fontSize = 12,
+                            fontStyle = FontStyle.BoldAndItalic,
+                            fixedWidth = 35,
+                            fixedHeight = 35
+                        };
 
                         GUIStyle occupiedStyle = new GUIStyle(normalStyle)
                         {
@@ -92,26 +124,38 @@ namespace MechanicFever
                             EditorGUILayout.BeginVertical(columnStyle);
                             for (int z = 0; z < map.Grid[x].Columns.Length; z++)
                             {
+                                Node n = map.Grid[x].Columns[z];
+
                                 EditorGUILayout.BeginHorizontal(rowStyle);
                                 GUIStyle styleToUse = normalStyle;
 
-                                switch (map.Grid[x].Columns[z].CollisionType)
+                                switch (n.CollisionType)
                                 {
-                                    case CollisionType.Obstacle_01:
-                                        styleToUse = wallStyle;
-                                        break;
-                                    case CollisionType.Obstacle_02:
-                                        styleToUse = wallStyle;
+                                    case CollisionType.Obstacle:
+                                        styleToUse = obstacleStyle;
                                         break;
                                     case CollisionType.Occupied:
                                         styleToUse = occupiedStyle;
                                         break;
                                 }
 
-                                map.Grid[x].Columns[z].SetCollisionType((CollisionType)EditorGUILayout.EnumPopup(map.Grid[x].Columns[z].CollisionType, styleToUse));
-                                map.Grid[x].Columns[z].SetPosition(x, 0, z);
+                                EditorGUILayout.BeginVertical(columnStyle);
+
+                                if(EditMode == EditMode.CollisionMode)
+                                {
+                                    n.SetCollisionType((CollisionType)EditorGUILayout.EnumPopup(n.CollisionType, styleToUse));
+                                    n.SetPosition(x, 0, z);
+                                }
 
                                 EditorGUILayout.EndHorizontal();
+
+                                if (EditMode == EditMode.PropMode)
+                                {
+                                    if (n.CollisionType == CollisionType.Obstacle)
+                                        n.SetProp(EditorGUILayout.IntField(n.Prop, obstacleTypeStyle));
+                                }
+
+                                EditorGUILayout.EndVertical();
                             }
                             EditorGUILayout.EndVertical();
                         }

@@ -5,8 +5,7 @@ namespace MechanicFever
     public enum CollisionType
     {
         None,
-        Obstacle_01,
-        Obstacle_02,
+        Obstacle,
         Occupied
     }
 
@@ -22,6 +21,12 @@ namespace MechanicFever
         [SerializeField]
         private CollisionType _collisionType;
         public CollisionType CollisionType => _collisionType;
+
+        [SerializeField]
+        private int _prop = 0;
+        public int Prop => _prop;
+
+        public void SetProp(int prop) => _prop = prop;
 
         public Node(int x, int y, int z)
         {
