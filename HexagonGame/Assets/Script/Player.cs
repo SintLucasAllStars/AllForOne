@@ -21,14 +21,28 @@ public class Player
         InitPlayer();
     }
 
-    public string GetName() { return this.name; }
-
-    public int GetMoney() { return this.money; }
-    public void SetMoney(int a_Money) { this.money = a_Money; }
-
     public void AddWarrior(Actor a_Warrior)
     {
         warriors.Add(a_Warrior);
+    }
+
+    public void RemoveWarrior(Actor a_Warrior)
+    {
+        warriors.Remove(a_Warrior);
+    }
+
+    public bool CompareWarrior(Actor a_Warrior)
+    {
+        if (warriors.Contains(a_Warrior))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void RemoveWarriorCost(int a_Cost)
+    {
+        money -= a_Cost;
     }
 
     private void InitPlayer()
@@ -36,4 +50,14 @@ public class Player
         warriors = new List<Actor>();
         this.money = 100;
     }
+
+    public string GetName() { return this.name; }
+
+    public List<Actor> GetWarriors()
+    {
+        return warriors;
+    }
+
+    public int GetMoney() { return this.money; }
+    public void SetMoney(int a_Money) { this.money = a_Money; }
 }

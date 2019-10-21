@@ -11,16 +11,20 @@ public class WarriorCreation : MonoBehaviour
     public GameObject panelContainer;
     public GameObject warriorPrefab;
 
+    private Player curPlayer;
     private TileScript tile;
     private Vector3 warriorStartPos;
+
+    int warriorCost = 0;
 
     public void Start()
     {
         warriorStartPos = new Vector3(0, 0.25f, 0);
     }
 
-    public void OpenWarriorCreator(TileScript a_Tile)
+    public void OpenWarriorCreator(TileScript a_Tile, Player a_Player)
     {
+        this.curPlayer = a_Player;
         this.tile = a_Tile;
         OnValueChange();
         panelContainer.SetActive(true);
@@ -28,7 +32,7 @@ public class WarriorCreation : MonoBehaviour
 
     public void OnValueChange()
     {
-        int warriorCost = 0;
+        warriorCost = 0;
 
         for (int i = 0; i < sliders.Length; i++)
             warriorCost += (int)sliders[i].value;
@@ -43,6 +47,8 @@ public class WarriorCreation : MonoBehaviour
         spawnedWarrior.GetComponent<Actor>().SetWarrior(createdWarrior);
 
         tile.AddNewWarrior(spawnedWarrior.GetComponent<Actor>());
+        curPlayer.RemoveWarriorCost(warriorCost);
+        curPlayer.AddWarrior(spawnedWarrior.GetComponent<Actor>());
 
         panelContainer.SetActive(false);
     }

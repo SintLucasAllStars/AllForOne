@@ -8,6 +8,9 @@ public class TileScript : MonoBehaviour
     private Vector3[] positions;
     private float spawnGap;
 
+    [SerializeField]
+    private TileType tileType;
+
     private void Start()
     {
         warriors = new List<Actor>();
@@ -25,6 +28,11 @@ public class TileScript : MonoBehaviour
         return positions[warriors.Count];
     }
 
+    public TileType GetTileType()
+    {
+        return tileType;
+    }
+
     private void InitPositions()
     {
         positions = new Vector3[5];
@@ -35,4 +43,9 @@ public class TileScript : MonoBehaviour
         positions[4] = new Vector3(spawnGap, 0, -spawnGap);
     }
 
+}
+
+public enum TileType {
+    Outside,
+    Inside
 }

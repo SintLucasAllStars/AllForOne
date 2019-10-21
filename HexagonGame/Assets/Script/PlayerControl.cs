@@ -4,45 +4,57 @@ using UnityEngine;
 
 public class PlayerControl : Singelton<PlayerControl>
 {
+    [SerializeField]
+    private Transform CamPos;
+
     private float scrollSpeed;
     private Camera cam;
     private bool InTurn;
-
+    private Player curPlayer;
+    private Actor curWarrior;
+    private bool hasSelected;
+    private GameState gameState;
+    private int turnTime;
+    private DisplayManager displayManager;
     public WarriorCreation warriorCreation;
 
     public void Start()
     {
         cam = this.GetComponent<Camera>();
+        displayManager = DisplayManager.Instance;
         scrollSpeed = 10;
+        turnTime = 10;
     }
 
-    private void SetTurn()
+    public void SetTurn(Player a_CurPlayer, GameState a_GameState)
     {
+        curPlayer = a_CurPlayer;
+        gameState = a_GameState;
         InTurn = true;
     }
 
     private void Update()
     {
-        if (InTurn) {
+        if (InTurn && !hasSelected) {
             CheckInput();
         }
     }
 
     private void FixedUpdate()
     {
-        if (InTurn) {
-            Move();
-        }
+        Move();
     }
 
     private void Move()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        float zoom = Input.GetAxis("Mouse ScrollWheel");
+        if (hasSelected == false) {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            float zoom = Input.GetAxis("Mouse ScrollWheel");
 
-        transform.Translate(horizontal, vertical, zoom * scrollSpeed);
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, 4, 14), Mathf.Clamp(transform.position.y, 6, 15), Mathf.Clamp(transform.position.z, 6, 16));
+            transform.Translate(horizontal, vertical, zoom * scrollSpeed);
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, 4, 14), Mathf.Clamp(transform.position.y, 6, 15), Mathf.Clamp(transform.position.z, 6, 16));
+        }
     }
 
     private void CheckInput()
@@ -59,10 +71,92 @@ public class PlayerControl : Singelton<PlayerControl>
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            InTurn = false;
-            warriorCreation.OpenWarriorCreator(hit.transform.gameObject.GetComponent<TileScript>());
+            switch (gameState)
+            {
+                case GameState.CreateStage:
+                    hasSelected = true;
+                    warriorCreation.OpenWarriorCreator(hit.transform.gameObject.GetComponent<TileScript>(), curPlayer);
+                    break;
+                case GameState.FightStage:
+                    curWarrior = hit.transform.GetComponent<Actor>();
+                    if (curWarrior == null) { return; }
+                    if (curPlayer.CompareWarrior(curWarrior))
+                    {
+                        SelectWarrior(curWarrior);
+                        displayManager.ResetEventText();
+                        StartCoroutine(StartTurnTime());
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
+    private void SelectWarrior(Actor a_Warrior) {
+        hasSelected = true;
+        StartCoroutine(MoveTowards(cam.transform, a_Warrior.GetCameraPoint(), 0.1f, false));
+        StartCoroutine(RotateTowards(cam.transform, a_Warrior.GetCameraPoint(), 1.5f));
+        a_Warrior.GetWarrior().SetIsSelected(true);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private IEnumerator MoveTowards(Transform a_Object, Transform a_TargetPos, float a_MDD, bool a_DisableControl)
+    {
+        while(Vector3.Distance(a_Object.transform.position, a_TargetPos.position) > 0.001f)
+        {
+            a_Object.transform.position = Vector3.MoveTowards(a_Object.position, a_TargetPos.position, a_MDD);
+            yield return new WaitForEndOfFrame();
+        }
+        if (a_DisableControl == false)
+            a_Object.transform.parent = a_TargetPos;
+        else 
+            hasSelected = false;
+    }
+
+    private IEnumerator RotateTowards(Transform a_Object, Transform a_TargetPos, float a_MDD)
+    {
+        while (Vector3.Distance(a_Object.transform.rotation.eulerAngles, a_TargetPos.rotation.eulerAngles) > 0.1f)
+        {
+            a_Object.rotation = Quaternion.RotateTowards(a_Object.rotation, a_TargetPos.rotation, a_MDD);
+            yield return new WaitForEndOfFrame();
+        }   
+    }   
+
+    private IEnumerator StartTurnTime()
+    {
+        displayManager.displayTime(turnTime);
+        turnTime -= 1;
+        if (turnTime >= 0)
+        {
+            yield return new WaitForSeconds(1);
+            StartCoroutine(StartTurnTime());
+        }
+        else
+            TimeUp();
+    }
+
+    public void TimeUp()
+    {
+        cam.transform.parent = null;
+        setInTurn(false);
+        curWarrior.GetWarrior().SetIsSelected(false);
+        displayManager.RemoveDisplayTime();
+        StartCoroutine(MoveTowards(cam.transform, CamPos, 0.1f, true));
+        StartCoroutine(RotateTowards(cam.transform, CamPos, 1f));
+        Cursor.lockState = CursorLockMode.None;
+        turnTime = 10;
+        curWarrior.EndofTurn();
+        if (curWarrior.IsDeath()) curPlayer.RemoveWarrior(curWarrior);
+    }
+
+    public void removeWarrior(Actor a_Warrior)
+    {
+        curPlayer.RemoveWarrior(a_Warrior);
+    }
+
     public void SetCanSelect(bool a_CanSelect) { this.InTurn = a_CanSelect; }
+    public void setInTurn(bool a_InTurn) { InTurn = a_InTurn; }
+    public bool IsInTurn() { return InTurn; }
+    public void setHasSelected(bool a_HasSelected) { hasSelected = a_HasSelected; }
 }
