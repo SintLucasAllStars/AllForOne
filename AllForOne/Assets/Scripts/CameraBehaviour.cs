@@ -8,7 +8,8 @@ public class CameraBehaviour : MonoBehaviour
     public float turnspeed;
     public Transform target;
     public float lerpSpeed;
-
+    private Vector3 startpos;
+    private Quaternion startRot;
     [SerializeField]
     private Vector3 offsetPosition;
 
@@ -34,10 +35,10 @@ public class CameraBehaviour : MonoBehaviour
     }
     void Start()
     {
-        
+        startpos = transform.position;
+        startRot = transform.rotation;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         float horizontal = Input.GetAxis("Horizontal");
@@ -76,5 +77,11 @@ public class CameraBehaviour : MonoBehaviour
         {
             transform.rotation = target.rotation;
         }
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = startpos;
+        transform.rotation = startRot;
     }
 }

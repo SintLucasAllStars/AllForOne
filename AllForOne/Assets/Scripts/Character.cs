@@ -16,8 +16,8 @@ public class Character : MonoBehaviour
         playerController = GetComponent<ThirdPersonUserControl>();
         playerControllerSettings = GetComponent<ThirdPersonCharacter>();
         characterState = CharacterStates.Idle;
-        playerControllerSettings.m_MoveSpeedMultiplier = playerControllerSettings.m_MoveSpeedMultiplier * actor.speed / 4;
-        playerControllerSettings.m_AnimSpeedMultiplier = playerControllerSettings.m_AnimSpeedMultiplier * actor.speed / 4;
+        playerControllerSettings.m_MoveSpeedMultiplier = playerControllerSettings.m_MoveSpeedMultiplier * (actor.speed / 5);
+        playerControllerSettings.m_AnimSpeedMultiplier = playerControllerSettings.m_AnimSpeedMultiplier * (actor.speed / 5);
 
     }
     public void Update()
@@ -25,12 +25,18 @@ public class Character : MonoBehaviour
         switch (characterState)
         {
             case CharacterStates.Idle:
-                if(playerController.enabled)
-                playerController.enabled = false;
+                if (playerController.enabled)
+                {
+                    playerController.enabled = false;
+                    playerControllerSettings.enabled = false;
+                }
                 break;
             case CharacterStates.Moving:
                 if (!playerController.enabled)
+                {
                     playerController.enabled = true;
+                    playerControllerSettings.enabled = true;
+                }
                 break;
         }
     }

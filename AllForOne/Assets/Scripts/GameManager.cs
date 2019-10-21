@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 public enum GameStates {Create,Place, Select,Move}
 public enum TurnState {Player1,Player2}
 public class GameManager : MonoBehaviour
@@ -16,6 +17,10 @@ public class GameManager : MonoBehaviour
     private float points;
     public Player curPlayer;
     public GameObject selectedPlayer;
+
+    public float roundTime = 10.0f;
+    public float timeLeft = 10.0f;
+    public Text startText;
 
 
     public void Awake()
@@ -80,6 +85,7 @@ public class GameManager : MonoBehaviour
             case GameStates.Move:
                 UpdateBuyWindow(false);
                 MoveSelectedPlayer(selectedPlayer);
+                Timer();
                 break;
         }
     }
@@ -108,6 +114,7 @@ public class GameManager : MonoBehaviour
                 turn = TurnState.Player1;
                 break;
         }
+        timeLeft = roundTime;
     }
     public void ReadyUp()
     {
@@ -127,6 +134,21 @@ public class GameManager : MonoBehaviour
     {
         Character player = selectedPlayer.GetComponent<Character>();
         player.characterState = CharacterStates.Moving;
+    }
+
+    public void Timer()
+    {
+        timeLeft -= Time.deltaTime;
+        startText.text = (timeLeft).ToString("0");
+        if (timeLeft < 0)
+        {
+            SwitchState(GameStates.Select);
+            NextTurn();
+            Character player = selectedPlayer.GetComponent<Character>();
+            player.characterState = CharacterStates.Idle;
+            CameraBehaviour.instance.ResetPosition();
+        }
+
     }
 
 }
