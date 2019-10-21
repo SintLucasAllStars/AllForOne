@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraController : Singleton<CameraController>
 {
+    public GameObject test;
     // Use this for initialization
     void Start()
     {

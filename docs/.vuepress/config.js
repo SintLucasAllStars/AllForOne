@@ -8,6 +8,7 @@ module.exports = {
             { text: 'Home', link: '/' },
             { text: 'Docs', link: '/Scripts/' },
             { text: 'How to use', link: '/HowToUse/' },
+            { text: 'Contact', link: '/Contact' }
         ],
         sidebar: {
             '/Scripts/':

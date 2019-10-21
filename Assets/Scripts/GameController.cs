@@ -1,5 +1,6 @@
 ﻿using System;
-
+using UnityEngine;
+using System.Collections;
 public class GameController : Singleton<GameController>
 {
     public int width, depth;
@@ -14,7 +15,7 @@ public class GameController : Singleton<GameController>
     // Use this for initialization
     void Start()
     {
-        isCurrentPlayerOne = true;
+
     }
 
     // Update is called once per frame
@@ -27,15 +28,19 @@ public class GameController : Singleton<GameController>
     {
         try
         {
-            if (isCurrentPlayerOne)
+            if (isCurrentPlayerOne && players[0].amountOfPoints > 10)
             {
                 players[0].units.Add(_unit);
                 players[0].amountOfPoints -= Unit.Cost(_strength, _speed, _range, _defense);
             }
-            else if (!isCurrentPlayerOne)
+            else if (!isCurrentPlayerOne && players[0].amountOfPoints > 10)
             {
                 players[1].units.Add(_unit);
                 players[1].amountOfPoints -= Unit.Cost(_strength, _speed, _range, _defense);
+            }
+            else
+            {
+                isCurrentPlayerOne = !isCurrentPlayerOne;
             }
         }
         catch (NullReferenceException a)
@@ -44,13 +49,48 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    public void MainLoopCountDown()
+    public bool PlaceUnit()
     {
+        if (isCurrentPlayerOne)
+        {
+            if (players[0].units.Count > 0)
+            {
 
+            }
+        }
+        else
+        {
+            if (players[1].units.Count > 0)
+            {
+
+            }
+        }
+        return false;
+    }
+
+    #region CountDown
+
+    IEnumerator Timer()
+    {
+        int timeLeft = 10;
+        UIController.instance.CountDownTimer(timeLeft);
+        for (int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds(1f);
+            timeLeft--;
+            UIController.instance.CountDownTimer(timeLeft);
+        }
+        TimersUp();
+    }
+
+    private void TimersUp()
+    {
+        throw new NotImplementedException();
     }
 
     public void HaltCountDown(int secondsToWait)
     {
         throw new NotImplementedException();
     }
+    #endregion
 }

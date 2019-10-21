@@ -4,12 +4,11 @@ using System.Collections;
 
 namespace IExtraFunctions
 {
-    public class WaitTimer : MonoBehaviour
+    public class Timer : MonoBehaviour
     {
-        static public WaitTimer _waitTimer;
+        static public Timer _waitTimer = new Timer();
         public static void Wait(float secondsToWait, Action action)
         {
-            _waitTimer = new WaitTimer();
             _waitTimer.StartCoroutine(_wait(action, secondsToWait));
         }
 

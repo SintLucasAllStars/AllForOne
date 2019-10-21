@@ -71,8 +71,8 @@ public class UIController : Singleton<UIController>
     public void ShowBuyScreen()
     {
         float speed = 1f;
-        int[] pos;
-        pos = new int[2] { 0, -480 };
+        int[] pos = new int[2] { 0, -480 };
+
         if (IsBuyScreenShowing)
         {
             LeanTween.moveY(BuyRoot, pos[1], speed);
