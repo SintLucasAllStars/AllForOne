@@ -51,7 +51,7 @@ public class UnitPlacer : MonoBehaviour
                     Vector3 targetLocation = hit.point;
                     targetLocation += new Vector3(0, transform.localScale.y / 2, 0);
                     GameObject newUnit = Instantiate(unitP1, targetLocation, Quaternion.identity);
-                    //newUnit.transform.parent = UnitListP1.transform;
+                    newUnit.transform.parent = UnitListP1.transform;
 
                     UnitValues uvScript = newUnit.GetComponent<UnitValues>();
                     uvScript.health = svScript.sliderValue3[0];

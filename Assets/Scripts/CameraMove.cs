@@ -12,6 +12,7 @@ public class CameraMove : MonoBehaviour
     public float speed = 2.0f;
 
     public PlayerController pcScript;
+    public PlayerSwitcher psScript;
 
     bool camMoveOn, backToTop;
 
@@ -103,6 +104,7 @@ public class CameraMove : MonoBehaviour
         objectToFollow = GameObject.Find("CamTop");
         Camera.main.transform.parent = objectToFollow.transform;
         pcScript.walkOn = false;
+        psScript.SwitchPlayer();
         //camMoveOn = true;
         timer.SetActive(false);
     }

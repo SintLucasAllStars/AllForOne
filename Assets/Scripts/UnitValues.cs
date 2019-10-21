@@ -5,7 +5,7 @@ using UnityEngine;
 public class UnitValues : MonoBehaviour
 {
 
-    public int health, strength, speed, defense;
+    public float health, strength, speed, defense;
 
     void Start()
     {

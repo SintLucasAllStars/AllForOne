@@ -13,6 +13,12 @@ public class PlayerController : MonoBehaviour
 
     public bool walkOn;
 
+    public float e_health, e_strength, e_defense = 1f;
+
+    public int rayDistance;
+
+    RaycastHit hit;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -55,6 +61,55 @@ public class PlayerController : MonoBehaviour
 
             //this.transform.position += Vector3.Normalize(targetDirection);
             //rb.AddForce(targetDirection * speed);
+            if (e_health <= 0)
+            {
+                Destroy(hit.transform.gameObject);
+                e_health = 1;
+            }
+            else
+            {
+                
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, rayDistance))
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                if (hit.transform.tag == "u_Player2")
+                {
+                    Debug.Log("Attack");
+                    e_health = hit.transform.gameObject.GetComponent<UnitValues>().health;
+                    e_strength = hit.transform.gameObject.GetComponent<UnitValues>().strength;
+                    e_defense = hit.transform.gameObject.GetComponent<UnitValues>().defense;
+
+                    e_health -= (this.GetComponent<UnitValues>().strength / e_defense);
+
+                    hit.transform.gameObject.GetComponent<UnitValues>().health = e_health;
+                }
+                else if (hit.transform.tag == "u_Player1")
+                {
+                    Debug.Log("Attack");
+                    e_health = hit.transform.gameObject.GetComponent<UnitValues>().health;
+                    e_strength = hit.transform.gameObject.GetComponent<UnitValues>().strength;
+                    e_defense = hit.transform.gameObject.GetComponent<UnitValues>().defense;
+
+                    e_health -= (this.GetComponent<UnitValues>().strength / e_defense);
+
+                    hit.transform.gameObject.GetComponent<UnitValues>().health = e_health;
+                }
+            }
+        }
+
+        if (GameObject.FindGameObjectsWithTag("u_Player1").Length == 0 && walkOn)
+        {
+            Debug.Log("Player 2 WINS!");
+        }
+
+        if (GameObject.FindGameObjectsWithTag("u_Player2").Length == 0 && walkOn)
+        {
+            Debug.Log("Player 1 WINS!");
         }
     }
 }

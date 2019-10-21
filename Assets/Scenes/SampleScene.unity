@@ -2912,8 +2912,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b6a648847d1a284c92fb530dad1775b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxTime: 10
   slider: {fileID: 247466184}
   cmScript: {fileID: 963194229}
+  playerTurnText: {fileID: 245613959}
 --- !u!4 &251939003 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 483054, guid: 857b9bcf7311f5a49b829c4fd3cc791f,
@@ -7974,6 +7976,7 @@ MonoBehaviour:
   objectToFollow: {fileID: 0}
   speed: 0.05
   pcScript: {fileID: 0}
+  psScript: {fileID: 1962206860}
   timer: {fileID: 247466182}
 --- !u!4 &964968472 stripped
 Transform:
@@ -8873,6 +8876,7 @@ MonoBehaviour:
   objectToFollow: {fileID: 105563926}
   speed: 0.5
   pcScript: {fileID: 0}
+  psScript: {fileID: 0}
   timer: {fileID: 0}
 --- !u!81 &1175910315
 AudioListener:
@@ -16343,7 +16347,7 @@ MonoBehaviour:
   gameUI: {fileID: 1501809442}
   switchPlayer: 0
   scriptOn: 0
-  switchplayer: 0
+  pcScript: {fileID: 0}
 --- !u!4 &1962206861
 Transform:
   m_ObjectHideFlags: 0
