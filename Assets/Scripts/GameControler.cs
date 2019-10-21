@@ -54,9 +54,17 @@ public class GameControler : MonoBehaviour
                 return;
             }
 
-            _focusedUnit = (Unit) hit.collider.gameObject.GetComponent(typeof(Unit));
+            Unit unit = (Unit) hit.collider.gameObject.GetComponent(typeof(Unit));
+            GameManager gameManager = GameManager.GetGameManager();
+
+            if (unit.color != gameManager.GetCurrentPlayer().GetColor())
+            {
+                return;
+            }
+            
+            _focusedUnit = unit;
             _moveToUnit = true;
-            GameManager.GetGameManager().SetGameState(GameManager.GameState.CameraMovement);
+            gameManager.SetGameState(GameManager.GameState.CameraMovement);
         }
     }
     

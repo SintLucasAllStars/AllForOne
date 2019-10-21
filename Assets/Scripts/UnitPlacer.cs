@@ -47,6 +47,7 @@ public class UnitPlacer : MonoBehaviour
             {
                 Unit unit = Instantiate(unitPrefab, hit.point + new Vector3(0, 1, 0), Quaternion.identity);
                 unit.Initialize(
+                    currentPlayer.GetColor(),
                     healthSlider.value/healthSlider.maxValue, 
                     strengthSlider.value/strengthSlider.maxValue, 
                     speedSlider.value/speedSlider.maxValue, 
