@@ -10,7 +10,7 @@ namespace MechanicFever
         private string[] _types;
 
         private int _health, _strength, _speed, _defense;
-        private string _type;
+        private string _type = "Overlord";
 
         [SerializeField]
         private TextMeshProUGUI _priceText, _healthValueText, _strengthValueText, _speedValueText, _defenseValueText;
@@ -32,9 +32,9 @@ namespace MechanicFever
     Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))), _types[Random.Range(0, _types.Length)]);
         }
 
-        public void UpdateValues() => UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value), _type);
+        public void UpdateValues() => UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value), _type, true);
 
-        public void UpdateValues(int health, int strength, int speed, int defense, string type)
+        public void UpdateValues(int health, int strength, int speed, int defense, string type, bool sliders = false)
         {
             _health = health;
             _strength = strength;
@@ -44,8 +44,11 @@ namespace MechanicFever
 
             UpdatePlayerUnit();
             UpdateText();
-            SetSliderValues(_health, _strength, _speed, _defense);
             SpawnUnit();
+
+            if (sliders)
+                return;
+            SetSliderValues(_health, _strength, _speed, _defense);
         }
 
         private void SpawnUnit()
@@ -62,11 +65,6 @@ namespace MechanicFever
             _strengthSlider.value = strength;
             _speedSlider.value = speed;
             _defenseSlider.value = defense;
-
-            _healthValueText.text = health.ToString();
-            _strengthValueText.text = strength.ToString();
-            _speedValueText.text = speed.ToString();
-            _defenseValueText.text = defense.ToString();
         }
 
         private void UpdatePlayerUnit()
@@ -79,9 +77,13 @@ namespace MechanicFever
         {
             int price = CalculateUnitPrice(_health, _strength, _speed, _defense);
             _priceText.text = price.ToString();
+
+            _healthValueText.text = _health.ToString();
+            _strengthValueText.text = _strength.ToString();
+            _speedValueText.text = _speed.ToString();
+            _defenseValueText.text = _defense.ToString();
         }
 
         public int CalculateUnitPrice(int health, int strength, int speed, int defense) => (3 * health) + (3 * _speed) + (2 * strength) + (2 * defense);
     }
-
 }
