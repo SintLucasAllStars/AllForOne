@@ -23,8 +23,8 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(100, PlayerPrefs.GetString("Name1"), "Red", mario);
-        player2 = new Player(100, PlayerPrefs.GetString("Name2"), "Blue", luigi);
+        player1 = new Player(10, PlayerPrefs.GetString("Name1"), "Red", mario);
+        player2 = new Player(10, PlayerPrefs.GetString("Name2"), "Blue", luigi);
         currentplayer = player1;
         //SpawnWeapons();
     }
@@ -49,7 +49,6 @@ public class Gamemanager : MonoBehaviour
             currentplayer = player1;
             canvas.SetActive(false);
             topview.SetActive(true);
-            SpawnWeapons();
         }
 
         else
@@ -95,7 +94,7 @@ public class Gamemanager : MonoBehaviour
         for (int i = 0; i < totalPowerups; i++)
         {
             Transform tempPos = ground[Random.Range(0, ground.Count)].transform;
-            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, transform.position.y + .3f, transform.position.z + 1), Quaternion.identity);
+            Instantiate(weapons[Random.Range(0, weapons.Count)], new Vector3(tempPos.transform.position.x, tempPos.transform.position.y + .8f, tempPos.transform.position.z + 1), Quaternion.identity);
         }
     }
 }

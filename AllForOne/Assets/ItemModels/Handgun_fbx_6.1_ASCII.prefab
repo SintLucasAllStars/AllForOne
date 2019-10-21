@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2655367484583872556}
   - component: {fileID: 6457630965895389573}
   - component: {fileID: 3379853903393629487}
+  - component: {fileID: 8313063294670090019}
   m_Layer: 0
   m_Name: Gun_trigger
   m_TagString: Untagged
@@ -77,6 +78,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!122 &8313063294670090019
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4057291029465763253}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4278255606
+  m_Size: 0.3
 --- !u!1 &5007307212569579184
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +387,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93cc338ffab541438297bce1865ed4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotateY: 0
+  rotateZ: 0
 --- !u!54 &8793887485710969406
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour
     bool fortify = false;
     public TextMeshProUGUI healthTxt, speedTxt, strengthTxt, defenceTxt;
     public TextMesh Text3d;
+    public Text timer;
 
     public bool isSelected = false;
     
@@ -67,6 +68,10 @@ public class Unit : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 SetFortify();
+            }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                anim.Play("Dance");
             }
         }
     }
@@ -196,7 +201,13 @@ public class Unit : MonoBehaviour
 
     IEnumerator Timer()
     {
-        yield return new WaitForSeconds(10);
+        int timeLeft = 10;
+        for (int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds(1);
+            timeLeft--;
+            timer.text = timeLeft.ToString();
+        }
         EndTurn();
     }
 
@@ -251,9 +262,10 @@ public class Unit : MonoBehaviour
                 weaponImg.sprite = weapons[4];
                 Destroy(collision.gameObject);
                 break;
-            //case "Lava":
-            //    Die();
-            //    break;
+            case "Lava":
+                EndTurn();
+                Die();
+                break;
         }
     }
 }

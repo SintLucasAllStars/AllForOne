@@ -15,6 +15,11 @@ public class TopView : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        Gamemanager.instance.SpawnWeapons();
+    }
+
     private void Update()
     {
         turnImg.sprite = Gamemanager.instance.currentplayer.characterImg;
