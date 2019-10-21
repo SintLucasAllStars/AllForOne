@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class Map : Singleton<Map>
     {
@@ -13,64 +13,62 @@ namespace AllForOne
         private MapX[] _grid = new MapX[0];
         public MapX[] Grid => _grid;
 
+        private Tile[,] _tiles;
+
         public GameObject Tile, RedTile;
 
         public void SetMap(MapX[] map) => _grid = map;
 
         private void Start()
         {
+            _tiles = new Tile[_sizeX, _sizeZ];
             for (int x = 0; x < _sizeX; x++)
             {
                 for (int z = 0; z < _sizeZ; z++)
                 {
-                    Tile tile;
                     if (_grid[x].Columns[z].CollisionType == CollisionType.None)
-                        tile = Instantiate(Tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                        _tiles[x, z] = Instantiate(Tile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
                     else
-                        tile = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
+                        _tiles[x, z] = Instantiate(RedTile, new Vector3(x, 0, z), Quaternion.identity, this.transform).GetComponent<Tile>();
                 }
             }
             Screen.fullScreen = false;
         }
 
-        public Node GetNode(int x, int y)
+        public Node GetNode(int x, int z)
         {
-            if (x < 0 || x > _sizeX - 1 || y < 0 || y > _sizeZ - 1)
+            if (x < 0 || x > _sizeX - 1 || z < 0 || z > _sizeZ - 1)
             {
                 if (x < 0)
                     x = 0;
                 if (x > _sizeX - 1)
                     x = _sizeX - 1;
-                if (y < 0)
-                    y = 0;
-                if (y > _sizeZ - 1)
-                    y = _sizeZ - 1;
+                if (z < 0)
+                    z = 0;
+                if (z > _sizeZ - 1)
+                    z = _sizeZ - 1;
             }
 
-            return Grid[x].Columns[y];
+            return Grid[x].Columns[z];
         }
 
-        public void OccupieNode(int x, int y)
+        public void OccupyNode(Node node, PlayerUnit unit)
         {
-            Node n = GetNode(x, y);
-            n.SetCollisionType(CollisionType.Occupied);
+            Node n = GetNode(node.X, node.Z);
+            _tiles[n.X, n.Z].Occupy(unit);
+            _grid[n.X].Columns[n.Z].SetCollisionType(CollisionType.Occupied);
         }
 
         public void ResetOldNode(int x, int y) => Grid[x].Columns[y].SetCollisionType(CollisionType.None);
 
-        public bool IsValidNode(int x, int y)
+        public bool IsValidNode(int x, int z)
         {
-            Debug.Log("[" + x + ", " + y + "]");
-            //BORDERS
-            if (x == _sizeX - 1 || y == _sizeZ - 1 || y == 0 || x == 0)
-                return false;
-
             //WALL DETECTION
-            if (Grid[x].Columns[y].GetCollisionType() == CollisionType.Obstacle)
+            if (Grid[x].Columns[z].GetCollisionType() == CollisionType.Obstacle)
                 return false;
 
             //UNIT DETECTION
-            if (Grid[x].Columns[y].GetCollisionType() == CollisionType.Occupied)
+            if (Grid[x].Columns[z].GetCollisionType() == CollisionType.Occupied)
                 return false;
 
             return true;

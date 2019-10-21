@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     [CustomEditor(typeof(Map))]
     public class CustomMapEditor : Editor
@@ -90,12 +90,12 @@ namespace AllForOne
                         for (int x = 0; x < map.Grid.Length; x++)
                         {
                             EditorGUILayout.BeginVertical(columnStyle);
-                            for (int y = 0; y < map.Grid[x].Columns.Length; y++)
+                            for (int z = 0; z < map.Grid[x].Columns.Length; z++)
                             {
                                 EditorGUILayout.BeginHorizontal(rowStyle);
                                 GUIStyle styleToUse = normalStyle;
 
-                                switch (map.Grid[x].Columns[y].CollisionType)
+                                switch (map.Grid[x].Columns[z].CollisionType)
                                 {
                                     case CollisionType.Obstacle:
                                         styleToUse = wallStyle;
@@ -105,8 +105,8 @@ namespace AllForOne
                                         break;
                                 }
 
-                                map.Grid[x].Columns[y].SetCollisionType((CollisionType)EditorGUILayout.EnumPopup(map.Grid[x].Columns[y].CollisionType, styleToUse));
-                                map.Grid[x].Columns[y].SetPosition(x, 0, y);
+                                map.Grid[x].Columns[z].SetCollisionType((CollisionType)EditorGUILayout.EnumPopup(map.Grid[x].Columns[z].CollisionType, styleToUse));
+                                map.Grid[x].Columns[z].SetPosition(x, 0, z);
 
                                 EditorGUILayout.EndHorizontal();
                             }
@@ -120,7 +120,7 @@ namespace AllForOne
             serializedObject.ApplyModifiedProperties();
         }
 
-        void GenerateMap(Map map)
+        private void GenerateMap(Map map)
         {
             if (map.Grid.Length != map.SizeX)
                 map.SetMap(new MapX[map.SizeX]);
@@ -130,9 +130,9 @@ namespace AllForOne
                 {
                     Columns = new Node[map.SizeZ]
                 };
-                for (int y = 0; y < map.Grid[x].Columns.Length; y++)
+                for (int z = 0; z < map.Grid[x].Columns.Length; z++)
                 {
-                    map.Grid[x].Columns[y] = new Node(x, y, 0);
+                    map.Grid[x].Columns[z] = new Node(x, z, 0);
                 }
             }
             serializedObject.ApplyModifiedProperties();

@@ -1,4 +1,4 @@
-﻿namespace AllForOne
+﻿namespace MechanicFever
 {
     public class SceneManager : Singleton<SceneManager>
     {

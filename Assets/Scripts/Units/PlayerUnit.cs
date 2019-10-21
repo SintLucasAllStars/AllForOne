@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class PlayerUnit : MonoBehaviour
     {
@@ -35,6 +35,8 @@ namespace AllForOne
             _gameData.SetPosition(node);
 
             transform.localPosition = Node.ToVector(_gameData.Position);
+
+            Map.Instance.OccupyNode(node, this);
         }
 
         public void SetGameData(UnitData data) => _gameData = data;

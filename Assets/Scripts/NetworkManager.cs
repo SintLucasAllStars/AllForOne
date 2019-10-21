@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WebSocketSharp;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class NetworkManager : Singleton<NetworkManager>
     {

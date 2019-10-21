@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class TurnManager : Singleton<TurnManager>
     {

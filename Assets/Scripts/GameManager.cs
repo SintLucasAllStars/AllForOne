@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class GameManager : Singleton<GameManager>
     {

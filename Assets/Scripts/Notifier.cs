@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class Notifier : Singleton<Notifier>
     {

@@ -1,30 +1,24 @@
 ﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class Tile : MonoBehaviour
     {
         private Node _position;
         public Node Position => _position;
 
+        private PlayerUnit _occupiedBy;
+        public PlayerUnit OccupiedBy => _occupiedBy;
+
         private void Awake()
         {
             _position = Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));
         }
 
-        private void OnMouseDown()
+        public void Occupy(PlayerUnit unit)
         {
-            switch (_position.CollisionType)
-            {
-                case CollisionType.None:
-                    break;
-                case CollisionType.Obstacle:
-                    Debug.Log("Obstacle");
-                    break;
-                case CollisionType.Occupied:
-                    Debug.Log("Occupied");
-                    break;
-            }
+            _occupiedBy = unit;
+            _position.SetCollisionType(CollisionType.Occupied);
         }
     }
 }

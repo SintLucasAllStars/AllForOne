@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace AllForOne
+﻿namespace MechanicFever
 {
     public class ConnectButton : Button
     {

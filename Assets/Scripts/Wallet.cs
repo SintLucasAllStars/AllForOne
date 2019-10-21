@@ -1,4 +1,4 @@
-﻿namespace AllForOne
+﻿namespace MechanicFever
 {
     [System.Serializable]
     public class Wallet

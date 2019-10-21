@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
-    [Serializable]
+    [System.Serializable]
     public class Message
     {
         public string GameData = "";

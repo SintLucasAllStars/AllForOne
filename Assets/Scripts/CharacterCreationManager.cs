@@ -1,9 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class CharacterCreationManager : Singleton<CharacterCreationManager>
     {

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public class UnitPlacementSystem : Singleton<UnitPlacementSystem>
     {

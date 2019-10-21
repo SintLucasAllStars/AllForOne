@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     [System.Serializable]
     public class UnitData : GameData

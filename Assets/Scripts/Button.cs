@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
-    public class Button : MonoBehaviour
+    public abstract class Button : MonoBehaviour
     {
         public virtual void Press()
         {
-
+            //content
         }
     }
 }

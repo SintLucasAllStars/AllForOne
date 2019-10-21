@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AllForOne
+namespace MechanicFever
 {
     public enum CollisionType
     {
