@@ -62,8 +62,6 @@ var server = ws.createServer(function (conn)
 		if (msg._type == "Player")
 		{
 			conn.id = msg._guid;
-			
-			console.log(conn.id);
 
 			for (var index in units)
 				conn.sendText(JSON.stringify(units[index]));
@@ -72,7 +70,7 @@ var server = ws.createServer(function (conn)
 			
 			setPlayerColor(conn.id);
 
-			console.log("Client " conn.id + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
+			console.log("Client " + conn.id + " joined the game. (" + Object.keys(players).length + "/" + maxConnections + ").");
 
 			updateClient(JSON.stringify(players[conn.id]));
 			

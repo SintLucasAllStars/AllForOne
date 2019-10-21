@@ -44,14 +44,19 @@ namespace MechanicFever
 
         private void UpdatePlayerUnit()
         {
-            int price = Player.Instance.CalculateUnitPrice(_health, _strength, _speed, _defense);
+            int price = CalculateUnitPrice(_health, _strength, _speed, _defense);
             Player.Instance.SetPlayerUnit(new UnitData("", new Node(), "", true, true, PlayerSide.Red, _health, _strength, _speed, _defense, price));
         }
 
         private void UpdateText()
         {
-            int price = Player.Instance.CalculateUnitPrice(_health, _strength, _speed, _defense);
+            int price = CalculateUnitPrice(_health, _strength, _speed, _defense);
             _priceText.text = price.ToString();
+        }
+
+        public int CalculateUnitPrice(int health, int strength, int speed, int defense)
+        {
+            return (3 * health) + (3 * _speed) + (2 * strength) + (2 * defense);
         }
     }
 

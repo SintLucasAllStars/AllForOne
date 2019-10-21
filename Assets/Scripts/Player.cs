@@ -35,11 +35,6 @@ namespace MechanicFever
             _playerUnit = gameData;
         }
 
-        public int CalculateUnitPrice(int health, int strength, int speed, int defense)
-        {
-            return health + strength + speed + defense;
-        }
-
         public static Color32 GetColor(PlayerSide side)
         {
             if (side == PlayerSide.Blu)
