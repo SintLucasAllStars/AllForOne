@@ -6,11 +6,21 @@ namespace MechanicFever
 {
     public class CharacterCreationManager : Singleton<CharacterCreationManager>
     {
+        [SerializeField]
+        private string[] _types;
+
         private int _health, _strength, _speed, _defense;
+        private string _type;
+
         [SerializeField]
         private TextMeshProUGUI _priceText, _healthValueText, _strengthValueText, _speedValueText, _defenseValueText;
         [SerializeField]
         private Slider _healthSlider, _strengthSlider, _speedSlider, _defenseSlider;
+
+        private GameObject _showCaseUnit;
+
+        [SerializeField]
+        private Transform _showCaseContainer;
 
         private void Start() => SetRandomValues();
 
@@ -19,21 +29,31 @@ namespace MechanicFever
             UpdateValues(Mathf.RoundToInt(Random.Range(_healthSlider.minValue + (_healthSlider.maxValue / 4), _healthSlider.maxValue - (_healthSlider.maxValue / 4))),
     Mathf.RoundToInt(Random.Range(_strengthSlider.minValue + (_strengthSlider.maxValue / 4), _strengthSlider.maxValue - (_strengthSlider.maxValue / 4))),
     Mathf.RoundToInt(Random.Range(_speedSlider.minValue + (_speedSlider.maxValue / 4), _speedSlider.maxValue - (_speedSlider.maxValue / 4))),
-    Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))));
+    Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))), _types[Random.Range(0, _types.Length)]);
         }
 
-        public void UpdateValues() => UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value));
+        public void UpdateValues() => UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value), _type);
 
-        public void UpdateValues(int health, int strength, int speed, int defense)
+        public void UpdateValues(int health, int strength, int speed, int defense, string type)
         {
             _health = health;
             _strength = strength;
             _speed = speed;
             _defense = defense;
+            _type = type;
 
             UpdatePlayerUnit();
             UpdateText();
             SetSliderValues(_health, _strength, _speed, _defense);
+            SpawnUnit();
+        }
+
+        private void SpawnUnit()
+        {
+            if (_showCaseUnit)
+                Destroy(_showCaseUnit);
+
+            _showCaseUnit = Instantiate(Resources.Load<GameObject>(_type), _showCaseContainer);
         }
 
         private void SetSliderValues(int health, int strength, int speed, int defense)
@@ -52,7 +72,7 @@ namespace MechanicFever
         private void UpdatePlayerUnit()
         {
             int price = CalculateUnitPrice(_health, _strength, _speed, _defense);
-            Player.Instance.SetPlayerUnit(new UnitData("", new Node(), "", true, true, PlayerSide.Red, _health, _strength, _speed, _defense, price));
+            Player.Instance.SetPlayerUnit(new UnitData("", new Node(), _type, true, true, PlayerSide.Red, _health, _strength, _speed, _defense, price));
         }
 
         private void UpdateText()

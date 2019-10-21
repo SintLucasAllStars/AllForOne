@@ -9,6 +9,10 @@ namespace MechanicFever
 
         private void Start()
         {
+            //Check for the unit creation scene.
+            if (!GameManager.Instance)
+                return;
+
             _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
             Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
             for (int i = 0; i < cubeRenderer.Length; i++)
