@@ -23,8 +23,8 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(100, "Henk", "Red", mario);
-        player2 = new Player(100, "Roderik", "Blue", luigi);
+        player1 = new Player(100, PlayerPrefs.GetString("Name1"), "Red", mario);
+        player2 = new Player(100, PlayerPrefs.GetString("Name2"), "Blue", luigi);
         currentplayer = player1;
         SpawnWeapons();
     }
