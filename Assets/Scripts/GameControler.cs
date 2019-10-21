@@ -113,6 +113,7 @@ public class GameControler : MonoBehaviour
         _controlTime += Time.deltaTime;
         if (_controlTime > 10)
         {
+            GameManager.GetGameManager().SwitchPlayers();
             _moveToUnit = false;
             GameManager.GetGameManager().SetGameState(GameManager.GameState.CameraMovement);
             _controlTime = 0;

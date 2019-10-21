@@ -63,6 +63,11 @@ public class GameManager
             _currentPlayer = _player1;
         }
 
+        if (_gameState != GameState.PreGame)
+        {
+            return;
+        }
+
         if (_player1.GetPoints() == 0 && _player2.GetPoints() == 0)
         {
             // start game
