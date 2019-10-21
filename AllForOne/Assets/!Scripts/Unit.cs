@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Unit : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class Unit : MonoBehaviour
     public int rotSpeed;
     public Camera cam;
     bool fortify = false;
+    public TextMeshProUGUI healthTxt, speedTxt, strengthTxt, defenceTxt;
+    public TextMesh Text3d;
 
     public bool isSelected = false;
     
@@ -34,7 +37,10 @@ public class Unit : MonoBehaviour
         if (fortify)
             health -= damage - defence;
         else
+        {
             health -= damage;
+            anim.Play("hit");
+        }
 
         if (health > 0)
         {
@@ -50,6 +56,7 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
+        //Text3d.text = "Health = " + speed.ToString();
         if (isSelected)
         {
             CharacterMovement();
@@ -96,7 +103,7 @@ public class Unit : MonoBehaviour
         isSelected = true;
         cam.gameObject.SetActive(true);
         Gamemanager.instance.TopViewTurnOn();
-        
+        SetUnitInfoText();
         anim.speed = speed;
         StartCoroutine(Timer());
     }
@@ -150,11 +157,7 @@ public class Unit : MonoBehaviour
         anim.speed = 1;
         anim.Play(weapontype.ToString());
         AttackRay(tRange, (tDamage * strength));
-        if (this.anim.GetCurrentAnimatorStateInfo(0).IsName(weapontype.ToString()))
-        {
-            anim.speed = speed;
-            Debug.Log("New animation speed = " + anim.speed);
-        }
+        anim.speed = speed;
     }
 
     public void AttackRay(int weaponRange, int Damage)
@@ -206,6 +209,14 @@ public class Unit : MonoBehaviour
         Gamemanager.instance.SwitchPlayer();
         Gamemanager.instance.TopViewTurnOn();
         //CheckIfInside();
+    }
+
+    public void SetUnitInfoText()
+    {
+        healthTxt.text = "Health = " + health.ToString();
+        speedTxt.text = "Speed = " + speed.ToString();
+        strengthTxt.text = "Strength = " + strength.ToString();
+        defenceTxt.text = "Defence = " + defence.ToString();
     }
 
     public void SetFortify()

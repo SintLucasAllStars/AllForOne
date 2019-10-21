@@ -7,11 +7,13 @@ using TMPro;
 public class CreateTeam : MonoBehaviour
 {
     public Camera mainCamera;
-    public TextMeshProUGUI healthTxt, speedTxt, defenceTxt, strengthTxt, pointsTxt, playerNameTxt, playerPointsLeft;
+    public Text healthTxt, speedTxt, defenceTxt, strengthTxt, pointsTxt, playerNameTxt, playerPointsLeft;
     public Unit unitRed, unitBlue;
     public bool placeUnit = false;
     public GameObject UI;
     public Image avatarImg;
+
+    Color lerpedColor = Color.white;
 
     int health;
     int speed;
@@ -21,6 +23,8 @@ public class CreateTeam : MonoBehaviour
 
     private void Update()
     {
+        lerpedColor = Color.Lerp(Color.red, Color.yellow, Mathf.PingPong(Time.time, 1));
+        playerNameTxt.color = lerpedColor;
         if (placeUnit)
         {
             PlacePlayer();
@@ -171,11 +175,11 @@ public class CreateTeam : MonoBehaviour
                     Debug.Log("Hit the ground");
                     if (Gamemanager.instance.currentplayer == Gamemanager.instance.player1)
                     {
-                        InstantiateUnit(unitRed, hit.point, "Red");
+                        InstantiateUnit(unitRed, hit.point);
                     }
                     else if (Gamemanager.instance.currentplayer == Gamemanager.instance.player2)
                     {
-                        InstantiateUnit(unitBlue, hit.point, "Blue");
+                        InstantiateUnit(unitBlue, hit.point);
                     }
                     setDefaultValues();
                 }
@@ -183,14 +187,14 @@ public class CreateTeam : MonoBehaviour
         }
     }
 
-    void InstantiateUnit(Unit unit, Vector3 hit, string tagname)
+    void InstantiateUnit(Unit unit, Vector3 hit)
     {
         Unit go = Instantiate(unit, hit, Quaternion.identity);
         go.health = this.health;
         go.speed = this.speed;
         go.defence = this.defence;
         go.strength = this.strength;
-        go.tag = tagname;
+
         placeUnit = false;
         UI.SetActive(true);
         Gamemanager.instance.SwitchCurrentPlayer();

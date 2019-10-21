@@ -13,6 +13,7 @@ public class Gamemanager : MonoBehaviour
     public Player player2;
     public GameObject canvas;
     public GameObject topview;
+    public GameObject winScreen;
 
     [Header("PowerUps")]
     public int totalPowerups;
@@ -22,8 +23,8 @@ public class Gamemanager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player1 = new Player(10, "Henk", "Red", mario);
-        player2 = new Player(10, "Roderik", "Blue", luigi);
+        player1 = new Player(100, "Henk", "Red", mario);
+        player2 = new Player(100, "Roderik", "Blue", luigi);
         currentplayer = player1;
         SpawnWeapons();
     }
@@ -59,23 +60,22 @@ public class Gamemanager : MonoBehaviour
 
     public void CheckForUnits()
     {
-        if(GameObject.FindGameObjectsWithTag("Red") == null)
+        if (GameObject.FindGameObjectsWithTag("Red").Length == 0)
         {
-            Debug.Log("Blue team wins");
+            winScreen.SetActive(true);
+            WinMenu.instance.winText.text = "Blue team Wins";
         }
-        if (GameObject.FindGameObjectsWithTag("Blue") == null)
+        if (GameObject.FindGameObjectsWithTag("Blue").Length == 0)
         {
-            Debug.Log("Red team wins");
-        }
-        else
-        {
-            Debug.Log("There are still 2 teams in game");
+            winScreen.SetActive(true);
+            WinMenu.instance.winText.text = "Red team Wins";
         }
 
     }
 
     public void SwitchPlayer()
     {
+        CheckForUnits();
         if (currentplayer == player1)
             currentplayer = player2;
         else if (currentplayer == player2)

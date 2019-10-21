@@ -1,16 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TopView : MonoBehaviour
 {
     public static TopView instance;
+    public Image turnImg;
 
     public GameObject topCam;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    private void Update()
+    {
+        turnImg.sprite = Gamemanager.instance.currentplayer.characterImg;
     }
 
     public void EnableTopView()
