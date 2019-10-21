@@ -31,7 +31,7 @@ namespace MechanicFever
         public delegate void OnConnectionSuccessful();
         public static OnConnectionSuccessful ConnectionSuccessful;
 
-        public delegate void OnError(string reason);
+        public delegate void OnError(string reason, string title);
         public static OnError Error;
 
         public void Connect()
@@ -67,7 +67,7 @@ namespace MechanicFever
         private void OnClose(string e)
         {
             Debug.Log("Closed Connection: " + e);
-            Error(e);
+            Error(e, "Understood");
             _connectionCoroutine = false;
         }
 

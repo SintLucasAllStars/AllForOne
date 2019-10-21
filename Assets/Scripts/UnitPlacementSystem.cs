@@ -31,10 +31,16 @@ namespace MechanicFever
         public void PurchaseUnit()
         {
             if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
+            {
+                Notifier.Instance.ShowNotification("It is not your turn.");
                 return;
+            }
 
             if (!Player.Instance.Wallet.CanWithdraw(Player.Instance.PlayerUnit.Price))
+            {
+                Notifier.Instance.ShowNotification("You are out of money.");
                 return;
+            }
 
             _hasPlaced = false;
         }
