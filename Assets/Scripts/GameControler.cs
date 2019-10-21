@@ -5,11 +5,13 @@ public class GameControler : MonoBehaviour
     private Camera _camera;
     private Unit _focusedUnit;
     private Vector3 _lastMousePos;
+    private float _controlTime;
 
     private void Start()
     {
         _camera = Camera.main;
         _lastMousePos = Vector3.zero;
+        _controlTime = 0;
     }
 
     private void Update()
@@ -89,13 +91,19 @@ public class GameControler : MonoBehaviour
         {
             Vector3 movement = Input.mousePosition - _lastMousePos;
             _lastMousePos = Input.mousePosition;
-            
-            Debug.Log(movement);
-            
             _focusedUnit.gameObject.transform.Rotate(0, movement.x, 0);
         }
         
         MoveCameraToUnit(100);
+        
+        // check if time is up
+        _controlTime += Time.deltaTime;
+        if (_controlTime > 10)
+        {
+            GameManager.GetGameManager().SetGameState(GameManager.GameState.InGame);
+            _controlTime = 0;
+            _lastMousePos = Vector3.zero;
+        }
     }
 
     private bool MoveCameraToUnit(float maxMovement)
