@@ -90,30 +90,49 @@ public class UiManager : MonoBehaviour
         float statCost;
         float totalcost = 0;
         float midRangeModif = maxPointsPerStat;
-        midRangeModif = midRangeModif / 3;
+        midRangeModif = midRangeModif / 3 * 2;
 
-        for (int i = 0; i < uiCharStats.Count; i++)
+        if (pointCap >= midRangeModif * numberOfStats)
         {
-            float maxAllStats =  maxPointsPerStat * numberOfStats;
-            float minimumAssign = maxAllStats / 100;
-            float randomAssign;
-          
-            randomAssign = UnityEngine.Random.Range(minimumAssign, maxPointsPerStat);
-            if (pointCap < randomAssign)
+            for (int i = 0; i < uiCharStats.Count; i++)
             {
-                randomAssign = pointCap;
-            }
+                float maxAllStats =  maxPointsPerStat * numberOfStats;
+                float minimumAssign = maxAllStats / 100;
+                float randomAssign;
+          
+                randomAssign = UnityEngine.Random.Range(minimumAssign, maxPointsPerStat);
+                if (pointCap < randomAssign)
+                {
+                    randomAssign = pointCap;
+                }
             
-            uiCharStats[i] = Mathf.RoundToInt(randomAssign);
-            statCost =  costList[i];
-            statCost = statCost * randomAssign;
-            pointCap = pointCap - Mathf.RoundToInt(statCost);
-            totalcost = totalcost + statCost;
+                uiCharStats[i] = Mathf.RoundToInt(randomAssign);
+                statCost =  costList[i];
+                statCost = statCost * randomAssign;
+                pointCap = pointCap - Mathf.RoundToInt(statCost);
+                totalcost = totalcost + statCost;
+            }
         }
+        else
+        {
+            for (int i = 0; i < uiCharStats.Count; i++)
+            {
+                float randomAssign;
+          
+                randomAssign = UnityEngine.Random.Range(midRangeModif / 2, midRangeModif);
+                
+                uiCharStats[i] = Mathf.RoundToInt(randomAssign);
+                statCost =  costList[i];
+                statCost = statCost * randomAssign;
+                pointCap = pointCap - Mathf.RoundToInt(statCost);
+                totalcost = totalcost + statCost;
+            }
+        }
+        
 
         
         
-        Debug.Log(totalcost);
+        Debug.Log(midRangeModif);
         
         
         uiCharHp = uiCharStats[0];
@@ -129,12 +148,12 @@ public class UiManager : MonoBehaviour
         {
             charCreateUi[0].GetComponent<TextMeshProUGUI>().text = charName;
             
-            charCreateUi[1].GetComponent<TextMeshProUGUI>().text = uiCharHp.ToString();
-            charCreateUi[2].GetComponent<TextMeshProUGUI>().text = uiCharStr.ToString();
-            charCreateUi[3].GetComponent<TextMeshProUGUI>().text = uiCharSpd.ToString();
-            charCreateUi[4].GetComponent<TextMeshProUGUI>().text = uiCharDef.ToString();
+            charCreateUi[1].GetComponent<TextMeshProUGUI>().text = "Health: " + uiCharHp.ToString();
+            charCreateUi[2].GetComponent<TextMeshProUGUI>().text = "Strength: " + uiCharStr.ToString();
+            charCreateUi[3].GetComponent<TextMeshProUGUI>().text = "Speed: " + uiCharSpd.ToString();
+            charCreateUi[4].GetComponent<TextMeshProUGUI>().text = "Defense: " + uiCharDef.ToString();
 
-            charCreateUi[5].GetComponent<TextMeshProUGUI>().text = uiPoints.ToString();
+            charCreateUi[5].GetComponent<TextMeshProUGUI>().text = "Creation Points: " + uiPoints.ToString();
         }
     }
 
@@ -164,11 +183,7 @@ public class UiManager : MonoBehaviour
 
    
 
-    public void PortionCalculation(float stat1Portion, float stat2Portion, float stat3PPortion, float stat4Portion)
-    {
-        
-    }
-
+ 
     // Update is called once per frame
     void Update()
     {
@@ -206,8 +221,5 @@ public class UiManager : MonoBehaviour
         StartCoroutine(gm.PhaseEnd(GameManager.Phase.PlacingUnits, GameManager.Phase.CreatePlayerCharacters));
     }
 
-    public void SelectPrefab()
-    {
-        
-    }
+  
 }

@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using Cinemachine;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +14,13 @@ public class GameManager : MonoBehaviour
     public int bluePlayerCreationPoints;
     public int turnHolderPoints;
     private UiManager UiM;
+
+    public List<Transform> transition = new List<Transform>();
+    public List<Transform> currentPath = new List<Transform>();
+    public Transform playerCamera;
+    public bool cameraAnimate = false;
+    public int cameraTarget;
+    
     //here are the phases of battle
     public enum Phase
     {
@@ -79,14 +90,43 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (cameraAnimate == true)
+        {
+            playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, currentPath[cameraTarget].position, Time.deltaTime * 2);
+
+            if (Vector3.Distance(playerCamera.position,currentPath[cameraTarget].position ) < 0.5f)
+            {
+                if (cameraTarget == currentPath.Count - 1)
+                {
+                    cameraAnimate = false;
+                }
+                else
+                {
+                    cameraTarget++;
+                }
+                
+            }
+        }
     }
-    
+
+    public void StartCamera(List<Transform> path, string order)
+    {
+        if (order == "Normal")
+        {
+            cameraTarget = 0;
+            currentPath = path;
+            cameraAnimate = true;
+        }
+    }
+
+   
+
     //After switching phase call this to start the phase. 
-    public void PhaseCheck(Phase nextPhase, Phase disengageTarget)
+    public IEnumerator PhaseCheck(Phase nextPhase, Phase disengageTarget)
     {
         DisengagePhases(disengageTarget);
         gamePhase = nextPhase;
+        yield return new WaitForSeconds(4);
         EngagePhases(gamePhase);
     }
 
@@ -105,6 +145,7 @@ public class GameManager : MonoBehaviour
 
         if (phase == Phase.CreatePlayerCharacters)
         {
+            StartCamera(transition,"Normal");
             Debug.Log("===================\r" + "Phase: CreatePlayerCharacters-End\r" + "===================");
 
         }
@@ -142,6 +183,8 @@ public class GameManager : MonoBehaviour
         
     }
 
+   
+
     public void AddUnitToTeam(GameObject unitToAdd)
     {
         if (turnHolder == "red")
@@ -158,7 +201,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         // game just started and this is the first thing my turn based system does.
-        PhaseCheck(newPhase, endTarget);
+        StartCoroutine(PhaseCheck(newPhase, endTarget));
     }
     public IEnumerator PhaseGoAhead()
     {
