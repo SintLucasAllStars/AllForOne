@@ -14,7 +14,10 @@ namespace MechanicFever
 
         private void Start()
         {
-            UpdateValues();
+            UpdateValues(Mathf.RoundToInt(Random.Range(_healthSlider.minValue + (_healthSlider.maxValue / 4), _healthSlider.maxValue - (_healthSlider.maxValue / 4))),
+                Mathf.RoundToInt(Random.Range(_strengthSlider.minValue + (_strengthSlider.maxValue / 4), _strengthSlider.maxValue - (_strengthSlider.maxValue / 4))),
+                Mathf.RoundToInt(Random.Range(_speedSlider.minValue + (_speedSlider.maxValue / 4), _speedSlider.maxValue - (_speedSlider.maxValue / 4))),
+                Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))));
         }
 
         public void UpdateValues()

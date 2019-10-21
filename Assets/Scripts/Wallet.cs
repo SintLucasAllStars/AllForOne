@@ -4,7 +4,7 @@
     public class Wallet
     {
         private int _money;
-        public int Money => _money;
+        public int Balance => _money;
 
         public Wallet(int startingMoney) => _money = startingMoney;
 

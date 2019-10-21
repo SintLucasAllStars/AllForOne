@@ -33,6 +33,9 @@ namespace MechanicFever
             if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
                 return;
 
+            if (!Player.Instance.Wallet.CanWithdraw(Player.Instance.PlayerUnit.Price))
+                return;
+
             _hasPlaced = false;
         }
 

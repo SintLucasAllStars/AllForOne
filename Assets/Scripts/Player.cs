@@ -12,8 +12,6 @@ namespace MechanicFever
         private Wallet _wallet = new Wallet(100);
         public Wallet Wallet => _wallet;
 
-        private List<PlayerUnit> _units = new List<PlayerUnit>();
-
         [SerializeField]
         private UnitData _playerUnit;
         public UnitData PlayerUnit => _playerUnit;
