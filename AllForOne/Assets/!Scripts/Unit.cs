@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour
     public int rotSpeed;
     public Camera cam;
     bool fortify = false;
-    public TextMeshProUGUI healthTxt, speedTxt, strengthTxt, defenceTxt;
+    public Text healthTxt, speedTxt, strengthTxt, defenceTxt;
     public TextMesh Text3d;
     public Text timer;
 
@@ -31,6 +31,7 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+        anim.speed = speed;
     }
 
     public void GetHit(int damage)
@@ -159,12 +160,19 @@ public class Unit : MonoBehaviour
         }
         Debug.Log("weaponType = " + weapontype);
         Debug.Log(anim.speed + "this is the speed of the animator");
-        anim.speed = 1;
         anim.Play(weapontype.ToString());
         AttackRay(tRange, (tDamage * strength));
-        anim.speed = speed;
     }
 
+    public void DefaultSpeed()
+    {
+        anim.speed = 1;
+    }
+
+    public void MoveSpeed()
+    {
+        anim.speed = speed;
+    }
     public void AttackRay(int weaponRange, int Damage)
     {
         RaycastHit hit;
@@ -225,10 +233,10 @@ public class Unit : MonoBehaviour
 
     public void SetUnitInfoText()
     {
-        healthTxt.text = "Health = " + health.ToString();
-        speedTxt.text = "Speed = " + speed.ToString();
-        strengthTxt.text = "Strength = " + strength.ToString();
-        defenceTxt.text = "Defence = " + defence.ToString();
+        healthTxt.text = "Health" + "\n" + health.ToString();
+        speedTxt.text = "Speed" + "\n" + speed.ToString();
+        strengthTxt.text = "Strength" + "\n" + strength.ToString();
+        defenceTxt.text = "Defence" + "\n" + defence.ToString();
     }
 
     public void SetFortify()
