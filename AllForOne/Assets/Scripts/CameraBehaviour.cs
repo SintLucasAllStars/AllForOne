@@ -52,6 +52,9 @@ public class CameraBehaviour : MonoBehaviour
             case GameStates.Select:
                 transform.RotateAround(map.localPosition, Vector3.up, turnspeed * horizontal * Time.deltaTime);
                 break;
+            case GameStates.Wait:
+                transform.RotateAround(target.position,Vector3.up, turnspeed * horizontal * Time.deltaTime);
+                break;
         }
     }
 

@@ -120,4 +120,13 @@ public class Character : MonoBehaviour
     {
         actor.Heal(healAmount);
     }
+
+    public IEnumerator SpeedUp()
+    {
+        playerControllerSettings.m_MoveSpeedMultiplier = playerControllerSettings.m_MoveSpeedMultiplier * (actor.speed / 3);
+        playerControllerSettings.m_AnimSpeedMultiplier = playerControllerSettings.m_AnimSpeedMultiplier * (actor.speed / 3);
+        yield return new WaitForSeconds(5);
+        playerControllerSettings.m_MoveSpeedMultiplier = playerControllerSettings.m_MoveSpeedMultiplier * (actor.speed / 5);
+        playerControllerSettings.m_AnimSpeedMultiplier = playerControllerSettings.m_AnimSpeedMultiplier * (actor.speed / 5);
+    }
 }

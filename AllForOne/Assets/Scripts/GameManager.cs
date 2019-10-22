@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-public enum GameStates {Create,Place, Select,Move}
+public enum GameStates {Create,Place, Select,Move,Wait}
 public enum TurnState {Player1,Player2}
 public class GameManager : MonoBehaviour
 {
@@ -118,7 +118,9 @@ public class GameManager : MonoBehaviour
                 break;
         }
         timeLeft = roundTime;
-        SpawnItems();
+        if(gamestate == GameStates.Move || gamestate == GameStates.Place) {
+            StartCoroutine(SpawnItems());
+        }
     }
     public void ReadyUp()
     {
@@ -174,9 +176,15 @@ public class GameManager : MonoBehaviour
         gamestate = GameStates.Create;
     }
 
-    private void SpawnItems()
+    public IEnumerator SpawnItems()
     {
-        Instantiate(items[Random.Range(0, items.Length)], spawnplaces[Random.Range(0, spawnplaces.Length)].position, Quaternion.identity);
+        GameObject g = Instantiate(items[Random.Range(0, items.Length)], spawnplaces[Random.Range(0, spawnplaces.Length)].position, Quaternion.identity);
+        CameraBehaviour.instance.target = g.transform;
+        var prevGameState = gamestate;
+        gamestate = GameStates.Wait;
+        CameraBehaviour.instance.transform.position = g.transform.position + new Vector3(0, 6.5f, -10);
+        CameraBehaviour.instance.transform.LookAt(g.transform);
+        yield return new WaitForSeconds(5);
+        gamestate = prevGameState;
     }
-
 }
