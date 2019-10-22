@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.activePlayer.units.Add(this);
         unitName = Rank() + " " + GetName();
     }
 

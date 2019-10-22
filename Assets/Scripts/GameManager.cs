@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState {topview,gameplay};
+    public enum GameState {Hiring, UnitSelection, Playing};
     public GameState state;
 
     public Player[] players = new Player[2];
@@ -39,19 +39,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        switch (state)
+        if (uiManager.placing && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            case GameState.topview:
-                if (uiManager.placing)
-                {
-                    uiManager.PlacingPhase();
-                }
-                break;
-            case GameState.gameplay:
-                mainCamera.enabled = false;
-                break;
-            default:
-                break;
+            uiManager.PlaceUnit();
         }
     }
 

@@ -30,10 +30,6 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (placing && Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            PlaceUnit();
-        }
     }
 
     public void AddValue(int _changeVal)
@@ -143,7 +139,7 @@ public class UIManager : MonoBehaviour
                 GameObject placedUnit = Instantiate(unit, hit.point, Quaternion.identity);
                 Unit newUnit = placedUnit.GetComponent<Unit>();
                 AssignValues(newUnit);
-                GameManager.instance.activePlayer.units.Add(newUnit);
+                //GameManager.instance.activePlayer.units.Add(newUnit);
                 if (GameManager.instance.activePlayer == GameManager.instance.players[0])
                 {
                     GameObject newUI = Instantiate(uiUnit, transform.position, Quaternion.identity);

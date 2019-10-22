@@ -8,6 +8,6 @@ public class SoldierSelector : MonoBehaviour
     public Text nameText;
     void Start()
     {
-        nameText.text = GameManager.instance.activePlayer.units[GameManager.instance.activePlayer.units.Count].name;
+        nameText.text = GameManager.instance.activePlayer.units[GameManager.instance.activePlayer.units.Count - 1].unitName;
     }
 }
