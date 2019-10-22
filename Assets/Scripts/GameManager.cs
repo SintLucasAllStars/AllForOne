@@ -93,7 +93,7 @@ public class GameManager
         if (_player1.GetPoints() == 0 && _player2.GetPoints() == 0)
         {
             // start game
-            _gameState = GameState.InGame;
+            SetGameState(GameState.InGame);
             Debug.Log("Start Game!");
             return;
         }
