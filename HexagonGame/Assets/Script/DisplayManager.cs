@@ -36,6 +36,11 @@ public class DisplayManager : Singelton<DisplayManager>
         timeText.text = "";
     }
 
+    public void SetVictoryText(Player winner)
+    {
+        VictoryText.text = winner.GetName() + " has won!";
+    }
+
     public void ResetText()
     {
         moneyText.text = "";

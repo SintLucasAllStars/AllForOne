@@ -43,6 +43,14 @@ public class TileScript : MonoBehaviour
         positions[4] = new Vector3(spawnGap, 0, -spawnGap);
     }
 
+    public bool IsSpotOpen()
+    {
+        if(warriors.Count >= positions.Length){
+            return false;
+        }
+        return true;
+    }
+
 }
 
 public enum TileType {

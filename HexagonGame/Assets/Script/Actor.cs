@@ -1,43 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 using UnityEngine;
 
 public class Actor : MonoBehaviour
 {
     [SerializeField]
-    private Transform CameraPoint;
+    private Transform cameraPoint;
+    [SerializeField]
+    private Transform healthBar;
+    [SerializeField]
+    private Image healthImage;
+    [SerializeField]
+    private Image attackDelayImage;
+    [SerializeField]
+    private GameObject HighLightObj;
+    [SerializeField]
+    private TMP_Text weaponText;
 
+    private Camera cam;
     private Animator anim;
     private Rigidbody rb;
     private Warrior warrior;
     private bool paused;
 
-    Weapon weapon;
+    private Item item;
 
     private float xCameraRotation;
     private float sensetivity;
     private bool isJumping;
     private float jumpVelocity;
+    private bool CanAttack;
      
     public void Start()
     {
+        item = new Item(1, 10, 0, "Punch", new GameObject(), WeaponType.Hand);
         xCameraRotation = 0;
         sensetivity = 4;
         isJumping = false;
         jumpVelocity = 2;
+        CanAttack = true;
 
         anim = this.GetComponent<Animator>();
         paused = false;
         rb = this.GetComponent<Rigidbody>();
-
-        weapon.Damage = 2;
-        weapon.speed = 10;
-        weapon.range = 0;
-        weapon.weaponType = WeaponType.Hand;
+        cam = PlayerControl.Instance.GetCam();
     }
 
     private void Update()
     {
+        HealthBarUpdate();
         if (!warrior.GetIsSelected()) return;
 
         if (!paused)
@@ -62,6 +75,11 @@ public class Actor : MonoBehaviour
                 rb.AddForce(new Vector3(0, jumpVelocity, 0), ForceMode.Impulse);
             }
         }
+    }
+
+    private void HealthBarUpdate()
+    {
+        healthBar.transform.LookAt(cam.transform);
     }
 
     private void Move()
@@ -104,20 +122,45 @@ public class Actor : MonoBehaviour
 
         if (UnityEngine.Input.GetMouseButtonDown(0))
         {
-            if(weapon.weaponType != WeaponType.Gun)
-                anim.SetTrigger(weapon.weaponType.ToString() + "Trigger");
+            if (CanAttack == true) {
+                StartCoroutine(SetAttackDelay());
+                if (item.GetWeaponType() != WeaponType.Gun)
+                    anim.SetTrigger(item.GetWeaponType().ToString() + "Trigger");
 
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position + new Vector3(0, 0.05f, 0), this.transform.forward, out hit, (0.1f + weapon.range), 9))
-            {
-                hit.transform.GetComponent<Actor>().Hit(weapon.Damage);
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position + new Vector3(0, 0.05f, 0), this.transform.forward, out hit, (0.1f + item.GetRange()), 9))
+                {
+                    hit.transform.GetComponent<Actor>().Hit((item.GetDamage() + warrior.GetStrenth()) / 15);
+                }
             }
         }
     }
 
+    private IEnumerator SetAttackDelay()
+    {
+        CanAttack = false;
+        float time = 0;
+        float fullDelayBar = 100;
+        while (time < 10f / item.GetSpeed())
+        {
+            yield return new WaitForSeconds(0.5f);
+            time += 0.5f;
+            attackDelayImage.fillAmount = ((fullDelayBar / (10f / item.GetSpeed())) * time) / fullDelayBar;
+        }
+        CanAttack = true;
+    }
+
+    public void HighLight(bool a_Highlighted, Color a_Color)
+    {
+        HighLightObj.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", a_Color);
+        HighLightObj.SetActive(a_Highlighted);
+    }   
+
     public void Hit(float damage)
     {
+        float blockDevider = 60;
         float health = warrior.GetHealth();
+        float trueDamage = damage - (warrior.GetDefense() / blockDevider);
 
         if (health < damage)
         {
@@ -125,7 +168,10 @@ public class Actor : MonoBehaviour
             PlayerControl.Instance.removeWarrior(this);
         } else
         {
+            float fullHealthBar = 100;
             health -= damage;
+            float healthBarHealth = (fullHealthBar / warrior.GetMaxHealth()) * health;
+            healthImage.fillAmount = (healthBarHealth / fullHealthBar);
             warrior.SetHealth(health);
         }
 
@@ -155,21 +201,7 @@ public class Actor : MonoBehaviour
     public Warrior GetWarrior() { return warrior; }
     public void SetWarrior(Warrior a_Warrior) { this.warrior = a_Warrior; }
 
-    public Transform GetCameraPoint() { return CameraPoint; }
+    public void SetItem(Item a_Item) { item = a_Item; weaponText.text = item.GetName(); }
 
-}
-
-struct Weapon
-{
-    public float Damage;
-    public float range;
-    public int speed;
-    public WeaponType weaponType;
-}
-
-enum WeaponType
-{
-    Hand,
-    Sword,
-    Gun
+    public Transform GetCameraPoint() { return cameraPoint; }
 }

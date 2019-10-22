@@ -16,11 +16,13 @@ public class PlayerControl : Singelton<PlayerControl>
     private GameState gameState;
     private int turnTime;
     private DisplayManager displayManager;
+    private GameManager gameManager;
     public WarriorCreation warriorCreation;
 
     public void Start()
     {
         cam = this.GetComponent<Camera>();
+        gameManager = GameManager.Instance;
         displayManager = DisplayManager.Instance;
         scrollSpeed = 10;
         turnTime = 10;
@@ -31,6 +33,7 @@ public class PlayerControl : Singelton<PlayerControl>
         curPlayer = a_CurPlayer;
         gameState = a_GameState;
         InTurn = true;
+        gameManager.ToggleHighlightPlayers(true);
     }
 
     private void Update()
@@ -74,6 +77,8 @@ public class PlayerControl : Singelton<PlayerControl>
             switch (gameState)
             {
                 case GameState.CreateStage:
+                    if (!hit.transform.GetComponent<TileScript>()) { return; }
+                    if (hit.transform.GetComponent<TileScript>().IsSpotOpen() == false) { return; }
                     hasSelected = true;
                     warriorCreation.OpenWarriorCreator(hit.transform.gameObject.GetComponent<TileScript>(), curPlayer);
                     break;
@@ -82,6 +87,7 @@ public class PlayerControl : Singelton<PlayerControl>
                     if (curWarrior == null) { return; }
                     if (curPlayer.CompareWarrior(curWarrior))
                     {
+                        gameManager.ToggleHighlightPlayers(false);
                         SelectWarrior(curWarrior);
                         displayManager.ResetEventText();
                         StartCoroutine(StartTurnTime());
@@ -97,7 +103,6 @@ public class PlayerControl : Singelton<PlayerControl>
         hasSelected = true;
         StartCoroutine(MoveTowards(cam.transform, a_Warrior.GetCameraPoint(), 0.1f, false));
         StartCoroutine(RotateTowards(cam.transform, a_Warrior.GetCameraPoint(), 1.5f));
-        a_Warrior.GetWarrior().SetIsSelected(true);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -109,9 +114,14 @@ public class PlayerControl : Singelton<PlayerControl>
             yield return new WaitForEndOfFrame();
         }
         if (a_DisableControl == false)
+        {
+            curWarrior.GetWarrior().SetIsSelected(true);
             a_Object.transform.parent = a_TargetPos;
-        else 
+        }
+        else
+        {
             hasSelected = false;
+        }
     }
 
     private IEnumerator RotateTowards(Transform a_Object, Transform a_TargetPos, float a_MDD)
@@ -159,4 +169,5 @@ public class PlayerControl : Singelton<PlayerControl>
     public void setInTurn(bool a_InTurn) { InTurn = a_InTurn; }
     public bool IsInTurn() { return InTurn; }
     public void setHasSelected(bool a_HasSelected) { hasSelected = a_HasSelected; }
+    public Camera GetCam() { return cam; }
 }

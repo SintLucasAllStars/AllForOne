@@ -31,8 +31,9 @@ public class GameManager : Singelton<GameManager>
     private void InitPlayers()
     {
         players = new List<Player>();
-        players.Add(new Player("player1"));
-        players.Add(new Player("player2"));
+        players.Add(new Player("player1", Color.red));
+        players.Add(new Player("player2", Color.blue));
+        players.Add(new Player("player3", Color.green));
     }
 
     public IEnumerator Game()
@@ -57,6 +58,7 @@ public class GameManager : Singelton<GameManager>
                         }
                         break;
                     case GameState.FightStage:
+                        MapManager.Instance.SpawnRandomItem();
                         displayManager.SetEventText(players[currentPlayer].GetName() + " can pick a warrior to fight with!");
                         playerController.SetTurn(players[currentPlayer], gameState);
                         isTurnOver = true;
@@ -92,7 +94,7 @@ public class GameManager : Singelton<GameManager>
     private void GameFin()
     {
         displayManager.ResetText();
-        Debug.Log(winState.winner.GetName() + " won");
+        displayManager.SetVictoryText(winState.winner);
     }
 
     private void CreateWarrior()
@@ -116,6 +118,17 @@ public class GameManager : Singelton<GameManager>
         int playercount = currentPlayer;
         playercount++;
         currentPlayer = (playercount % players.Count);
+    }
+
+    public void ToggleHighlightPlayers(bool Highlighted)
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            for (int y = 0; y < players[i].GetWarriors().Count; y++)
+            {
+                players[i].GetWarriors()[y].HighLight(Highlighted, players[i].GetColor());
+            }
+        }
     }
 }
 

@@ -7,6 +7,7 @@ public class Player
 {
     private string name;
     private int money;
+    private Color color;
     private List<Actor> warriors;
 
     public Player()
@@ -15,9 +16,10 @@ public class Player
         InitPlayer();
     }
 
-    public Player(string a_Name)
+    public Player(string a_Name, Color a_Color)
     {
         this.name = a_Name;
+        this.color = a_Color;
         InitPlayer();
     }
 
@@ -60,4 +62,5 @@ public class Player
 
     public int GetMoney() { return this.money; }
     public void SetMoney(int a_Money) { this.money = a_Money; }
+    public Color GetColor(){ return color; }
 }
