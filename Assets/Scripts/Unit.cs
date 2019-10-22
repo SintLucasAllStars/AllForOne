@@ -22,6 +22,8 @@ public class Unit : MonoBehaviour
 
     public GameObject selfCam;
 
+    private float gameTimer;
+
     private void Start()
     {
         GameManager.instance.activePlayer.units.Add(this);
@@ -45,7 +47,7 @@ public class Unit : MonoBehaviour
         {
             GetComponent<FirstPersonController>().enabled = true;
             GetComponent<CharacterController>().enabled = true;
-            Camera.main.gameObject.SetActive(false);
+            //Camera.main.gameObject.SetActive(false);
             Playing();
         }
         else {
@@ -53,9 +55,9 @@ public class Unit : MonoBehaviour
             GetComponent<CharacterController>().enabled = false;
             if (Camera.main != null)
             {
-                Camera.main.gameObject.SetActive(true);
+                //Camera.main.gameObject.SetActive(true);
             }
-            selfCam.SetActive(false);
+            //selfCam.SetActive(false);
         }
     }
 
@@ -69,6 +71,7 @@ public class Unit : MonoBehaviour
 
     private void Playing()
     {
+        GameTimer();
         if (Input.GetKeyDown(KeyCode.F))
         {
             isFortified = true;
@@ -76,7 +79,7 @@ public class Unit : MonoBehaviour
         }
 
         WeaponCooldown();
-        if (Input.GetButtonDown(buttonName:"Fire1") && cooldown >= 10)
+        if (Input.GetButtonDown(buttonName:"Fire1") && cooldown >= 5)
         {
             if (Physics.Raycast(transform.position,Vector3.forward, out RaycastHit hit,currentWeapon.range) && hit.collider.GetComponent<Unit>())
             {
@@ -84,6 +87,19 @@ public class Unit : MonoBehaviour
                 Shoot(hitUnit);
             }
             cooldown = 0;
+        }
+    }
+
+    public void GameTimer() {
+        if (gameTimer < 10)
+        {
+            gameTimer += 1 * Time.deltaTime;
+        }
+        else if (gameTimer >= 10)
+        {
+            isActive = false;
+            GameManager.instance.EndTurn();
+            //GameManager.instance.state = GameState.UnitSelection;
         }
     }
 

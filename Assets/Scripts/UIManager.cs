@@ -137,7 +137,7 @@ public class UIManager : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                GameObject placedUnit = Instantiate(unit, hit.point, Quaternion.identity);
+                GameObject placedUnit = Instantiate(unit, new Vector3(hit.point.x,hit.point.y + 1f,hit.point.z), Quaternion.identity);
                 Unit newUnit = placedUnit.GetComponent<Unit>();
                 AssignValues(newUnit);
                 //GameManager.instance.activePlayer.units.Add(newUnit);
