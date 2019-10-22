@@ -32,16 +32,30 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         activePlayer = players[0];
-
-        Debug.Log(players[0]);
-        Debug.Log(players[1]);
     }
 
     private void Update()
     {
-        if (uiManager.placing && Input.GetKeyDown(KeyCode.Mouse0))
+        if (GameManager.instance.players[0].units.Count == 4 && GameManager.instance.players[1].units.Count == 4 && state == GameState.Hiring)
         {
-            uiManager.PlaceUnit();
+            uiManager.purchaseUI.SetActive(false);
+            state = GameState.UnitSelection;
+        }
+
+        switch (state)
+        {
+            case GameState.Hiring:
+                if (uiManager.placing && Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    uiManager.PlaceUnit();
+                }
+                break;
+            case GameState.UnitSelection:
+                break;
+            case GameState.Playing:
+                break;
+            default:
+                break;
         }
     }
 
@@ -54,6 +68,7 @@ public class GameManager : MonoBehaviour
         {
             if (p != activePlayer)
             {
+                uiManager.activePlayerText.text = activePlayer.name.ToString();
                 return p;
             }
         }

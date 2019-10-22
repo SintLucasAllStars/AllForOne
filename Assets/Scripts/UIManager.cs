@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     public Transform blueUnits;
     public Transform redUnits;
     public GameObject uiUnit;
+    public Text activePlayerText;
+    public Image soldierImage;
 
     [Header("Purchase UI values")]
     public Text healthT;
@@ -28,8 +30,9 @@ public class UIManager : MonoBehaviour
     public bool placing = false;
     public GameObject unit;
 
-    private void Update()
+    private void Start()
     {
+
     }
 
     public void AddValue(int _changeVal)
@@ -69,7 +72,7 @@ public class UIManager : MonoBehaviour
                 break;
         }
         cost = 10 + ((health - 1) * 4) + ((speed - 1) * 4) + (strength - 1) + (defence - 1);
-        costText.text = "Cost: " + cost.ToString();
+        costText.text = "Cost: " + cost.ToString() + "/" + GameManager.instance.activePlayer.money.ToString();
     }
     public void DecValue(int _changeVal)
     {
@@ -120,7 +123,6 @@ public class UIManager : MonoBehaviour
         else {
             GameManager.instance.activePlayer = GameManager.instance.players[1];
         }
-
     }
 
     public void PlacingPhase() {
@@ -159,6 +161,7 @@ public class UIManager : MonoBehaviour
         placing = false;
         purchaseUI.SetActive(true);
         GameManager.instance.EndTurn();
+        costText.text = "Cost: " + cost.ToString() + "/" + GameManager.instance.activePlayer.money.ToString();
     }
 
     private void AssignValues(Unit thisUnit) {
