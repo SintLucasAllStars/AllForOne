@@ -9,13 +9,15 @@ public class UIManager : MonoBehaviour
 
     [Header("UI Assignables")]
     public GameObject purchaseUI;
+    public GameObject redTeamUI;
+    public GameObject blueTeamUI;
     public Transform blueUnits;
     public Transform redUnits;
     public GameObject uiUnit;
     public Text activePlayerText;
     public Image soldierImage;
-    public Button[] redUnitButtons = new Button[4];
-    public Button[] blueUnitButtons = new Button[4];
+    public List<Button> redUnitButtons = new List<Button>();
+    public List<Button> blueUnitButtons = new List<Button>();
 
     [Header("Purchase UI values")]
     public Text healthT;

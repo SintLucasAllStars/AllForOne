@@ -55,8 +55,27 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.UnitSelection:
+                if (selectedUnit != null)
+                {
+                    selectedUnit.GetComponent<Unit>().isActive = true;
+                    uiManager.redTeamUI.SetActive(false);
+                    uiManager.blueTeamUI.SetActive(false);
+                    Debug.Log("Completed UnitSelection PreState");
+                    state = GameState.Playing;
+                    Debug.Log("Completed UnitSelection postState");
+                }
                 break;
             case GameState.Playing:
+                if (selectedUnit.GetComponent<Unit>().isActive == false)
+                {
+                    selectedUnit = null;
+                    uiManager.redTeamUI.SetActive(true);
+                    uiManager.blueTeamUI.SetActive(true);
+                    EndTurn();
+                    Debug.Log("Completed Playing PreState");
+                    state = GameState.UnitSelection;
+                    Debug.Log("Completed Playing postState");
+                }
                 break;
             default:
                 break;

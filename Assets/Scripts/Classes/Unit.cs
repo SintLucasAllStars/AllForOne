@@ -12,6 +12,8 @@ public class Unit : MonoBehaviour
     public int defence;
     public int cost;
 
+    public bool isActive;
+
     private void Start()
     {
         GameManager.instance.activePlayer.units.Add(this);
