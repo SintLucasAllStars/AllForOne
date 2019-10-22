@@ -164,7 +164,7 @@ public class UIManager : MonoBehaviour
     }
 
     private void AssignValues(Unit thisUnit) {
-        thisUnit.health = health;
+        thisUnit.health = health + 10;
         thisUnit.speed = speed;
         thisUnit.strength = strength;
         thisUnit.defence = defence;

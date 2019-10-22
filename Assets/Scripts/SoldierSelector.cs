@@ -30,6 +30,7 @@ public class SoldierSelector : MonoBehaviour
             if (u.id == id)
             {
                 GameManager.instance.selectedUnit = u.gameObject;
+                u.isFortified = false;
                 u.isActive = true;
             }
         }
