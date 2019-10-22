@@ -50,6 +50,18 @@ public class GameManager : MonoBehaviour
     private Transform _selectingScreen;
 
     [SerializeField]
+    private List<Transform> _powerUpSpawns;
+
+    [SerializeField]
+    private List<PowerUp> _powerUps;
+
+    [SerializeField]
+    private List<GameObject> _player1Meshes;
+
+    [SerializeField]
+    private List<GameObject> _player2Meshes;
+
+    [SerializeField]
     private Canvas _unitCanvas;
 
     [SerializeField]
@@ -60,6 +72,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private Camera _mainCamera;
+
+    public int _player1Units = 0;
+    public int _player2Units = 0;
+
+    public bool _canSpawn;
+    public bool _canSelect;
+
+    private bool _player1Turn = true;
 
     private Color _blue = new Color32(42, 87, 226, 255);
     private Color _red = new Color32(226, 42, 42, 255);
@@ -75,15 +95,9 @@ public class GameManager : MonoBehaviour
     private int _player1Points = 90;
     private int _player2Points = 90;
 
+    private int _meshNum;
+    private int _currentPowerUpSpawnpoint;
     private int _unitCost = 10;
-
-    private bool _player1Turn = true;
-
-    public int _player1Units = 0;
-    public int _player2Units = 0;
-
-    public bool _canSpawn;
-    public bool _canSelect;
 
     private void Awake()
     {
@@ -91,6 +105,9 @@ public class GameManager : MonoBehaviour
 
         _unitCostText.text = "$" + _unitCost;
         _playerCurrencyText.text = "$" + _player1Points;
+
+        _meshNum = Random.Range(0, _player1Meshes.Count);
+        _player1Meshes[_meshNum].SetActive(true);
 
     }
 
@@ -105,13 +122,11 @@ public class GameManager : MonoBehaviour
             if (_player1Turn)
             {
                 _player1Units++;
-                Debug.Log(_player1Units);
             }
             else
             {
                 _player2Units++;
                 _doneButton.gameObject.SetActive(true);
-                Debug.Log(_player2Units);
             }
         }
     }
@@ -129,16 +144,31 @@ public class GameManager : MonoBehaviour
         _canSpawn = false;
         _mainCamera.enabled = false;
         _unitCanvas.enabled = true;
+        unit._currentMesh = _meshNum;
 
         SwitchTeam();
+
+        if (_player1Turn)
+        {
+            _player2Meshes[_meshNum].SetActive(false);
+            _meshNum = Random.Range(0, _player1Meshes.Count);
+            _player1Meshes[_meshNum].SetActive(true);
+        }
+        else
+        {
+            _player1Meshes[_meshNum].SetActive(false);
+            _meshNum = Random.Range(0, _player2Meshes.Count);
+            _player2Meshes[_meshNum].SetActive(true);
+        }
     }
+
 
     private void SwitchTeam()
     {
         if (_player1Turn)
         {
-            _player1Points -= 10;
             _player1Turn = false;
+            _player2Points -= 10;
             _playerCurrencyText.text = "$" + _player2Points;
             _colorBlock.color = _blue;
             _gameColorBlock.color = _blue;
@@ -146,14 +176,13 @@ public class GameManager : MonoBehaviour
 
         }
         else
-        { 
-            _player2Points -= 10;
+        {
             _player1Turn = true;
+            _player1Points -= 10;
             _playerCurrencyText.text = "$" + _player1Points;
             _colorBlock.color = _red;
             _gameColorBlock.color = _red;
             _gamePlayerBlock.gameObject.SetActive(true);
-
         }
 
         _health = 1;
@@ -170,6 +199,17 @@ public class GameManager : MonoBehaviour
 
         _unitCost = 10;
         _unitCostText.text = "$" + _unitCost;
+    }
+
+    private void SpawnPowerUp()
+    {
+        if (_currentPowerUpSpawnpoint >= _powerUpSpawns.Count)
+        {
+            _currentPowerUpSpawnpoint = 0;
+        }
+
+        Instantiate(_powerUps[Random.Range(0, _powerUps.Count)], _powerUpSpawns[_currentPowerUpSpawnpoint].position, transform.rotation);
+        _currentPowerUpSpawnpoint++;
     }
 
     public void AddHealthPoints(int health)
@@ -312,6 +352,7 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
+
         _unitCost += defense * _cheapCostModifier;
         _defense += defense;
 
@@ -321,6 +362,8 @@ public class GameManager : MonoBehaviour
 
     public void SelectingPhase()
     {
+        SpawnPowerUp();
+
         _canSelect = true;
         _mainCamera.enabled = true;
         _gameCanvas.enabled = true;
@@ -346,6 +389,8 @@ public class GameManager : MonoBehaviour
         _mainCamera.enabled = true;
         _gameCanvas.enabled = true;
         _canSelect = true;
+
+        SpawnPowerUp();
         SwitchTeam();
     }
 
@@ -362,7 +407,5 @@ public class GameManager : MonoBehaviour
         {
             _winScreenPlayerBlock.gameObject.SetActive(false);
         }
-
-        Debug.Log(player1Lost);
     }
 }

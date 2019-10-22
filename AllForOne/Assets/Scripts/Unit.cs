@@ -24,6 +24,24 @@ public class Unit : MonoBehaviour
     private float _maxClampY;
 
     [SerializeField]
+    private AudioSource _punchSound;
+
+    [SerializeField]
+    private AudioSource _placedSound;
+
+    [SerializeField]
+    private AudioSource _deathSound;
+
+    [SerializeField]
+    private AudioSource _fortifySound;
+
+    [SerializeField]
+    private AudioSource _powerUpGrabbedSound;
+
+    [SerializeField]
+    private AudioSource _powerUpActivatedSound;
+
+    [SerializeField]
     private List<GameObject> _player1Meshes;
 
     [SerializeField]
@@ -37,6 +55,9 @@ public class Unit : MonoBehaviour
 
     [SerializeField]
     private Transform _rayPosition;
+
+    [SerializeField]
+    private Transform _fortifiedShark;
 
     [SerializeField]
     private LayerMask _attackLayer;
@@ -56,6 +77,8 @@ public class Unit : MonoBehaviour
     public bool _isPlayer1;
     public bool _freeze;
 
+    public int _currentMesh;
+
     private int _playTime = 10;
 
     private Color _blue = new Color32(42, 87, 226, 255);
@@ -68,26 +91,33 @@ public class Unit : MonoBehaviour
     private float _yRotation;
 
     private bool _inAttackAnimation;
+    private bool _isFortified;
 
     private void Start()
     {
+        _placedSound.Play();
+
         if (_isPlayer1)
         {
-            _player1Meshes[Random.Range(0, _player1Meshes.Count)].SetActive(true);
+            _player1Meshes[_currentMesh].SetActive(true);
             _teamIndicator.material.color = _red;
         }
         else
         {
-            _player2Meshes[Random.Range(0, _player2Meshes.Count)].SetActive(true);
+            _player2Meshes[_currentMesh].SetActive(true);
             _teamIndicator.material.color = _blue;
         }
     }
 
     public void StartControl()
     {
+        _isFortified = false;
+        _fortifiedShark.gameObject.SetActive(false);
+
         _playCamera.enabled = true;
         _activated = true;
         _unitCanvas.enabled = true;
+
         StartCoroutine(UnitControlTimer());
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -128,6 +158,10 @@ public class Unit : MonoBehaviour
             UsePowerUp(2);
         }
 
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Fortify();
+        }
     }
 
     private void FixedUpdate()
@@ -148,8 +182,12 @@ public class Unit : MonoBehaviour
             {
                 i--;
             }
-            _timerText.text = i.ToString();
-            yield return new WaitForSeconds(1);
+
+            if (_activated)
+            {
+                _timerText.text = i.ToString();
+                yield return new WaitForSeconds(1);
+            }
         }
 
         EndControlPhase();
@@ -158,12 +196,12 @@ public class Unit : MonoBehaviour
     private void Attack()
     {
         _animator.Play("Punch");
+        _punchSound.Play();
 
         RaycastHit hit;
         if (Physics.Raycast(_rayPosition.position, _rayPosition.forward, out hit, 1.5f, _attackLayer))
         {
             Unit unit = hit.collider.GetComponent<Unit>();
-            Debug.Log(hit.collider.name);
             if (unit != null && unit._isPlayer1 != _isPlayer1)
             {
                 unit.TakeDamage(_strenght);
@@ -181,6 +219,7 @@ public class Unit : MonoBehaviour
                 return;
             }
 
+            _powerUpGrabbedSound.Play();
             PowerUp powerUp = hit.collider.GetComponent<PowerUp>();
             _powerUps.Add(powerUp);
             powerUp.gameObject.SetActive(false);
@@ -190,9 +229,11 @@ public class Unit : MonoBehaviour
 
     private void UsePowerUp(int powerUpNum)
     {
+        _powerUpActivatedSound.Play();
+
         if (powerUpNum < _powerUps.Count)
         {
-            _powerUps[powerUpNum].Use(this);
+            StartCoroutine(_powerUps[powerUpNum].Use(this));
             _powerUps.Remove(_powerUps[powerUpNum]);
 
             for (int i = 0; i < _powerUps.Count; i++)
@@ -204,6 +245,14 @@ public class Unit : MonoBehaviour
         }
     }
 
+    private void Fortify()
+    {
+        _isFortified = true;
+        _fortifySound.Play();
+        _fortifiedShark.gameObject.SetActive(true);
+        EndControlPhase();
+    }
+
     private void CooldownEnd()
     {
         _inAttackAnimation = false;
@@ -211,6 +260,11 @@ public class Unit : MonoBehaviour
 
     private void EndControlPhase()
     {
+        if (!_activated)
+        {
+            return;
+        }
+
         Cursor.lockState = CursorLockMode.None;
         _playCamera.enabled = false;
         _activated = false;
@@ -253,6 +307,11 @@ public class Unit : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (_isFortified)
+        {
+            damage /= _defense;
+        }
+
         _health -= damage;
 
         if (_health <= 0)
@@ -263,12 +322,15 @@ public class Unit : MonoBehaviour
 
     private void Die()
     {
+        _fortifiedShark.gameObject.SetActive(false);
         _animator.Play("Die");
+
+        _deathSound.pitch = Random.Range(0.1f, 1.9f);
+        _deathSound.Play();
 
         if (_isPlayer1)
         {
             GameManager._instance._player1Units--;
-            Debug.Log(GameManager._instance._player1Units);
             if (GameManager._instance._player1Units == 0)
             {
                 GameManager._instance.EndGame(true);
@@ -277,7 +339,6 @@ public class Unit : MonoBehaviour
         else
         {
             GameManager._instance._player2Units--;
-            Debug.Log(GameManager._instance._player2Units);
             if (GameManager._instance._player2Units == 0)
             {
                 GameManager._instance.EndGame(false);
