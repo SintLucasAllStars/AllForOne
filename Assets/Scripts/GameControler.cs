@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameControler : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class GameControler : MonoBehaviour
     private Vector3 _lastMousePos;
     private float _controlTime;
     private bool _moveToUnit;
+
+    public Text currentPlayerText;
 
     private void Start()
     {
@@ -25,7 +28,8 @@ public class GameControler : MonoBehaviour
         switch (gameManager.GetGameState())
         {
             case GameManager.GameState.PreGame:
-                return;
+                HandlePreGame();
+                break;
             case GameManager.GameState.InGame:
                 // handle unit clicking
                 HandleUnitSelection();
@@ -43,8 +47,15 @@ public class GameControler : MonoBehaviour
         Debug.Log(gameManager.GetGameState());
     }
 
+    private void HandlePreGame()
+    {
+        UpdateUI();
+    }
+
     private void HandleUnitSelection()
     {
+        UpdateUI();
+        
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -165,6 +176,11 @@ public class GameControler : MonoBehaviour
         _camera.transform.position = newLocation;
         _camera.transform.rotation = newRotation;
         return true;
+    }
+
+    private void UpdateUI()
+    {
+        currentPlayerText.text = "Current Player: " + GameManager.GetGameManager().GetCurrentPlayer().GetName();
     }
     
 }

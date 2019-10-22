@@ -5,7 +5,6 @@ public class UnitPlacer : MonoBehaviour
 {
     public Text unitPrice;
     public Text playerPoints;
-    public Text currentPlayer;
     public Slider healthSlider, strengthSlider, speedSlider, defenseSlider;
     public Unit unitPrefab;
     public Material red, blue;
@@ -78,7 +77,6 @@ public class UnitPlacer : MonoBehaviour
     {
         unitPrice.text = CalculatePrice() + "";
         Player player = GameManager.GetGameManager().GetCurrentPlayer();
-        currentPlayer.text = player.GetName();
         playerPoints.text = player.GetPoints() + "";
     }
     
