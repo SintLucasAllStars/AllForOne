@@ -10,7 +10,7 @@ namespace MechanicFever
 
         private Rigidbody _rigidbody;
 
-        private bool _canMove = false;
+        private bool _canMove = false, _canAttack = true;
 
         [SerializeField]
         private float _mouseSensitivity = 100.0f, _rotY = 0.0f;
@@ -43,7 +43,7 @@ namespace MechanicFever
 
         private void FixedUpdate()
         {
-            if (_canMove)
+            if (_canMove && _playerUnit.GameData.PlayerSide == Player.Instance.GameData.PlayerSide)
             {
                 //Look around part.
                 float mouseX = Input.GetAxis("Mouse X");
@@ -53,8 +53,9 @@ namespace MechanicFever
                 Quaternion localRotation = Quaternion.Euler(0, _rotY, 0);
                 transform.rotation = localRotation;
 
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && _jump.IsGrounded() && _canAttack)
                 {
+                    _animator.SetTrigger("Attack");
                     RaycastHit hit;
                     Vector3 fwd = transform.TransformDirection(Vector3.forward);
                     Debug.DrawRay(transform.position, fwd * 50, Color.green);
@@ -69,6 +70,13 @@ namespace MechanicFever
                     }
                 }
             }
+        }
+
+        private IEnumerator AttackDelay()
+        {
+            _canAttack = false;
+            yield return new WaitForSeconds(3);
+            _canAttack = true;
         }
     }
 }
