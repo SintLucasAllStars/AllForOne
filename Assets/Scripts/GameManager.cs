@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager
 {
@@ -15,8 +16,8 @@ public class GameManager
     private Player _player1;
     private Player _player2;
     private GameState _gameState;
-
     private Player _currentPlayer;
+    private List<IEventListener> _listeners;
 
     public GameManager()
     {
@@ -26,6 +27,8 @@ public class GameManager
         _player2 = new Player("Player 2", Player.Color.Blue);
 
         _currentPlayer = _player1;
+        
+        _listeners = new List<IEventListener>();
     }
 
     public static GameManager GetGameManager()
@@ -47,9 +50,28 @@ public class GameManager
         return _gameState;
     }
 
+    public void CallPowerUpPickupEvent(PowerUp powerUp, Player player)
+    {
+        Debug.Log("Call event! " + _listeners.Count + " listeners listening!");
+        foreach (IEventListener listener in _listeners)
+        {
+            listener.OnPowerUpPickup(powerUp, player);
+        }
+    }
+
     public void SetGameState(GameState gameState)
     {
+        Debug.Log("OnStateChange event! " + _listeners.Count + " listeners listening!");
+        foreach (IEventListener listener in _listeners)
+        {
+            listener.OnStateChange(_gameState, gameState);
+        }
         _gameState = gameState;
+    }
+
+    public void RegisterListener(IEventListener listener)
+    {
+        _listeners.Add(listener);
     }
 
     public void SwitchPlayers()

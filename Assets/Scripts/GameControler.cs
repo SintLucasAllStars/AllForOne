@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class GameControler : MonoBehaviour
+public class GameControler : MonoBehaviour, IEventListener
 {
     private Transform _cameraHome;
     private Camera _camera;
@@ -9,8 +11,10 @@ public class GameControler : MonoBehaviour
     private Vector3 _lastMousePos;
     private float _controlTime;
     private bool _moveToUnit;
+    private int _selectedPowerUp;
 
     public Text currentPlayerText;
+    public Text powerUpsText;
 
     private void Start()
     {
@@ -19,6 +23,9 @@ public class GameControler : MonoBehaviour
         _lastMousePos = Vector3.zero;
         _controlTime = 0;
         _moveToUnit = true;
+        _selectedPowerUp = 0;
+        
+        GameManager.GetGameManager().RegisterListener(this);
     }
 
     private void Update()
@@ -45,6 +52,24 @@ public class GameControler : MonoBehaviour
         }
         
         Debug.Log(gameManager.GetGameState());
+    }
+
+    void IEventListener.OnStateChange(GameManager.GameState oldState, GameManager.GameState newState)
+    {
+        if (oldState == GameManager.GameState.UnitControl)
+        {
+            powerUpsText.gameObject.SetActive(false);
+        }
+
+        if (newState == GameManager.GameState.UnitControl)
+        {
+            UpdatePowerUpText();
+        }
+    }
+
+    void IEventListener.OnPowerUpPickup(PowerUp powerUp, Player player)
+    {
+        UpdatePowerUpText();
     }
 
     private void HandlePreGame()
@@ -89,9 +114,10 @@ public class GameControler : MonoBehaviour
 
     private void HandleUnitControl()
     {
+        GameManager gm = GameManager.GetGameManager();
         float speed = _focusedUnit._speed * Time.deltaTime;
 
-        if (GameManager.GetGameManager().GetCurrentPlayer().GetActivePowerUps().Contains(PowerUp.Type.Adrenaline))
+        if (gm.GetCurrentPlayer().GetActivePowerUps().Contains(PowerUp.Type.Adrenaline))
         {
             speed *= 1.5f;
         }
@@ -119,6 +145,17 @@ public class GameControler : MonoBehaviour
         {
             _focusedUnit.transform.GetComponent<Rigidbody>().AddForce(0, 300, 0);
         }
+        
+        // PowerUp sellection
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            _selectedPowerUp++;
+            if (gm.GetCurrentPlayer().GetValidPowerUps().Count <= _selectedPowerUp)
+            {
+                _selectedPowerUp = 0;
+            }
+            UpdatePowerUpText();
+        }
 
         // Rotation
         if (_lastMousePos.Equals(Vector3.zero))
@@ -137,7 +174,7 @@ public class GameControler : MonoBehaviour
         
         // Check if time is up
         // Don't check with TimeMachine powerup
-        if (GameManager.GetGameManager().GetCurrentPlayer().GetActivePowerUps().Contains(PowerUp.Type.TimeMachine))
+        if (gm.GetCurrentPlayer().GetActivePowerUps().Contains(PowerUp.Type.TimeMachine))
         {
             return;
         }
@@ -145,9 +182,9 @@ public class GameControler : MonoBehaviour
         _controlTime += Time.deltaTime;
         if (_controlTime > 10)
         {
-            GameManager.GetGameManager().SwitchPlayers();
+            gm.SwitchPlayers();
             _moveToUnit = false;
-            GameManager.GetGameManager().SetGameState(GameManager.GameState.CameraMovement);
+            gm.SetGameState(GameManager.GameState.CameraMovement);
             _controlTime = 0;
             _lastMousePos = Vector3.zero;
         }
@@ -165,17 +202,43 @@ public class GameControler : MonoBehaviour
         // Calculating distance since .Equal doesn't always work
         if (Vector3.Distance(newLocation, _camera.transform.position) < .01f && Quaternion.Angle(newRotation, _camera.transform.rotation) < .01f)
         {
-            GameManager.GetGameManager().SetGameState(GameManager.GameState.UnitControl);
             return false;
-        }
-        if(true)
-        {
-            Debug.Log(newLocation + " | " + _camera.transform.position + " | " + newRotation + " | " + _camera.transform.rotation);
         }
 
         _camera.transform.position = newLocation;
         _camera.transform.rotation = newRotation;
         return true;
+    }
+
+    /// <summary>
+    /// Updates the PowerUp text
+    /// </summary>
+    /// <param name="force">When true the text will update even when it's already active.</param>
+    private void UpdatePowerUpText()
+    {
+        if (!powerUpsText.IsActive())
+        {
+            powerUpsText.gameObject.SetActive(true);
+            _selectedPowerUp = 0;
+        }
+        
+        GameManager gameManager = GameManager.GetGameManager();
+        
+        StringBuilder sb = new StringBuilder();
+        List<PowerUp> validPowerUps = gameManager.GetCurrentPlayer().GetValidPowerUps();
+
+        for (int i = 0; i < validPowerUps.Count; i++)
+        {
+            sb.Append(validPowerUps[i].GetType());
+            if (_selectedPowerUp == i)
+            {
+                sb.Append(" *");
+            }
+
+            sb.Append('\n');
+        }
+
+        powerUpsText.text = sb.ToString();
     }
 
     private void UpdateUI()
