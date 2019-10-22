@@ -10,17 +10,26 @@ public class GameManager : MonoBehaviour
 {
     public string turnHolder;
     public int maxCreationPoints;
-    public int redPlayerCreationPoints;
-    public int bluePlayerCreationPoints;
-    public int turnHolderPoints;
+    public float redPlayerCreationPoints;
+    public float bluePlayerCreationPoints;
+    public bool redCanBuy = true;
+    public bool blueCanBuy = true;
+    
+    
+    public float turnHolderPoints;
     private UiManager UiM;
 
     public List<Transform> transition = new List<Transform>();
     public List<Transform> currentPath = new List<Transform>();
     public Transform playerCamera;
-    public bool cameraAnimate = false;
+    public bool cameraAnimateNormal = false;
+    public bool cameraAnimateReverse = false;
     public int cameraTarget;
     
+    // place Character  bool
+    public bool canPlaceChar = false;
+    // character to be placed instance
+    public GameObject characterInstance;
     //here are the phases of battle
     public enum Phase
     {
@@ -46,13 +55,6 @@ public class GameManager : MonoBehaviour
         BattleAi = 10,
         BattleEnd = 11
     }
-    
-    
-    public enum PhaseAction
-    {
-        LoadLevelAndSetValues = 1,
-    }
-    
     //game phase
     public Phase gamePhase;
     
@@ -72,6 +74,7 @@ public class GameManager : MonoBehaviour
         UiM = GetComponent<UiManager>();
         //test
         turnHolder = "Red";
+
         redPlayerCreationPoints = maxCreationPoints;
         bluePlayerCreationPoints = maxCreationPoints;
         if (turnHolder == "Red")
@@ -90,21 +93,117 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (cameraAnimate == true)
+        if (cameraAnimateNormal == true)
         {
-            playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, currentPath[cameraTarget].position, Time.deltaTime * 2);
+            MoveCamera(0);
+        }
 
-            if (Vector3.Distance(playerCamera.position,currentPath[cameraTarget].position ) < 0.5f)
+        if (cameraAnimateReverse == true)
+        {
+            MoveCamera(1);
+        }
+
+        if (canPlaceChar == true)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                //character gets assigned in ui manager
+                PlaceCharacter(characterInstance);
+            }
+
+        }
+    }
+
+    public void PlaceCharacter(GameObject character)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Placement"))
+            {
+                
+                character.transform.position = hit.point;
+                // checks if their is a possibility for a player to buy more units.
+                if (redCanBuy == true || blueCanBuy == true)
+                {
+                    if (turnHolder == "Red")
+                    {
+                        turnHolder = "blue";
+                        turnHolderPoints = bluePlayerCreationPoints;
+                        Debug.Log("Switched to blue");
+                    }
+                    else
+                    {
+                        turnHolder = "Red";
+                        turnHolderPoints = redPlayerCreationPoints;
+                        Debug.Log("Switched to red");
+
+                    }
+                    
+
+                    StartCoroutine(PhaseEnd(Phase.CreatePlayerCharacters, Phase.PlacingUnits));
+                }
+                else
+                {
+                    if (turnHolder == "Red")
+                    {
+                        turnHolder = "blue";
+                        turnHolderPoints = bluePlayerCreationPoints;
+
+                    }
+                    else
+                    {
+                        turnHolder = "Red";
+                        turnHolderPoints = redPlayerCreationPoints;
+
+                    }
+                    StartCoroutine(PhaseEnd(Phase.SelectingUnit, Phase.PlacingUnits));
+                }
+            }
+            canPlaceChar = false;
+
+        }
+        else
+        {
+            Debug.Log("Didnt hit anything");
+        }
+
+
+        
+    }
+
+    public void MoveCamera(int order)
+    {
+        Transform cam = playerCamera.transform;
+        cam.position = Vector3.Lerp(cam.position, currentPath[cameraTarget].position, Time.deltaTime * 2);
+        cam.rotation = Quaternion.Lerp(cam.rotation, currentPath[cameraTarget].rotation, Time.deltaTime * 2);
+        
+        if (Vector3.Distance(playerCamera.position,currentPath[cameraTarget].position ) < 0.5f)
+        {
+
+            if (order == 0)
             {
                 if (cameraTarget == currentPath.Count - 1)
-                {
-                    cameraAnimate = false;
+                {    
+                    cameraAnimateNormal = false;
                 }
                 else
                 {
                     cameraTarget++;
+                } 
+            }
+
+            if (order == 1)
+            {
+                if (cameraTarget == 0)
+                {    
+                    cameraAnimateReverse = false;
                 }
-                
+                else
+                {
+                    cameraTarget--;
+                }  
             }
         }
     }
@@ -115,20 +214,20 @@ public class GameManager : MonoBehaviour
         {
             cameraTarget = 0;
             currentPath = path;
-            cameraAnimate = true;
+            cameraAnimateNormal = true;
+        }
+        else
+        {
+            currentPath = path;
+            cameraTarget = currentPath.Count -1;
+            cameraAnimateReverse = true;
         }
     }
 
    
 
     //After switching phase call this to start the phase. 
-    public IEnumerator PhaseCheck(Phase nextPhase, Phase disengageTarget)
-    {
-        DisengagePhases(disengageTarget);
-        gamePhase = nextPhase;
-        yield return new WaitForSeconds(4);
-        EngagePhases(gamePhase);
-    }
+   
 
     public void DisengagePhases(Phase phase)
     {
@@ -145,9 +244,27 @@ public class GameManager : MonoBehaviour
 
         if (phase == Phase.CreatePlayerCharacters)
         {
+            UiM.ActivateUi(UiManager.UiGroups.CreationUi, false);
             StartCamera(transition,"Normal");
             Debug.Log("===================\r" + "Phase: CreatePlayerCharacters-End\r" + "===================");
 
+        }
+
+        if (phase == Phase.PlacingUnits)
+        {
+            if (turnHolder == "Red" && blueCanBuy == true)    
+            {
+                StartCamera(transition,"Reverse");
+            }
+
+            if (turnHolder != "Red" && redCanBuy == true)
+            {
+                StartCamera(transition,"Reverse");
+            }
+            
+            
+            Debug.Log("===================\r" + "Phase: PlacingUnits-End\r" + "===================");
+            
         }
     }
 
@@ -173,21 +290,60 @@ public class GameManager : MonoBehaviour
             Debug.Log("===================\r" + "Phase: Tutorial-Start\r" + "===================");
 
         }
-
+        
         if (phase == Phase.CreatePlayerCharacters)
         {
+            
+           
             // activate ui
             Debug.Log("===================\r" + "Phase: CreatePlayerCharacters-Start\r" + "===================");
-            UiM.ActivateUi(UiManager.UiGroups.CreationUi);
+            UiM.ActivateUi(UiManager.UiGroups.CreationUi, true);
+        }
+
+        if (phase == Phase.PlacingUnits)
+        {
+            UnitMarkers(true);
+            Debug.Log("===================\r" + "Phase: PlacingUnits-Start\r" + "===================");
+            canPlaceChar = true;
+        }
+
+        if (phase == Phase.SelectingUnit)
+        {
+            UnitMarkers(true);
+            
+            Debug.Log("===================\r" + "Phase: SelectingUnit-Start\r" + "===================");
+
         }
         
     }
-
+    
+    public IEnumerator PhaseEnd(Phase newPhase, Phase endTarget)
+    {
+        yield return new WaitForSeconds(2f);
+        // game just started and this is the first thing my turn based system does.
+        StartCoroutine(PhaseCheck(newPhase, endTarget)); 
+    }
    
+    public IEnumerator PhaseCheck(Phase nextPhase, Phase disengageTarget)
+    {
+        DisengagePhases(disengageTarget);
+        gamePhase = nextPhase;
+        if (cameraAnimateNormal == true)
+        {
+            yield return new WaitForSeconds(2 * transition.Count);
+
+        }
+        else
+        {
+            yield return new WaitForSeconds(2f);
+
+        }
+        EngagePhases(gamePhase);
+    }
 
     public void AddUnitToTeam(GameObject unitToAdd)
     {
-        if (turnHolder == "red")
+        if (turnHolder == "Red")
         {
             redPlayerUnits.Add(unitToAdd); 
         }
@@ -197,12 +353,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public IEnumerator PhaseEnd(Phase newPhase, Phase endTarget)
-    {
-        yield return new WaitForSeconds(2f);
-        // game just started and this is the first thing my turn based system does.
-        StartCoroutine(PhaseCheck(newPhase, endTarget));
-    }
+ 
     public IEnumerator PhaseGoAhead()
     {
         yield return new WaitForSeconds(1f);
@@ -219,6 +370,27 @@ public class GameManager : MonoBehaviour
     {
         bluePlayerCreationPoints = maxPoints;
         redPlayerCreationPoints = maxPoints;
+    }
+
+    public void UnitMarkers(bool active)
+    {
+
+        if (turnHolder == "Red")
+        {
+            foreach (var unit in redPlayerUnits)
+            {
+                var script = unit.GetComponent<PlayerCharacter>();
+                script.ActivateMarker(active);
+            }
+        }
+        else
+        {
+            foreach (var unit in bluePlayerUnits)
+            {
+                var script = unit.GetComponent<PlayerCharacter>();
+                script.ActivateMarker(active);
+            }
+        }
     }
 }
 
