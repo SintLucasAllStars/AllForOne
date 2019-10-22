@@ -13,7 +13,7 @@ public class HitTarget : MonoBehaviour
     
     public void TakeDamage(float amount)
     {
-        health -= amount;
+        health -= amount/2;
         if (health <= 0)
         {
             Die();
