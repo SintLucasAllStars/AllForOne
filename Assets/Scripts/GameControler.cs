@@ -3,6 +3,11 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class is responsible for handling the different game states.
+/// Every game state has it's own method handling the things that need to be done for that specific state which is called once a frame.
+/// IEventListener: This class listens for IEventListener events.
+/// </summary>
 public class GameControler : MonoBehaviour, IEventListener
 {
     private Transform _cameraHome;
