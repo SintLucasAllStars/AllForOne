@@ -20,6 +20,8 @@ public class Unit : MonoBehaviour
     public Weapon currentWeapon;
     private float cooldown;
 
+    public Powerup activePowerup;
+
     public GameObject selfCam;
 
     private float gameTimer;
@@ -66,6 +68,10 @@ public class Unit : MonoBehaviour
         if (cld.gameObject.GetComponent<Weapon>())
         {
             currentWeapon = cld.gameObject.GetComponent<Weapon>();
+        }
+        if (cld.gameObject.GetComponent<Powerup>())
+        {
+            activePowerup = cld.gameObject.GetComponent<Powerup>();
         }
     }
 
