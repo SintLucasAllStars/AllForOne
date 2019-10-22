@@ -13,7 +13,7 @@ namespace MechanicFever
 
         private void SpawnPowerup()
         {
-            GameManager.Instance.SpawnPowerup(new PowerupData(
+            GameManager.Instance.UpdatePowerup(new PowerupData(
                 Map.Instance.GetRandomFreeNode(), 
                 true, 
                 "Powerup", 

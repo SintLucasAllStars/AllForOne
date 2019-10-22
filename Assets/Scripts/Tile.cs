@@ -22,5 +22,11 @@ namespace MechanicFever
             _occupiedBy = unit;
             _position.SetCollisionType(CollisionType.Occupied);
         }
+
+        public void Free()
+        {
+            _occupiedBy = null;
+            _position.SetCollisionType(CollisionType.None);
+        }
     }
 }

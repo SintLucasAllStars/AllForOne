@@ -4,8 +4,18 @@ using UnityEngine;
 
 namespace MechanicFever
 {
+    public enum GameState
+    {
+        UnitPlacement,
+        UnitMovement
+    }
     public class TurnManager : Singleton<TurnManager>
     {
+        private GameState _gameState = GameState.UnitPlacement;
+        public GameState GameState => _gameState;
+
+        public bool CanMoveUnits => _gameState == GameState.UnitMovement;
+
         private PlayerSide _currentTurn = PlayerSide.Red;
         public PlayerSide CurrentTurn => _currentTurn;
 

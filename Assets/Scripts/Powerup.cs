@@ -17,8 +17,31 @@ namespace MechanicFever
 
             Map.Instance.OccupyNode(node, this);
         }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Unit"))
+            {
+                Kill();
+            }
+        }
+
+        private void OnTriggerEnter(Collider collision)
+        {
+            if (collision.CompareTag("Unit"))
+            {
+                Kill();
+            }
+        }
+
+        public override void Kill()
+        {
+            _powerupData.SetActive(false);
+            GameManager.Instance.UpdatePowerup(_powerupData);
+        }
     }
 
+    [System.Serializable]
     public class PowerupData : ItemData
     {
         [SerializeField]

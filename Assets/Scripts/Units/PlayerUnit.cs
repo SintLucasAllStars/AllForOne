@@ -64,6 +64,9 @@ namespace MechanicFever
             if (!GameManager.Instance)
                 return;
 
+            //if (!TurnManager.Instance.CanMoveUnits)
+                //return;
+
             EnableMovement(true);
         }
 

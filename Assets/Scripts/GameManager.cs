@@ -16,7 +16,7 @@ namespace MechanicFever
 
         public void SpawnUnit(UnitData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
-        public void SpawnPowerup(PowerupData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
+        public void UpdatePowerup(PowerupData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
         public void ChangeTurn(GameData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
@@ -63,7 +63,11 @@ namespace MechanicFever
                 for (int i = 0; i < _units.Count; i++)
                 {
                     if (_units[i].GameData.Guid == gameData.Guid)
-                        _units.Remove(_units[i]);
+                    {
+                        Map.Instance.FreeNode(_units[i].GameData.Position);
+                        Destroy(_units[i].gameObject);
+                        _units.RemoveAt(i);
+                    }
                 }
                 if (GetUnitCount(gameData.PlayerSide) == 0)
                     Debug.Log(gameData.PlayerSide + " player loses.");
@@ -99,7 +103,11 @@ namespace MechanicFever
                 for (int i = 0; i < _powerups.Count; i++)
                 {
                     if (_powerups[i].PowerupData.Guid == gameData.Guid)
-                        _powerups.Remove(_powerups[i]);
+                    {
+                        Map.Instance.FreeNode(_powerups[i].PowerupData.Position);
+                        Destroy(_powerups[i].gameObject);
+                        _powerups.RemoveAt(i);
+                    }
                 }
                 return;
             }
@@ -110,15 +118,14 @@ namespace MechanicFever
                 Powerup u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Powerup>();
                 u.SetPowerupData(gameData);
                 u.SetPosition(gameData.Position);
+                _powerups.Add(u);
             }
         }
 
         private void UpdateClients(GameData gameData)
         {
             if (Player.Instance.GameData.Guid == gameData.Guid)
-            {
                 Player.Instance.SetGameData(gameData);
-            }
 
             //On player has disconnected.
             if (!gameData.IsConnected)

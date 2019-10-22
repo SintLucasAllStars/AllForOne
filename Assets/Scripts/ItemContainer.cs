@@ -9,6 +9,9 @@ namespace MechanicFever
 
         public virtual void SetPosition(Node node)
         { }
+
+        public virtual void Kill()
+        { }
     }
 }
 

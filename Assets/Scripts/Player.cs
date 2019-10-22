@@ -37,7 +37,7 @@ namespace MechanicFever
         public static Color32 GetColor(PlayerSide side)
         {
             if (side == PlayerSide.Blu)
-                return new Color32(0, 0, 255, 255);
+                return new Color32(67, 195, 255, 255);
             else
                 return new Color32(255, 0, 0, 255);
         }

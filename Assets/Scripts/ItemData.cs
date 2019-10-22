@@ -2,6 +2,7 @@
 
 namespace MechanicFever
 {
+    [System.Serializable]
     public class ItemData : GameData
     {
         [SerializeField]

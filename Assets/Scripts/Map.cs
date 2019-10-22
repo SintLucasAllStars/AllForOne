@@ -87,6 +87,13 @@ namespace MechanicFever
             _grid[n.X].Columns[n.Z].SetCollisionType(CollisionType.Occupied);
         }
 
+        public void FreeNode(Node node)
+        {
+            Node n = GetNode(node.X, node.Z);
+            _tiles[n.X, n.Z].Free();
+            _grid[n.X].Columns[n.Z].SetCollisionType(CollisionType.None);
+        }
+
         public void ResetOldNode(int x, int y) => Grid[x].Columns[y].SetCollisionType(CollisionType.None);
 
         public bool IsValidNode(int x, int z)
