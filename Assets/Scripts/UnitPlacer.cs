@@ -14,6 +14,12 @@ public class UnitPlacer : MonoBehaviour
     {
         if (GameManager.GetGameManager().GetGameState() != GameManager.GameState.PreGame)
         {
+            Destroy(unitPrice);
+            Destroy(playerPoints);
+            healthSlider.gameObject.SetActive(false);
+            strengthSlider.gameObject.SetActive(false);
+            speedSlider.gameObject.SetActive(false);
+            defenseSlider.gameObject.SetActive(false);
             Destroy(this);
         }
         
