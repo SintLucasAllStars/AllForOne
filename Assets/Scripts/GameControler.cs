@@ -79,6 +79,8 @@ public class GameControler : MonoBehaviour
     private void HandleUnitControl()
     {
         float speed = _focusedUnit._speed * Time.deltaTime;
+        
+        // X & Y Movement
         if (Input.GetKey(KeyCode.W))
         {
             _focusedUnit.transform.Translate(0, 0, speed);
@@ -95,7 +97,14 @@ public class GameControler : MonoBehaviour
         {
             _focusedUnit.transform.Translate(speed, 0, 0);
         }
+        
+        // Jumping
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _focusedUnit.transform.GetComponent<Rigidbody>().AddForce(0, 300, 0);
+        }
 
+        // Rotation
         if (_lastMousePos.Equals(Vector3.zero))
         {
             _lastMousePos = Input.mousePosition;
@@ -107,9 +116,10 @@ public class GameControler : MonoBehaviour
             _focusedUnit.gameObject.transform.Rotate(0, movement.x, 0);
         }
         
+        // Update camera location to follow
         MoveCameraTo(_focusedUnit.transform, 100);
         
-        // check if time is up
+        // Check if time is up
         _controlTime += Time.deltaTime;
         if (_controlTime > 10)
         {
@@ -130,10 +140,15 @@ public class GameControler : MonoBehaviour
             );
         Quaternion newRotation = Quaternion.RotateTowards(_camera.transform.rotation, location.rotation, maxMovement);
 
-        if (newLocation == _camera.transform.position && newRotation == _camera.transform.rotation)
+        // Calculating distance since .Equal doesn't always work
+        if (Vector3.Distance(newLocation, _camera.transform.position) < .01f && Quaternion.Angle(newRotation, _camera.transform.rotation) < .01f)
         {
             GameManager.GetGameManager().SetGameState(GameManager.GameState.UnitControl);
             return false;
+        }
+        if(true)
+        {
+            Debug.Log(newLocation + " | " + _camera.transform.position + " | " + newRotation + " | " + _camera.transform.rotation);
         }
 
         _camera.transform.position = newLocation;
