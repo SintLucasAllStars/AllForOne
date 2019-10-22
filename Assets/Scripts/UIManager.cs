@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public GameObject purchaseUI;
     public Transform blueUnits;
     public Transform redUnits;
+    public GameObject uiUnit;
 
     [Header("Purchase UI values")]
     public Text healthT;
@@ -121,7 +122,7 @@ public class UIManager : MonoBehaviour
             PlacingPhase();
         }
         else {
-            // don't buy
+            GameManager.instance.activePlayer = GameManager.instance.players[1];
         }
 
     }
@@ -132,19 +133,36 @@ public class UIManager : MonoBehaviour
     }
 
     public void PlaceUnit() {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(Camera.main.ScreenPointToRay(Input.mousePosition).origin,Vector3.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (GameManager.instance.activePlayer.units.Count <= 4)
         {
-            GameObject placedUnit = Instantiate(unit,hit.point,Quaternion.identity);
-            Unit newUnit = placedUnit.GetComponent<Unit>();
-            AssignValues(newUnit);
-
-            placing = false;
-            purchaseUI.SetActive(true);
-            GameManager.instance.EndTurn();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Debug.DrawRay(Camera.main.ScreenPointToRay(Input.mousePosition).origin, Vector3.forward);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject placedUnit = Instantiate(unit, hit.point, Quaternion.identity);
+                Unit newUnit = placedUnit.GetComponent<Unit>();
+                AssignValues(newUnit);
+                GameManager.instance.activePlayer.units.Add(newUnit);
+                if (GameManager.instance.activePlayer == GameManager.instance.players[0])
+                {
+                    GameObject newUI = Instantiate(uiUnit, transform.position, Quaternion.identity);
+                    newUI.transform.parent = redUnits;
+                }
+                else
+                {
+                    GameObject newUI = Instantiate(uiUnit, transform.position, Quaternion.identity);
+                    newUI.transform.parent = blueUnits;
+                }
+            }
         }
+        else
+        {
+            GameManager.instance.activePlayer = GameManager.instance.players[1];
+        }
+        placing = false;
+        purchaseUI.SetActive(true);
+        GameManager.instance.EndTurn();
     }
 
     private void AssignValues(Unit thisUnit) {

@@ -7,10 +7,8 @@ public class GameManager : MonoBehaviour
     public enum GameState {topview,gameplay};
     public GameState state;
 
-    public Player[] players = new Player[1];
+    public Player[] players = new Player[2];
     public Player activePlayer;
-
-    public int[] points = new int[1];
 
     public Transform topViewPos;
 
@@ -33,8 +31,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        players = GameObject.FindObjectsOfType<Player>();
         activePlayer = players[0];
+
+        Debug.Log(players[0]);
+        Debug.Log(players[1]);
     }
 
     private void Update()
