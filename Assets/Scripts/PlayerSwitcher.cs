@@ -14,6 +14,9 @@ public class PlayerSwitcher : MonoBehaviour
     public PlayerController pcScript;
 
     //public bool switchplayer;
+    public Animator anim;
+
+    public bool endGame = false;
 
     void Start()
     {
@@ -29,6 +32,7 @@ public class PlayerSwitcher : MonoBehaviour
             {
                 if (hit.transform.tag == "u_Player1" && !switchPlayer)
                 {
+                    anim = hit.transform.gameObject.GetComponent<Animator>();
                     Cursor.lockState = CursorLockMode.Locked;
                     pcScript = hit.transform.GetComponent<PlayerController>();
                     pcScript.speed = hit.transform.gameObject.GetComponent<UnitValues>().speed;
@@ -40,6 +44,7 @@ public class PlayerSwitcher : MonoBehaviour
                 }
                 else if(hit.transform.tag == "u_Player2" && switchPlayer)
                 {
+                    anim = hit.transform.gameObject.GetComponent<Animator>();
                     Cursor.lockState = CursorLockMode.Locked;
                     pcScript = hit.transform.GetComponent<PlayerController>();
                     pcScript.speed = hit.transform.gameObject.GetComponent<UnitValues>().speed;
@@ -63,6 +68,11 @@ public class PlayerSwitcher : MonoBehaviour
 
     public void SwitchPlayer()
     {
-        switchPlayer = !switchPlayer;
+        if (!endGame)
+        {
+            switchPlayer = !switchPlayer;
+            pcScript.SetAnimState();
+            pcScript.AnimRemover();
+        }
     }
 }

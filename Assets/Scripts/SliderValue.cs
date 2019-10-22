@@ -99,10 +99,10 @@ public class SliderValue : MonoBehaviour
     public void NextButtonClick()
     {
         optionsMenu.SetActive(false);
-        for (int i = 0; i < groundCollider.Length; i++)
-        {
-            groundCollider[i].enabled = true;
-        }
+        //for (int i = 0; i < groundCollider.Length; i++)
+        //{
+        //    groundCollider[i].enabled = true;
+        //}
         PointsSaver();
     }
 
@@ -130,10 +130,10 @@ public class SliderValue : MonoBehaviour
             optionsMenu.gameObject.transform.GetChild(17).GetComponent<Image>().color = new Color32(45, 136, 221, 100);
 
             optionsMenu.SetActive(true);
-            for (int i = 0; i < groundCollider.Length; i++)
-            {
-                groundCollider[i].enabled = false;
-            }
+            //for (int i = 0; i < groundCollider.Length; i++)
+            //{
+            //    groundCollider[i].enabled = false;
+            //}
             return;
         }
         if (switchTurn || playerOneDone == true)
@@ -145,10 +145,10 @@ public class SliderValue : MonoBehaviour
             optionsMenu.gameObject.transform.GetChild(17).GetComponent<Image>().color = new Color32(250, 56, 48, 100);
 
             optionsMenu.SetActive(true);
-            for (int i = 0; i < groundCollider.Length; i++)
-            {
-                groundCollider[i].enabled = false;
-            }
+            //for (int i = 0; i < groundCollider.Length; i++)
+            //{
+            //    groundCollider[i].enabled = false;
+            //}
         }
     }
 
