@@ -7,13 +7,11 @@ namespace MechanicFever
         private UnitData _gameData = new UnitData();
         public UnitData GameData => _gameData;
 
-        [SerializeField]
         private Camera _unitCamera;
         public Camera UnitCamera => _unitCamera;
 
         public void EnableUnitCamera(bool isEnabled) => _unitCamera.enabled = isEnabled;
 
-        [SerializeField]
         private UnitController _unitController;
 
         [SerializeField]
@@ -21,6 +19,9 @@ namespace MechanicFever
 
         private void Awake()
         {
+            _unitCamera = GetComponentInChildren<Camera>();
+            _unitController = GetComponent<UnitController>();
+
             EnableUnitCamera(false);
 
             //Check for the unit creation scene.
