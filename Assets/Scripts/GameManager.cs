@@ -23,8 +23,8 @@ public class GameManager
     {
         _gameManager = this;
         _gameState = GameState.PreGame;
-        _player1 = new Player("Player 1", Player.Color.Red);
-        _player2 = new Player("Player 2", Player.Color.Blue);
+        _player1 = new Player("Player 1 (Red)", Player.Color.Red);
+        _player2 = new Player("Player 2 (Blue)", Player.Color.Blue);
 
         _currentPlayer = _player1;
         
