@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Unit : MonoBehaviour
 {
@@ -15,10 +16,11 @@ public class Unit : MonoBehaviour
 
     public bool isFortified;
     public bool isActive;
-    public MonoBehaviour shit;
 
     public Weapon currentWeapon;
     private float cooldown;
+
+    public GameObject selfCam;
 
     private void Start()
     {
@@ -29,15 +31,31 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (isActive)
+        if (isActive && GameManager.instance.state == GameState.Playing)
         {
-            Playing();
+            selfCam.SetActive(true);
+        }
+        else
+        {
+            selfCam.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+
+        if (isActive)
         {
-            isFortified = true;
-            isActive = false;
+            GetComponent<FirstPersonController>().enabled = true;
+            GetComponent<CharacterController>().enabled = true;
+            Camera.main.gameObject.SetActive(false);
+            Playing();
+        }
+        else {
+            GetComponent<FirstPersonController>().enabled = false;
+            GetComponent<CharacterController>().enabled = false;
+            if (Camera.main != null)
+            {
+                Camera.main.gameObject.SetActive(true);
+            }
+            selfCam.SetActive(false);
         }
     }
 
@@ -51,6 +69,12 @@ public class Unit : MonoBehaviour
 
     private void Playing()
     {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            isFortified = true;
+            isActive = false;
+        }
+
         WeaponCooldown();
         if (Input.GetButtonDown(buttonName:"Fire1") && cooldown >= 10)
         {

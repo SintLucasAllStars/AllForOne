@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState {Hiring, UnitSelection, Playing};
     public GameState state;
 
     public Player[] players = new Player[2];
@@ -55,14 +54,13 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.UnitSelection:
+                Cursor.visible = true;
                 if (selectedUnit != null)
                 {
                     selectedUnit.GetComponent<Unit>().isActive = true;
                     uiManager.redTeamUI.SetActive(false);
                     uiManager.blueTeamUI.SetActive(false);
-                    Debug.Log("Completed UnitSelection PreState");
                     state = GameState.Playing;
-                    Debug.Log("Completed UnitSelection postState");
                 }
                 break;
             case GameState.Playing:
@@ -72,9 +70,7 @@ public class GameManager : MonoBehaviour
                     uiManager.redTeamUI.SetActive(true);
                     uiManager.blueTeamUI.SetActive(true);
                     EndTurn();
-                    Debug.Log("Completed Playing PreState");
                     state = GameState.UnitSelection;
-                    Debug.Log("Completed Playing postState");
                 }
                 break;
             default:

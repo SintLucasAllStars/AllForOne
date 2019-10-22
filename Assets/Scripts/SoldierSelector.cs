@@ -32,6 +32,7 @@ public class SoldierSelector : MonoBehaviour
                 GameManager.instance.selectedUnit = u.gameObject;
                 u.isFortified = false;
                 u.isActive = true;
+                u.selfCam.SetActive(true);
             }
         }
     }
