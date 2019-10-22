@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,8 +26,11 @@ public class PlayerController : MonoBehaviour
     RaycastHit hit;
 
     public PlayerSwitcher psScript;
+    public TimeBalk tbScript;
 
     bool startGame = false;
+
+    public TMP_Text winText;
 
     void Start()
     {
@@ -87,16 +93,17 @@ public class PlayerController : MonoBehaviour
 
             //this.transform.position += Vector3.Normalize(targetDirection);
             //rb.AddForce(targetDirection * speed);
-            if (e_health <= 0)
-            {
-                e_dead = true;
-                e_Anim.SetBool("isDead", true);
-                StartCoroutine(WaitForDeadAni());
-            }
-            else
-            {
+
+            //if (e_health <= 0)
+            //{
+            //    e_dead = true;
+            //    e_Anim.SetBool("isDead", true);
+            //    StartCoroutine(WaitForDeadAni());
+            //}
+            //else
+            //{
                 
-            }
+            //}
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -172,6 +179,28 @@ public class PlayerController : MonoBehaviour
             psScript.endGame = true;
             Debug.Log("Player 1 WINS!");
         }
+
+        if (e_health <= 0)
+        {
+            e_dead = true;
+            e_Anim.SetBool("isDead", true);
+            winText = GameObject.Find("Timer").GetComponent<TimeBalk>().playerTurnText;
+            if (GameObject.FindGameObjectsWithTag("u_Player1").Length <= 1)
+            {
+                //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                winText.text = ("Player 2 won!");
+            }
+            if (GameObject.FindGameObjectsWithTag("u_Player2").Length <= 1)
+            {
+                //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                winText.text = ("Player 1 won!");
+            }
+            StartCoroutine(WaitForDeadAni());
+        }
+        else
+        {
+
+        }
     }
 
     public void SetAnimState()
@@ -187,6 +216,14 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(4);
         Destroy(enemy);
         e_health = 1;
+        if (GameObject.FindGameObjectsWithTag("u_Player1").Length < 1)
+        {
+            Player1Win();
+        }
+        if (GameObject.FindGameObjectsWithTag("u_Player2").Length < 1)
+        {
+            Player2Win();
+        }
     }
 
     IEnumerator WaitForPunch()
@@ -200,14 +237,31 @@ public class PlayerController : MonoBehaviour
     {
         psScript.anim.SetBool("isPunching", false);
         e_Anim.SetBool("isHit", false);
-        e_health -= (this.GetComponent<UnitValues>().strength / e_defense);
-        hit.transform.gameObject.GetComponent<UnitValues>().health = e_health;
+        if (e_Anim.GetBool("isReady") == true)
+        {
+            e_health -= (this.GetComponent<UnitValues>().strength / e_defense);
+            hit.transform.gameObject.GetComponent<UnitValues>().health = e_health;
+        }
+        else
+        {
+            e_health -= (this.GetComponent<UnitValues>().strength / 10 * 2);
+            hit.transform.gameObject.GetComponent<UnitValues>().health = e_health;
+        }
     }
 
     public void AnimRemover()
     {
-        e_Anim.SetBool("isHit", false);
-        e_Anim = null;
-        enemy = null;
+        //e_Anim.SetBool("isHit", false);
+        //e_Anim = null;
+        //enemy = null;
+    }
+
+    public void Player1Win()
+    {
+        SceneManager.LoadScene("Player 2 win");
+    }
+    public void Player2Win()
+    {
+        SceneManager.LoadScene("Player 1 win");
     }
 }

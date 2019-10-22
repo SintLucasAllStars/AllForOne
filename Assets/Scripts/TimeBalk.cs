@@ -30,11 +30,25 @@ public class TimeBalk : MonoBehaviour
         if(timeRemaining <= 0)
         {
             Cursor.lockState = CursorLockMode.None;
-            timeRemaining = 10;
+            //timeRemaining = 10;
             SwapNum(ref a, ref b);
-            playerTurnText.text = ("Player ") + a + (" turn");
-            cmScript.BackToTop();
-            return;
+            if (GameObject.FindGameObjectsWithTag("u_Player1").Length <= 1)
+            {
+                playerTurnText.text = ("Player 1 won!");
+                return;
+            }
+            if (GameObject.FindGameObjectsWithTag("u_Player2").Length <= 1)
+            {
+                playerTurnText.text = ("Player 2 won!");
+                return;
+            }
+            else
+            {
+                timeRemaining = 10;
+                playerTurnText.text = ("Player ") + a + (" turn");
+                cmScript.BackToTop();
+                return;
+            }
         }
         else if(timeRemaining > 0)
         {
