@@ -223,7 +223,7 @@ public class GameControler : MonoBehaviour, IEventListener
             _focusedUnit.transform.GetComponent<Rigidbody>().AddForce(0, 300, 0);
         }
         
-        // PowerUp sellection
+        // PowerUp selection
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             _selectedPowerUp++;
@@ -232,6 +232,18 @@ public class GameControler : MonoBehaviour, IEventListener
                 _selectedPowerUp = 0;
             }
             UpdatePowerUpText();
+        }
+        
+        // PowerUp activation
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            List<PowerUp> validPowerUps = gm.GetCurrentPlayer().GetValidPowerUps();
+            if (validPowerUps.Count != 0)
+            {
+                PowerUp selected = validPowerUps[_selectedPowerUp];
+                selected.Activate();
+                UpdatePowerUpText();
+            }
         }
 
         // Rotation

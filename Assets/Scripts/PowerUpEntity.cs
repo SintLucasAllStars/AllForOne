@@ -34,6 +34,10 @@ public class PowerUpEntity : MonoBehaviour
             Player player = gameManager.GetCurrentPlayer();
             
             player.AddPowerUp(_powerUp);
+            // Adding more powerups for testing
+            player.AddPowerUp(new PowerUp(PowerUp.Type.Adrenaline));
+            player.AddPowerUp(new PowerUp(PowerUp.Type.TimeMachine));
+            player.AddPowerUp(new PowerUp(PowerUp.Type.Rage));
             
             gameManager.CallPowerUpPickupEvent(_powerUp, player);
             

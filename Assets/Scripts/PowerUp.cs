@@ -52,6 +52,7 @@ public class PowerUp
             return false;
         }
 
+        _valid = false;
         _active = true;
         return true;
     }
