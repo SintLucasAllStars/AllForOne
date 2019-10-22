@@ -36,7 +36,10 @@ public class Character : MonoBehaviour
         }
         else
             animator.enabled = true;
-
+        if(transform.position.y < -30)
+        {
+            Destroy(transform.gameObject);
+        }
         switch (characterState)
         {
             case CharacterStates.Idle:
