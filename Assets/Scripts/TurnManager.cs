@@ -31,9 +31,12 @@ namespace MechanicFever
         public delegate void OnChangeTurn();
         public static OnChangeTurn ChangeTurn;
 
-        private void OnEnable() => ChangeTurn += ShowTurn;
+        public delegate void OnTurnChanged();
+        public static OnTurnChanged TurnChanged;
 
-        private void OnDisable() => ChangeTurn -= ShowTurn;
+        private void OnEnable() => TurnChanged += ShowTurn;
+
+        private void OnDisable() => TurnChanged -= ShowTurn;
 
         private void Start() => ShowTurn();
 
@@ -67,6 +70,7 @@ namespace MechanicFever
             _currentTurn = playerSide;
             _turns++;
             CheckTurn();
+            TurnChanged();
         }
 
         private void CheckTurn()

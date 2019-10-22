@@ -65,8 +65,23 @@ namespace MechanicFever
             if (!GameManager.Instance)
                 return;
 
-            //if (!TurnManager.Instance.CanMoveUnits)
-                //return;
+            if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
+            {
+                Notifier.Instance.ShowNotification("It is not your turn.");
+                return;
+            }
+
+            if (!TurnManager.Instance.CanMoveUnits)
+            {
+                Notifier.Instance.ShowNotification("You cannot move units yet.");
+                return;
+            }
+
+            if (_gameData.PlayerSide != Player.Instance.GameData.PlayerSide)
+            {
+                Notifier.Instance.ShowNotification("This is not your unit.");
+                return;
+            }
 
             EnableMovement(true);
         }
