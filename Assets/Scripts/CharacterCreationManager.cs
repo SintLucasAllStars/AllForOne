@@ -10,6 +10,28 @@ namespace MechanicFever
         private string[] _types = null;
 
         private int _health = 0, _strength = 0, _speed = 0, _defense = 0;
+
+        public void AddHealth(int i)
+        {
+            _health = Mathf.Clamp(_health + i, 1, 10);
+            UpdateValues();
+        }
+        public void AddStrength(int i)
+        {
+            _strength = Mathf.Clamp(_strength + i, 1, 10);
+            UpdateValues();
+        }
+        public void AddSpeed(int i)
+        {
+            _speed = Mathf.Clamp(_speed + i, 1, 10);
+            UpdateValues();
+        }
+        public void AddDefense(int i)
+        {
+            _defense = Mathf.Clamp(_defense + i, 1, 10);
+            UpdateValues();
+        }
+
         private string _type = "Overlord";
 
         [SerializeField]
@@ -26,15 +48,16 @@ namespace MechanicFever
 
         public void SetRandomValues()
         {
-            UpdateValues(Mathf.RoundToInt(Random.Range(_healthSlider.minValue + (_healthSlider.maxValue / 4), _healthSlider.maxValue - (_healthSlider.maxValue / 4))),
-    Mathf.RoundToInt(Random.Range(_strengthSlider.minValue + (_strengthSlider.maxValue / 4), _strengthSlider.maxValue - (_strengthSlider.maxValue / 4))),
-    Mathf.RoundToInt(Random.Range(_speedSlider.minValue + (_speedSlider.maxValue / 4), _speedSlider.maxValue - (_speedSlider.maxValue / 4))),
-    Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))), _types[Random.Range(0, _types.Length)]);
+            UpdateValues(
+                Mathf.RoundToInt(Random.Range(_healthSlider.minValue + (_healthSlider.maxValue / 4), _healthSlider.maxValue - (_healthSlider.maxValue / 4))),
+                Mathf.RoundToInt(Random.Range(_strengthSlider.minValue + (_strengthSlider.maxValue / 4), _strengthSlider.maxValue - (_strengthSlider.maxValue / 4))),
+                Mathf.RoundToInt(Random.Range(_speedSlider.minValue + (_speedSlider.maxValue / 4), _speedSlider.maxValue - (_speedSlider.maxValue / 4))),
+                Mathf.RoundToInt(Random.Range(_defenseSlider.minValue + (_defenseSlider.maxValue / 4), _defenseSlider.maxValue - (_defenseSlider.maxValue / 4))), _types[Random.Range(0, _types.Length)]);
         }
 
-        public void UpdateValues() => UpdateValues(Mathf.RoundToInt(_healthSlider.value), Mathf.RoundToInt(_strengthSlider.value), Mathf.RoundToInt(_speedSlider.value), Mathf.RoundToInt(_defenseSlider.value), _type, true);
+        public void UpdateValues() => UpdateValues(_health, _strength, _speed, _defense, _type);
 
-        public void UpdateValues(int health, int strength, int speed, int defense, string type, bool sliders = false)
+        public void UpdateValues(int health, int strength, int speed, int defense, string type)
         {
             _health = health;
             _strength = strength;
@@ -45,10 +68,6 @@ namespace MechanicFever
             UpdatePlayerUnit();
             UpdateText();
             SpawnUnit();
-
-            if (sliders)
-                return;
-
             SetSliderValues(_health, _strength, _speed, _defense);
         }
 

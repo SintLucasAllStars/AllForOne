@@ -71,6 +71,8 @@ namespace MechanicFever
             int i = ((int)_currentTurn + 1) % Enum.GetNames(typeof(PlayerSide)).Length;
             _currentTurn = (PlayerSide)i;
 
+            _turnTime = 0;
+
             //Send message to server so that everyone gets the turn change.
             GameManager.Instance.ChangeTurn(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
             ChangeTurn();
@@ -93,7 +95,8 @@ namespace MechanicFever
             if (_turns >= 2)
                 _gameState = GameState.UnitMovement;
 
-            //_timerCoroutine = StartCoroutine(Timer());
+            if(_currentTurn == Player.Instance.GameData.PlayerSide)
+                _timerCoroutine = StartCoroutine(Timer());
         }
 
         private IEnumerator Timer()
@@ -107,9 +110,6 @@ namespace MechanicFever
             NextTurn();
         }
 
-        private void Update()
-        {
-            _turnTimeText.text = _turnTime.ToString();
-        }
+        private void Update() => _turnTimeText.text = _turnTime.ToString();
     }
 }

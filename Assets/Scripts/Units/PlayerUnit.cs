@@ -86,6 +86,12 @@ namespace MechanicFever
             EnableMovement(true);
         }
 
+        private void OnEnable() => TurnManager.ChangeTurn += DisableMovement;
+
+        private void OnDisable() => TurnManager.ChangeTurn -= DisableMovement;
+
+        private void DisableMovement() => EnableMovement(false);
+
         private void EnableMovement(bool isEnabled)
         {
             RTS_Camera.Instance.Camera.enabled = !isEnabled;
