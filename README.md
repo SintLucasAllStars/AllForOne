@@ -23,12 +23,12 @@ The game is to be played by 2 players. They can be both on the same computer (Ch
 * On the begining of each turn, one power up or weapon will randomly spawn on the play area. ✔
 * The current player will then choose one unit to control by clicking it.
 * Once the player clicks the unit the camera flies into 3rd person mode, a 10 second timer starts and the player now has full control of the character and can (more details on each of these below): ✖
-  - Run
-  - Jump
+  - Run ✔
+  - Jump ✔
   - Attack / use weapon (if you have one)
   - Pick up power ups and weapons
   - Use power ups
-  - Fortify
+  - Fortify ✔
 * Once the 10 seconds are finished the turn is over.
 * The game ends when one of the players has no more units alive. Obviously the other player wins. ✔
 
@@ -60,7 +60,7 @@ This is the initial phase where the players buy and place units on the game area
 
 * When the player starts, the counter should be clearly visible and counting down from 10.
 * The player can:
-  - Run / Jump anywhere on the game area
+  - Run / Jump anywhere on the game area 
   - Attack / use weapon: All players start without weapon and they can only punch. They can then pick up weapons that give them more range or hit points. (See attack/defense mechanic)
   - Pick up power ups and weapons. 
   - Use power ups (see description of powerups below)

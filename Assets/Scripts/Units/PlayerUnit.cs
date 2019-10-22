@@ -7,63 +7,32 @@ namespace MechanicFever
         private UnitData _gameData = new UnitData();
         public UnitData GameData => _gameData;
 
+        [SerializeField]
         private Camera _unitCamera;
         public Camera UnitCamera => _unitCamera;
 
         public void EnableUnitCamera(bool isEnabled) => _unitCamera.enabled = isEnabled;
 
-        private bool _canMove = false;
-
-        private Rigidbody _rigidbody;
+        [SerializeField]
+        private UnitController _unitController;
 
         [SerializeField]
-        private float mouseSensitivity = 100.0f, rotY = 0.0f;
+        private Renderer[] _coloredMaterials;
 
-        [SerializeField]
-        private GameObject _rocket;
-
-        [SerializeField]
-        private Transform _cannon;
-
-        private void FixedUpdate()
+        private void Awake()
         {
-            if(_canMove)
-            {
-                _rigidbody.velocity = new Vector3(Input.GetAxis("Horizontal") * _gameData.Speed / 2, 0, Input.GetAxis("Vertical") * _gameData.Speed / 2);
-
-                _rigidbody.velocity = transform.forward * _rigidbody.velocity.magnitude;
-
-                float mouseX = Input.GetAxis("Mouse X");
-
-                rotY += mouseX * mouseSensitivity * Time.deltaTime;
-
-                Quaternion localRotation = Quaternion.Euler(0, rotY, 0);
-                transform.rotation = localRotation;
-
-                if (Input.GetMouseButtonDown(0))
-                    Instantiate(_rocket, _cannon.transform.position, _cannon.transform.rotation);
-            }
-        }
-
-        private void Start()
-        {
-            _unitCamera = GetComponentInChildren<Camera>();
-            _rigidbody = GetComponent<Rigidbody>();
             EnableUnitCamera(false);
-
-            rotY = transform.localRotation.eulerAngles.y;
 
             //Check for the unit creation scene.
             if (!GameManager.Instance)
                 return;
 
             _gameData.SetPosition(Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
-            Renderer[] cubeRenderer = GetComponentsInChildren<Renderer>();
-            for (int i = 0; i < cubeRenderer.Length; i++)
+            for (int i = 0; i < _coloredMaterials.Length; i++)
             {
-                for (int j = 0; j < cubeRenderer[i].materials.Length; j++)
+                for (int j = 0; j < _coloredMaterials[i].materials.Length; j++)
                 {
-                    cubeRenderer[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
+                    _coloredMaterials[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
                 }
             }
         }
@@ -106,7 +75,7 @@ namespace MechanicFever
 
             EnableUnitCamera(isEnabled);
 
-            _canMove = isEnabled;
+            _unitController.EnableController(enabled);
         }
 
         public void EnableCursor(bool isEnabled)
