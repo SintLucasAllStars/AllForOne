@@ -36,7 +36,7 @@ namespace MechanicFever
             _currentTurn = (PlayerSide)i;
 
             //Send message to server so that everyone gets the turn change.
-            NetworkManager.Instance.SendMessage(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
+            GameManager.Instance.ChangeTurn(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
         }
 
         public bool HasTurn(PlayerSide side) => side == _currentTurn;

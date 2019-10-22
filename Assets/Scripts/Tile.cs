@@ -7,8 +7,8 @@ namespace MechanicFever
         private Node _position;
         public Node Position => _position;
 
-        private PlayerUnit _occupiedBy;
-        public PlayerUnit OccupiedBy => _occupiedBy;
+        private ItemContainer _occupiedBy;
+        public ItemContainer OccupiedBy => _occupiedBy;
 
         public void SetNode(Node node) => _position = node;
 
@@ -17,7 +17,7 @@ namespace MechanicFever
             _position = Map.Instance.GetNode(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));
         }
 
-        public void Occupy(PlayerUnit unit)
+        public void Occupy(ItemContainer unit)
         {
             _occupiedBy = unit;
             _position.SetCollisionType(CollisionType.Occupied);

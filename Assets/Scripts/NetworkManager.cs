@@ -57,10 +57,7 @@ namespace MechanicFever
             _webSocket.Send(message.GameData);
         }
 
-        new public void SendMessage(string message)
-        {
-            _webSocket.Send(message);
-        }
+        new public void SendMessage(string json) => _webSocket.Send(json);
 
         private void OnClose(string e)
         {
@@ -74,8 +71,6 @@ namespace MechanicFever
             Debug.Log("Connection Successful.");
             ConnectionSuccessful();
         }
-
-        public void SendMessage(GameData gameData) => SendMessage(new Message(gameData));
 
         private IEnumerator HandleNetwork(string url)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 namespace MechanicFever
 {
@@ -23,7 +24,7 @@ namespace MechanicFever
         private void Connect()
         {
             _gameData = new GameData("Player", Guid.NewGuid().ToString(), true, PlayerSide.Red);
-            NetworkManager.Instance.SendMessage(_gameData);
+            NetworkManager.Instance.SendMessage(JsonUtility.ToJson(_gameData));
         }
 
         public void SetGameData(GameData gameData) => _gameData = gameData;

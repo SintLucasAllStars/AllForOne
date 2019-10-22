@@ -71,7 +71,7 @@ namespace MechanicFever
         private void UpdatePlayerUnit()
         {
             int price = CalculateUnitPrice(_health, _strength, _speed, _defense);
-            Player.Instance.SetPlayerUnit(new UnitData("", new Node(), _type, true, true, PlayerSide.Red, _health, _strength, _speed, _defense, price));
+            Player.Instance.SetPlayerUnit(new UnitData(_health, _strength, _speed, _defense, price, "", new Node(), _type, true, true, PlayerSide.Red));
         }
 
         private void UpdateText()

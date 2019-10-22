@@ -8,15 +8,17 @@ namespace MechanicFever
     {
         private List<PlayerUnit> _units = new List<PlayerUnit>();
         private List<Player> _players = new List<Player>();
+        private List<Powerup> _powerups = new List<Powerup>();
 
         public int Connections => _players.Count;
 
-        private void Start()
-        {
-            StartCoroutine(HandleMessages());
-        }
+        private void Start() => StartCoroutine(HandleMessages());
 
-        public void SpawnUnit(UnitData data) => NetworkManager.Instance.SendMessage(data);
+        public void SpawnUnit(UnitData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
+
+        public void SpawnPowerup(PowerupData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
+
+        public void ChangeTurn(GameData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
         private IEnumerator HandleMessages()
         {
@@ -33,13 +35,24 @@ namespace MechanicFever
 
         public void HandleMessage(string message)
         {
-            UnitData data = JsonUtility.FromJson<UnitData>(message);
-            if (string.Equals(data.Type, "Player"))
-                UpdateClients(data);
-            else if (string.Equals(data.Type, "Turn"))
-                TurnManager.Instance.SetTurn(data.PlayerSide);
-            else
-                UpdateUnits(data);
+            GameData data = JsonUtility.FromJson<ItemData>(message);
+            switch (data.Type)
+            {
+                case "Player":
+                    UpdateClients(data);
+                    break;
+                case "Powerup":
+                    PowerupData powerup = JsonUtility.FromJson<PowerupData>(message);
+                    UpdatePowerups(powerup);
+                    break;
+                case "Turn":
+                    TurnManager.Instance.SetTurn(data.PlayerSide);
+                    break;
+                default:
+                    UnitData unit = JsonUtility.FromJson<UnitData>(message);
+                    UpdateUnits(unit);
+                    break;
+            }
         }
 
         private void UpdateUnits(UnitData gameData)
@@ -47,10 +60,10 @@ namespace MechanicFever
             //Unit has died.
             if (!gameData.IsActive)
             {
-                for (int i = 0; i < _players.Count; i++)
+                for (int i = 0; i < _units.Count; i++)
                 {
-                    if (_players[i].GameData.Guid == gameData.Guid)
-                        _players.Remove(_players[i]);
+                    if (_units[i].GameData.Guid == gameData.Guid)
+                        _units.Remove(_units[i]);
                 }
                 if (GetUnitCount(gameData.PlayerSide) == 0)
                     Debug.Log(gameData.PlayerSide + " player loses.");
@@ -58,7 +71,7 @@ namespace MechanicFever
             }
 
             //Unit existed and just gets updated.
-            if (DoesUnitExist(gameData.Guid))
+            if (DoesItemExist(gameData.Guid))
             {
                 //Checks if any player moves.
                 for (int i = 0; i < _units.Count; i++)
@@ -67,7 +80,6 @@ namespace MechanicFever
                     {
                         _units[i].MoveTo(gameData.Position);
                         _units[i].SetGameData(gameData);
-                        _units[i].SetPosition(gameData.Position);
                     }
                 }
             }
@@ -75,6 +87,28 @@ namespace MechanicFever
             {
                 PlayerUnit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<PlayerUnit>();
                 u.SetGameData(gameData);
+                u.SetPosition(gameData.Position);
+            }
+        }
+
+        private void UpdatePowerups(PowerupData gameData)
+        {
+            //Powerup has been picked up.
+            if (!gameData.IsActive)
+            {
+                for (int i = 0; i < _powerups.Count; i++)
+                {
+                    if (_powerups[i].PowerupData.Guid == gameData.Guid)
+                        _powerups.Remove(_powerups[i]);
+                }
+                return;
+            }
+
+            //Powerup gets spawned.
+            if (!DoesItemExist(gameData.Guid))
+            {
+                Powerup u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Powerup>();
+                u.SetPowerupData(gameData);
                 u.SetPosition(gameData.Position);
             }
         }
@@ -98,11 +132,16 @@ namespace MechanicFever
             }
         }
 
-        private bool DoesUnitExist(string guid)
+        private bool DoesItemExist(string guid)
         {
             for (int i = 0; i < _units.Count; i++)
             {
                 if (guid == _units[i].GameData.Guid)
+                    return true;
+            }
+            for (int i = 0; i < _powerups.Count; i++)
+            {
+                if (guid == _powerups[i].PowerupData.Guid)
                     return true;
             }
             return false;

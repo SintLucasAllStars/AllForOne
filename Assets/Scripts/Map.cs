@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace MechanicFever
 {
@@ -65,7 +66,21 @@ namespace MechanicFever
             return Grid[x].Columns[z];
         }
 
-        public void OccupyNode(Node node, PlayerUnit unit)
+        public Node GetRandomFreeNode()
+        {
+            List<Node> nodes = new List<Node>();
+            for (int x = 0; x < _sizeX; x++)
+            {
+                for (int z = 0; z < _sizeZ; z++)
+                {
+                    if (_grid[x].Columns[z].CollisionType == CollisionType.None)
+                        nodes.Add(_grid[x].Columns[z]);
+                }
+            }
+            return nodes[Random.Range(0, nodes.Count)];
+        }
+
+        public void OccupyNode(Node node, ItemContainer unit)
         {
             Node n = GetNode(node.X, node.Z);
             _tiles[n.X, n.Z].Occupy(unit);

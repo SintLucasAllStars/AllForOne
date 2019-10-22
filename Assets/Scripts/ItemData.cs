@@ -1,32 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MechanicFever
 {
-    public class ItemData
+    public class ItemData : GameData
     {
         [SerializeField]
-        protected string _type = "";
-        public string Type => _type;
+        private Node _position = null;
+        public Node Position => _position;
+
+        public void SetPosition(Node node) => _position = node;
 
         [SerializeField]
-        protected string _guid = "";
-        public string Guid => _guid;
+        private bool _isActive = true;
+        public bool IsActive => _isActive;
 
-        [SerializeField]
-        protected bool _isConnected = true;
-        public bool IsConnected => _isConnected;
+        public void SetActive(bool active) => _isActive = active;
 
-        public ItemData(string type, string guid, bool isConnected)
+        public ItemData(Node position, bool isActive, string type, string guid, bool isConnected, PlayerSide playerSide) : base(type, guid, isConnected, playerSide)
         {
-            _type = type;
-            _guid = guid;
-            _isConnected = isConnected;
+            _position = position;
+            _isActive = isActive;
         }
 
-        public ItemData(ItemData itemData)
+        public ItemData(ItemData itemData) : base(itemData)
         {
+            _isActive = itemData._isActive;
             _type = itemData._type;
             _guid = itemData._guid;
             _isConnected = itemData._isConnected;

@@ -2,7 +2,7 @@
 
 namespace MechanicFever
 {
-    public class PlayerUnit : MonoBehaviour
+    public class PlayerUnit : ItemContainer
     {
         private UnitData _gameData = new UnitData();
         public UnitData GameData => _gameData;
@@ -38,8 +38,7 @@ namespace MechanicFever
             }
         }
 
-        //Basic MoveTo method. Most classes inheriting from this class will override.
-        public virtual void MoveTo(Node node)
+        public override void MoveTo(Node node)
         {
             Node oldNode = new Node(_gameData.Position.X, _gameData.Position.Y, _gameData.Position.Z);
 
@@ -48,7 +47,7 @@ namespace MechanicFever
             SetPosition(node);
         }
 
-        public void SetPosition(Node node)
+        public override void SetPosition(Node node)
         {
             _gameData.SetPosition(node);
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,14 @@ namespace MechanicFever
 
         private void SpawnPowerup()
         {
-            Debug.Log("Spawned powerup");
+            GameManager.Instance.SpawnPowerup(new PowerupData(
+                Map.Instance.GetRandomFreeNode(), 
+                true, 
+                "Powerup", 
+                Guid.NewGuid().ToString(), 
+                true, 
+                (PowerupType)UnityEngine.Random.Range(0, Enum.GetNames(typeof(PowerupType)).Length), 
+                (PlayerSide)UnityEngine.Random.Range(0, Enum.GetNames(typeof(PlayerSide)).Length)));
         }
     }
 }
