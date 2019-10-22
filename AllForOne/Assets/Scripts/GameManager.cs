@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     public float timeLeft = 10.0f;
     public Text startText;
 
+    public GameObject[] items;
+    public Transform[] spawnplaces;
+
 
     public void Awake()
     {
@@ -115,6 +118,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         timeLeft = roundTime;
+        SpawnItems();
     }
     public void ReadyUp()
     {
@@ -168,6 +172,11 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
         gamestate = GameStates.Create;
+    }
+
+    private void SpawnItems()
+    {
+        Instantiate(items[Random.Range(0, items.Length)], spawnplaces[Random.Range(0, spawnplaces.Length)].position, Quaternion.identity);
     }
 
 }
