@@ -79,6 +79,11 @@ public class GameControler : MonoBehaviour
     private void HandleUnitControl()
     {
         float speed = _focusedUnit._speed * Time.deltaTime;
+
+        if (GameManager.GetGameManager().GetCurrentPlayer().GetActivePowerUps().Contains(PowerUp.Type.Adrenaline))
+        {
+            speed *= 1.5f;
+        }
         
         // X & Y Movement
         if (Input.GetKey(KeyCode.W))
@@ -120,6 +125,12 @@ public class GameControler : MonoBehaviour
         MoveCameraTo(_focusedUnit.transform, 100);
         
         // Check if time is up
+        // Don't check with TimeMachine powerup
+        if (GameManager.GetGameManager().GetCurrentPlayer().GetActivePowerUps().Contains(PowerUp.Type.TimeMachine))
+        {
+            return;
+        }
+        
         _controlTime += Time.deltaTime;
         if (_controlTime > 10)
         {
