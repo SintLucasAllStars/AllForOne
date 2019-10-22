@@ -3,7 +3,7 @@ using IExtraFunctions;
 using System;
 
 [RequireComponent(typeof(CharacterController))]
-public class Unit : MonoBehaviour
+public class Unit
 {
     public int health;
     public int strength;
@@ -33,39 +33,6 @@ public class Unit : MonoBehaviour
         this.weapon = WeaponController.WeaponDict[weapon];
     }
 
-    private void Start()
-    {
-        characterController = this.gameObject.GetComponent<CharacterController>();
-    }
-
-    private void FixedUpdate()
-    {
-        InputController();
-    }
-
-    private void InputController()
-    {
-        if (characterController.isGrounded)
-        {
-            var gravity = 20.0f;
-            var jumpHeight = 8.0f;
-            var moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-                speed *= 1.5f;
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                moveDir.y = jumpHeight;
-            }
-
-            moveDir *= speed;
-
-            //add the gravity
-            moveDir.y -= gravity * Time.deltaTime;
-            characterController.Move(moveDir * Time.deltaTime);
-        }
-    }
 
     public void PickUpPowerUp(PowerUp _powerUp) { this.powerUp = _powerUp; }
 
@@ -103,18 +70,5 @@ public class Unit : MonoBehaviour
     public static int Cost(int _health, int _strength, int _speed, int _defense)
     {
         return (_health * 3) + (_speed * 3) + (_strength * 2) + (_defense * 2);
-    }
-
-    public void SetColor(bool _isPlayerOne)
-    {
-        var mat = this.gameObject.GetComponent<Material>();
-        if (_isPlayerOne)
-        {
-            mat.color = colors[0];
-        }
-        else
-        {
-            mat.color = colors[1];
-        }
     }
 }

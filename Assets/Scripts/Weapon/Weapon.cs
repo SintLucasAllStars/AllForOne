@@ -21,7 +21,7 @@ public class Weapon
     /// <param name="width">width of the playarea</param>
     /// <param name="depth">depth of the playarea</param>
     /// <returns>The diagonal size of the playarea</returns>
-    public float GetDiagonalSizePlayarea(int width, int depth)
+    public static float GetDiagonalSizePlayarea(int width, int depth)
     {
         return Mathf.Sqrt(Mathf.Pow(2, width) * Mathf.Pow(2, depth));
     }

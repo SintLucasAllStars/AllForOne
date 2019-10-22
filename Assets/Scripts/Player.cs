@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
 
-public class Player : MonoBehaviour
+public class Player
 {
     private bool isPlayerOne;
 
@@ -12,10 +10,9 @@ public class Player : MonoBehaviour
     private bool myTurn;
     private bool isSelected;
 
-    [SerializeField] private CharacterController characterController;
-
     public Player(bool _isPlayerOne)
     {
+        units = new List<Unit>();
         this.isPlayerOne = _isPlayerOne;
     }
 

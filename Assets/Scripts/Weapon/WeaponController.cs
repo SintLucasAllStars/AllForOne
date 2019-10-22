@@ -2,14 +2,17 @@ using System.Collections.Generic;
 using System;
 using SimpleJSON;
 
-class WeaponController : Weapon
+class WeaponController
 {
     private static string filePath = "./Assets/Scripts/Weapon/WeaponStats.json";
 
-    public static Dictionary<TypeOfWeapon, Weapon> WeaponDict = new Dictionary<TypeOfWeapon, Weapon>();
+    public static Dictionary<Weapon.TypeOfWeapon, Weapon> WeaponDict = new Dictionary<Weapon.TypeOfWeapon, Weapon>();
 
-    private new TypeOfWeapon typeOfWeapon;
-    public WeaponController(int damage, int speed, float range, TypeOfWeapon typeOfWeapon) : base(damage, speed, range, typeOfWeapon) { }
+    public WeaponController()
+    {
+        UnityEngine.Debug.Log("loading");
+        LoadIn();
+    }
 
     public void LoadIn()
     {
@@ -20,7 +23,7 @@ class WeaponController : Weapon
 
         foreach (var item in jsonFile.Keys)
         {
-            TypeOfWeapon type = (TypeOfWeapon)Enum.Parse(typeof(TypeOfWeapon), item.ToString());
+            Weapon.TypeOfWeapon type = (Weapon.TypeOfWeapon)Enum.Parse(typeof(Weapon.TypeOfWeapon), item.ToString());
             var damage = jsonFile[item]["damage"];
             var speed = jsonFile[item]["speed"];
             var range = jsonFile[item]["range"];
@@ -29,7 +32,7 @@ class WeaponController : Weapon
             //instead of getting the data out of the JSON file
             if (range == "null")
             {
-                var _range = GetDiagonalSizePlayarea(gameController.width, gameController.depth);
+                var _range = Weapon.GetDiagonalSizePlayarea(gameController.width, gameController.depth);
                 Weapon weapon = new Weapon(damage, speed, _range, type);
                 WeaponDict.Add(type, weapon);
                 return;

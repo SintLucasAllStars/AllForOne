@@ -1,15 +1,11 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 
 public class UIController : Singleton<UIController>
 {
-    [SerializeField]
-    private Slider strength_s, speed_s, health_s, defense_s;
-
-    [SerializeField]
-    private TMP_Text strength_t, speed_t, health_t, defense_t;
 
     private int strength_i, speed_i, health_i, defense_i;
 
@@ -24,21 +20,11 @@ public class UIController : Singleton<UIController>
     private TextMeshPro countDownText;
 
     [SerializeField] private RectTransform BuyRoot;
-    private bool IsBuyScreenShowing;
+    private bool isBuyScreenShowing = false;
 
     private void Start()
     {
         AssignDropDown();
-        UpdateSliderText();
-    }
-
-
-    public void UpdateSliderText()
-    {
-        strength_t.text = strength_s.value.ToString();
-        speed_t.text = speed_s.value.ToString();
-        health_t.text = health_s.value.ToString();
-        defense_t.text = defense_s.value.ToString();
     }
 
     private void AssignDropDown()
@@ -55,14 +41,12 @@ public class UIController : Singleton<UIController>
 
     public void BuyUnit()
     {
-        strength_s.value = strength_i;
-        speed_s.value = speed_i;
-        health_s.value = health_i;
-        defense_s.value = defense_i;
-
+        strength_i = UnityEngine.Random.Range(0, 10);
+        speed_i = UnityEngine.Random.Range(0, 10);
+        health_i = UnityEngine.Random.Range(0, 10);
+        defense_i = UnityEngine.Random.Range(0, 10);
         var enumValue = (Weapon.TypeOfWeapon)weaponSelection.value;
-        var _unit = new Unit(health_i, strength_i, speed_i, defense_i, enumValue);
-
+        Unit _unit = new Unit(health_i, strength_i, speed_i, defense_i, enumValue);
         GameController.instance.BuyUnit(_unit, health_i, strength_i, speed_i, defense_i);
     }
 
@@ -73,15 +57,20 @@ public class UIController : Singleton<UIController>
         float speed = 1f;
         int[] pos = new int[2] { 0, -480 };
 
-        if (IsBuyScreenShowing)
+        if (isBuyScreenShowing)
         {
-            LeanTween.moveY(BuyRoot, pos[1], speed);
+            LeanTween.moveY(BuyRoot, -pos[1], speed);
         }
-        else if (!IsBuyScreenShowing)
+        else if (!isBuyScreenShowing)
         {
-            LeanTween.moveY(BuyRoot, pos[0], speed);
+            LeanTween.moveY(BuyRoot, -pos[0], speed);
         }
-        IsBuyScreenShowing = !IsBuyScreenShowing;
+        isBuyScreenShowing = !isBuyScreenShowing;
+
     }
 
+    public void GamePhase()
+    {
+
+    }
 }
