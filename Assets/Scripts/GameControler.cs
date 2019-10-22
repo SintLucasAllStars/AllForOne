@@ -15,6 +15,7 @@ public class GameControler : MonoBehaviour, IEventListener
 
     public Text currentPlayerText;
     public Text powerUpsText;
+    public Text turnTimerText;
 
     private void Start()
     {
@@ -59,11 +60,13 @@ public class GameControler : MonoBehaviour, IEventListener
         if (oldState == GameManager.GameState.UnitControl)
         {
             powerUpsText.gameObject.SetActive(false);
+            turnTimerText.gameObject.SetActive(false);
         }
 
         if (newState == GameManager.GameState.UnitControl)
         {
             UpdatePowerUpText();
+            turnTimerText.gameObject.SetActive(true);
         }
     }
 
@@ -180,6 +183,9 @@ public class GameControler : MonoBehaviour, IEventListener
         }
         
         _controlTime += Time.deltaTime;
+
+        turnTimerText.text = "Time left: " + (10 - _controlTime);
+        
         if (_controlTime > 10)
         {
             gm.SwitchPlayers();
