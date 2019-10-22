@@ -223,6 +223,28 @@ public class GameControler : MonoBehaviour, IEventListener
             _focusedUnit.transform.GetComponent<Rigidbody>().AddForce(0, 300, 0);
         }
         
+        // Fighting
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 10))
+            {
+                if (hit.collider.gameObject.CompareTag("Unit"))
+                {
+                    Unit unit = hit.collider.gameObject.GetComponent<Unit>();
+                    if (unit.color == gm.GetCurrentPlayer().GetColor())
+                    {
+                        // Cant hit own units
+                        return;
+                    }
+                    
+                    unit.Hit(_focusedUnit._strength);
+                }
+            }
+        }
+        
         // PowerUp selection
         if (Input.GetKeyDown(KeyCode.Tab))
         {

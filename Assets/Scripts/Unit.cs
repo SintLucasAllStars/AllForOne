@@ -23,5 +23,14 @@ public class Unit : MonoBehaviour
         _speed = MaxSpeed * speed;
         _defence = MaxDefence * defence;
     }
+
+    public void Hit(float strength)
+    {
+        _health -= strength/_defence;
+        if (_health < 0)
+        {
+            Destroy(gameObject);
+        }
+    }
     
 }
