@@ -15,7 +15,7 @@ namespace MechanicFever
         private UnitController _unitController;
 
         [SerializeField]
-        private Renderer[] _coloredMaterials;
+        private Renderer[] _coloredMaterials = null;
 
         private void Awake()
         {

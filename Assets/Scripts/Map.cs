@@ -13,13 +13,13 @@ namespace MechanicFever
         private MapX[] _grid = new MapX[0];
         public MapX[] Grid => _grid;
 
-        private Tile[,] _tiles;
+        private Tile[,] _tiles = null;
 
         [SerializeField]
-        private GameObject _tile;
+        private GameObject _tile = null;
 
         [SerializeField]
-        private GameObject[] _obstacles;
+        private GameObject[] _obstacles = null;
 
         public void SetMap(MapX[] map) => _grid = map;
 

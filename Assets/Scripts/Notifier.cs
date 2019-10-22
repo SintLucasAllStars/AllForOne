@@ -6,10 +6,10 @@ namespace MechanicFever
 {
     public class Notifier : Singleton<Notifier>
     {
-        private Animator _animator;
+        private Animator _animator = null;
 
         [SerializeField]
-        private TextMeshProUGUI _notificationText, _buttonText;
+        private TextMeshProUGUI _notificationText = null, _buttonText = null;
 
         public delegate void OnUnderstoodPress();
         public static OnUnderstoodPress Understood;

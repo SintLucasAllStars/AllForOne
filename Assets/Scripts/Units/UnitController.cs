@@ -13,7 +13,7 @@ namespace MechanicFever
         private bool _canMove = false;
 
         [SerializeField]
-        private float _mouseSensitivity = 100.0f, _rotY = 0.0f, _speed = 6f;
+        private float _mouseSensitivity = 100.0f, _rotY = 0.0f;
 
         [SerializeField]
         private GameObject _rocket = null;

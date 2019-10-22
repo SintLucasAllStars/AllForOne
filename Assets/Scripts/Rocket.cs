@@ -4,10 +4,10 @@ namespace MechanicFever
 {
     public class Rocket : MonoBehaviour
     {
-        private Rigidbody _rigidbody;
+        private Rigidbody _rigidbody = null;
 
         [SerializeField]
-        private GameObject _explosion;
+        private GameObject _explosion = null;
 
         private void Awake() => _rigidbody = GetComponent<Rigidbody>();
 

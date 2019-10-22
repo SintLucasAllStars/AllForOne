@@ -10,8 +10,6 @@ namespace MechanicFever
         [SerializeField]
         private bool _connectOnAwake = false;
 
-        private bool _hasConnected = false;
-
         private void Start()
         {
             if (_connectOnAwake)
@@ -75,7 +73,6 @@ namespace MechanicFever
         {
             Debug.Log("Connection Successful.");
             ConnectionSuccessful();
-            _hasConnected = true;
         }
 
         public void SendMessage(GameData gameData) => SendMessage(new Message(gameData));

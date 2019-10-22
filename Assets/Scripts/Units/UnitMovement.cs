@@ -4,7 +4,7 @@ namespace MechanicFever
 {
     public class UnitMovement : MonoBehaviour
     {
-        private float _turnSmoothVelocity = 3, _speedSmoothTime = 0.1f, _currentSpeed = 4;
+        private float _currentSpeed = 4;
 
         private Animator _animator;
         private Rigidbody _rigidBody;

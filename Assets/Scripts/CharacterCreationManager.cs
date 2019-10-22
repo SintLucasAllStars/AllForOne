@@ -7,20 +7,20 @@ namespace MechanicFever
     public class CharacterCreationManager : Singleton<CharacterCreationManager>
     {
         [SerializeField]
-        private string[] _types;
+        private string[] _types = null;
 
-        private int _health, _strength, _speed, _defense;
+        private int _health = 0, _strength = 0, _speed = 0, _defense = 0;
         private string _type = "Overlord";
 
         [SerializeField]
-        private TextMeshProUGUI _priceText, _healthValueText, _strengthValueText, _speedValueText, _defenseValueText;
+        private TextMeshProUGUI _priceText = null, _healthValueText = null, _strengthValueText = null, _speedValueText = null, _defenseValueText = null;
         [SerializeField]
-        private Slider _healthSlider, _strengthSlider, _speedSlider, _defenseSlider;
+        private Slider _healthSlider = null, _strengthSlider = null, _speedSlider = null, _defenseSlider = null;
 
-        private GameObject _showCaseUnit;
+        private GameObject _showCaseUnit = null;
 
         [SerializeField]
-        private Transform _showCaseContainer;
+        private Transform _showCaseContainer = null;
 
         private void Start() => SetRandomValues();
 
