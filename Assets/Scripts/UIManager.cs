@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     public GameObject uiUnit;
     public Text activePlayerText;
     public Image soldierImage;
+    public Button[] redUnitButtons = new Button[4];
+    public Button[] blueUnitButtons = new Button[4];
 
     [Header("Purchase UI values")]
     public Text healthT;
@@ -29,11 +31,6 @@ public class UIManager : MonoBehaviour
 
     public bool placing = false;
     public GameObject unit;
-
-    private void Start()
-    {
-
-    }
 
     public void AddValue(int _changeVal)
     {

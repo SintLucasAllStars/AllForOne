@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public GameObject purchaseUI;
     public UIManager uiManager;
+
+    public GameObject selectedUnit;
 
 
     #region Singleton
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+
         if (GameManager.instance.players[0].units.Count == 4 && GameManager.instance.players[1].units.Count == 4 && state == GameState.Hiring)
         {
             uiManager.purchaseUI.SetActive(false);
@@ -59,8 +63,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     public void EndTurn() {
         activePlayer = SwitchPlayer();
+        if (activePlayer == players[1])
+        {
+            foreach (Button b in uiManager.redUnitButtons)
+            {
+                b.interactable = true;
+            }
+            foreach (Button b in uiManager.blueUnitButtons)
+            {
+                b.interactable = false;
+            }
+        } else if (activePlayer == players[0])
+        {
+            foreach (Button b in uiManager.blueUnitButtons)
+            {
+                b.interactable = true;
+            }
+            foreach (Button b in uiManager.redUnitButtons)
+            {
+                b.interactable = false;
+            }
+        }
     }
 
     public Player SwitchPlayer() {
