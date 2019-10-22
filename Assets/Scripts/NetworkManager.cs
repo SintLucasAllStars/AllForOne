@@ -91,6 +91,9 @@ namespace MechanicFever
 
         private void OnApplicationQuit()
         {
+            GameData data = Player.Instance.GameData;
+            data.SetIsConnected(false);
+            SendMessage(JsonUtility.ToJson(data));
             Close("Player closed");
         }
     }

@@ -18,10 +18,14 @@ namespace MechanicFever
         [SerializeField]
         protected string _guid = "";
         public string Guid => _guid;
+        
+        public void SetGuid(string guid) => _guid = guid;
 
         [SerializeField]
         protected bool _isConnected = true;
         public bool IsConnected => _isConnected;
+
+        public void SetIsConnected(bool isConnected) => _isConnected = isConnected;
 
         [SerializeField]
         protected PlayerSide _playerSide = PlayerSide.Blu;

@@ -72,7 +72,14 @@ namespace MechanicFever
                     }
                 }
                 if (GetUnitCount(gameData.PlayerSide) == 0)
-                    Debug.Log(gameData.PlayerSide + " player loses.");
+                {
+                    NetworkManager.Instance.Close("Player won");
+                    if (gameData.PlayerSide == Player.Instance.GameData.PlayerSide)
+                        Notifier.Instance.ShowNotification("You lost!");
+                    else
+                        Notifier.Instance.ShowNotification("You won!");
+                    SceneManager.Instance.LoadScene(0);
+                }
                 return;
             }
 
@@ -137,6 +144,7 @@ namespace MechanicFever
 
             if(!gameData.IsConnected)
             {
+                Notifier.Instance.ShowNotification("Other user disconnected!");
                 NetworkManager.Instance.Close("Player leave");
                 SceneManager.Instance.LoadScene(0);
             }
