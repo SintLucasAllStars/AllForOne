@@ -44,18 +44,13 @@ namespace MechanicFever
                 Vector3 rigidDir = Vector3.Lerp(_rigidBody.velocity, targetDir, 1);
                 rigidDir = new Vector3(rigidDir.x, _rigidBody.velocity.y, rigidDir.z);
 
-                _rigidBody.velocity = rigidDir;
+                if(inputY > 0)
+                    _rigidBody.velocity = rigidDir;
 
                 if (inputY > 0)
                     _animator.SetBool("IsWalking", true);
                 else
                     _animator.SetBool("IsWalking", false);
-
-                if (normalizedTargetDir != Vector3.zero)
-                {
-                    float targetRotation = Mathf.Atan2(normalizedTargetDir.x, normalizedTargetDir.z) * Mathf.Rad2Deg;
-                    transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref _turnSmoothVelocity, 0.1f);
-                }
             }
         }
 
