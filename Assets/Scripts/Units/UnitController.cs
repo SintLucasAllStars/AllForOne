@@ -15,12 +15,6 @@ namespace MechanicFever
         [SerializeField]
         private float _mouseSensitivity = 100.0f, _rotY = 0.0f;
 
-        [SerializeField]
-        private GameObject _rocket = null;
-
-        [SerializeField]
-        private Transform _cannon = null;
-
         private bool _isWalking;
 
         private UnitMovement _movement;
@@ -58,7 +52,15 @@ namespace MechanicFever
                 transform.rotation = localRotation;
 
                 if (Input.GetMouseButtonDown(0))
-                    Instantiate(_rocket, _cannon.transform.position, _cannon.transform.rotation);
+                {
+                    RaycastHit hit;
+                    Vector3 fwd = transform.TransformDirection(Vector3.forward);
+                    Debug.DrawRay(transform.position, fwd * 50, Color.green);
+                    if (Physics.Raycast(transform.position, fwd, out hit, 50))
+                    {
+                        Debug.Log(hit.collider.gameObject.name);
+                    }
+                }
             }
         }
     }

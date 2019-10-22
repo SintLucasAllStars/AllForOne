@@ -14,21 +14,20 @@ var maxConnections = 2;
 
 console.log("Created server on port " + port + ".");
 
+resetServer();
+
+function resetServer()
+{
+	units = {};
+	players = {};
+	turn = 0;
+
+	//process.stdout.write('\033c');
+	console.log("Reset server.");
+}
+
 var server = ws.createServer(function (conn) 
 {
-	resetServer();
-
-	function resetServer()
-	{
-		units = {};
-		players = {};
-		turn = 0;
-
-		//process.stdout.write('\033c');
-		//console.log("Reset server.");
-		//console.log("First turn: " + getPlayerSide(turn) + ".");
-	}
-	
 	//Simple function that checks what skins have not been picked yet. No double skins.
 	function setPlayerColor(id)
 	{
@@ -77,13 +76,9 @@ var server = ws.createServer(function (conn)
 			return;
 		}
 		else if (msg._type == "Turn")
-		{
 			console.log("Next turn: " + getPlayerSide(msg._playerSide) + ".");
-		}
 		else if(msg._type)
-		{
 			console.log("Unit moved: " + msg._type + ".");
-		}
 			
 		units[msg._guid] = msg;
 			

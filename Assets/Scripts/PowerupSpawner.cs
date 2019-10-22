@@ -13,6 +13,9 @@ namespace MechanicFever
 
         private void SpawnPowerup()
         {
+            if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
+                return;
+
             GameManager.Instance.UpdatePowerup(new PowerupData(
                 Map.Instance.GetRandomFreeNode(), 
                 true, 

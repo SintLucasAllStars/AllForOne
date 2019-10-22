@@ -9,6 +9,7 @@ namespace MechanicFever
         UnitPlacement,
         UnitMovement
     }
+
     public class TurnManager : Singleton<TurnManager>
     {
         private GameState _gameState = GameState.UnitPlacement;
@@ -18,6 +19,9 @@ namespace MechanicFever
 
         private PlayerSide _currentTurn = PlayerSide.Red;
         public PlayerSide CurrentTurn => _currentTurn;
+
+        private int _turns;
+        public int Turns => _turns;
 
         [SerializeField]
         private TextMeshProUGUI _turnText = null;
@@ -41,6 +45,12 @@ namespace MechanicFever
                 return;
             }
 
+            if(Player.Instance.Wallet.Balance > Player.Instance.PlayerUnit.Price)
+            {
+                Notifier.Instance.ShowNotification("You need to place more units.");
+                return;
+            }
+
             //Move on to the next turn. Made dynamic in case there will be more players in the future.
             int i = ((int)_currentTurn + 1) % Enum.GetNames(typeof(PlayerSide)).Length;
             _currentTurn = (PlayerSide)i;
@@ -54,7 +64,17 @@ namespace MechanicFever
         public void SetTurn(PlayerSide playerSide)
         {
             _currentTurn = playerSide;
+            _turns++;
             ChangeTurn();
+            CheckTurn();
+        }
+
+        private void CheckTurn()
+        {
+            if (_turns < 2)
+                _gameState = GameState.UnitPlacement;
+            if (_turns >= 2)
+                _gameState = GameState.UnitMovement;
         }
     }
 }

@@ -11,7 +11,7 @@ The game is to be played by 2 players. They can be both on the same computer (Ch
 
 * The game starts with a top view map of a corridor system. ✔
 * Every player has an initial point budget of 100 points to buy and place units anywhere on the map. They do this in turn. meaning that player 1 "buys" and places 1 unit in the game area, then player 2 places one unit, then player 1 again, until both either run out of points or press a "Done" button. ✔
-* Units are humanoid 3D characters. ✖
+* Units are humanoid 3D characters. ✔
 * They have a set of stats that amount to:
   - Health ✔
   - Strength ✔ 
@@ -25,8 +25,8 @@ The game is to be played by 2 players. They can be both on the same computer (Ch
 * Once the player clicks the unit the camera flies into 3rd person mode, a 10 second timer starts and the player now has full control of the character and can (more details on each of these below): ✖
   - Run ✔
   - Jump ✔
-  - Attack / use weapon (if you have one)
-  - Pick up power ups and weapons
+  - Attack / use weapon (if you have one) ✔
+  - Pick up power ups and weapons ✔
   - Use power ups
   - Fortify ✔
 * Once the 10 seconds are finished the turn is over.
@@ -52,7 +52,7 @@ This is the initial phase where the players buy and place units on the game area
 ## BOARD MECHANICS DETAIL
 
 * The full game area should be visible on the top view. ✔
-* First thing that happens when a turn starts is that a power up spawns randomly on the scene. This should be clearly visible. ✖
+* First thing that happens when a turn starts is that a power up spawns randomly on the scene. This should be clearly visible. ✔✖
 * There should be a clear element that tells which player's turn it is. ✔
 * The color of the units should also be clearly visible. ✔
 
@@ -60,10 +60,10 @@ This is the initial phase where the players buy and place units on the game area
 
 * When the player starts, the counter should be clearly visible and counting down from 10.
 * The player can:
-  - Run / Jump anywhere on the game area 
-  - Attack / use weapon: All players start without weapon and they can only punch. They can then pick up weapons that give them more range or hit points. (See attack/defense mechanic)
-  - Pick up power ups and weapons. 
-  - Use power ups (see description of powerups below)
+  - Run / Jump anywhere on the game area. ✔
+  - Attack / use weapon: All players start without weapon and they can only punch. They can then pick up weapons that give them more range or hit points. (See attack/defense mechanic). 
+  - Pick up power ups and weapons. ✔
+  - Use power ups (see description of powerups below).
   - Fortify: at any point during the 10 second turn (action view), the player can choose to fortify. Fortify will put this unit in a defensive position and he will remain this way. The unit stays fortified until it gets picked to play again. (See attack/defense mechanic)
 * If the 10 seconds run out and the unit is outdoors, then that unit dies instantly.
 
