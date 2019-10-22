@@ -125,7 +125,10 @@ namespace MechanicFever
         private void UpdateClients(GameData gameData)
         {
             if (Player.Instance.GameData.Guid == gameData.Guid)
+            {
                 Player.Instance.SetGameData(gameData);
+                Player.Instance.PlayerUnit.SetPlayerSide(gameData.PlayerSide);
+            }
 
             //On player has disconnected.
             if (!gameData.IsConnected)

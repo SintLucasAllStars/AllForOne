@@ -27,6 +27,8 @@ namespace MechanicFever
         protected PlayerSide _playerSide = PlayerSide.Blu;
         public PlayerSide PlayerSide => _playerSide;
 
+        public void SetPlayerSide(PlayerSide playerSide) => _playerSide = playerSide;
+
         public GameData(string type, string guid, bool isConnected, PlayerSide playerSide)
         {
             _type = type;

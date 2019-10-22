@@ -28,8 +28,8 @@ namespace MechanicFever
 
         private void ShowTurn() => _turnText.text = "Turn: " + _currentTurn;
 
-        public delegate void OnTurnChanged();
-        public static OnTurnChanged ChangeTurn;
+        public delegate void OnChangeTurn();
+        public static OnChangeTurn ChangeTurn;
 
         private void OnEnable() => ChangeTurn += ShowTurn;
 
@@ -57,6 +57,7 @@ namespace MechanicFever
 
             //Send message to server so that everyone gets the turn change.
             GameManager.Instance.ChangeTurn(new GameData("Turn", Player.Instance.GameData.Guid, Player.Instance.GameData.IsConnected, _currentTurn));
+            ChangeTurn();
         }
 
         public bool HasTurn(PlayerSide side) => side == _currentTurn;
@@ -65,7 +66,6 @@ namespace MechanicFever
         {
             _currentTurn = playerSide;
             _turns++;
-            ChangeTurn();
             CheckTurn();
         }
 

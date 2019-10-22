@@ -9,20 +9,17 @@ namespace MechanicFever
 
         private void Update()
         {
-            if (!_hasPlaced)
+            if (!_hasPlaced && Input.GetMouseButtonDown(0))
             {
-                if (Input.GetMouseButtonDown(0))
+                RaycastHit hit;
+                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, 100.0f))
                 {
-                    RaycastHit hit;
-                    Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
-                    if (Physics.Raycast(ray, out hit, 100.0f))
+                    Tile t;
+                    if (t = hit.transform.GetComponent<Tile>())
                     {
-                        Tile t;
-                        if (t = hit.transform.GetComponent<Tile>())
-                        {
-                            if (Map.Instance.IsValidNode(t.Position.X, t.Position.Z))
-                                PlaceUnit(t.Position);
-                        }
+                        if (Map.Instance.IsValidNode(t.Position.X, t.Position.Z))
+                            PlaceUnit(t.Position);
                     }
                 }
             }
@@ -48,11 +45,15 @@ namespace MechanicFever
         private void PlaceUnit(Node node)
         {
             UnitData newUnit = Player.Instance.PlayerUnit;
+
             newUnit.SetPosition(node);
             newUnit.SetGuid(Guid.NewGuid().ToString());
+
             GameManager.Instance.SpawnUnit(newUnit);
-            _hasPlaced = true;
+
             Player.Instance.Wallet.Withdraw(newUnit.Price);
+
+            _hasPlaced = true;
         }
     }
 }

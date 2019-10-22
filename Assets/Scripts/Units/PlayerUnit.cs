@@ -17,7 +17,7 @@ namespace MechanicFever
         [SerializeField]
         private Renderer[] _coloredMaterials = null;
 
-        private void Awake()
+        private void Start()
         {
             _unitCamera = GetComponentInChildren<Camera>();
             _unitController = GetComponent<UnitController>();
@@ -33,6 +33,7 @@ namespace MechanicFever
             {
                 for (int j = 0; j < _coloredMaterials[i].materials.Length; j++)
                 {
+                    Debug.Log(_gameData.PlayerSide);
                     _coloredMaterials[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
                 }
             }
