@@ -110,5 +110,23 @@ namespace MechanicFever
                 Cursor.visible = false;
             }
         }
+
+        public void Hit(int damage)
+        {
+            if (_gameData.Health - damage <= 0)
+            {
+                Kill();
+                return;
+            }
+
+            _gameData.SetHealth(_gameData.Health - damage);
+            GameManager.Instance.UpdateUnit(_gameData);
+        }
+
+        public override void Kill()
+        {
+            _gameData.SetActive(false);
+            GameManager.Instance.UpdateUnit(_gameData);
+        }
     }
 }

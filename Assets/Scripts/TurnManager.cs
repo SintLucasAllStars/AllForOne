@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -20,13 +21,19 @@ namespace MechanicFever
         private PlayerSide _currentTurn = PlayerSide.Red;
         public PlayerSide CurrentTurn => _currentTurn;
 
-        private int _turns;
+        private Coroutine _timerCoroutine = null;
+
+        private int _turns, _turnTime;
         public int Turns => _turns;
 
         [SerializeField]
-        private TextMeshProUGUI _turnText = null;
+        private TextMeshProUGUI _turnText = null, _turnsText = null, _turnTimeText = null;
 
-        private void ShowTurn() => _turnText.text = "Turn: " + _currentTurn;
+        private void ShowTurn()
+        {
+            _turnText.text = "Turn: " + _currentTurn;
+            _turnsText.text = "Turns: " + _turns.ToString();
+        }
 
         public delegate void OnChangeTurn();
         public static OnChangeTurn ChangeTurn;
@@ -54,6 +61,12 @@ namespace MechanicFever
                 return;
             }
 
+            if (_timerCoroutine != null)
+            {
+                StopCoroutine(_timerCoroutine);
+                _timerCoroutine = null;
+            }
+
             //Move on to the next turn. Made dynamic in case there will be more players in the future.
             int i = ((int)_currentTurn + 1) % Enum.GetNames(typeof(PlayerSide)).Length;
             _currentTurn = (PlayerSide)i;
@@ -79,6 +92,24 @@ namespace MechanicFever
                 _gameState = GameState.UnitPlacement;
             if (_turns >= 2)
                 _gameState = GameState.UnitMovement;
+
+            //_timerCoroutine = StartCoroutine(Timer());
+        }
+
+        private IEnumerator Timer()
+        {
+            _turnTime = 10;
+            while (_turnTime > 0)
+            {
+                yield return new WaitForSeconds(1);
+                _turnTime--;
+            }
+            NextTurn();
+        }
+
+        private void Update()
+        {
+            _turnTimeText.text = _turnTime.ToString();
         }
     }
 }

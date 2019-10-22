@@ -1,20 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace MechanicFever
 {
     public class GameManager : Singleton<GameManager>
     {
         private List<PlayerUnit> _units = new List<PlayerUnit>();
-        private List<Player> _players = new List<Player>();
         private List<Powerup> _powerups = new List<Powerup>();
 
-        public int Connections => _players.Count;
+        [SerializeField]
+        private TextMeshProUGUI _teamText = null, _unitCostText = null;
 
         private void Start() => StartCoroutine(HandleMessages());
 
-        public void SpawnUnit(UnitData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
+        public void UpdateUnit(UnitData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
         public void UpdatePowerup(PowerupData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
@@ -64,6 +65,7 @@ namespace MechanicFever
                 {
                     if (_units[i].GameData.Guid == gameData.Guid)
                     {
+                        Debug.Log("Found");
                         Map.Instance.FreeNode(_units[i].GameData.Position);
                         Destroy(_units[i].gameObject);
                         _units.RemoveAt(i);
@@ -92,6 +94,7 @@ namespace MechanicFever
                 PlayerUnit u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<PlayerUnit>();
                 u.SetGameData(gameData);
                 u.SetPosition(gameData.Position);
+                _units.Add(u);
             }
         }
 
@@ -128,17 +131,14 @@ namespace MechanicFever
             {
                 Player.Instance.SetGameData(gameData);
                 Player.Instance.PlayerUnit.SetPlayerSide(gameData.PlayerSide);
+                _teamText.text = "YOUR TEAM: " + gameData.PlayerSide;
+                _unitCostText.text = "UNIT PRICE: € " + Player.Instance.PlayerUnit.Price + ",-";
             }
 
-            //On player has disconnected.
-            if (!gameData.IsConnected)
+            if(!gameData.IsConnected)
             {
-                for (int i = 0; i < _players.Count; i++)
-                {
-                    if (_players[i].GameData.Guid == gameData.Guid)
-                        _players.Remove(_players[i]);
-                }
-                return;
+                NetworkManager.Instance.Close("Player leave");
+                SceneManager.Instance.LoadScene(0);
             }
         }
 

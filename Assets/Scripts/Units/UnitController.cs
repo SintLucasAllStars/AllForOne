@@ -17,6 +17,7 @@ namespace MechanicFever
 
         private bool _isWalking;
 
+        private PlayerUnit _playerUnit;
         private UnitMovement _movement;
         private UnitJump _jump;
 
@@ -29,6 +30,7 @@ namespace MechanicFever
 
         private void Awake()
         {
+            _playerUnit = GetComponent<PlayerUnit>();
             _movement = GetComponent<UnitMovement>();
             _jump = GetComponent<UnitJump>();
 
@@ -58,7 +60,12 @@ namespace MechanicFever
                     Debug.DrawRay(transform.position, fwd * 50, Color.green);
                     if (Physics.Raycast(transform.position, fwd, out hit, 50))
                     {
-                        Debug.Log(hit.collider.gameObject.name);
+                        if(hit.collider.gameObject.GetComponent<PlayerUnit>())
+                        {
+                            PlayerUnit unit = hit.collider.gameObject.GetComponent<PlayerUnit>();
+                            if (unit.GameData.PlayerSide != _playerUnit.GameData.PlayerSide)
+                                unit.Hit(_playerUnit.GameData.Strength);
+                        }
                     }
                 }
             }

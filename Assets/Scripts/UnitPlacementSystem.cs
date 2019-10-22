@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace MechanicFever
@@ -6,6 +7,14 @@ namespace MechanicFever
     public class UnitPlacementSystem : Singleton<UnitPlacementSystem>
     {
         private bool _hasPlaced = true;
+
+        [SerializeField]
+        private TextMeshProUGUI _moneyText = null;
+
+        private void Start()
+        {
+            UpdateText();
+        }
 
         private void Update()
         {
@@ -49,11 +58,15 @@ namespace MechanicFever
             newUnit.SetPosition(node);
             newUnit.SetGuid(Guid.NewGuid().ToString());
 
-            GameManager.Instance.SpawnUnit(newUnit);
+            GameManager.Instance.UpdateUnit(newUnit);
 
             Player.Instance.Wallet.Withdraw(newUnit.Price);
 
             _hasPlaced = true;
+
+            UpdateText();
         }
+
+        private void UpdateText() => _moneyText.text = "MONEY: € " + Player.Instance.Wallet.Balance + ",-";
     }
 }
