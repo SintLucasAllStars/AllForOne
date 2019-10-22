@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public enum GameStates {Create,Place, Select,Move}
 public enum TurnState {Player1,Player2}
 public class GameManager : MonoBehaviour
@@ -28,7 +29,6 @@ public class GameManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(instance);
         }
         else
         {
@@ -147,8 +147,27 @@ public class GameManager : MonoBehaviour
             Character player = selectedPlayer.GetComponent<Character>();
             player.characterState = CharacterStates.Idle;
             CameraBehaviour.instance.ResetPosition();
+            GameObject[] player1 = GameObject.FindGameObjectsWithTag("Player1");
+            GameObject[] player2 = GameObject.FindGameObjectsWithTag("Player2");
+
+            if(player1.Length <= 0)
+            {
+                Debug.Log("player2 wins");
+                ResetScene();
+            }
+            if (player2.Length <= 0)
+            {
+                Debug.Log("player2 wins");
+                ResetScene();
+            }
         }
 
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(0);
+        gamestate = GameStates.Create;
     }
 
 }

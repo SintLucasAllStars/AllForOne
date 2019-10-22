@@ -6,13 +6,12 @@ public class FollowMouse : MonoBehaviour
 {
     public static FollowMouse instance;
     Vector3 hitpoint;
-    // Start is called before the first frame update
+
     public void Awake()
     {
         if(instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(instance);
         }
         else
         {
@@ -35,8 +34,12 @@ public class FollowMouse : MonoBehaviour
         switch (GameManager.instance.gamestate)
         {
             case GameStates.Place:
-                transform.position = hitpoint;
-                CreateActor.instance.actor.layer = 2;
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                {
+                    transform.position = hitpoint;
+                    CreateActor.instance.actor.layer = 2;
+
+                }
                 break;
             case GameStates.Select:
                 CreateActor.instance.actor.layer = 0;

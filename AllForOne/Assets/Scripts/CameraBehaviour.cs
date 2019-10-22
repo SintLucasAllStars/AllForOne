@@ -26,7 +26,6 @@ public class CameraBehaviour : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this);
         }
         else
         {
@@ -45,13 +44,13 @@ public class CameraBehaviour : MonoBehaviour
         switch (GameManager.instance.gamestate)
         {
             case GameStates.Place:
-                transform.RotateAround(map.position, Vector3.up, turnspeed * horizontal * Time.deltaTime);
+                transform.RotateAround(map.localPosition, Vector3.up, turnspeed * horizontal * Time.deltaTime);
                 break;
             case GameStates.Move:
                 Refresh();
                 break;
             case GameStates.Select:
-                transform.RotateAround(map.position, Vector3.up, turnspeed * horizontal * Time.deltaTime);
+                transform.RotateAround(map.localPosition, Vector3.up, turnspeed * horizontal * Time.deltaTime);
                 break;
         }
     }
