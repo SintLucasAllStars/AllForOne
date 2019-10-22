@@ -90,7 +90,7 @@ public class Actor : MonoBehaviour
         Vector3 movementHorizontal = transform.right * horizontal;
         Vector3 movementVertical = transform.forward * vertical;
 
-        Vector3 velocity = (movementHorizontal + movementVertical).normalized * warrior.GetSpeed();
+        Vector3 velocity = (movementHorizontal + movementVertical).normalized *  (1 + warrior.GetSpeed() / 30);
 
         rb.MovePosition(transform.position + velocity * Time.deltaTime);
     }

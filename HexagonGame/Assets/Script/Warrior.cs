@@ -29,7 +29,7 @@ public class Warrior
     {
         this.health = a_Health;
         this.strength = a_Strenth;
-        this.speed = (a_Speed / 10);
+        this.speed = (a_Speed);
         this.defense = a_Defense;
         this.isSelected = false;
         this.MaxHealth = a_Health;
