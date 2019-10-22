@@ -13,17 +13,17 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Set's the text at the mouse and switches the bool, leave string as "" if you want to turn it off.
     /// </summary>
-    public void SetMouseText(string textString)
+    public void SetDescriptionText(string textString)
     {
         descriptionText.text = textString;
 
-        if (textString == "")
-        {
-            mouseTextActive = false;
-        }
-        else
-        {
-            mouseTextActive = true;
-        }
+        //if (textString == "")
+        //{
+        //    mouseTextActive = false;
+        //}
+        //else
+        //{
+        //    mouseTextActive = true;
+        //}
     }
 }

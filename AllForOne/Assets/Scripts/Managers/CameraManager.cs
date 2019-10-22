@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private Transform cameraTransform;
+    public static CameraManager cameraManager;
 
-    [SerializeField] private Transform overviewCameraPosition;
+    private void Awake()
+    {
+        cameraManager = this;
+    }
+
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Transform cameraHolder;
+
+    [SerializeField] public Transform overviewCameraPosition;
 
     #region The varibles for moving the camera to the next target.
     [SerializeField] private int destinationPositionSpeed;
@@ -16,12 +24,12 @@ public class CameraManager : MonoBehaviour
     private Quaternion destinationRotation;
     #endregion
 
-    private bool cameraSwitching = false;
+    [SerializeField] private bool cameraSwitching = false;
 
 
     private void Start()
     {
-        OverviewCamera();
+        //MoveCamera(overviewCameraPosition);
     }
 
     /// <summary>
@@ -29,34 +37,28 @@ public class CameraManager : MonoBehaviour
     /// </summary>
     public void ChangeUnit(Unit unit)
     {
-        cameraTransform.localPosition = unit.cameraTransform.localPosition;
+        cameraHolder.SetParent(unit.cameraTransform);
+        //ZeroCameraPosition(cameraTransform);
+        CameraMoveTowards(unit.cameraTransform.localPosition, unit.cameraTransform.localRotation);
     }
 
     /// <summary>
-    /// Move the Camera to a specific location.
+    /// Move the Camera to a specific Transform.
     /// </summary>
-    public void MoveCamera(Vector3 position, Vector3 rotation)
+    public void MoveCamera(Transform transform)
     {
-        cameraTransform.localPosition = position;
-        cameraTransform.localRotation = Quaternion.Euler(rotation);
-    }
-
-    /// <summary>
-    /// Move the Main Camera above the Game.
-    /// </summary>
-    public void OverviewCamera()
-    {
-        cameraTransform.SetParent(overviewCameraPosition);
-        CameraMoveTowards(cameraTransform.localPosition, cameraTransform.localRotation);
+        cameraHolder.SetParent(transform);
+        //ZeroCameraPosition(cameraTransform);
+        CameraMoveTowards(transform.localPosition, transform.localRotation);
     }
 
     /// <summary>
     /// Set the Camera position and rotation to 0 on all axis.
     /// </summary>
-    private void ZeroCameraPosition()
+    private void ZeroCameraPosition(Transform transform)
     {
-        cameraTransform.localPosition = Vector3.zero;
-        cameraTransform.localRotation = Quaternion.Euler(Vector3.zero);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 
     /// <summary>
@@ -66,16 +68,19 @@ public class CameraManager : MonoBehaviour
     {
         destinationPosition = localPosition;
         destinationRotation = localRotation;
+        cameraSwitching = true;
     }
 
-
-    private void Update()
+    private void FixedUpdate()
     {
         if (cameraSwitching)
         {
-            cameraTransform.parent.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, destinationPosition, destinationPositionSpeed);
-            cameraTransform.parent.localRotation = Quaternion.RotateTowards(cameraTransform.localRotation, destinationRotation, destinationRotationSpeed);
-            
+            float stepPos = destinationPositionSpeed * Time.deltaTime;
+            float stepRot = destinationRotationSpeed * Time.deltaTime;
+
+            cameraHolder.localPosition = Vector3.MoveTowards(cameraHolder.localPosition, Vector3.zero, stepPos);
+            cameraHolder.localRotation = Quaternion.RotateTowards(cameraHolder.localRotation, Quaternion.Euler(Vector3.zero), stepRot);
+
             if ((cameraTransform.parent.localPosition == destinationPosition) && (cameraTransform.parent.localRotation == destinationRotation))
             {
                 cameraSwitching = false;

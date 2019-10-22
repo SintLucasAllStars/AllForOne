@@ -10,6 +10,7 @@ public class UnitStore : MonoBehaviour
     [SerializeField] private GameObject buyMenuObject;
 
     // Bought Unit Data
+    private BaseTeam customer;
     private Vector3 boughtUnitPosition;
     private GameObject boughtUnitObject;
     private int teamNumber;
@@ -17,7 +18,7 @@ public class UnitStore : MonoBehaviour
     //Economy Data
     private int weaponCost = 0;
 
-    private int unitPointCost;
+    private int unitPointCost = 10;
     private int unitPointAvailable;
 
     [SerializeField] private TMP_Text unitPointCostText;
@@ -26,7 +27,7 @@ public class UnitStore : MonoBehaviour
 
     //Weapon Data
     public Weapon[] weapons;
-    enum Weapons { None, Knuckles, Knife, Gun }
+    enum Weapons { None, Knuckles, Knife, Pistol }
     private Weapons chosenWeapon = Weapons.Knuckles;
 
     [SerializeField] private TMP_Text weaponText;
@@ -58,7 +59,7 @@ public class UnitStore : MonoBehaviour
         GetFeatures();
         GetWeapons();
 
-        ButtonChooseWeapon(false);
+        ResetStoreData();
     }
 
     #region All the UnitStore Buttons
@@ -66,15 +67,30 @@ public class UnitStore : MonoBehaviour
     /// <summary>
     /// Button press function to buy the unit with all selected stats.
     /// </summary>
+    /// 
     public void ButtonBuyUnit()
     {
-        Weapon weapon = weapons[(int)chosenWeapon];
+        if (unitPointAvailable >= unitPointCost)
+        {
+            Weapon weapon = weapons[(int)chosenWeapon];
 
-        GameObject createdUnit = Instantiate(boughtUnitObject, boughtUnitPosition, Quaternion.identity);
-        createdUnit.GetComponent<Unit>().CreateUnit((int)speedSlider.value, (int)strengthSlider.value, (int)defenseSlider.value, teamNumber, chosenFeatures, weapon);
+            GameObject createdUnit = Instantiate(boughtUnitObject, boughtUnitPosition, Quaternion.identity);
+            Unit unit = createdUnit.GetComponent<Unit>();
+            unit.CreateUnit((int)speedSlider.value, (int)strengthSlider.value, (int)defenseSlider.value, teamNumber, chosenFeatures, weapon, customer);
 
-        ResetStoreData();
-        BuyMenu(true);
+            customer.AddUnitToList(unit);
+            customer.unitPoints = unitPointAvailable - unitPointCost;
+            customer.inStore = false;
+
+            BuyMenu(false);
+            uiManager.SetDescriptionText("");
+
+            ResetStoreData();
+        }
+        else
+        {
+            uiManager.SetDescriptionText("This unit is too expensive!");
+        }
     }
 
     /// <summary>
@@ -129,14 +145,14 @@ public class UnitStore : MonoBehaviour
     {
         string description;
         description = features[i].description;
-        uiManager.SetMouseText(description);
+        uiManager.SetDescriptionText(description);
     }
 
     public void ButtonOnPointerGetFeature(int i)
     {
         string description;
         description = features[i].feat.ToString() + ": " + features[i].featureDescription;
-        uiManager.SetMouseText(description);
+        uiManager.SetDescriptionText(description);
         Debug.Log("Entered Pointer");
     }
 
@@ -145,8 +161,19 @@ public class UnitStore : MonoBehaviour
     /// </summary>
     public void ButtonOnPointerLeave()
     {
-        uiManager.SetMouseText("");
+        uiManager.SetDescriptionText("");
         Debug.Log("left Pointer");
+    }
+
+    /// <summary>
+    /// Exits the store early and resets it.
+    /// </summary>
+    public void ButtonCloseStore()
+    {
+        ResetStoreData();
+        BuyMenu(false);
+
+        customer.inStore = false;
     }
 
     #endregion
@@ -154,11 +181,17 @@ public class UnitStore : MonoBehaviour
     /// <summary>
     /// Instantiates a unit with the selected attributes given in the buy menu.
     /// </summary>
-    public void BuyUnit(Vector3 position, GameObject unit, int team)
+    public void BuyUnit(Vector3 position, GameObject unit, int teamNumber, BaseTeam customer)
     {
+        //Parameters Filled
         boughtUnitObject = unit;
         boughtUnitPosition = position;
-        teamNumber = team;
+        this.teamNumber = teamNumber;
+        this.customer = customer;
+
+        //Texts
+        unitPointAvailable = customer.unitPoints;
+        unitPointAvailableText.text = "Coins: " + unitPointAvailable;
 
         BuyMenu(true);
     }
@@ -176,13 +209,26 @@ public class UnitStore : MonoBehaviour
     /// </summary>
     private void ResetStoreData()
     {
+        //Unit Features Reset
         chosenFeatures.Clear();
-        chosenWeapon = Weapons.None;
+        featureImage[0].SetActive(false);
+        featureImage[1].SetActive(false);
+        featureImage[2].SetActive(false);
 
+        //Unit Weapon Reset
+        chosenWeapon = Weapons.Knuckles;
+        ButtonChooseWeapon(false);
+
+        //Unit Attribute Reset
         SetValueSliders(10);
 
+        //Unit Transform Reset
         boughtUnitObject = null;
         boughtUnitPosition = Vector3.zero;
+
+        //Unit Cost Reset
+        unitPointCost = 10;
+        unitPointCostText.text = "Price: " + unitPointCost;
     }
 
     /// <summary>
@@ -206,8 +252,13 @@ public class UnitStore : MonoBehaviour
     private void SetValueSliders(int i)
     {
         speedSlider.value = i;
+        speedText.text = speedSlider.value.ToString();
+
         strengthSlider.value = i;
+        strengthText.text = strengthSlider.value.ToString();
+
         defenseSlider.value = i;
+        defenseText.text = defenseSlider.value.ToString();
     }
 
     /// <summary>
@@ -233,11 +284,10 @@ public class UnitStore : MonoBehaviour
         features[2] = FillFeature(2, "apt fitness", 20, 40, 0, 5, BonusFeatures.None, "None");
 
         //Special Features
-        features[3] = FillFeature(3, "Driveby Shooter", 30, 0, 0, 10, BonusFeatures.Driveby, "When making an attack with this unit you can move at double speed for the rest of your turn.");
+        features[3] = FillFeature(3, "Driveby Shooter", 30, 0, 0, 10, BonusFeatures.Driveby, "You can only make one attack per turn, but your speed is doubled after the attack.");
         features[4] = FillFeature(4, "Opportunity Attacker", 0, 30, 0, 10, BonusFeatures.Opportunist, "When an enemy is close to this unit the unit make one attack against them.");
         features[5] = FillFeature(5, "Towershield Expert", 0, 0, 30, 10, BonusFeatures.TowerShield, "With this unit you can stop your turn outside without any penalty.");
     }
-
 
     /// <summary>
     /// Fills in all the Weapon array of weapons;
@@ -246,12 +296,12 @@ public class UnitStore : MonoBehaviour
     {
         weapons = new Weapon[6];
         //Weapons 10 speed is max.
-        weapons[0] = FillWeapon(0, "none", true, 5, 10, 1, 0);
-        weapons[1] = FillWeapon(1, "Knuckles", true, 10, 8, 1, 5);
-        weapons[2] = FillWeapon(2, "Knife", true, 10, 9, 1, 10);
-        weapons[3] = FillWeapon(3, "Pistol", false, 10, 5, 10, 20);
-        weapons[4] = FillWeapon(4, "Warhammer", true, 20, 5, 2, 15);
-        weapons[5] = FillWeapon(5, "Rifle", false, 20, 3, 20, 30);
+        weapons[0] = FillWeapon(0, "none", true, 2, 9, 3, 0);
+        weapons[1] = FillWeapon(1, "Knuckles", true, 3, 8, 3, 5);
+        weapons[2] = FillWeapon(2, "Knife", true, 5, 9, 3, 10);
+        weapons[3] = FillWeapon(3, "Pistol", false, 5, 6, 10, 20);
+        weapons[4] = FillWeapon(4, "Warhammer", true, 10, 5, 2, 15);
+        weapons[5] = FillWeapon(5, "Rifle", false, 10, 3, 20, 30);
     }
 
     /// <summary>
