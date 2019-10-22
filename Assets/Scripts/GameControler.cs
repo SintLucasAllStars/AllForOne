@@ -103,8 +103,7 @@ public class GameControler : MonoBehaviour, IEventListener
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 clickPos = Input.mousePosition;
-            Camera camera = Camera.main;
-            Ray ray = camera.ScreenPointToRay(clickPos);
+            Ray ray = _camera.ScreenPointToRay(clickPos);
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit, 100) || !hit.collider.gameObject.CompareTag("Ground"))
             {
