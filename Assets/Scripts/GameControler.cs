@@ -73,12 +73,14 @@ public class GameControler : MonoBehaviour, IEventListener
         {
             powerUpsText.gameObject.SetActive(false);
             turnTimerText.gameObject.SetActive(false);
+            Cursor.visible = true;
         }
 
         if (newState == GameManager.GameState.UnitControl)
         {
             UpdatePowerUpText();
             turnTimerText.gameObject.SetActive(true);
+            Cursor.visible = false;
         }
 
         if (oldState == GameManager.GameState.PreGame)
@@ -226,7 +228,13 @@ public class GameControler : MonoBehaviour, IEventListener
         // Fighting
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            Vector3 origin = new Vector3(
+                _focusedUnit.transform.position.x + 1, 
+                _focusedUnit.transform.position.y + 1, 
+                _focusedUnit.transform.position.z
+                );
+            
+            Ray ray = new Ray(_focusedUnit.transform.position, _focusedUnit.transform.forward);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, 10))
