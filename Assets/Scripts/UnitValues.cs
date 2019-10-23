@@ -7,6 +7,7 @@ public class UnitValues : MonoBehaviour
 
     public float health, strength, speed, defense;
     public bool dead;
+    public bool weapon;
 
     void Start()
     {

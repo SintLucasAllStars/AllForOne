@@ -7,24 +7,31 @@ using TMPro;
 public class TimeBalk : MonoBehaviour
 {
 
-    private float timeRemaining;
+    public float timeRemaining;
     public float maxTime = 10f;
     public Slider slider;
 
     public CameraMove cmScript;
 
     public TMP_Text playerTurnText;
+    public bool dead;
 
     int a = 1;
     int b = 2;
 
+    public bool walkOn;
+    public bool test = true;
+
+    //public PlayerController pcScript;
+
     void Start()
     {
-        timeRemaining = maxTime;
+        timeRemaining = 10f;
     }
 
     void Update()
     {
+
         slider.value = CalculateSliderValue();
 
         if(timeRemaining <= 0)
@@ -32,25 +39,41 @@ public class TimeBalk : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             //timeRemaining = 10;
             SwapNum(ref a, ref b);
-            if (GameObject.FindGameObjectsWithTag("u_Player1").Length <= 1)
+            if (GameObject.FindGameObjectsWithTag("u_Player1").Length <= 1 && dead == true)
             {
-                playerTurnText.text = ("Player 1 won!");
+                //playerTurnText.text = ("Player 1 won!");
                 return;
             }
-            if (GameObject.FindGameObjectsWithTag("u_Player2").Length <= 1)
+            else if (GameObject.FindGameObjectsWithTag("u_Player2").Length <= 1 && dead == true)
             {
-                playerTurnText.text = ("Player 2 won!");
+                //playerTurnText.text = ("Player 2 won!");
                 return;
             }
-            else
+            else if(cmScript.psScript.testHit == true)
             {
-                timeRemaining = 10;
+                walkOn = false;
+                //timeRemaining = 10;
                 playerTurnText.text = ("Player ") + a + (" turn");
+                StartCoroutine(Wait());
+                return;
+            }
+            else if(cmScript.psScript.testHit == false)
+            {
+                walkOn = false;
+                Debug.Log("Switch");
+                //timeRemaining = 10;
+                playerTurnText.text = ("Player ") + a + (" turn");
+                test = false;
+                timeRemaining = 10;
                 cmScript.BackToTop();
+                timeRemaining = 10;
+                walkOn = false;
+                test = true;
+                cmScript.psScript.testHit = true;
                 return;
             }
         }
-        else if(timeRemaining > 0)
+        else if(timeRemaining > 0 && walkOn == true && test == true)
         {
             timeRemaining -= Time.deltaTime;
         }
@@ -66,5 +89,16 @@ public class TimeBalk : MonoBehaviour
         int tempswap = x;
         x = y;
         y = tempswap;
+    }
+    
+    IEnumerator Wait()
+    {
+        test = false;
+        timeRemaining = 10;
+        yield return new WaitForSeconds(3);
+        cmScript.BackToTop();
+        timeRemaining = 10;
+        walkOn = false;
+        test = true;
     }
 }

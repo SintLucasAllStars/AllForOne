@@ -13,10 +13,13 @@ public class CameraMove : MonoBehaviour
 
     public PlayerController pcScript;
     public PlayerSwitcher psScript;
+    public TimeBalk tbScript;
 
     bool camMoveOn, backToTop;
 
     public GameObject timer;
+
+    //public bool walkOn;
 
     public void Start()
     {
@@ -25,8 +28,10 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
+        //pcScript = psScript.playerNow.GetComponent<PlayerController>();
         if (camMoveOn)
         {
+            pcScript = psScript.playerNow.GetComponent<PlayerController>();
             /*float xAxisValue = Input.GetAxis("Horizontal");
         float zAxisValue = Input.GetAxis("Vertical");
         float scrollAxisValue = Input.GetAxis("Mouse ScrollWheel");
@@ -58,6 +63,7 @@ public class CameraMove : MonoBehaviour
             position.z = Mathf.Lerp(this.transform.position.z, objectToFollow.transform.position.z, interpolation);
             if (!backToTop)
             {
+                //tbScript.walkOn = true;
                 Debug.Log("heheh");
                 rotation.x = Mathf.Lerp(this.transform.rotation.x, objectToFollow.transform.rotation.x, interpolation);
                 rotation.y = Mathf.Lerp(this.transform.rotation.y, objectToFollow.transform.rotation.y, interpolation);
@@ -66,6 +72,7 @@ public class CameraMove : MonoBehaviour
             else if(backToTop)
             {
                 Debug.Log("sadsad");
+                //tbScript.walkOn = true;
                 rotation2.x = Mathf.Lerp(this.transform.eulerAngles.x, objectToFollow.transform.eulerAngles.x, interpolation);
                 rotation2.y = Mathf.Lerp(this.transform.eulerAngles.y, objectToFollow.transform.eulerAngles.y, interpolation);
                 rotation2.z = Mathf.Lerp(this.transform.eulerAngles.z, objectToFollow.transform.eulerAngles.z, interpolation);
@@ -81,6 +88,7 @@ public class CameraMove : MonoBehaviour
             if (!backToTop)
             {
                 this.transform.rotation = rotation;
+                tbScript.walkOn = true;
             }
             else if(backToTop)
             {
@@ -96,6 +104,7 @@ public class CameraMove : MonoBehaviour
         pcScript.walkOn = true;
         camMoveOn = true;
         timer.SetActive(true);
+        StartCoroutine(wait());
     }
 
     public void BackToTop()
@@ -107,5 +116,12 @@ public class CameraMove : MonoBehaviour
         psScript.SwitchPlayer();
         //camMoveOn = true;
         timer.SetActive(false);
+        pcScript.canClick = false;
+        //psScript.testHit = true;
+    }
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(1);
+        pcScript.canClick = true;
     }
 }

@@ -45,6 +45,7 @@ public class UnitPlacer : MonoBehaviour
                     svScript.switchTurn = true;
                     svScript.SwitchPlayer();
                     test = 2;
+                    svScript.raycastOn = false;
                 }
                 else if (test == 0)
                 {
@@ -91,6 +92,7 @@ public class UnitPlacer : MonoBehaviour
 
                     svScript.SwitchPlayer();
                     test2 = 2;
+                    svScript.raycastOn = false;
                 }
                 else if(test2 == 0)
                 {

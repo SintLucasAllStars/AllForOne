@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &377896887315488431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1024827302155588275}
+  m_Layer: 0
+  m_Name: Sword holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1024827302155588275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377896887315488431}
+  m_LocalRotation: {x: -0, y: 0.99819034, z: -0, w: 0.060134638}
+  m_LocalPosition: {x: -0.234, y: 0.814, z: 0.345}
+  m_LocalScale: {x: 0.6746, y: 0.6746, z: 0.6746}
+  m_Children: []
+  m_Father: {fileID: 7716005942604064259}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 173.10501, z: 0}
 --- !u!1 &485969520503861355
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,8 +423,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1994676836813582921}
-  m_LocalRotation: {x: 0.14029106, y: 0.015096254, z: -0.16277075, w: 0.97652256}
-  m_LocalPosition: {x: -0.2832884, y: -0.00000017440718, z: 0.00000037804523}
+  m_LocalRotation: {x: 0.14029104, y: 0.015096275, z: -0.16277078, w: 0.97652256}
+  m_LocalPosition: {x: -0.28328872, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 964365301556475775}
@@ -616,7 +646,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2629006567582970850}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -12.681, y: 0, z: -88.01353}
   m_LocalScale: {x: 1.3559, y: 1.3559, z: 1.3559}
   m_Children:
@@ -624,6 +654,7 @@ Transform:
   - {fileID: 3420482341892989034}
   - {fileID: 4984419365631983529}
   - {fileID: 8573190571706358640}
+  - {fileID: 1024827302155588275}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -660,7 +691,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 120
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &3906679529256995447
 MonoBehaviour:
@@ -678,6 +709,8 @@ MonoBehaviour:
   strength: 0
   speed: 0
   defense: 0
+  dead: 0
+  weapon: 0
 --- !u!114 &1500581340038387611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,8 +730,19 @@ MonoBehaviour:
   e_health: 1
   e_strength: 0
   e_defense: 0
+  e_dead: 0
+  e_Anim: {fileID: 0}
+  enemy: {fileID: 0}
   rayDistance: 2
   psScript: {fileID: 0}
+  tbScript: {fileID: 0}
+  winText: {fileID: 0}
+  sword: {fileID: 0}
+  sword2: {fileID: 0}
+  weapon1: 0
+  weapon2: 0
+  isSpawn: {fileID: 0}
+  cmScript: {fileID: 0}
 --- !u!1 &2665673068994756131
 GameObject:
   m_ObjectHideFlags: 0

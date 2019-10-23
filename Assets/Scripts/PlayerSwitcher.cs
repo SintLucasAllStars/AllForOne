@@ -17,6 +17,12 @@ public class PlayerSwitcher : MonoBehaviour
     public Animator anim;
 
     public bool endGame = false;
+    public TimeBalk tbScript;
+    public ItemSpawn isScript;
+
+    public GameObject playerNow;
+
+    public bool testHit = false;
 
     void Start()
     {
@@ -30,8 +36,13 @@ public class PlayerSwitcher : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
+                //pcScript = hit.transform.gameObject.GetComponent<PlayerController>();
                 if (hit.transform.tag == "u_Player1" && !switchPlayer)
                 {
+                    //pcScript.canClick = true;
+                    testHit = true;
+                    playerNow = hit.transform.gameObject;
+                    tbScript.walkOn = true;
                     anim = hit.transform.gameObject.GetComponent<Animator>();
                     Cursor.lockState = CursorLockMode.Locked;
                     pcScript = hit.transform.GetComponent<PlayerController>();
@@ -44,6 +55,10 @@ public class PlayerSwitcher : MonoBehaviour
                 }
                 else if(hit.transform.tag == "u_Player2" && switchPlayer)
                 {
+                    //pcScript.canClick = true;
+                    testHit = true;
+                    playerNow = hit.transform.gameObject;
+                    tbScript.walkOn = true;
                     anim = hit.transform.gameObject.GetComponent<Animator>();
                     Cursor.lockState = CursorLockMode.Locked;
                     pcScript = hit.transform.GetComponent<PlayerController>();
@@ -70,9 +85,11 @@ public class PlayerSwitcher : MonoBehaviour
     {
         if (!endGame)
         {
+            //pcScript.canClick = false;
             switchPlayer = !switchPlayer;
             pcScript.SetAnimState();
             pcScript.AnimRemover();
+            isScript.RespawnWeapons();
         }
     }
 }

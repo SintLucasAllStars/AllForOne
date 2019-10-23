@@ -28,6 +28,10 @@ public class SliderValue : MonoBehaviour
 
     public PlayerSwitcher psScript;
 
+    void Start()
+    {
+        raycastOn = false;
+    }
     void Update()
     {
         if (sliderValue2[0] == 0 || sliderValue2[1] == 0 || sliderValue3[0] == 0 || sliderValue3[0] == 0)
@@ -99,6 +103,7 @@ public class SliderValue : MonoBehaviour
     public void NextButtonClick()
     {
         optionsMenu.SetActive(false);
+        raycastOn = true;
         //for (int i = 0; i < groundCollider.Length; i++)
         //{
         //    groundCollider[i].enabled = true;
