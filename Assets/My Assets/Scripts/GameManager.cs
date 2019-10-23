@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using Cinemachine;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,22 +14,32 @@ public class GameManager : MonoBehaviour
     public float bluePlayerCreationPoints;
     public bool redCanBuy = true;
     public bool blueCanBuy = true;
-    
+    public List<GameObject> weaponList = new List<GameObject>();
     
     public float turnHolderPoints;
     private UiManager UiM;
 
+    // camera movement
     public List<Transform> transition = new List<Transform>();
     public List<Transform> currentPath = new List<Transform>();
     public Transform playerCamera;
     public bool cameraAnimateNormal = false;
     public bool cameraAnimateReverse = false;
+    public bool returnToSelect = false;
     public int cameraTarget;
+    
+    //character camera
+    public bool moveToUnit = false;
+    public Transform characterCameraPos;
     
     // place Character  bool
     public bool canPlaceChar = false;
     // character to be placed instance
     public GameObject characterInstance;
+    //alive check
+    public bool blueAlive = true;
+    public bool redAlive = true;
+    
     //here are the phases of battle
     public enum Phase
     {
@@ -93,14 +103,27 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // from creation to field view
         if (cameraAnimateNormal == true)
         {
             MoveCamera(0);
         }
 
+        // from field view to creation
         if (cameraAnimateReverse == true)
         {
             MoveCamera(1);
+        }
+
+        // in select character phase from field view to character
+        if (moveToUnit == true)
+        {
+            ControlUnit();
+        }
+
+        if (returnToSelect == true)
+        {
+            CameraReturnToSelect();
         }
 
         if (canPlaceChar == true)
@@ -110,8 +133,18 @@ public class GameManager : MonoBehaviour
                 //character gets assigned in ui manager
                 PlaceCharacter(characterInstance);
             }
-
         }
+        
+        if (gamePhase == Phase.SelectingUnit)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                
+                //character gets assigned in ui manager
+                SelectUnitRayCast();
+            }
+        }
+        
     }
 
     public void PlaceCharacter(GameObject character)
@@ -131,13 +164,11 @@ public class GameManager : MonoBehaviour
                     {
                         turnHolder = "blue";
                         turnHolderPoints = bluePlayerCreationPoints;
-                        Debug.Log("Switched to blue");
                     }
                     else
                     {
                         turnHolder = "Red";
                         turnHolderPoints = redPlayerCreationPoints;
-                        Debug.Log("Switched to red");
 
                     }
                     
@@ -164,13 +195,68 @@ public class GameManager : MonoBehaviour
             canPlaceChar = false;
 
         }
-        else
-        {
-            Debug.Log("Didnt hit anything");
-        }
-
-
         
+    }
+
+    public void SelectUnitRayCast()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+
+            if (turnHolder == "Red")
+            {
+                if (hit.collider.gameObject.CompareTag("Red"))
+                {
+                    characterCameraPos = hit.collider.gameObject.transform.GetChild(2);
+                    StartCoroutine(PhaseEnd(Phase.BattlePlayer, Phase.SelectingUnit));
+                }    
+            }
+
+            if (turnHolder == "Blue")
+            {
+                if (hit.collider.gameObject.CompareTag("Blue"))
+                {
+                    characterCameraPos = hit.collider.gameObject.transform.GetChild(2);
+                    StartCoroutine(PhaseEnd(Phase.BattlePlayer, Phase.SelectingUnit));
+                }     
+            }
+        }
+    }
+
+    public void CameraReturnToSelect()
+    {
+        
+        Transform cam = playerCamera;
+        cam.parent = null;
+        cam.position = Vector3.Lerp(cam.position, currentPath[currentPath.Count - 1].position,Time.deltaTime);
+        cam.rotation = Quaternion.Lerp(cam.rotation,currentPath[currentPath.Count - 1].rotation, Time.deltaTime);
+        
+        
+        if (Vector3.Distance(playerCamera.position, currentPath[currentPath.Count - 1].position) < 0.2f)
+        {
+            returnToSelect = false;
+        }
+    }
+
+    public void ControlUnit()
+    {
+        Transform cam = playerCamera;
+        cam.position = Vector3.Lerp(cam.position, characterCameraPos.position,Time.deltaTime);
+        cam.rotation = Quaternion.Lerp(cam.rotation,characterCameraPos.rotation, Time.deltaTime);
+        
+        if (Vector3.Distance(playerCamera.position, characterCameraPos.position) < 0.2f)
+        {
+            GameObject charObj = characterCameraPos.parent.gameObject;
+            cam.SetParent(charObj.transform);
+            charObj.GetComponent<PlayerCharacter>().TakeControl();
+            charObj.GetComponent<PlayerCharacter>().active = true;
+            moveToUnit = false;
+            
+            StartCoroutine(BattleTimer());
+
+        }
     }
 
     public void MoveCamera(int order)
@@ -266,6 +352,28 @@ public class GameManager : MonoBehaviour
             Debug.Log("===================\r" + "Phase: PlacingUnits-End\r" + "===================");
             
         }
+
+        if (phase == Phase.SelectingUnit)
+        {
+            Debug.Log("===================\r" + "Phase: SelectingUnit-End\r" + "===================");
+
+            moveToUnit = true;
+        }
+
+        if (phase == Phase.BattlePlayer)
+        {
+            if (redPlayerUnits.Count == 0)
+            {
+                Debug.Log("============== Player 2 wins ================");
+            }
+            else
+            {
+                Debug.Log("============== Player 1 wins ================");
+            }
+            
+            Debug.Log("===================\r" + "Phase: BattlePlayer-End\r" + "===================");
+
+        }
     }
 
     
@@ -302,17 +410,24 @@ public class GameManager : MonoBehaviour
 
         if (phase == Phase.PlacingUnits)
         {
-            UnitMarkers(true);
+            UnitMarkers(true, false);
             Debug.Log("===================\r" + "Phase: PlacingUnits-Start\r" + "===================");
             canPlaceChar = true;
         }
 
         if (phase == Phase.SelectingUnit)
         {
-            UnitMarkers(true);
+            UnitMarkers(true, true);
             
             Debug.Log("===================\r" + "Phase: SelectingUnit-Start\r" + "===================");
 
+        }
+
+        if (phase == Phase.BattlePlayer)
+        {
+
+           
+            Debug.Log("===================\r" + "Phase: BattlePlayer-Start\r" + "===================");
         }
         
     }
@@ -372,9 +487,25 @@ public class GameManager : MonoBehaviour
         redPlayerCreationPoints = maxPoints;
     }
 
-    public void UnitMarkers(bool active)
+    public void UnitMarkers(bool active, bool reset)
     {
 
+        if (reset == true)
+        {
+            foreach (var unit in bluePlayerUnits)
+            {
+                var script = unit.GetComponent<PlayerCharacter>();
+                script.ActivateMarker(false);
+            }
+            
+            foreach (var unit in redPlayerUnits)
+            {
+                var script = unit.GetComponent<PlayerCharacter>();
+                script.ActivateMarker(false);
+            }
+        }
+        
+           
         if (turnHolder == "Red")
         {
             foreach (var unit in redPlayerUnits)
@@ -392,5 +523,45 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    
+    
+    public IEnumerator BattleTimer()
+    {
+        Debug.Log("timer start");
+        
+        yield return new WaitForSeconds(10f);
+        //turn of control
+        characterCameraPos.parent.GetComponent<PlayerCharacter>().TakeControl();       
+        // check if you won
+        if (redAlive == false || blueAlive == false)
+        {
+            StartCoroutine(PhaseEnd(Phase.BattleEnd, Phase.BattlePlayer));
+        }
+        else
+        {
+            if (turnHolder == "Red")
+            {
+                turnHolder = "Blue";
+            }
+            else
+            {
+                turnHolder = "Red";
+            }
+            // move camera back up
+            returnToSelect = true;
+            if (redPlayerUnits.Count == 0 || bluePlayerUnits.Count == 0)
+            {
+                StartCoroutine(PhaseEnd(Phase.BattleEnd, Phase.BattlePlayer));
+            }
+            else
+            {
+                StartCoroutine(PhaseEnd(Phase.SelectingUnit, Phase.DummyPhase));
+
+            }
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+    
 }
 

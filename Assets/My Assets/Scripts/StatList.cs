@@ -11,6 +11,7 @@ public class StatList
     public int strength;
     public int speed;
     public int defence;
+    public int weaponId;
 
 
 
@@ -18,8 +19,9 @@ public class StatList
     {
     }
 
-    public StatList(string team, string charName, int health, int strength, int speed , int defence)
+    public StatList(string team, string charName, int health, int strength, int speed , int defence, int weaponId)
     {
+        this.weaponId = weaponId;
         this.team = team;
         this.charName = charName;
         this.health = health;
@@ -31,12 +33,14 @@ public class StatList
 
     public void DebugStats()
     {
+        Debug.Log("=======================" + "character stats" + "=======================");
         Debug.Log("team: " + team);
         Debug.Log("name: " + charName);
         Debug.Log("health: " + health);
         Debug.Log("strength: " + strength);
         Debug.Log("speed: " + speed);
         Debug.Log("defence: " + defence);
+        Debug.Log("Weapon id: " + weaponId);
     }
     // Start is called before the first frame update
     void Start()

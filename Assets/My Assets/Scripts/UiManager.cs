@@ -22,6 +22,7 @@ public class UiManager : MonoBehaviour
     private int uiCharStr = 1;
     private int uiCharSpd = 1;
     private int uiCharDef = 1;
+    public int weaponId = 0;
     public List<int> uiCharStats = new List<int>();
     public  float uiPoints;
     private string uiTurnHolder = "";
@@ -56,6 +57,8 @@ public class UiManager : MonoBehaviour
     
     //character to place
     public GameObject charInstance;
+
+    public int charPrefabId = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -95,7 +98,6 @@ public class UiManager : MonoBehaviour
     public void RandomizeValues(float playerPoints, float minimumPercent, int numberOfStats)
     {
         pointCap = Mathf.RoundToInt(playerPoints);
-        Debug.Log(uiPoints+"before");
         float statCost;
         float totalcost = 0;
         float midRangeModif = maxPointsPerStat;
@@ -146,7 +148,6 @@ public class UiManager : MonoBehaviour
 
         
         
-        Debug.Log(uiPoints+"after");
         
         
         uiCharHp = uiCharStats[0];
@@ -182,8 +183,8 @@ public class UiManager : MonoBehaviour
 
     public void CreationDefaults(int playerMaxPoints)
     {
-        
-        
+
+        charPrefabId = UnityEngine.Random.Range(0, gm.charPrefabs.Count);
         maxPoints = playerMaxPoints;
         
         // turn the values to the portions of 100(if all added up result should be 100)
@@ -228,24 +229,25 @@ public class UiManager : MonoBehaviour
         string team = gm.turnHolder;
         
         //
+        int weapon = weaponId;
         string name = charName;
         int Hp = uiCharHp;
         int Str = uiCharStr;
         int Spd = uiCharSpd;
         int Def = uiCharDef;
-        StatList statInstance = new StatList(team, name, Hp, Str, Spd, Def);
+        StatList statInstance = new StatList(team, name, Hp, Str, Spd, Def, weapon);
         return statInstance;
     }
 
     //button
  
 
-    public void CreatePlayerCharacter(int charClass)
+    public void CreatePlayerCharacter()
     {
         charName = charCreateUi[0].GetComponent<TextMeshProUGUI>().text; 
         StatList flatStats = CreateStatList();
 
-        GameObject prefab = gm.charPrefabs[charClass];
+        GameObject prefab = gm.charPrefabs[charPrefabId];
         
         
         charInstance = Instantiate(prefab, dummyPos.position, Quaternion.identity);
@@ -384,6 +386,11 @@ public class UiManager : MonoBehaviour
         }
 
         UiUpdate(UiGroups.CreationUi);
+    }
+
+    public void SelectWeapon(int id)
+    {
+        weaponId = id;
     }
 
     public void DoneBuying()
