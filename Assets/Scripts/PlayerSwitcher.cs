@@ -22,7 +22,7 @@ public class PlayerSwitcher : MonoBehaviour
 
     public GameObject playerNow;
 
-    public bool testHit = false;
+    public bool testHit, oneunit = false;
 
     void Start()
     {
@@ -39,6 +39,8 @@ public class PlayerSwitcher : MonoBehaviour
                 //pcScript = hit.transform.gameObject.GetComponent<PlayerController>();
                 if (hit.transform.tag == "u_Player1" && !switchPlayer)
                 {
+                    tbScript.test = true;
+                    oneunit = true;
                     //pcScript.canClick = true;
                     testHit = true;
                     playerNow = hit.transform.gameObject;
@@ -55,6 +57,8 @@ public class PlayerSwitcher : MonoBehaviour
                 }
                 else if(hit.transform.tag == "u_Player2" && switchPlayer)
                 {
+                    tbScript.test = true;
+                    oneunit = true;
                     //pcScript.canClick = true;
                     testHit = true;
                     playerNow = hit.transform.gameObject;

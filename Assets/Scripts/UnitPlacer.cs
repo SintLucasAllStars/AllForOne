@@ -20,10 +20,12 @@ public class UnitPlacer : MonoBehaviour
             if(svScript.playerOnePoints < 10)
             {
                 svScript.playerOneDone = true;
+                svScript.raycastOn = false;
             }
             if (svScript.playerTwoPoints < 10)
             {
                 svScript.playerTwoDone = true;
+                svScript.raycastOn = false;
             }
             if ((svScript.switchTurn == false))
             {
@@ -59,16 +61,19 @@ public class UnitPlacer : MonoBehaviour
                     uvScript.strength = svScript.sliderValue3[1];
                     uvScript.speed = svScript.sliderValue2[0];
                     uvScript.defense = svScript.sliderValue2[1];
+                    svScript.raycastOn = false;
 
                     if (svScript.playerTwoDone)
                     {
                         svScript.switchTurn = false;
                         svScript.SwitchPlayer();
+                        svScript.raycastOn = false;
                     }
                     else
                     {
                         svScript.switchTurn = !svScript.switchTurn;
                         svScript.SwitchPlayer();
+                        svScript.raycastOn = false;
                     }
                 }
                 return;

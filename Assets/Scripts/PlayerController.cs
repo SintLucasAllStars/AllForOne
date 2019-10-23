@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     public bool test= false;
 
     public bool canClick = false;
+    public bool lastHealth = false;
 
     void Start()
     {
@@ -52,6 +53,68 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+        if (e_health <= 0)
+        {
+            Debug.Log("health");
+            lastHealth = true;
+            psScript.testHit = false;
+            //e_dead = true;
+            e_Anim.SetBool("isDead", true);
+            winText = GameObject.Find("Timer").GetComponent<TimeBalk>().playerTurnText;
+            if (GameObject.FindGameObjectsWithTag("u_Player1").Length == 1 && psScript.switchPlayer)
+            {
+                e_dead = true;
+                test = true;
+                //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                winText.text = ("Player 2 won!");
+                win2 = true;
+                e_health = 10;
+                StartCoroutine(WaitForDeadAni());
+                Debug.Log("testttt1");
+                psScript.endGame = true;
+                tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                tbScript.dead = true;
+                //checker();
+                //return;
+            }
+            if (GameObject.FindGameObjectsWithTag("u_Player2").Length == 1 && !psScript.switchPlayer)
+            {
+                e_dead = true;
+                test = true;
+                //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                winText.text = ("Player 1 won!");
+                win1 = true;
+                e_health = 10;
+                StartCoroutine(WaitForDeadAni());
+                Debug.Log("testttt2");
+                psScript.endGame = true;
+                tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                tbScript.dead = true;
+                //checker();
+                //return;
+            }
+            else
+            {
+                if (test == false)
+                {
+                    tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                    tbScript.Change();
+                    e_health = 10;
+                    StartCoroutine(WaitForDeadAni());
+                    Debug.Log("testttt5");
+                    //psScript.endGame = true;
+                    //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+                    //tbScript.dead = true;
+                    //checker();
+                }
+            }
+        }
+        else
+        {
+
+        }
+
+
         psScript = GameObject.Find("GameManager").GetComponent<PlayerSwitcher>();
         if (walkOn)
         {
@@ -199,62 +262,63 @@ public class PlayerController : MonoBehaviour
         ////    Debug.Log("Player 1 WINS!");
         ////}
 
-        if (e_health <= 0)
-        {
-            psScript.testHit = false;
-            //e_dead = true;
-            e_Anim.SetBool("isDead", true);
-            winText = GameObject.Find("Timer").GetComponent<TimeBalk>().playerTurnText;
-            if (GameObject.FindGameObjectsWithTag("u_Player1").Length == 1 && psScript.switchPlayer)
-            {
-                e_dead = true;
-                test = true;
-                //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
-                winText.text = ("Player 2 won!");
-                win2 = true;
-                e_health = 10;
-                StartCoroutine(WaitForDeadAni());
-                Debug.Log("testttt1");
-                psScript.endGame = true;
-                tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
-                tbScript.dead = true;
-                //checker();
-                //return;
-            }
-            if (GameObject.FindGameObjectsWithTag("u_Player2").Length == 1 && !psScript.switchPlayer)
-            {
-                e_dead = true;
-                test = true;
-                //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
-                winText.text = ("Player 1 won!");
-                win1 = true;
-                e_health = 10;
-                StartCoroutine(WaitForDeadAni());
-                Debug.Log("testttt2");
-                psScript.endGame = true;
-                tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
-                tbScript.dead = true;
-                //checker();
-                //return;
-            }
-            else
-            {
-                if (test == false)
-                {
-                    e_health = 10;
-                    StartCoroutine(WaitForDeadAni());
-                    Debug.Log("testttt5");
-                    //psScript.endGame = true;
-                    //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
-                    //tbScript.dead = true;
-                    //checker();
-                }
-            }
-        }
-        else
-        {
+        //if (e_health <= 0)
+        //{
+        //    lastHealth = true;
+        //    psScript.testHit = false;
+        //    //e_dead = true;
+        //    e_Anim.SetBool("isDead", true);
+        //    winText = GameObject.Find("Timer").GetComponent<TimeBalk>().playerTurnText;
+        //    if (GameObject.FindGameObjectsWithTag("u_Player1").Length == 1 && psScript.switchPlayer)
+        //    {
+        //        e_dead = true;
+        //        test = true;
+        //        //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+        //        winText.text = ("Player 2 won!");
+        //        win2 = true;
+        //        e_health = 10;
+        //        StartCoroutine(WaitForDeadAni());
+        //        Debug.Log("testttt1");
+        //        psScript.endGame = true;
+        //        tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+        //        tbScript.dead = true;
+        //        //checker();
+        //        //return;
+        //    }
+        //    if (GameObject.FindGameObjectsWithTag("u_Player2").Length == 1 && !psScript.switchPlayer)
+        //    {
+        //        e_dead = true;
+        //        test = true;
+        //        //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+        //        winText.text = ("Player 1 won!");
+        //        win1 = true;
+        //        e_health = 10;
+        //        StartCoroutine(WaitForDeadAni());
+        //        Debug.Log("testttt2");
+        //        psScript.endGame = true;
+        //        tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+        //        tbScript.dead = true;
+        //        //checker();
+        //        //return;
+        //    }
+        //    else
+        //    {
+        //        if (test == false)
+        //        {
+        //            e_health = 10;
+        //            StartCoroutine(WaitForDeadAni());
+        //            Debug.Log("testttt5");
+        //            //psScript.endGame = true;
+        //            //tbScript = GameObject.Find("Timer").GetComponent<TimeBalk>();
+        //            //tbScript.dead = true;
+        //            //checker();
+        //        }
+        //    }
+        //}
+        //else
+        //{
 
-        }
+        //}
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit2, rayDistance))
         {
             Debug.Log(hit2.transform.gameObject.name);
@@ -285,6 +349,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
     }
 
     public void SetAnimState()
@@ -301,8 +366,8 @@ public class PlayerController : MonoBehaviour
         walkOn = false;
         //psScript.endGame = true;
         yield return new WaitForSeconds(4);
-        psScript.endGame = false;
-        Destroy(enemy);
+        //psScript.endGame = false;
+        //Destroy(enemy);
         tbScript.slider.value = 0;
         tbScript.timeRemaining = 0;
         e_health = 1;
@@ -318,6 +383,13 @@ public class PlayerController : MonoBehaviour
             Player2Win();
         }
         Debug.Log("dasasasasasasasasasasasasasasasasasas");
+        Destroy(enemy);
+        tbScript.slider.value = 10;
+        tbScript.timeRemaining = 10;
+        tbScript.test = false;
+        Cursor.lockState = CursorLockMode.None;
+        cmScript = GameObject.Find("Main Camera").GetComponent<CameraMove>();
+        cmScript.BackToTop();
         //tbScript.timeRemaining = 10;
     }
     IEnumerator WaitForDeadAni2()
@@ -395,7 +467,7 @@ public class PlayerController : MonoBehaviour
     {
         //e_Anim.SetBool("isHit", false);
         //e_Anim = null;
-        enemy = null;
+        //enemy = null;
     }
 
     public void Player1Win()

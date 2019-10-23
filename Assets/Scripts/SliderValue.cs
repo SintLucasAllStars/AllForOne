@@ -139,6 +139,7 @@ public class SliderValue : MonoBehaviour
             //{
             //    groundCollider[i].enabled = false;
             //}
+            raycastOn = false;
             return;
         }
         if (switchTurn || playerOneDone == true)

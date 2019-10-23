@@ -109,6 +109,7 @@ public class CameraMove : MonoBehaviour
 
     public void BackToTop()
     {
+        Cursor.lockState = CursorLockMode.None;
         backToTop = true;
         objectToFollow = GameObject.Find("CamTop");
         Camera.main.transform.parent = objectToFollow.transform;
