@@ -20,10 +20,6 @@ public class Unit
 
     public PowerUp powerUp;
 
-    //movement
-    private CharacterController characterController;
-    private float JumpForce;
-
     public Unit(int _health, int _strength, float _speed, int _defense, Weapon.TypeOfWeapon weapon)
     {
         this.health = _health;

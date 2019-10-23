@@ -8,17 +8,23 @@ public class GameController : Singleton<GameController>
 
     public int width, depth;
 
-    private Player[] players;
+    public Player[] players;
 
     [SerializeField] private GameObject _unitObject;
 
     public static bool isCurrentPlayerOne;
     private bool isPlacing = false;
     private Unit goingToBePlaced;
+    private LayerMask layerToPlace;
+
+    private bool isGamePhase = false;
+
+    private GameObject currentObj;
 
     // Use this for initialization
     void Start()
     {
+        UIController.instance.ShowBuyScreen();
         weaponController = new WeaponController();
         players = new Player[2] {
         new Player(true),
@@ -29,14 +35,13 @@ public class GameController : Singleton<GameController>
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("space is clicked");
-            UIController.instance.ShowBuyScreen();
-        }
         if (isPlacing)
         {
-            PlaceUnit(goingToBePlaced);
+            PlaceUnit(goingToBePlaced, isCurrentPlayerOne);
+        }
+        if (isGamePhase)
+        {
+            GamePhase();
         }
     }
 
@@ -55,8 +60,9 @@ public class GameController : Singleton<GameController>
             else
             {
                 isCurrentPlayerOne = !isCurrentPlayerOne;
-                Debug.Log("ran out of monet");
-                CameraController.instance.SetView();
+                Debug.Log("ran out of money");
+                isGamePhase = true;
+                UIController.instance.GamePhase();
             }
 
         }
@@ -74,8 +80,9 @@ public class GameController : Singleton<GameController>
             else
             {
                 isCurrentPlayerOne = !isCurrentPlayerOne;
-                Debug.Log("ran out of monet");
-                GamePhase();
+                Debug.Log("ran out of money");
+                isGamePhase = true;
+                UIController.instance.GamePhase();
             }
         }
 
@@ -84,24 +91,39 @@ public class GameController : Singleton<GameController>
 
     private void GamePhase()
     {
-        UIController.instance.GamePhase();
-        if (isCurrentPlayerOne)
-        {
-
-        }
-        Debug.LogError("playing");
+        TakeControl();
     }
 
-    void PlaceUnit(Unit unit)
+    private void TakeControl()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit) && Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Fired ray");
+            if (hit.transform.gameObject.CompareTag("Unit"))
+            {
+                Debug.Log("taking Control");
+                hit.transform.GetComponent<UnitController>().isControlled = true;
+                CameraController.instance.SetTarget(hit.transform);
+                currentObj = hit.transform.gameObject;
+                StartCoroutine(Timer());
+            }
+        }
+    }
+
+    void PlaceUnit(Unit unit, bool isOne)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit) && Input.GetMouseButtonDown(0))
-        {
-            var _placedUnit = Instantiate(_unitObject, hit.point, Quaternion.identity);
-            _placedUnit.AddComponent<UnitController>();
+        int layermask = 1 << 9;
+        layerToPlace = layermask;
 
+        if (Physics.Raycast(ray, out hit, layerToPlace) && Input.GetMouseButtonDown(0))
+        {
+            var _placedUnit = Instantiate(_unitObject, hit.point, hit.transform.rotation);
+            _placedUnit.AddComponent<UnitController>().SetColor(isOne);
             isPlacing = false;
             UIController.instance.ShowBuyScreen();
             isCurrentPlayerOne = !isCurrentPlayerOne;
@@ -124,11 +146,17 @@ public class GameController : Singleton<GameController>
 
     private void TimersUp()
     {
-        throw new NotImplementedException();
+        var control = currentObj.GetComponent<UnitController>();
+        control.isControlled = false;
+        control.CheckIfInside();
+        CameraController.isFollowing = false;
+        isCurrentPlayerOne = !isCurrentPlayerOne;
+        UIController.instance.SetCurrentPlayerText();
     }
 
     public void HaltCountDown(int secondsToWait)
     {
+        Debug.LogError("the powerups are not in working condition");
         throw new NotImplementedException();
     }
     #endregion

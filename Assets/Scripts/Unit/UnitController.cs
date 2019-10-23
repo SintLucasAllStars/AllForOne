@@ -4,7 +4,9 @@ public class UnitController : MonoBehaviour
 {
     private CharacterController characterController;
     private float JumpForce;
-    float speed = 2f;
+    private float speed = 2f;
+
+    public bool isControlled = false;
     private void Start()
     {
         this.gameObject.AddComponent<CharacterController>();
@@ -13,30 +15,57 @@ public class UnitController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        InputController();
+        if (isControlled)
+        {
+            InputController();
+        }
     }
 
     private void InputController()
     {
-        if (characterController.isGrounded)
+        var gravity = 20.0f;
+        var jumpHeight = 20.0f;
+        var moveDir = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+        var rotateDir = new Vector3(0, Input.GetAxis("Rotate"), 0);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            var gravity = 20.0f;
-            var jumpHeight = 8.0f;
-            var moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            speed *= 1.5f;
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && characterController.isGrounded)
+        {
+            moveDir.y = jumpHeight;
+        }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-                speed *= 1.5f;
+        moveDir *= speed;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                moveDir.y = jumpHeight;
-            }
+        //add the gravity
+        moveDir.y -= gravity * Time.deltaTime;
+        this.gameObject.transform.Rotate(rotateDir);
+        characterController.Move(moveDir * Time.deltaTime);
+    }
 
-            moveDir *= speed;
+    public void CheckIfInside()
+    {
+        RaycastHit hit;
+        if (!Physics.Raycast(transform.position, Vector3.up, out hit))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.cyan);
 
-            //add the gravity
-            moveDir.y -= gravity * Time.deltaTime;
-            characterController.Move(moveDir * Time.deltaTime);
+            Destroy(this.gameObject);
+            //Because the unit class is not implemted correctly the list will only grow of
+        }
+    }
+
+    public void SetColor(bool isOne)
+    {
+        if (isOne)
+        {
+            gameObject.GetComponent<Renderer>().material.color = Unit.colors[0];
+        }
+        else
+        {
+            gameObject.GetComponent<Renderer>().material.color = Unit.colors[1];
         }
     }
 }

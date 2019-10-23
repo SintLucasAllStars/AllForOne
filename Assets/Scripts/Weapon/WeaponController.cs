@@ -10,7 +10,6 @@ class WeaponController
 
     public WeaponController()
     {
-        UnityEngine.Debug.Log("loading");
         LoadIn();
     }
 
