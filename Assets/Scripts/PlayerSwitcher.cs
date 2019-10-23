@@ -13,7 +13,6 @@ public class PlayerSwitcher : MonoBehaviour
 
     public PlayerController pcScript;
 
-    //public bool switchplayer;
     public Animator anim;
 
     public bool endGame = false;
@@ -36,12 +35,10 @@ public class PlayerSwitcher : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
-                //pcScript = hit.transform.gameObject.GetComponent<PlayerController>();
                 if (hit.transform.tag == "u_Player1" && !switchPlayer)
                 {
                     tbScript.test = true;
                     oneunit = true;
-                    //pcScript.canClick = true;
                     testHit = true;
                     playerNow = hit.transform.gameObject;
                     tbScript.walkOn = true;
@@ -59,7 +56,6 @@ public class PlayerSwitcher : MonoBehaviour
                 {
                     tbScript.test = true;
                     oneunit = true;
-                    //pcScript.canClick = true;
                     testHit = true;
                     playerNow = hit.transform.gameObject;
                     tbScript.walkOn = true;
@@ -81,7 +77,6 @@ public class PlayerSwitcher : MonoBehaviour
     public void StartGame()
     {
         cmScript.enabled = true;
-        //cmScript.CameraParent();
         gameUI.SetActive(true);
     }
 
@@ -89,7 +84,6 @@ public class PlayerSwitcher : MonoBehaviour
     {
         if (!endGame)
         {
-            //pcScript.canClick = false;
             switchPlayer = !switchPlayer;
             pcScript.SetAnimState();
             pcScript.AnimRemover();

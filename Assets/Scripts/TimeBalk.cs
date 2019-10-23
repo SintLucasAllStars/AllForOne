@@ -22,8 +22,6 @@ public class TimeBalk : MonoBehaviour
     public bool walkOn;
     public bool test = true;
 
-    //public PlayerController pcScript;
-
     void Start()
     {
         timeRemaining = 10f;
@@ -37,66 +35,6 @@ public class TimeBalk : MonoBehaviour
         if (timeRemaining <= 0)
         {
             StartCoroutine(WaitForHealth());
-            //    Cursor.lockState = CursorLockMode.None;
-            //    //timeRemaining = 10;
-            //    //SwapNum(ref a, ref b);
-            //    if (GameObject.FindGameObjectsWithTag("u_Player1").Length <= 1 && dead == true)
-            //    {
-            //        //playerTurnText.text = ("Player 1 won!");
-            //        Debug.Log("Player 1 won");
-            //        return;
-            //    }
-            //    else if (GameObject.FindGameObjectsWithTag("u_Player2").Length <= 1 && dead == true)
-            //    {
-            //        //playerTurnText.text = ("Player 2 won!");
-            //        Debug.Log("Player 2 won");
-            //        return;
-            //    }
-            //    else if(cmScript.psScript.testHit == false)
-            //    {
-            //        SwapNum(ref a, ref b);
-            //        Debug.Log("TestHitFalse");
-            //        walkOn = false;
-            //        //timeRemaining = 10;
-            //        playerTurnText.text = ("Player ") + a + (" turn");
-            //        StartCoroutine(Wait());
-            //        return;
-            //    }
-            //    else if((cmScript.psScript.testHit == true) && (test) && cmScript.pcScript.canClick == true)
-            //    {
-            //        SwapNum(ref a, ref b);
-            //        Debug.Log("TestHitTrue");
-            //        walkOn = false;
-            //        //timeRemaining = 10;
-            //        if(cmScript.pcScript.lastHealth == false)
-            //        {
-            //            Debug.Log("Switch");
-            //            playerTurnText.text = ("Player ") + a + (" turn");
-            //        }
-            //        test = false;
-            //        timeRemaining = 10;
-            //        cmScript.BackToTop();
-            //        timeRemaining = 10;
-            //        walkOn = false;
-            //        test = true;
-            //        //cmScript.psScript.testHit = true;
-            //        return;
-            //    }
-            //    else if (cmScript.psScript.testHit == true && test && cmScript.pcScript.e_health > 0)
-            //    {
-            //        SwapNum(ref a, ref b);
-            //        Debug.Log("TestHittrueeeee");
-            //        walkOn = false;
-            //        //timeRemaining = 10;
-            //        playerTurnText.text = ("Player ") + a + (" turn");
-            //        StartCoroutine(Wait());
-            //        return;
-            //    }
-            //}
-            //else if(timeRemaining > 0 && walkOn == true && test == true)
-            //{
-            //    timeRemaining -= Time.deltaTime;
-            //}
         }
         else if (timeRemaining > 0 && walkOn == true && test == true)
         {
@@ -138,17 +76,13 @@ public class TimeBalk : MonoBehaviour
     public void GO()
     {
         Cursor.lockState = CursorLockMode.None;
-        //timeRemaining = 10;
-        //SwapNum(ref a, ref b);
         if (GameObject.FindGameObjectsWithTag("u_Player1").Length <= 1 && dead == true)
         {
-            //playerTurnText.text = ("Player 1 won!");
             Debug.Log("Player 1 won");
             return;
         }
         else if (GameObject.FindGameObjectsWithTag("u_Player2").Length <= 1 && dead == true)
         {
-            //playerTurnText.text = ("Player 2 won!");
             Debug.Log("Player 2 won");
             return;
         }
@@ -162,32 +96,11 @@ public class TimeBalk : MonoBehaviour
             StartCoroutine(Wait());
             return;
         }
-        //else if ((cmScript.psScript.testHit == true) && (test) && cmScript.pcScript.canClick == true)
-        //{
-        //    SwapNum(ref a, ref b);
-        //    Debug.Log("TestHitTrue");
-        //    walkOn = false;
-        //    //timeRemaining = 10;
-        //    if (cmScript.pcScript.lastHealth == false)
-        //    {
-        //        Debug.Log("Switch");
-        //        playerTurnText.text = ("Player ") + a + (" turn");
-        //    }
-        //    test = false;
-        //    timeRemaining = 10;
-        //    cmScript.BackToTop();
-        //    timeRemaining = 10;
-        //    walkOn = false;
-        //    test = true;
-        //    //cmScript.psScript.testHit = true;
-        //    return;
-        //}
         else if (cmScript.psScript.testHit == true && test && cmScript.pcScript.e_health > 0 && walkOn == true)
         {
             SwapNum(ref a, ref b);
             Debug.Log("TestHitTrue");
             walkOn = false;
-            //timeRemaining = 10;
             playerTurnText.text = ("Player ") + a + (" turn");
             test = false;
             timeRemaining = 10;
@@ -196,13 +109,8 @@ public class TimeBalk : MonoBehaviour
             walkOn = false;
             test = true;
             timeRemaining = 10;
-            //cmScript.psScript.testHit = true;
             return;
         }
-        //else if (timeRemaining > 0 && walkOn == true && test == true)
-        //{
-        //    timeRemaining -= Time.deltaTime;
-        //}
     }
 
     public void Change()

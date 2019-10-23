@@ -19,8 +19,6 @@ public class CameraMove : MonoBehaviour
 
     public GameObject timer;
 
-    //public bool walkOn;
-
     public void Start()
     {
 
@@ -28,29 +26,9 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
-        //pcScript = psScript.playerNow.GetComponent<PlayerController>();
         if (camMoveOn)
         {
             pcScript = psScript.playerNow.GetComponent<PlayerController>();
-            /*float xAxisValue = Input.GetAxis("Horizontal");
-        float zAxisValue = Input.GetAxis("Vertical");
-        float scrollAxisValue = Input.GetAxis("Mouse ScrollWheel");
-
-        if (Camera.main != null)
-        {
-            Camera.main.transform.Translate(new Vector3(xAxisValue, zAxisValue, 0.0f));
-        }
-
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
-        {
-            Debug.Log("scroll");
-            Camera.main.transform.Translate(new Vector3(0.0f, 0.0f, scrollAxisValue + scrollSpeed));
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-        {
-            Debug.Log("scroll");
-            Camera.main.transform.Translate(new Vector3(0.0f, 0.0f, +scrollAxisValue + -scrollSpeed));
-        }*/
 
             //CAMERA SMOTHE OBJECT
             float interpolation = speed;
@@ -63,7 +41,6 @@ public class CameraMove : MonoBehaviour
             position.z = Mathf.Lerp(this.transform.position.z, objectToFollow.transform.position.z, interpolation);
             if (!backToTop)
             {
-                //tbScript.walkOn = true;
                 Debug.Log("heheh");
                 rotation.x = Mathf.Lerp(this.transform.rotation.x, objectToFollow.transform.rotation.x, interpolation);
                 rotation.y = Mathf.Lerp(this.transform.rotation.y, objectToFollow.transform.rotation.y, interpolation);
@@ -72,16 +49,9 @@ public class CameraMove : MonoBehaviour
             else if(backToTop)
             {
                 Debug.Log("sadsad");
-                //tbScript.walkOn = true;
                 rotation2.x = Mathf.Lerp(this.transform.eulerAngles.x, objectToFollow.transform.eulerAngles.x, interpolation);
                 rotation2.y = Mathf.Lerp(this.transform.eulerAngles.y, objectToFollow.transform.eulerAngles.y, interpolation);
                 rotation2.z = Mathf.Lerp(this.transform.eulerAngles.z, objectToFollow.transform.eulerAngles.z, interpolation);
-
-                //Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
-
-                //rotation2.x = Mathf.Lerp(objectToFollow.transform.rotation.x, this.transform.rotation.x, interpolation);
-                //rotation2.y = Mathf.Lerp(objectToFollow.transform.rotation.y, this.transform.rotation.y, interpolation);
-                //rotation2.z = Mathf.Lerp(objectToFollow.transform.rotation.z, this.transform.rotation.z, interpolation);
             }
 
             this.transform.position = position;
@@ -94,7 +64,6 @@ public class CameraMove : MonoBehaviour
             {
                 this.transform.eulerAngles = rotation2;
             }
-            //this.transform.rotation = rotation;
         }
     }
 
@@ -115,10 +84,8 @@ public class CameraMove : MonoBehaviour
         Camera.main.transform.parent = objectToFollow.transform;
         pcScript.walkOn = false;
         psScript.SwitchPlayer();
-        //camMoveOn = true;
         timer.SetActive(false);
         pcScript.canClick = false;
-        //psScript.testHit = true;
     }
     IEnumerator wait()
     {

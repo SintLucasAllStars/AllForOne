@@ -104,10 +104,6 @@ public class SliderValue : MonoBehaviour
     {
         optionsMenu.SetActive(false);
         raycastOn = true;
-        //for (int i = 0; i < groundCollider.Length; i++)
-        //{
-        //    groundCollider[i].enabled = true;
-        //}
         PointsSaver();
     }
 
@@ -135,10 +131,6 @@ public class SliderValue : MonoBehaviour
             optionsMenu.gameObject.transform.GetChild(17).GetComponent<Image>().color = new Color32(45, 136, 221, 100);
 
             optionsMenu.SetActive(true);
-            //for (int i = 0; i < groundCollider.Length; i++)
-            //{
-            //    groundCollider[i].enabled = false;
-            //}
             raycastOn = false;
             return;
         }
@@ -151,10 +143,6 @@ public class SliderValue : MonoBehaviour
             optionsMenu.gameObject.transform.GetChild(17).GetComponent<Image>().color = new Color32(250, 56, 48, 100);
 
             optionsMenu.SetActive(true);
-            //for (int i = 0; i < groundCollider.Length; i++)
-            //{
-            //    groundCollider[i].enabled = false;
-            //}
         }
     }
 
