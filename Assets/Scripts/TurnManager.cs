@@ -13,6 +13,9 @@ namespace MechanicFever
 
     public class TurnManager : Singleton<TurnManager>
     {
+        private PlayerUnit _currentUnit;
+        public void SetPlayerUnit(PlayerUnit unit) => _currentUnit = unit;
+
         private GameState _gameState = GameState.UnitPlacement;
         public GameState GameState => _gameState;
 
@@ -107,6 +110,7 @@ namespace MechanicFever
                 yield return new WaitForSeconds(1);
                 _turnTime--;
             }
+            NetworkManager.Instance.SendMessage(JsonUtility.ToJson(_currentUnit.GameData));
             NextTurn();
         }
 

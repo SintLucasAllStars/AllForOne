@@ -86,9 +86,15 @@ namespace MechanicFever
             EnableMovement(true);
         }
 
-        private void OnEnable() => TurnManager.ChangeTurn += DisableMovement;
+        private void OnEnable()
+        {
+            TurnManager.ChangeTurn += DisableMovement;
+        }
 
-        private void OnDisable() => TurnManager.ChangeTurn -= DisableMovement;
+        private void OnDisable()
+        {
+            TurnManager.ChangeTurn -= DisableMovement;
+        }
 
         private void DisableMovement() => EnableMovement(false);
 
@@ -100,7 +106,7 @@ namespace MechanicFever
 
             EnableUnitCamera(isEnabled);
 
-            _unitController.EnableController(enabled);
+            _unitController.EnableController(isEnabled);
         }
 
         public void EnableCursor(bool isEnabled)
