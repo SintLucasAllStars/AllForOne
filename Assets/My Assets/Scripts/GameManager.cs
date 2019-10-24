@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -39,7 +41,9 @@ public class GameManager : MonoBehaviour
     //alive check
     public bool blueAlive = true;
     public bool redAlive = true;
-    
+    // timer
+    public bool timerActive = false;
+    public float battleTimer;
     //here are the phases of battle
     public enum Phase
     {
@@ -103,6 +107,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //timer countdown
+        if (timerActive == true)
+        {
+            if (battleTimer <= 0)
+            {
+                timerActive = false;
+            }
+            UiM.timerText.GetComponent<TextMeshProUGUI>().text = "Time left: " + Mathf.RoundToInt(battleTimer).ToString();
+            battleTimer = battleTimer - Time.deltaTime;
+        }
         // from creation to field view
         if (cameraAnimateNormal == true)
         {
@@ -190,6 +204,10 @@ public class GameManager : MonoBehaviour
 
                     }
                     StartCoroutine(PhaseEnd(Phase.SelectingUnit, Phase.PlacingUnits));
+                }
+                for (int i = 0; i < UiM.dummyModels.Count; i++)
+                {
+                    UiM.dummyModels[i].SetActive(false);
                 }
             }
             canPlaceChar = false;
@@ -426,7 +444,7 @@ public class GameManager : MonoBehaviour
         if (phase == Phase.BattlePlayer)
         {
 
-           
+            UiM.ActivateUi(UiManager.UiGroups.Battle, true);
             Debug.Log("===================\r" + "Phase: BattlePlayer-Start\r" + "===================");
         }
         
@@ -528,7 +546,8 @@ public class GameManager : MonoBehaviour
     public IEnumerator BattleTimer()
     {
         Debug.Log("timer start");
-        
+        battleTimer = 10;
+        timerActive = true;
         yield return new WaitForSeconds(10f);
         //turn of control
         characterCameraPos.parent.GetComponent<PlayerCharacter>().TakeControl();       

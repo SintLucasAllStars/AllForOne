@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,8 @@ public class UiManager : MonoBehaviour
 {
     public enum UiGroups
     {
-        CreationUi = 0
+        CreationUi = 0,
+        Battle = 1
     }
     
     
@@ -48,13 +50,15 @@ public class UiManager : MonoBehaviour
     // ui overlay groups
     public List<GameObject> ui;
     public GameObject creationUi;
+    public GameObject battleUi;
+    public GameObject timerText;
     public List<GameObject> creationUiText = new List<GameObject>();
 
     public List<GameObject> charCreateUi = new List<GameObject>();
     //Preview and Dummy positions
     public Transform dummyPos;
-    
-    
+    public List<GameObject> dummyModels = new List<GameObject>();
+
     //character to place
     public GameObject charInstance;
 
@@ -63,6 +67,10 @@ public class UiManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < dummyModels.Count; i++)
+        {
+            dummyModels[i].SetActive(false);
+        }
         uiCharStats.Add(uiCharHp);
         uiCharStats.Add(uiCharStr);
         uiCharStats.Add(uiCharSpd);
@@ -93,6 +101,12 @@ public class UiManager : MonoBehaviour
             creationUi.SetActive(activate);
             UiUpdate(UiGroups.CreationUi);
         }
+
+        if (targetUi == UiGroups.Battle)
+        {
+            battleUi.SetActive(activate);
+        }
+        
     }
 
     public void RandomizeValues(float playerPoints, float minimumPercent, int numberOfStats)
@@ -185,6 +199,7 @@ public class UiManager : MonoBehaviour
     {
 
         charPrefabId = UnityEngine.Random.Range(0, gm.charPrefabs.Count);
+        dummyModels[charPrefabId].SetActive(true);
         maxPoints = playerMaxPoints;
         
         // turn the values to the portions of 100(if all added up result should be 100)
@@ -211,6 +226,7 @@ public class UiManager : MonoBehaviour
         costList.Add(spdCost);
         costList.Add(defCost);
         
+
         // this should equal to 1% of maxPoints
         Debug.Log(onePercentFactor);
     }

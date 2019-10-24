@@ -104,7 +104,7 @@ public class PlayerCharacter : MonoBehaviour
 
     public void Attack()
     {
-        Ray weaponRay = new Ray(rayOrigin.position,rayOrigin.TransformDirection(Vector3.forward));
+        Ray weaponRay = new Ray(rayOrigin.position,rayOrigin.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(weaponRay, out hit, weaponStats.range + 10));
         {
