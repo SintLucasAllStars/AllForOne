@@ -312,7 +312,7 @@ public class PlayerController : MonoBehaviour
 
         if (e_Anim.GetBool("isReady") == true && (!weapon1 || !weapon2))
         {
-            e_health -= (this.GetComponent<UnitValues>().strength / e_defense);
+            e_health -= (this.GetComponent<UnitValues>().strength / e_defense -0.5f);
             hit.transform.gameObject.GetComponent<UnitValues>().health = e_health;
             Debug.Log(3);
             weapon1 = false;
