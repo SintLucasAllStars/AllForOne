@@ -32,11 +32,12 @@ public class TimeBalk : MonoBehaviour
 
         slider.value = CalculateSliderValue();
 
-        if (timeRemaining <= 0)
+        if (timeRemaining <= -1)
         {
+            Debug.Log("sdadsad");
             StartCoroutine(WaitForHealth());
         }
-        else if (timeRemaining > 0 && walkOn == true && test == true)
+        else if (timeRemaining > -1 && walkOn == true && test == true)
         {
             timeRemaining -= Time.deltaTime;
         }

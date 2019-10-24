@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     public bool canClick = false;
     public bool lastHealth = false;
+    bool punch = true;
 
     void Start()
     {
@@ -55,6 +56,8 @@ public class PlayerController : MonoBehaviour
     {
         if (e_health <= 0)
         {
+            punch = false;
+            e_health = 10;
             Debug.Log("health");
             lastHealth = true;
             psScript.testHit = false;
@@ -112,9 +115,9 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey("w"))
             {
-                transform.position += transform.TransformDirection(Vector3.forward) * Time.deltaTime * speed * 2.5f;
+                transform.position += transform.TransformDirection(Vector3.forward) * Time.deltaTime * speed * 1.5f;
             }
-            else if (Input.GetKey("w") && !Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey("w") && !Input.GetKey(KeyCode.LeftShift))
             {
                 transform.position += transform.TransformDirection(Vector3.forward) * Time.deltaTime * speed;
             }
@@ -154,7 +157,7 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(0, h, 0);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && punch == true)
         {
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, rayDistance))
             {
@@ -261,6 +264,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         cmScript = GameObject.Find("Main Camera").GetComponent<CameraMove>();
         cmScript.BackToTop();
+        punch = true;
     }
     IEnumerator WaitForDeadAni2()
     {

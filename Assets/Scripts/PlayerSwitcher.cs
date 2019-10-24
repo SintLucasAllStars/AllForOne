@@ -22,6 +22,7 @@ public class PlayerSwitcher : MonoBehaviour
     public GameObject playerNow;
 
     public bool testHit, oneunit = false;
+    public bool stopFirstClick;
 
     void Start()
     {
@@ -35,7 +36,7 @@ public class PlayerSwitcher : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
-                if (hit.transform.tag == "u_Player1" && !switchPlayer)
+                if (hit.transform.tag == "u_Player1" && !switchPlayer && stopFirstClick == true)
                 {
                     tbScript.test = true;
                     oneunit = true;
@@ -78,6 +79,7 @@ public class PlayerSwitcher : MonoBehaviour
     {
         cmScript.enabled = true;
         gameUI.SetActive(true);
+        stopFirstClick = false;
     }
 
     public void SwitchPlayer()
