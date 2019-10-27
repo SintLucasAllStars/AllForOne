@@ -23,7 +23,6 @@ namespace MechanicFever
 
         public void EnableController(bool enabled)
         {
-            Debug.Log(enabled);
             _canMove = enabled;
             _jump.EnableJumping(enabled);
             _movement.EnableWalking(enabled);

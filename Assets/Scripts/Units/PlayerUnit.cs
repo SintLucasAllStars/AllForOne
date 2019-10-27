@@ -17,7 +17,8 @@ namespace MechanicFever
         [SerializeField]
         private Renderer[] _coloredMaterials = null;
 
-        private bool _hasMoved = false;
+        private bool _hasUsedTurn = false, _hasMoved = false, _isFortified = false;
+        public bool IsFortified => _isFortified;
 
         private void Start()
         {
@@ -35,7 +36,6 @@ namespace MechanicFever
             {
                 for (int j = 0; j < _coloredMaterials[i].materials.Length; j++)
                 {
-                    Debug.Log(_gameData.PlayerSide);
                     _coloredMaterials[i].materials[j].SetColor("_Color", Player.GetColor(_gameData.PlayerSide));
                 }
             }
@@ -61,56 +61,78 @@ namespace MechanicFever
 
         public void SetGameData(UnitData data) => _gameData = data;
 
-        private void OnMouseDown()
+        private bool CanUseTurn()
         {
             //Check for the unit creation scene.
             if (!GameManager.Instance)
-                return;
+                return false;
 
             if (!TurnManager.Instance.HasTurn(Player.Instance.GameData.PlayerSide))
             {
                 Notifier.Instance.ShowNotification("It is not your turn.");
-                return;
+                return false;
             }
 
             if (!TurnManager.Instance.CanMoveUnits)
             {
                 Notifier.Instance.ShowNotification("You cannot move units yet.");
-                return;
+                return false;
             }
 
             if (_gameData.PlayerSide != Player.Instance.GameData.PlayerSide)
             {
                 Notifier.Instance.ShowNotification("This is not your unit.");
-                return;
+                return false;
             }
 
-            if(_hasMoved)
+            if (_hasUsedTurn)
             {
                 Notifier.Instance.ShowNotification("You've already used your turn on this unit.");
-                return;
+                return false;
             }
 
-            _hasMoved = true;
-            EnableMovement(true);
+            return true;
+        }
+
+        private void Move()
+        {
+            if (!CanUseTurn())
+                return;
+
+            _hasUsedTurn = true;
             TurnManager.Instance.SetPlayerUnit(this);
+            EnableMovement(true);
+            TurnManager.Instance.StartTimer();
+        }
+
+        private void OnMouseOver()
+        {
+            if (Input.GetMouseButtonDown(0))
+                Move();
+            else if (Input.GetMouseButtonDown(1))
+                Fortify();
         }
 
         private void OnEnable()
         {
             TurnManager.ChangeTurn += DisableMovement;
-            TurnManager.TurnChanged += EnableMove;
+            TurnManager.TurnChanged += ResetUnit;
         }
 
         private void OnDisable()
         {
             TurnManager.ChangeTurn -= DisableMovement;
-            TurnManager.TurnChanged += EnableMove;
+            TurnManager.TurnChanged += ResetUnit;
         }
 
         private void DisableMovement() => EnableMovement(false);
 
-        private void EnableMove() => _hasMoved = false;
+        private void ResetUnit()
+        {
+            _hasMoved = false;
+            _hasUsedTurn = false;
+            _isFortified = false;
+        }
 
         public void EnableMovement(bool isEnabled)
         {
@@ -121,9 +143,15 @@ namespace MechanicFever
             EnableUnitCamera(isEnabled);
 
             _unitController.EnableController(isEnabled);
+        }
 
-            if(isEnabled)
-                TurnManager.Instance.StartTimer();
+        public void Fortify()
+        {
+            if (!CanUseTurn())
+                return;
+
+            _hasUsedTurn = true;
+            _isFortified = true;
         }
 
         public void Hit(int damage)
