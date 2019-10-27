@@ -116,7 +116,7 @@ namespace MechanicFever
         {
             RTS_Camera.Instance.Camera.enabled = !isEnabled;
 
-            EnableCursor(!isEnabled);
+            GameManager.Instance.EnableCursor(!isEnabled);
 
             EnableUnitCamera(isEnabled);
 
@@ -124,20 +124,6 @@ namespace MechanicFever
 
             if(isEnabled)
                 TurnManager.Instance.StartTimer();
-        }
-
-        private void EnableCursor(bool isEnabled)
-        {
-            if(isEnabled)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
         }
 
         public void Hit(int damage)

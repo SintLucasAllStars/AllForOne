@@ -78,6 +78,8 @@ namespace MechanicFever
                         Notifier.Instance.ShowNotification("You lost!");
                     else
                         Notifier.Instance.ShowNotification("You won!");
+
+                    EnableCursor(false);
                     SceneManager.Instance.LoadScene(0);
                 }
                 return;
@@ -147,6 +149,7 @@ namespace MechanicFever
             {
                 Notifier.Instance.ShowNotification("Other user disconnected!");
                 NetworkManager.Instance.Close("Player leave");
+                EnableCursor(false);
                 SceneManager.Instance.LoadScene(0);
             }
         }
@@ -175,6 +178,20 @@ namespace MechanicFever
                     numUnits++;
             }
             return numUnits;
+        }
+
+        public void EnableCursor(bool isEnabled)
+        {
+            if (isEnabled)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 }
