@@ -9,12 +9,12 @@ public class Warrior
     private float speed;
     private int defense;
 
+    public GameObject hand;
+    private bool isSelected;
+    private Player player;
+
     private float MaxHealth;
 
-    public GameObject hand;
-
-    private bool isSelected;
-    
     public Warrior()
     {
         this.health = 5;
@@ -25,7 +25,7 @@ public class Warrior
         this.MaxHealth = 5;
     }
 
-    public Warrior(int a_Health, int a_Strenth, int a_Speed, int a_Defense)
+    public Warrior(int a_Health, int a_Strenth, int a_Speed, int a_Defense, Player a_Player)
     {
         this.health = a_Health;
         this.strength = a_Strenth;
@@ -33,6 +33,7 @@ public class Warrior
         this.defense = a_Defense;
         this.isSelected = false;
         this.MaxHealth = a_Health;
+        this.player = a_Player;
     }
 
     public float GetHealth() { return this.health; }
@@ -51,4 +52,6 @@ public class Warrior
     public void SetIsSelected(bool a_IsSelected) { this.isSelected = a_IsSelected; }
 
     public float GetMaxHealth() { return this.MaxHealth; }
+
+    public Player GetPlayer() { return player; }
 }

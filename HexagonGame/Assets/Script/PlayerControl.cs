@@ -160,11 +160,6 @@ public class PlayerControl : Singelton<PlayerControl>
         if (curWarrior.IsDeath()) curPlayer.RemoveWarrior(curWarrior);
     }
 
-    public void removeWarrior(Actor a_Warrior)
-    {
-        curPlayer.RemoveWarrior(a_Warrior);
-    }
-
     public void SetCanSelect(bool a_CanSelect) { this.InTurn = a_CanSelect; }
     public void setInTurn(bool a_InTurn) { InTurn = a_InTurn; }
     public bool IsInTurn() { return InTurn; }

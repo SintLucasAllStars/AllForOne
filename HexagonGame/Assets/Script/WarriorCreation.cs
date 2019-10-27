@@ -42,7 +42,7 @@ public class WarriorCreation : MonoBehaviour
 
     public void CreateWarrior()
     {
-        Warrior createdWarrior = new Warrior((int)sliders[0].value, (int)sliders[1].value, (int)sliders[2].value, (int)sliders[3].value);
+        Warrior createdWarrior = new Warrior((int)sliders[0].value, (int)sliders[1].value, (int)sliders[2].value, (int)sliders[3].value, curPlayer);
         GameObject spawnedWarrior = Instantiate(warriorPrefab, (tile.transform.position + tile.GetPosition() + warriorStartPos), Quaternion.identity);
         spawnedWarrior.GetComponent<Actor>().SetWarrior(createdWarrior);
 

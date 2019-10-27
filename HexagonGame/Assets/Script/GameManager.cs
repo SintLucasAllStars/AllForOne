@@ -24,16 +24,14 @@ public class GameManager : Singelton<GameManager>
         winState.won = false;
         currentPlayer = 0;
 
-        InitPlayers();
+        players = new List<Player>();
+
         StartCoroutine(Game());
     }
 
-    private void InitPlayers()
+    public void InitPlayers(Color a_Color)
     {
-        players = new List<Player>();
-        players.Add(new Player("player1", Color.red));
-        players.Add(new Player("player2", Color.blue));
-        players.Add(new Player("player3", Color.green));
+        players.Add(new Player("player" + players.Count, a_Color));
     }
 
     public IEnumerator Game()

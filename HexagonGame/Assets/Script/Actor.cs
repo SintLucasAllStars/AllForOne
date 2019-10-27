@@ -27,7 +27,6 @@ public class Actor : MonoBehaviour
 
     private Item item;
 
-    private float xCameraRotation;
     private float sensetivity;
     private bool isJumping;
     private float jumpVelocity;
@@ -36,7 +35,6 @@ public class Actor : MonoBehaviour
     public void Start()
     {
         item = new Item(1, 10, 0, "Punch", new GameObject(), WeaponType.Hand);
-        xCameraRotation = 0;
         sensetivity = 4;
         isJumping = false;
         jumpVelocity = 2;
@@ -165,7 +163,7 @@ public class Actor : MonoBehaviour
         if (health < damage)
         {
             Destroy(this.gameObject);
-            PlayerControl.Instance.removeWarrior(this);
+            warrior.GetPlayer().RemoveWarrior(this);
         } else
         {
             float fullHealthBar = 100;
@@ -190,6 +188,7 @@ public class Actor : MonoBehaviour
         {
             if (hit.transform.GetComponent<TileScript>().GetTileType() == TileType.Outside)
             {
+                
                 Destroy(this.gameObject);
                 return true;
             }
