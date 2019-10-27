@@ -211,7 +211,7 @@ namespace MechanicFever
 
         public void HighlightTarget(Transform highlightedTransform)
         {
-            Vector3 e = new Vector3(highlightedTransform.position.x, transform.localPosition.y, highlightedTransform.position.z - 12);
+            Vector3 e = new Vector3(highlightedTransform.position.x, transform.localPosition.y, highlightedTransform.position.z - transform.position.x);
             transform.localPosition = transform.InverseTransformPoint(e);
         }
 

@@ -109,7 +109,7 @@ namespace MechanicFever
                 yield return new WaitForSeconds(1);
                 _turnTime--;
             }
-            NetworkManager.Instance.SendMessage(JsonUtility.ToJson(_currentUnit.GameData));
+            NetworkManager.Instance.SendMessage(JsonUtility.ToJson(new UnitData(_currentUnit.GameData.Health, _currentUnit.GameData.Strength, _currentUnit.GameData.Speed, _currentUnit.GameData.Defense, _currentUnit.GameData.Price, _currentUnit.GameData.Guid, Node.ConvertVector(_currentUnit.transform.position), _currentUnit.GameData.Type, _currentUnit.GameData.IsConnected, _currentUnit.GameData.IsActive, _currentUnit.GameData.PlayerSide)));
             _currentUnit.EnableMovement(false);
         }
 
