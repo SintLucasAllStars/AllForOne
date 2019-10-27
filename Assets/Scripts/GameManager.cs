@@ -8,7 +8,6 @@ namespace MechanicFever
     public class GameManager : Singleton<GameManager>
     {
         private List<PlayerUnit> _units = new List<PlayerUnit>();
-        private List<Powerup> _powerups = new List<Powerup>();
 
         [SerializeField]
         private TextMeshProUGUI _teamText = null, _unitCostText = null;
@@ -16,8 +15,6 @@ namespace MechanicFever
         private void Start() => StartCoroutine(HandleMessages());
 
         public void UpdateUnit(UnitData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
-
-        public void UpdatePowerup(PowerupData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
         public void ChangeTurn(GameData data) => NetworkManager.Instance.SendMessage(JsonUtility.ToJson(data));
 
@@ -41,10 +38,6 @@ namespace MechanicFever
             {
                 case "Player":
                     UpdateClients(data);
-                    break;
-                case "Powerup":
-                    PowerupData powerup = JsonUtility.FromJson<PowerupData>(message);
-                    UpdatePowerups(powerup);
                     break;
                 case "Turn":
                     TurnManager.Instance.SetTurn(data.PlayerSide);
@@ -107,34 +100,6 @@ namespace MechanicFever
             }
         }
 
-        private void UpdatePowerups(PowerupData gameData)
-        {
-            //Powerup has been picked up.
-            if (!gameData.IsActive)
-            {
-                for (int i = 0; i < _powerups.Count; i++)
-                {
-                    if (_powerups[i].PowerupData.Guid == gameData.Guid)
-                    {
-                        Map.Instance.FreeNode(_powerups[i].PowerupData.Position);
-                        Destroy(_powerups[i].gameObject);
-                        _powerups.RemoveAt(i);
-                    }
-                }
-                return;
-            }
-
-            //Powerup gets spawned.
-            if (!DoesItemExist(gameData.Guid))
-            {
-                Powerup u = Instantiate(Resources.Load<GameObject>(gameData.Type)).GetComponent<Powerup>();
-                u.SetPowerupData(gameData);
-                u.SetPosition(gameData.Position);
-                _powerups.Add(u);
-                RTS_Camera.Instance.HighlightTarget(u.transform);
-            }
-        }
-
         private void UpdateClients(GameData gameData)
         {
             if (Player.Instance.GameData.Guid == gameData.Guid)
@@ -159,11 +124,6 @@ namespace MechanicFever
             for (int i = 0; i < _units.Count; i++)
             {
                 if (guid == _units[i].GameData.Guid)
-                    return true;
-            }
-            for (int i = 0; i < _powerups.Count; i++)
-            {
-                if (guid == _powerups[i].PowerupData.Guid)
                     return true;
             }
             return false;
