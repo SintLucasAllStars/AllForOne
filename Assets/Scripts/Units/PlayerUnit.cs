@@ -162,7 +162,11 @@ namespace MechanicFever
                 return;
             }
 
-            _gameData.SetHealth(_gameData.Health - damage);
+            if(_isFortified)
+                _gameData.SetHealth(_gameData.Health - (damage - (_gameData.Defense / 2)));
+            else
+                _gameData.SetHealth(_gameData.Health - damage);
+
             GameManager.Instance.UpdateUnit(_gameData);
         }
 
