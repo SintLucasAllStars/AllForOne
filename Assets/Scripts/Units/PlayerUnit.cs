@@ -17,6 +17,8 @@ namespace MechanicFever
         [SerializeField]
         private Renderer[] _coloredMaterials = null;
 
+        private bool _hasMoved = false;
+
         private void Start()
         {
             _unitCamera = GetComponentInChildren<Camera>();
@@ -83,22 +85,34 @@ namespace MechanicFever
                 return;
             }
 
+            if(_hasMoved)
+            {
+                Notifier.Instance.ShowNotification("You've already used your turn on this unit.");
+                return;
+            }
+
+            _hasMoved = true;
             EnableMovement(true);
+            TurnManager.Instance.SetPlayerUnit(this);
         }
 
         private void OnEnable()
         {
             TurnManager.ChangeTurn += DisableMovement;
+            TurnManager.TurnChanged += EnableMove;
         }
 
         private void OnDisable()
         {
             TurnManager.ChangeTurn -= DisableMovement;
+            TurnManager.TurnChanged += EnableMove;
         }
 
         private void DisableMovement() => EnableMovement(false);
 
-        private void EnableMovement(bool isEnabled)
+        private void EnableMove() => _hasMoved = false;
+
+        public void EnableMovement(bool isEnabled)
         {
             RTS_Camera.Instance.Camera.enabled = !isEnabled;
 
@@ -107,9 +121,12 @@ namespace MechanicFever
             EnableUnitCamera(isEnabled);
 
             _unitController.EnableController(isEnabled);
+
+            if(isEnabled)
+                TurnManager.Instance.StartTimer();
         }
 
-        public void EnableCursor(bool isEnabled)
+        private void EnableCursor(bool isEnabled)
         {
             if(isEnabled)
             {

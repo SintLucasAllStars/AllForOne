@@ -129,6 +129,7 @@ namespace MechanicFever
                 u.SetPowerupData(gameData);
                 u.SetPosition(gameData.Position);
                 _powerups.Add(u);
+                RTS_Camera.Instance.HighlightTarget(u.transform);
             }
         }
 

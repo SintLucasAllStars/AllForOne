@@ -136,10 +136,7 @@ namespace MechanicFever
 
         private void CameraUpdate()
         {
-            if (FollowingTarget)
-                FollowTarget();
-            else
-                Move();
+            Move();
 
             HeightCalculation();
             Rotation();
@@ -202,12 +199,6 @@ namespace MechanicFever
                 m_Transform.Rotate(Vector3.up, -MouseAxis.x * Time.deltaTime * mouseRotationSpeed, Space.World);
         }
 
-        private void FollowTarget()
-        {
-            Vector3 targetPos = new Vector3(targetFollow.localPosition.x, m_Transform.localPosition.y, targetFollow.localPosition.z) + targetOffset;
-            m_Transform.localPosition = Vector3.MoveTowards(m_Transform.localPosition, targetPos, Time.deltaTime * followingSpeed);
-        }
-
         private void LimitPosition()
         {
             if (!limitMap)
@@ -218,9 +209,10 @@ namespace MechanicFever
                 Mathf.Clamp(m_Transform.localPosition.z, -15, 15));
         }
 
-        public void SetTarget(Transform target)
+        public void HighlightTarget(Transform highlightedTransform)
         {
-            targetFollow = target;
+            Vector3 e = new Vector3(highlightedTransform.position.x, transform.localPosition.y, highlightedTransform.position.z - 12);
+            transform.localPosition = transform.InverseTransformPoint(e);
         }
 
         public void ResetTarget() => targetFollow = null;

@@ -97,10 +97,9 @@ namespace MechanicFever
                 _gameState = GameState.UnitPlacement;
             if (_turns >= 2)
                 _gameState = GameState.UnitMovement;
-
-            if(_currentTurn == Player.Instance.GameData.PlayerSide)
-                _timerCoroutine = StartCoroutine(Timer());
         }
+
+        public void StartTimer() => _timerCoroutine = StartCoroutine(Timer());
 
         private IEnumerator Timer()
         {
@@ -111,7 +110,7 @@ namespace MechanicFever
                 _turnTime--;
             }
             NetworkManager.Instance.SendMessage(JsonUtility.ToJson(_currentUnit.GameData));
-            NextTurn();
+            _currentUnit.EnableMovement(false);
         }
 
         private void Update() => _turnTimeText.text = _turnTime.ToString();
