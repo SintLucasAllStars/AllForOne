@@ -19,14 +19,14 @@ The game is to be played by 2 players. They can be both on the same computer (Ch
   - Defense ✔
 * Each player will have a color - Player1 is RED, player 2 is BLUE. All units of each player must have an element of that color. That could be clothing, skin, a light or a overhead floating object, aura etc. Up to you. ✔
 * When buying a unit the price depends on the balance of the stats, and that will also influence how many units each player is going to have. So stratigically one player could choose to set up a single unit with full stats and play with only one "super soldier" or have 10 weak units. ✔
-* When all units are placed, the game starts. ✖
+* When all units are placed, the game starts.
 * On the begining of each turn, one power up or weapon will randomly spawn on the play area. ✔
 * The current player will then choose one unit to control by clicking it.
-* Once the player clicks the unit the camera flies into 3rd person mode, a 10 second timer starts and the player now has full control of the character and can (more details on each of these below): ✖
+* Once the player clicks the unit the camera flies into 3rd person mode, a 10 second timer starts and the player now has full control of the character and can (more details on each of these below): 
   - Run ✔
   - Jump ✔
   - Attack / use weapon (if you have one) ✔
-  - Pick up power ups and weapons ✔
+  - Pick up power ups and weapons 
   - Use power ups
   - Fortify ✔
 * Once the 10 seconds are finished the turn is over.
@@ -52,7 +52,7 @@ This is the initial phase where the players buy and place units on the game area
 ## BOARD MECHANICS DETAIL
 
 * The full game area should be visible on the top view. ✔
-* First thing that happens when a turn starts is that a power up spawns randomly on the scene. This should be clearly visible. ✔✖
+* First thing that happens when a turn starts is that a power up spawns randomly on the scene. This should be clearly visible. 
 * There should be a clear element that tells which player's turn it is. ✔
 * The color of the units should also be clearly visible. ✔
 
@@ -61,10 +61,10 @@ This is the initial phase where the players buy and place units on the game area
 * When the player starts, the counter should be clearly visible and counting down from 10.
 * The player can:
   - Run / Jump anywhere on the game area. ✔
-  - Attack / use weapon: All players start without weapon and they can only punch. They can then pick up weapons that give them more range or hit points. (See attack/defense mechanic). 
-  - Pick up power ups and weapons. ✔
+  - Attack / use weapon: All players start without weapon and they can only punch. They can then pick up weapons that give them more range or hit points. (See attack/defense mechanic). ✔
+  - Pick up power ups and weapons. 
   - Use power ups (see description of powerups below).
-  - Fortify: at any point during the 10 second turn (action view), the player can choose to fortify. Fortify will put this unit in a defensive position and he will remain this way. The unit stays fortified until it gets picked to play again. (See attack/defense mechanic)
+  - Fortify: at any point during the 10 second turn (action view), the player can choose to fortify. Fortify will put this unit in a defensive position and he will remain this way. The unit stays fortified until it gets picked to play again. (See attack/defense mechanic) ✔
 * If the 10 seconds run out and the unit is outdoors, then that unit dies instantly.
 
 ## ATTACK / DEFENSE MECHANIC
