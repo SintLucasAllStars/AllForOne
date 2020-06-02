@@ -6,7 +6,6 @@ public class Unit : MonoBehaviour
 {
     private Rigidbody rb;
     private Transform camTransform;
-    private Vector3 offset = new Vector3(0, 0, -5);
 
     private int m_Health;
     private int m_Strength;
@@ -30,24 +29,29 @@ public class Unit : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         camTransform = GetComponentInChildren<Transform>();
+
+        SetUp(30, 10, 10, 10, Team.Red); //<-toRemove
+
+        unitPos = transform.position;
     }
 
     public void Move(Vector3 moveDir)
     {
         unitPos += moveDir * (m_Speed * Time.deltaTime);
         unitPos.y = transform.position.y;
+        unitPos = transform.TransformDirection(unitPos);
         rb.MovePosition(unitPos);
     }
 
     public Vector3 GetCameraPos()
     {
-        Vector3 transform = camTransform.position + offset;
-        return transform;
+        Vector3 pos = transform.GetChild(0).position - (transform.forward * 5.0f);
+        return pos;
     }
 
     public void Look(Vector3 rotation)
     {
-
+        rb.rotation = Quaternion.Euler(rotation);
     }
 }
 
