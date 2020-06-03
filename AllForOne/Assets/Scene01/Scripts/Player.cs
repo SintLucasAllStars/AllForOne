@@ -5,15 +5,30 @@ using System.Threading;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{
+{ 
+    private Unit unit; 
+
+    //Input
+    Vector2 movementInput;
 
     //Camera
-    public float mouseSens = 10;
+    [Header("Camera Variables")]
+    [SerializeField]
     public Transform target;
-    public float DistanceFormTarget = 2; 
-    float x, y;
 
-    enum PlayerState {None, Selected, Controlling }; 
+    public Camera mainCamera;
+    public float mouseSens = 10;
+    public float distanceFromTarget = 2;
+    public float rotSmoothDuration = .12f;
+    public Vector2 pitchMinMax = new Vector2(-40, 85);
+
+    float pitch, yaw; 
+    Vector3 rotSmoothing;
+    Vector3 curRotation; 
+    
+
+    enum currentState {None, Selected, Controlling };
+    private currentState curState; 
 
     // Start is called before the first frame update
     void Start()
@@ -24,19 +39,55 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Click();
+        ThirdPersonCamera();
+    }
+
+    void Click()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Debug.Log("click");
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.GetComponent<Unit>() != null)
+                {
+                    Debug.Log(hit.collider.name);
+                    target = hit.collider.transform;
+                }
+            }
+        }
+
+    }
+
+    void SwitchCase()
+    {
+        switch (curState)
+        {
+            case currentState.None:
+
+                break;
+            case currentState.Selected:
+
+                break;
+            case currentState.Controlling:
+                break;
+            default:
+                break;
+        }
     }
 
     void ThirdPersonCamera()
     {
-        x += Input.GetAxisRaw("Mouse X") * mouseSens;
-        y += Input.GetAxisRaw("Mouse Y") * mouseSens;
-        y = Mathf.Clamp(y, -40, 85);
+        yaw += Input.GetAxis("Mouse X") * mouseSens;
+        pitch -= Input.GetAxis("Mouse Y") * mouseSens;
+        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
 
-        Vector3 targetRot = new Vector3(y, x);
-        transform.eulerAngles = targetRot;
-
-        transform.position = target.position - transform.position * DistanceFormTarget; 
+        curRotation = Vector3.SmoothDamp(curRotation, new Vector3(pitch, yaw), ref rotSmoothing, rotSmoothDuration);
+        mainCamera.transform.eulerAngles = curRotation; 
+        mainCamera.transform.position = target.transform.position - (mainCamera.transform.forward * distanceFromTarget); 
 
 
     }
