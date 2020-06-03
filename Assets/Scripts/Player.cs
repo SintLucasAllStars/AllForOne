@@ -11,10 +11,12 @@ public class Player : MonoBehaviour
 
     private Vector3 movedir;
     private Vector3 offset;
-    
-    private float pitch;
-    private float yawSpeed = 100f;
-    private float currentYaw = 0f;
+    private float selectDir;
+
+    private float mouseX;
+    private float mouseY;
+    private float sensivityX = 2.5f;
+    private float sensivityY = 1.5f;
 
     private float SelectedTime;
     private float controlTimer;
@@ -34,6 +36,10 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 controlState = ControlState.Controlling;
+                cam.transform.position = curUnit.GetCameraPos();
+                cam.transform.parent = curUnit.GetTarget();
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
 
@@ -47,13 +53,26 @@ public class Player : MonoBehaviour
             curUnit.Move(movedir);
 
             //Looking
-            currentYaw += Input.GetAxis("Mouse X") * 1.5f;
-            curUnit.Look(new Vector3(0, currentYaw, 0));
+            mouseX = Input.GetAxis("Mouse X") * sensivityX;
+            mouseY = Input.GetAxis("Mouse Y") * sensivityY;
+            curUnit.Look(mouseX, mouseY);
         }
 
         if (Input.GetMouseButtonDown(0) && controlState != ControlState.Controlling)
         {
             Click();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && controlState == ControlState.Controlling)
+        {
+            controlState = ControlState.Selected;
+            cam.transform.parent = null;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            movedir = Vector3.zero;
+            mouseX = 0;
+            mouseY = 0;
         }
     }
 
@@ -87,13 +106,11 @@ public class Player : MonoBehaviour
                 break;
             case ControlState.Selected:
                 cam.transform.position = Vector3.Lerp(cam.transform.position, curUnit.GetCameraPos(), (SelectedTime += Time.deltaTime / 2));
-                cam.transform.eulerAngles = Vector3.Lerp(cam.transform.eulerAngles, Vector3.zero, SelectedTime);
+                //cam.transform.eulerAngles = Vector3.Lerp(cam.transform.eulerAngles, Vector3.zero, SelectedTime);
+                cam.transform.LookAt(curUnit.GetTarget());
                 break;
             case ControlState.Controlling:
-
-                cam.transform.position = curUnit.GetCameraPos();
-                cam.transform.LookAt(curUnit.gameObject.transform.position);
-
+                cam.transform.LookAt(curUnit.GetTarget());
                 break;
         }
     }

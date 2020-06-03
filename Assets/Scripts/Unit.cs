@@ -5,7 +5,9 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     private Rigidbody rb;
-    private Transform camTransform;
+    private Transform targetTransform;
+    private float lookDirX;
+    private float lookDirY;
 
     private int m_Health;
     private int m_Strength;
@@ -22,36 +24,41 @@ public class Unit : MonoBehaviour
         m_Defence = defence;
         m_Speed = speed;
         m_Team = team;
-        unitPos = transform.position;
     }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        camTransform = GetComponentInChildren<Transform>();
+        targetTransform = transform.GetChild(0);
 
-        SetUp(30, 10, 10, 10, Team.Red); //<-toRemove
-
-        unitPos = transform.position;
+        SetUp(30, 10, 10, 250, Team.Red); //<-toRemove
     }
 
     public void Move(Vector3 moveDir)
     {
-        unitPos += moveDir * (m_Speed * Time.deltaTime);
-        unitPos.y = transform.position.y;
+        unitPos = moveDir * (m_Speed * Time.fixedDeltaTime);
         unitPos = transform.TransformDirection(unitPos);
-        rb.MovePosition(unitPos);
+        rb.velocity = unitPos;
     }
 
     public Vector3 GetCameraPos()
     {
-        Vector3 pos = transform.GetChild(0).position - (transform.forward * 5.0f);
+        Vector3 pos = targetTransform.position - (transform.forward * 5.0f);
         return pos;
     }
 
-    public void Look(Vector3 rotation)
+    public Transform GetTarget()
     {
-        rb.rotation = Quaternion.Euler(rotation);
+        return targetTransform;
+    }
+
+    public void Look(float mouseX, float mouseY)
+    {
+        lookDirX += mouseX;
+        lookDirY -= mouseY;
+        lookDirY = Mathf.Clamp(lookDirY, -35, 60);
+        rb.rotation = Quaternion.Euler(new Vector3(0, lookDirX, 0));
+        targetTransform.rotation = Quaternion.Euler(new Vector3(lookDirY, lookDirX, 0));
     }
 }
 
