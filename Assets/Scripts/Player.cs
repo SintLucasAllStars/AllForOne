@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private ControlState controlState;
+    private Team currentTeam;
     [SerializeField]
     private Unit curUnit;
     private Camera cam;
@@ -21,12 +22,21 @@ public class Player : MonoBehaviour
     private float SelectedTime;
     private float controlTimer;
     private float myDeltaTime;
-    private Vector3 topDownRotation = new Vector3(55, 0, 0);
-    private Vector3 topDownPosition = new Vector3(0, 20, -20);
+
+    private Vector3 topDownPosition;
+    private Vector3 topDownRotation;
+    private Vector3 topDownRotationRed = new Vector3(55, 0, 0);
+    private Vector3 topDownPositionRed = new Vector3(0, 20, -20);
+    private Vector3 topDownRotationBlue = new Vector3(55, 180, 0);
+    private Vector3 topDownPositionBlue = new Vector3(0, 20, 20);
+
+    public Material mat;
 
     private void Start()
     {
         cam = Camera.main;
+        topDownPosition = topDownPositionRed;
+        topDownRotation = topDownRotationRed;
     }
 
     private void Update()
@@ -40,16 +50,16 @@ public class Player : MonoBehaviour
                 cam.transform.parent = curUnit.GetTarget();
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
+                Debug.Log("Lock mouse");
             }
         }
 
         if(controlState == ControlState.Controlling)
         {
+            //Moving
             float horizontalMovement = Input.GetAxisRaw("Horizontal");
             float verticalMovement = Input.GetAxisRaw("Vertical");
-
             movedir = new Vector3(horizontalMovement, 0, verticalMovement).normalized;
-
             curUnit.Move(movedir);
 
             //Looking
@@ -74,6 +84,11 @@ public class Player : MonoBehaviour
             mouseX = 0;
             mouseY = 0;
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SwitchPlayer();
+        }
     }
 
     private void Click()
@@ -87,12 +102,31 @@ public class Player : MonoBehaviour
         {
             Debug.Log(hit.collider.name);
             unit = hit.collider.GetComponent<Unit>();
-            if(unit != null)
+            if(unit != null && unit.GetTeam() == currentTeam)
             {
                 controlState = ControlState.Selected;
+                unit.SetTeam(Team.Blue, mat);
             }
         }
         curUnit = unit;
+        SelectedTime = 0;
+    }
+
+    private void SwitchPlayer()
+    {
+        if(currentTeam == Team.Red)
+        {
+            currentTeam = Team.Blue;
+            topDownPosition = topDownPositionBlue;
+            topDownRotation = topDownRotationBlue;
+        }
+        else
+        {
+            currentTeam = Team.Red;
+            topDownPosition = topDownPositionRed;
+            topDownRotation = topDownRotationRed;
+        }
+
         SelectedTime = 0;
     }
 
@@ -106,7 +140,6 @@ public class Player : MonoBehaviour
                 break;
             case ControlState.Selected:
                 cam.transform.position = Vector3.Lerp(cam.transform.position, curUnit.GetCameraPos(), (SelectedTime += Time.deltaTime / 2));
-                //cam.transform.eulerAngles = Vector3.Lerp(cam.transform.eulerAngles, Vector3.zero, SelectedTime);
                 cam.transform.LookAt(curUnit.GetTarget());
                 break;
             case ControlState.Controlling:

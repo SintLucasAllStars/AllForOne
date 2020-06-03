@@ -52,6 +52,11 @@ public class Unit : MonoBehaviour
         return targetTransform;
     }
 
+    public Team GetTeam()
+    {
+        return m_Team;
+    }
+
     public void Look(float mouseX, float mouseY)
     {
         lookDirX += mouseX;
@@ -59,6 +64,12 @@ public class Unit : MonoBehaviour
         lookDirY = Mathf.Clamp(lookDirY, -35, 60);
         rb.rotation = Quaternion.Euler(new Vector3(0, lookDirX, 0));
         targetTransform.rotation = Quaternion.Euler(new Vector3(lookDirY, lookDirX, 0));
+    }
+
+    public void SetTeam(Team team, Material teamMat)
+    {
+        m_Team = team;
+        GetComponent<Renderer>().material = teamMat;
     }
 }
 
