@@ -30,8 +30,6 @@ public class Player : MonoBehaviour
     private Vector3 topDownRotationBlue = new Vector3(55, 180, 0);
     private Vector3 topDownPositionBlue = new Vector3(0, 20, 20);
 
-    public Material mat;
-
     private void Start()
     {
         cam = Camera.main;
@@ -105,7 +103,6 @@ public class Player : MonoBehaviour
             if(unit != null && unit.GetTeam() == currentTeam)
             {
                 controlState = ControlState.Selected;
-                unit.SetTeam(Team.Blue, mat);
             }
         }
         curUnit = unit;

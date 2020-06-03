@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
     private int m_Strength;
     private int m_Defence;
     private int m_Speed;
-    private Team m_Team;
+    [SerializeField]private Team m_Team;
 
     private Vector3 unitPos;
 
@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         targetTransform = transform.GetChild(0);
+        lookDirX = transform.eulerAngles.y;
 
         SetUp(30, 10, 10, 250, Team.Red); //<-toRemove
     }
