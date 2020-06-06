@@ -12,12 +12,13 @@ public class Unit : MonoBehaviour
     private int m_Health;
     private int m_Strength;
     private int m_Defence;
-    [SerializeField]private int m_Speed;
+    private int m_Speed;
     [SerializeField]private Team m_Team;
 
     private Vector3 unitPos;
     private float attackDist = 2f;
     private bool isFortified = false;
+    private float jumpForce = 7f;
 
     public void SetUp(int health, int strength, int defence, int speed, Team team)
     {
@@ -34,14 +35,29 @@ public class Unit : MonoBehaviour
         targetTransform = transform.GetChild(0);
         lookDirX = transform.eulerAngles.y;
 
-        SetUp(30, 15, 8, 750, Team.Red); //<-toRemove
+        SetUp(30, 15, 8, 500, Team.Red); //<-toRemove
     }
 
     public void Move(Vector3 moveDir)
     {
         unitPos = moveDir * (m_Speed * Time.fixedDeltaTime);
+        unitPos.y += rb.velocity.y;
         unitPos = transform.TransformDirection(unitPos);
+        if (rb.velocity.y < 0)
+        {
+            unitPos.y += Physics.gravity.y * Time.fixedDeltaTime * 6f;
+        }
         rb.velocity = unitPos;
+    }
+
+    public void Jump()
+    {
+        rb.AddForce(Vector3.up * Mathf.Sqrt(jumpForce * -2f * Physics.gravity.y), ForceMode.Impulse);
+    }
+
+    public bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, 1.1f);
     }
 
     public Vector3 GetCameraPos()

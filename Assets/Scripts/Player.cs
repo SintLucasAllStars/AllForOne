@@ -51,10 +51,6 @@ public class Player : MonoBehaviour
 
         if(controlState == ControlState.Selected)
         {
-            //
-            //float mouseX = Input.GetAxis("Mouse X") * sensivityX;
-            //float mouseY = Input.GetAxis("Mouse Y") * sensivityY;
-
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 curUnit.GetComponent<Rigidbody>().mass = 1;
@@ -73,6 +69,12 @@ public class Player : MonoBehaviour
             float verticalMovement = Input.GetAxisRaw("Vertical");
             movedir = new Vector3(horizontalMovement, 0, verticalMovement).normalized;
             curUnit.Move(movedir);
+
+            Debug.Log(curUnit.IsGrounded());
+            if (Input.GetKeyDown(KeyCode.Space) && curUnit.IsGrounded())
+            {
+                curUnit.Jump();
+            }
 
             //Looking
             float mouseX = Input.GetAxis("Mouse X") * sensivityX;
