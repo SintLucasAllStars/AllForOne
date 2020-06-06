@@ -13,9 +13,8 @@ public class Player : MonoBehaviour
     private Vector3 movedir;
     private Vector3 offset;
     private float selectDir;
+    private Vector3 camOffset;
 
-    private float mouseX;
-    private float mouseY;
     private float sensivityX = 2.5f;
     private float sensivityY = 1.5f;
 
@@ -39,16 +38,31 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if(controlState == ControlState.None)
+        {
+            if (Input.GetMouseButton(1))
+            {
+                float hor = Input.GetAxis("Mouse X");
+                float ver = Input.GetAxis("Mouse Y");
+                Vector3 camDir = new Vector3(hor, 0f, ver);
+                camOffset += currentTeam == Team.Red ? -camDir : camDir;
+            }
+        }
+
         if(controlState == ControlState.Selected)
         {
+            //
+            //float mouseX = Input.GetAxis("Mouse X") * sensivityX;
+            //float mouseY = Input.GetAxis("Mouse Y") * sensivityY;
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                curUnit.GetComponent<Rigidbody>().mass = 1;
                 controlState = ControlState.Controlling;
                 cam.transform.position = curUnit.GetCameraPos();
                 cam.transform.parent = curUnit.GetTarget();
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                Debug.Log("Lock mouse");
             }
         }
 
@@ -61,8 +75,8 @@ public class Player : MonoBehaviour
             curUnit.Move(movedir);
 
             //Looking
-            mouseX = Input.GetAxis("Mouse X") * sensivityX;
-            mouseY = Input.GetAxis("Mouse Y") * sensivityY;
+            float mouseX = Input.GetAxis("Mouse X") * sensivityX;
+            float mouseY = Input.GetAxis("Mouse Y") * sensivityY;
             curUnit.Look(mouseX, mouseY);
         }
 
@@ -71,19 +85,24 @@ public class Player : MonoBehaviour
             Click();
         }
 
+        if(Input.GetMouseButtonDown(0) && controlState == ControlState.Controlling)
+        {
+            bool hitTarget = curUnit.Attack();
+            Debug.Log(hitTarget);
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape) && controlState == ControlState.Controlling)
         {
             controlState = ControlState.Selected;
             cam.transform.parent = null;
+            curUnit.ResetTarget();
 
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             movedir = Vector3.zero;
-            mouseX = 0;
-            mouseY = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && controlState == ControlState.None)
         {
             SwitchPlayer();
         }
@@ -103,10 +122,13 @@ public class Player : MonoBehaviour
             if(unit != null && unit.GetTeam() == currentTeam)
             {
                 controlState = ControlState.Selected;
+                camOffset = Vector3.zero;
+                curUnit = unit;
+                SelectedTime = 0;
+                return;
             }
         }
-        curUnit = unit;
-        SelectedTime = 0;
+        curUnit = null;
     }
 
     private void SwitchPlayer()
@@ -125,6 +147,7 @@ public class Player : MonoBehaviour
         }
 
         SelectedTime = 0;
+        camOffset = Vector3.zero;
     }
 
     private void LateUpdate()
@@ -132,8 +155,8 @@ public class Player : MonoBehaviour
         switch (controlState)
         {
             case ControlState.None:
-                cam.transform.position = Vector3.Lerp(cam.transform.position, topDownPosition, (SelectedTime += Time.deltaTime / 2));
-                cam.transform.eulerAngles = Vector3.Lerp(cam.transform.eulerAngles, topDownRotation, SelectedTime);
+                cam.transform.position = Vector3.Lerp(cam.transform.position, topDownPosition + camOffset, (SelectedTime += Time.deltaTime / 2));
+                cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, Quaternion.Euler(topDownRotation), SelectedTime);
                 break;
             case ControlState.Selected:
                 cam.transform.position = Vector3.Lerp(cam.transform.position, curUnit.GetCameraPos(), (SelectedTime += Time.deltaTime / 2));

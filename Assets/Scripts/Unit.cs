@@ -12,10 +12,12 @@ public class Unit : MonoBehaviour
     private int m_Health;
     private int m_Strength;
     private int m_Defence;
-    private int m_Speed;
+    [SerializeField]private int m_Speed;
     [SerializeField]private Team m_Team;
 
     private Vector3 unitPos;
+    private float attackDist = 2f;
+    private bool isFortified = false;
 
     public void SetUp(int health, int strength, int defence, int speed, Team team)
     {
@@ -32,7 +34,7 @@ public class Unit : MonoBehaviour
         targetTransform = transform.GetChild(0);
         lookDirX = transform.eulerAngles.y;
 
-        SetUp(30, 10, 10, 250, Team.Red); //<-toRemove
+        SetUp(30, 15, 8, 750, Team.Red); //<-toRemove
     }
 
     public void Move(Vector3 moveDir)
@@ -46,6 +48,13 @@ public class Unit : MonoBehaviour
     {
         Vector3 pos = targetTransform.position - (transform.forward * 5.0f);
         return pos;
+    }
+
+    public void ResetTarget()
+    {
+        targetTransform.rotation = transform.rotation;
+        lookDirY = 0;
+        rb.mass = 100f;
     }
 
     public Transform GetTarget()
@@ -62,9 +71,53 @@ public class Unit : MonoBehaviour
     {
         lookDirX += mouseX;
         lookDirY -= mouseY;
-        lookDirY = Mathf.Clamp(lookDirY, -35, 60);
+        lookDirY = Mathf.Clamp(lookDirY, -20, 60);
         rb.rotation = Quaternion.Euler(new Vector3(0, lookDirX, 0));
         targetTransform.rotation = Quaternion.Euler(new Vector3(lookDirY, lookDirX, 0));
+    }
+
+    public bool Attack()
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, attackDist))//attackDist * weapon.range
+        {
+            Unit unit = hit.collider.GetComponent<Unit>();
+            if (unit != null)
+            {
+                if(unit.GetTeam() != GetTeam())
+                {
+                    Debug.Log("Hit an enemy unit");
+                    int damage = m_Strength; // * weapon.damage
+                    unit.Hit(damage, (hit.point - transform.position).normalized);
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void Hit(int damage, Vector3 direction)
+    {
+        if (isFortified)
+        {
+            damage -= m_Defence;
+            if(damage < 0)
+            {
+                damage = 0;
+            }
+        }
+
+        m_Health -= damage;
+        if(m_Health <= 0)
+        {
+            //Die
+        }
+
+        rb.AddForce(direction * 10f, ForceMode.VelocityChange);
+
+        //make invulnerable for another attack.
     }
 
     public void SetTeam(Team team, Material teamMat)
