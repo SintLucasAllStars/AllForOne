@@ -35,7 +35,7 @@ public class Unit : MonoBehaviour
         targetTransform = transform.GetChild(0);
         lookDirX = transform.eulerAngles.y;
 
-        SetUp(30, 15, 8, 500, Team.Red); //<-toRemove
+        SetUp(30, 15, 8, 500, m_Team); //<-toRemove
     }
 
     public void Move(Vector3 moveDir)

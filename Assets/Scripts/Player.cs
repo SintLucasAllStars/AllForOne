@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     private float sensivityY = 1.5f;
 
     private float SelectedTime;
-    private float controlTimer;
+    private float ControlTime = 10f;
     private float myDeltaTime;
 
     private Vector3 topDownPosition;
@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
         cam = Camera.main;
         topDownPosition = topDownPositionRed;
         topDownRotation = topDownRotationRed;
+        myDeltaTime = Time.time;
     }
 
     private void Update()
@@ -49,20 +50,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if(controlState == ControlState.Selected)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                curUnit.GetComponent<Rigidbody>().mass = 1;
-                controlState = ControlState.Controlling;
-                cam.transform.position = curUnit.GetCameraPos();
-                cam.transform.parent = curUnit.GetTarget();
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
-
-        if(controlState == ControlState.Controlling)
+        if (controlState == ControlState.Controlling)
         {
             //Moving
             float horizontalMovement = Input.GetAxisRaw("Horizontal");
@@ -82,6 +70,20 @@ public class Player : MonoBehaviour
             curUnit.Look(mouseX, mouseY);
         }
 
+        if (controlState == ControlState.Selected)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                curUnit.GetComponent<Rigidbody>().mass = 1;
+                controlState = ControlState.Controlling;
+                cam.transform.position = curUnit.GetCameraPos();
+                cam.transform.parent = curUnit.GetTarget();
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                myDeltaTime = Time.time + ControlTime;
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && controlState != ControlState.Controlling)
         {
             Click();
@@ -93,7 +95,7 @@ public class Player : MonoBehaviour
             Debug.Log(hitTarget);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && controlState == ControlState.Controlling)
+        if (myDeltaTime < Time.time && controlState == ControlState.Controlling)
         {
             controlState = ControlState.Selected;
             cam.transform.parent = null;
@@ -154,6 +156,8 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
+
+
         switch (controlState)
         {
             case ControlState.None:
