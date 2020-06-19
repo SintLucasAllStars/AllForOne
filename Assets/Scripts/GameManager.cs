@@ -23,4 +23,17 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    public void PlacementMode(bool state)
+    {
+        UnitPlacement up = this.gameObject.GetComponent<UnitPlacement>();
+        if (up == null)
+        {
+            Debug.Log("There is no UnitPlacement on this object!");
+        }
+        else
+        {
+            up.enabled = state;
+        }
+    }
 }

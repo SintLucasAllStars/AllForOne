@@ -97,6 +97,7 @@ public class UnitCreation : MonoBehaviour
         {
             g = m_UnitBlue;
         }
+
         UnitStats stats = g.GetComponent<UnitStats>();
         
         // Setting the input as its stats
@@ -152,6 +153,7 @@ public class UnitCreation : MonoBehaviour
         }
         else
         {
+            GameManager.instance.PlacementMode(true);
             // Set the Unit Creation Canvas to OFF.
             this.gameObject.transform.parent.gameObject.SetActive(false);
         }
