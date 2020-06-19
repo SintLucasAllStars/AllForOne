@@ -1,10 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 
-// TODO: Check if both players are ready/done with placing unit
-
-public class CharacterController : MonoBehaviour
+public class UnitController : MonoBehaviour
 {
     public Team myTeam;
     Unit targetUnit;
@@ -13,16 +12,21 @@ public class CharacterController : MonoBehaviour
     public bool myTurn;
 
     Camera _overviewCam;
+
+    // false start of turn true end of turn
     public bool _setupUnit = false;
     public bool _setupTeam = false;
+    public bool _movedUnit = false;
 
     int unitPoints = 100;
-    int _maxUnit = 5;
+    int _maxUnit = 2;
     int _currentAmountUnit = 0;
+
+    public List<Unit> myUnits = new List<Unit>();
 
     private void Awake()
     {
-        _overviewCam = GetComponentInParent<Camera>();
+        _overviewCam = Camera.main;
     }
 
     // Update is called once per frame
@@ -30,45 +34,59 @@ public class CharacterController : MonoBehaviour
     {
         if(myTurn)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 if (Physics.Raycast(_overviewCam.ScreenPointToRay(Input.mousePosition).origin,
                     _overviewCam.ScreenPointToRay(Input.mousePosition).direction, out RaycastHit hit, 100,
-                    Physics.DefaultRaycastLayers))
+                    Physics.DefaultRaycastLayers) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     if(!_setupTeam)
                     {
                         SetupTeam(hit);
                     }
-                    else
+
+                    if (hit.transform.GetComponent<Unit>() != null && hit.transform.GetComponent<Unit>().myTeam == myTeam)
                     {
-                        Debug.Log("team full");
+                        SelectNewUnit(hit.transform.GetComponent<Unit>());
+                        return;
+                    }
+                    
+                    if (hit.collider != null && hit.transform.CompareTag("Ground"))
+                    {
+                        UnSelect();
+                        return;
                     }
                 }
             }
+
+
         }
     }
 
     public void StartYourTurn()
     {
         myTurn = true;
-        _setupUnit = false;
+
+        if(!_setupTeam)
+            _setupUnit = false;
     }
 
     public void EndYourTurn()
     {
         myTurn = false;
-        _setupUnit = true;
+        UnSelect();
+
+        if(!_setupTeam)
+            _setupUnit = true;
     }
 
-    // confirm
+    // confirm from unit
     // called from Unit class
     public bool BuyUnit(int a_UnitCost)
     {
         if (unitPoints - a_UnitCost > 0)
         {
             unitPoints -= a_UnitCost;
-            GameManager.instance.EndTurn();
             return true;
         }
         else
@@ -77,9 +95,12 @@ public class CharacterController : MonoBehaviour
 
     void SelectNewUnit(Unit newUnit)
     {
+        if (targetUnit == newUnit)
+            return;
+
         if(targetUnit == null)
         {
-            targetUnit = newUnit.GetComponent<Unit>();
+            targetUnit = newUnit;
             targetUnit.GetCanvas().SetActive(true);
             targetUnit.SetCharController(this);
             return;
@@ -92,6 +113,15 @@ public class CharacterController : MonoBehaviour
         targetUnit = newUnit;
     }
 
+    void UnSelect()
+    {
+        if(targetUnit != null)
+        {
+            targetUnit.GetCanvas().SetActive(false);
+            targetUnit = null;
+        }
+    }
+
     void SetupTeam(RaycastHit hit)
     {
         if (!_setupUnit)
@@ -99,11 +129,14 @@ public class CharacterController : MonoBehaviour
             if (hit.transform.CompareTag("Ground") && _currentAmountUnit < _maxUnit)
             {
                 // vector is offset
-                GameObject newUnit = Instantiate(prefabUnit, hit.point + new Vector3(0, 1, 0), Quaternion.identity);
+                GameObject newUnit = Instantiate(prefabUnit, hit.point + new Vector3(0, 1, 0), Quaternion.identity).transform.GetChild(0).gameObject;
+                myUnits.Add(newUnit.GetComponent<Unit>());
                 SelectNewUnit(newUnit.GetComponent<Unit>());
 
                 newUnit.GetComponent<Unit>().myTeam = myTeam;
-                _setupUnit = true; ;
+                _setupUnit = true;
+
+                // TODO: transfer this to gamemanger in the future 
                 _currentAmountUnit++;
                 if (_currentAmountUnit == _maxUnit)
                 {
@@ -116,5 +149,26 @@ public class CharacterController : MonoBehaviour
         {
             SelectNewUnit(hit.transform.GetComponent<Unit>());
         }
+    }
+
+    public bool AllUnitReady()
+    {
+        if(myUnits != null)
+        {
+            bool allUnitsReady = true;
+            for (int i = 0; i < myUnits.Count; i++)
+            {
+                if (!myUnits[i]._isReady)
+                    allUnitsReady = false;
+            }
+
+            return allUnitsReady;
+        }
+        return false;
+    }
+
+    public int GetPoints()
+    {
+        return unitPoints;
     }
 }
