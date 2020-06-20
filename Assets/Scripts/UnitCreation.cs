@@ -12,6 +12,8 @@ public class UnitCreation : MonoBehaviour
     private int m_LowCostMod = 2; // Strength & Defence
     private int m_HighCostMod = 3; // Health Speed
 
+    [SerializeField] private GameObject m_UnitCreationCanvas;
+    
     [SerializeField] private GameObject m_UnitRed;
     [SerializeField] private GameObject m_UnitBlue;
     
@@ -23,6 +25,8 @@ public class UnitCreation : MonoBehaviour
 
     [SerializeField] private Text m_TextCost;
     [SerializeField] private Text m_TextFunds;
+    [SerializeField] private Text m_Player1Text;
+    [SerializeField] private Text m_Player2Text;
 
     [SerializeField] private Button m_ButtonHire;
     [SerializeField] private Button m_ButtonX;
@@ -46,9 +50,13 @@ public class UnitCreation : MonoBehaviour
         m_FieldDefence.value = Random.Range(1, 10);
         ExitButtonValidity();
 
-        GameObject canvas = GameObject.Find("/Canvas - Unit Creation/Graphics");
-        RectTransform rt = canvas.GetComponent<RectTransform>();
+        RectTransform rt = m_UnitCreationCanvas.GetComponent<RectTransform>();
         rt.anchoredPosition = new Vector2(rt.anchoredPosition.x * -1, rt.anchoredPosition.y);
+        
+        Outline o1 = m_Player1Text.gameObject.GetComponent<Outline>();
+        o1.enabled = false;
+        Outline o2 = m_Player2Text.gameObject.GetComponent<Outline>();
+        o2.enabled = false;
     }
     
     public void CostUpdate()
@@ -89,13 +97,15 @@ public class UnitCreation : MonoBehaviour
     {
         // Creating the unit
         GameObject g;
+        Vector3 t = new Vector3(0, -5, 0);
+        Quaternion q = Quaternion.Euler(0, Random.Range(0, 360), 0);
         if (m_Player2Turn == false)
         {
-            g = m_UnitRed;
+            g = Instantiate(m_UnitRed, t, q) as GameObject;
         }
         else
         {
-            g = m_UnitBlue;
+            g = Instantiate(m_UnitBlue, t, q) as GameObject;
         }
 
         UnitStats stats = g.GetComponent<UnitStats>();
@@ -112,10 +122,12 @@ public class UnitCreation : MonoBehaviour
         if (m_Player2Turn == false)
         {
             GameManager.instance.m_P1Units.Add(g);
+            m_Player1Text.text = "Red Team:\n" + GameManager.instance.m_P1Units.Count.ToString();
         }
         else
         {
             GameManager.instance.m_P2Units.Add(g);
+            m_Player2Text.text = "Blue Team:\n" + GameManager.instance.m_P2Units.Count.ToString();
         }
     }
 
@@ -155,7 +167,7 @@ public class UnitCreation : MonoBehaviour
         {
             GameManager.instance.PlacementMode(true);
             // Set the Unit Creation Canvas to OFF.
-            this.gameObject.transform.parent.gameObject.SetActive(false);
+            this.gameObject.gameObject.SetActive(false);
         }
     }
 
@@ -165,11 +177,15 @@ public class UnitCreation : MonoBehaviour
         Quaternion newRot;
         if (m_Player2Turn == false)
         {
-            newRot = Quaternion.Euler(0, -15, 0);
+            Outline o = m_Player1Text.gameObject.GetComponent<Outline>();
+            o.enabled = true;
+            newRot = Quaternion.Euler(0, main.transform.localEulerAngles.y + -15, 0);
         }
         else
         {
-            newRot = Quaternion.Euler(0, 15, 0);
+            Outline o = m_Player2Text.gameObject.GetComponent<Outline>();
+            o.enabled = true;
+            newRot = Quaternion.Euler(0, main.transform.localEulerAngles.y + 30, 0);
         }
         main.transform.rotation = newRot;
     }

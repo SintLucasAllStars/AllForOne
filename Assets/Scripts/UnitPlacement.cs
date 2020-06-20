@@ -22,7 +22,7 @@ public class UnitPlacement : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Ground")
             {
                 GameObject go;
                 if (m_P2Turn == false)
@@ -33,7 +33,7 @@ public class UnitPlacement : MonoBehaviour
                 {
                     go = GameManager.instance.m_P2Units[m_ArrayNum];
                 }
-                Instantiate(go, hit.point, Quaternion.identity);
+                go.transform.position = hit.point + new Vector3(0,6,0);
                 m_ArrayNum++;
 
                 if (m_P2Turn == false && m_ArrayNum >= GameManager.instance.m_P1Units.Count)
@@ -45,6 +45,7 @@ public class UnitPlacement : MonoBehaviour
                 else if (m_P2Turn == true && m_ArrayNum >= GameManager.instance.m_P2Units.Count)
                 {
                     this.enabled = false;
+                    Debug.Log("All Units have been placed!");
                 }
             }
         }
