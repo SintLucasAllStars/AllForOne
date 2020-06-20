@@ -11,18 +11,23 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         audioS = GetComponent<AudioSource>();
+        GetRandomSong();
+    }
+
+    private void GetRandomSong()
+    {
         randomSong = Random.Range(0, song.Length);
         StartCoroutine(GlobalAudio());
     }
 
     private void Update()
     {
-        if (randomSong < 1)
+        if (randomSong < 0)
         {
             randomSong = song.Length -1;
         }
 
-        if (randomSong >= song.Length)
+        if (randomSong > 1)
         {
             randomSong = 0;
         }
@@ -30,8 +35,6 @@ public class AudioManager : MonoBehaviour
 
     IEnumerator GlobalAudio()
     {
-        yield return new WaitForEndOfFrame();
-
         float songLength;
 
         songLength = song[randomSong].length;
@@ -40,7 +43,6 @@ public class AudioManager : MonoBehaviour
 
         yield return new WaitForSeconds(songLength);
         audioS.Stop();
-        randomSong++;
-        StartCoroutine(GlobalAudio());
+        GetRandomSong();
     }
 }
