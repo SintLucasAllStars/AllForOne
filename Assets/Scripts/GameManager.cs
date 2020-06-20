@@ -63,11 +63,10 @@ public class GameManager : MonoBehaviour
 
         if(playerOne._setupTeam && playerTwo._setupTeam)
         {
-            // the only available buttons should be the combat buttons
-            Button[] combatButtons = FindObjectsOfType<Button>();
-            for (int i = 0; i < combatButtons.Length; i++)
+            Unit[] units = FindObjectsOfType<Unit>();
+            for (int i = 0; i < units.Length; i++)
             {
-                combatButtons[i].interactable = true;
+                units[i].combatButton.interactable = true;
             }
         }
     }
@@ -75,14 +74,16 @@ public class GameManager : MonoBehaviour
     // called from unit
     public void CheckIfEndTurn(UnitController uc)
     {
-        if(!uc._setupTeam)
+        // setting up phase
+        if(!playerOne._setupTeam && !playerTwo._setupTeam)
         {
             endturnButton.interactable = uc._setupUnit && uc.AllUnitReady();
         }
         else
         {
-            endturnButton.interactable = uc._movedUnit;
+            endturnButton.interactable = true;
         }
+
 
     }
 

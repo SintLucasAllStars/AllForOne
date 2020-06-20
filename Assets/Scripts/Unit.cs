@@ -27,6 +27,7 @@ public class Unit : MonoBehaviour
 
     public GameObject setupUI;
     public GameObject combatUI;
+    public Button combatButton;
 
     //Health, Strength, Speed, Defense
     string[] _statName = new string[4];
@@ -37,8 +38,8 @@ public class Unit : MonoBehaviour
     public GameObject canvasGameobject;
 
     UnitController _unitController;
-    public Transform camPos;
-
+    public Transform camTrans;
+    
     private void Start()
     {
         _statName[0] = "Health ";
@@ -48,6 +49,23 @@ public class Unit : MonoBehaviour
 
         canvasGameobject.SetActive(true);
         canvasGameobject.GetComponent<Canvas>().worldCamera = Camera.main;
+        combatButton = combatUI.GetComponentInChildren<Button>();
+    }
+
+    private void Update()
+    {
+        if(CameraController.instance.GetIsControllingUnit())
+        {
+            if(_unitController.targetUnit == this)
+            {
+                float x = Input.GetAxis("Horizontal") * Time.deltaTime * _speed; ;
+                float z = Input.GetAxis("Vertical") * Time.deltaTime * _speed;
+
+                transform.parent.Translate(x, 0, z);
+            }
+            //Debug.Log(CameraController.instance);
+        }
+
     }
 
     public int Attack()
@@ -129,8 +147,9 @@ public class Unit : MonoBehaviour
     {
         if(!_unitController._movedUnit)
         {
+            // TODO add timer for how long you can move and set in UnitController movedUnit true
             // make this unit moveable
-            StartCoroutine(CameraController.instance.LerpCamToUnit(0.5f, camPos));
+            CameraController.instance.SetCamForUnit(camTrans);
         }
         else
         {

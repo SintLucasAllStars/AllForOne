@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     public Team myTeam;
-    Unit targetUnit;
+    public Unit targetUnit;
 
     public GameObject prefabUnit;
     public bool myTurn;
@@ -42,7 +42,7 @@ public class UnitController : MonoBehaviour
                 {
                     if(!_setupTeam)
                     {
-                        SetupTeam(hit);
+                        SetupTeam(ref hit);
                     }
 
                     if (hit.transform.GetComponent<Unit>() != null && hit.transform.GetComponent<Unit>().myTeam == myTeam)
@@ -122,7 +122,7 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    void SetupTeam(RaycastHit hit)
+    void SetupTeam(ref RaycastHit hit)
     {
         if (!_setupUnit)
         {
@@ -136,6 +136,13 @@ public class UnitController : MonoBehaviour
                 newUnit.GetComponent<Unit>().myTeam = myTeam;
                 _setupUnit = true;
 
+                if (Physics.Raycast(_overviewCam.ScreenPointToRay(Input.mousePosition).origin,
+                    _overviewCam.ScreenPointToRay(Input.mousePosition).direction, out RaycastHit newHit, 100,
+                    Physics.DefaultRaycastLayers) && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    hit = newHit;
+                }
+
                 // TODO: transfer this to gamemanger in the future 
                 _currentAmountUnit++;
                 if (_currentAmountUnit == _maxUnit)
@@ -143,7 +150,6 @@ public class UnitController : MonoBehaviour
                     _setupTeam = true;
                 }
             }
-            // if prefab prefab and not confirmed show canvas
         }
         if (hit.transform.GetComponent<Unit>() != null && hit.transform.GetComponent<Unit>().myTeam == myTeam)
         {
@@ -171,4 +177,5 @@ public class UnitController : MonoBehaviour
     {
         return unitPoints;
     }
+    
 }
