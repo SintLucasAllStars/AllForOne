@@ -85,6 +85,10 @@ public class UnitCreation : MonoBehaviour
     
     public void Hire()
     {
+        // Playing Sound Effect to let player know they hired a unit.
+        GameManager.instance.m_as.clip = GameManager.instance.m_Hire;
+        GameManager.instance.m_as.Play();
+        
         m_Funds -= m_Cost;
         m_TextFunds.text = "Funds: " + m_Funds.ToString();
 
@@ -97,7 +101,7 @@ public class UnitCreation : MonoBehaviour
     {
         // Creating the unit
         GameObject g;
-        Vector3 t = new Vector3(0, -5, 0);
+        Vector3 t = new Vector3(0, 80, 0);
         Quaternion q = Quaternion.Euler(0, Random.Range(0, 360), 0);
         if (m_Player2Turn == false)
         {
@@ -165,8 +169,14 @@ public class UnitCreation : MonoBehaviour
         }
         else
         {
+            // Both players have hired their units, so deleting the example models.
+            GameObject redModel = GameObject.Find("Model - Red");
+            GameObject blueModel = GameObject.Find("Model - Blue");
+            Destroy(redModel.gameObject);
+            Destroy(blueModel.gameObject);
+            
+            // Set the Unit Creation screen to OFF & turning Place mode ON
             GameManager.instance.PlacementMode(true);
-            // Set the Unit Creation Canvas to OFF.
             this.gameObject.gameObject.SetActive(false);
         }
     }
@@ -180,12 +190,15 @@ public class UnitCreation : MonoBehaviour
             Outline o = m_Player1Text.gameObject.GetComponent<Outline>();
             o.enabled = true;
             newRot = Quaternion.Euler(0, main.transform.localEulerAngles.y + -15, 0);
+            // The camera will be facing between the 2 models, so only -15 angle.
         }
         else
         {
             Outline o = m_Player2Text.gameObject.GetComponent<Outline>();
             o.enabled = true;
             newRot = Quaternion.Euler(0, main.transform.localEulerAngles.y + 30, 0);
+            // At this point, the camera will be looking at one of the models.
+            // Thus, a larger degree is needed to look at the other one.
         }
         main.transform.rotation = newRot;
     }
