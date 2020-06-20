@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
-public enum GameState { INSTANTIATINGPLAYERS, P1SETUP, P2SETUP, P1TURN, P2TURN, FIGHT }
+public enum GameState { INSTANTIATINGPLAYERS, P1SETUP, P2SETUP, P1TURN, P2TURN }
 
 public class GameManager : MonoBehaviour
 {
@@ -16,16 +17,27 @@ public class GameManager : MonoBehaviour
     public List<GameObject> p1Units;
     public List<GameObject> p2Units;
 
-    [Header("Canvas settings.")]
+    [Header("Global canvas settings.")]
     public Canvas UiCanvas;
     public GameObject buttonP1Setup;
     public GameObject buttonP2Setup;
     [SerializeField] private TextMeshProUGUI pointsLeftDisplay;
     [SerializeField] private GameObject Narrorator;
+    [Header("Unit canvas settings")]
+    public GameObject unitStatusDisplay;
+    [SerializeField] private TextMeshProUGUI unitTypeDisplay;
+    [SerializeField] private TextMeshProUGUI unitTeamDisplay;
+    [SerializeField] private TextMeshProUGUI unitHealthDisplay;
+    [SerializeField] private TextMeshProUGUI unitStrengthDisplay;
+    [SerializeField] private TextMeshProUGUI unitSpeedDisplay;
+    [SerializeField] private TextMeshProUGUI unitDefenceDisplay;
+    [SerializeField] private Image weakUnitTextImage;
+    [SerializeField] private Image strongUnitTextImage;
 
     [Header("Unit settings")]
     public GameObject weakUnit;
     public GameObject strongUnit;
+    public GameObject oldUnit;
 
     private GameObject player1Obj, player2Obj;
     private Animator player1Anim;
@@ -33,6 +45,8 @@ public class GameManager : MonoBehaviour
     public string unitType;
 
     public GameState status;
+    
+    public GameObject OldUnit { get { return oldUnit; } set { oldUnit = value; } }
 
     #region Singleton
     public static GameManager Instance;
@@ -60,6 +74,7 @@ public class GameManager : MonoBehaviour
         UiCanvas.enabled = false;
         player1Anim.enabled = false;
         player2Anim.enabled = false;
+        unitStatusDisplay.SetActive(false);
         yield return new WaitForSeconds(2f);
         UiCanvas.enabled = true;
         status = GameState.P1SETUP;
@@ -70,12 +85,16 @@ public class GameManager : MonoBehaviour
     {
         if(player1Manager.GetPoints() <= 0)
         {
+            unitType = "";
+            ShowUnitSetupButtonActive(unitType);
             status = GameState.P2SETUP;
         }
 
         if (player2Manager.GetPoints() <= 0)
         {
-            status = GameState.FIGHT;
+            unitType = "";
+            ShowUnitSetupButtonActive(unitType);
+            status = GameState.P1TURN;
         }
 
         /// Turning scripts off because else p2 will lose points at the same time when you 
@@ -111,6 +130,29 @@ public class GameManager : MonoBehaviour
             player1Anim.enabled = false;
             player2Anim.enabled = true;
         }
+
+        if(status == GameState.P1TURN)
+        {
+            buttonP2Setup.SetActive(false);
+            buttonP1Setup.SetActive(false);
+            player1Manager.enabled = true;
+            player2Manager.enabled = false;
+
+            /// Turning on the player1 animation so you can see its he's turn.
+            player1Anim.enabled = true;
+            player2Anim.enabled = false;
+        }
+        if(status == GameState.P2TURN)
+        {
+            buttonP1Setup.SetActive(false);
+            buttonP2Setup.SetActive(false);
+            player1Manager.enabled = false;
+            player2Manager.enabled = true;
+
+            /// Turning on the player 2 animation so you can see its he's turn.
+            player1Anim.enabled = false;
+            player2Anim.enabled = true;
+        }
     }
 
     private void SetupCharacters()
@@ -131,11 +173,13 @@ public class GameManager : MonoBehaviour
     public void OnStrongUnitButton()
     {
         unitType = "StrongUnit";
+        ShowUnitSetupButtonActive(unitType);
     }
 
     public void OnWeakUnitButton()
     {
         unitType = "WeakUnit";
+        ShowUnitSetupButtonActive(unitType);
     }
 
     /// Once the button is pressed, change the turn to player 2.
@@ -143,12 +187,55 @@ public class GameManager : MonoBehaviour
     {
         status = GameState.P2SETUP;
         StartCoroutine(DisplayMessage("Player 2:\nPlace all of you minions on the board.\nIf you ran out of points you can press the done button."));
+        unitType = "";
+        ShowUnitSetupButtonActive(unitType);
     }
 
-    /// Once the button is pressed, change the state to fight!.
+    /// Once the button is pressed, change the state to P1Turn!.
     public void Player2ReadyButton()
     {
-        status = GameState.FIGHT;
+        status = GameState.P1TURN;
+        StartCoroutine(DisplayMessage("Action gameplay comming soon... or not... Stay tuned... or not."));
+        unitType = "";
+        ShowUnitSetupButtonActive(unitType);
+    }
+
+    public void SendMessageToPlayers(string a_Message)
+    {
+        StartCoroutine(DisplayMessage(a_Message));
+    }
+
+    public void ShowUnitStats()
+    {
+        unitStatusDisplay.SetActive(true);
+        Unit oldUnitManager = oldUnit.GetComponent<Unit>();
+        unitTypeDisplay.text = oldUnit.gameObject.name;
+        unitTeamDisplay.text = "Team: " + oldUnit.gameObject.tag;
+        unitHealthDisplay.text = "Hp: " + oldUnitManager.GetHealth().ToString() + " / 100";
+        unitStrengthDisplay.text = "Strength: " + oldUnitManager.GetStrength().ToString() + " / 100";
+        unitSpeedDisplay.text = "Speed: " + oldUnitManager.GetSpeed().ToString() + " / 100";
+        unitDefenceDisplay.text = "Defence: " + oldUnitManager.GetDefence().ToString() + " / 100";
+    }
+
+    private void ShowUnitSetupButtonActive(string a_Unittype)
+    {
+        switch (a_Unittype)
+        {
+            case "WeakUnit":
+                weakUnitTextImage.color = new Color32(4, 166, 6, 255);
+                strongUnitTextImage.color = Color.white;
+                break;
+
+            case "StrongUnit":
+                weakUnitTextImage.color = Color.white;
+                strongUnitTextImage.color = new Color32(4, 166, 6, 255);
+                break;
+
+            default:
+                weakUnitTextImage.color = Color.white;
+                strongUnitTextImage.color = Color.white;
+                break;
+        }
     }
 
     /// <summary>
@@ -164,4 +251,5 @@ public class GameManager : MonoBehaviour
         Narrorator.GetComponentInChildren<TextMeshProUGUI>().text = "";
         Narrorator.SetActive(false);
     }
+
 }

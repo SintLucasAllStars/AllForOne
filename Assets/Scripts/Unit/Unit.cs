@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     private float strength;
     private float speed;
     private float defence;
+    private Color unitTeamColor;
 
     public void Initialize(string UnitType)
     {
@@ -59,4 +60,22 @@ public class Unit : MonoBehaviour
     {
         return defence;
     }
+
+    public Color SetUnitTeamColor
+    {
+        get
+        {
+            return unitTeamColor;
+        }
+        set
+        {
+            unitTeamColor = value;
+        }
+    }
+
+    public Color GetUnitTeamColor()
+    {
+        return unitTeamColor;
+    }
+
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -6,7 +7,8 @@ public class Player : MonoBehaviour
     private GameObject unit;
     private int points;
     private int playerNumber;
-
+    private Ray ray;
+    private RaycastHit hit;
     private bool pressing = false;
 
     public void Initialize(int playerNumber)
@@ -40,11 +42,18 @@ public class Player : MonoBehaviour
             }
         }
 
+        if(GameManager.Instance.status == GameState.P1TURN || GameManager.Instance.status == GameState.P2TURN)
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                SelectUnit();
+            }
+        }
+
         if (!Input.GetButtonDown("Fire1"))
         {
             pressing = false;
         }
-        else Debug.Log("Instantiating unit for player " + playerNumber);
     }
 
     // Without the Ienumerator there will be 2 units spawned at the same time.
@@ -56,9 +65,6 @@ public class Player : MonoBehaviour
 
     private void InstantiateUnit(string type)
     {
-        Ray ray;
-        RaycastHit hit;
-
         /// Do we have enough points to spawn a unit?
         /// Has there been pressed and did we press on the Map or outside the map?
         /// Instantiate the unit.
@@ -83,17 +89,22 @@ public class Player : MonoBehaviour
                                 unit = Instantiate(GameManager.Instance.strongUnit, spawnPos, Quaternion.identity);
                                 unit.gameObject.name = "Strong Unit";
 
+                                var unitManagerStrong = unit.AddComponent<Unit>();
+                                unitManagerStrong.Initialize("StrongUnit");
+
                                 if (GameManager.Instance.status == GameState.P1SETUP)
                                 {
+                                    unit.gameObject.tag = "Red";
                                     unit.GetComponent<MeshRenderer>().material.color = Color.red;
+                                    unitManagerStrong.SetUnitTeamColor = Color.red;
                                 }
                                 else if (GameManager.Instance.status == GameState.P2SETUP)
                                 {
+                                    unit.gameObject.tag = "Blue";
                                     unit.GetComponent<MeshRenderer>().material.color = Color.blue;
+                                    unitManagerStrong.SetUnitTeamColor = Color.blue;
                                 }
 
-                                var unitManagerStrong = unit.AddComponent<Unit>();
-                                unitManagerStrong.Initialize("StrongUnit");
                                 points -= unitManagerStrong.GetProductionCosts();
                             }
                         }
@@ -116,18 +127,22 @@ public class Player : MonoBehaviour
                                 Vector3 spawnPos = new Vector3(hit.transform.position.x, hit.transform.position.y + 1, hit.transform.position.z);
                                 unit = Instantiate(GameManager.Instance.weakUnit, spawnPos, Quaternion.identity);
                                 unit.gameObject.name = "Weak Unit";
+                                var unitManagerWeak = unit.AddComponent<Unit>();
+                                unitManagerWeak.Initialize("WeakUnit");
 
                                 if (GameManager.Instance.status == GameState.P1SETUP)
                                 {
+                                    unit.gameObject.tag = "Red";
                                     unit.GetComponent<MeshRenderer>().material.color = Color.red;
+                                    unitManagerWeak.SetUnitTeamColor = Color.red;
                                 }
                                 else if (GameManager.Instance.status == GameState.P2SETUP)
                                 {
+                                    unit.gameObject.tag = "Blue";
                                     unit.GetComponent<MeshRenderer>().material.color = Color.blue;
+                                    unitManagerWeak.SetUnitTeamColor = Color.blue;
                                 }
 
-                                var unitManagerWeak = unit.AddComponent<Unit>();
-                                unitManagerWeak.Initialize("WeakUnit");
                                 points -= unitManagerWeak.GetProductionCosts();
                             }
                         }
@@ -146,6 +161,46 @@ public class Player : MonoBehaviour
         {
             GameManager.Instance.p2Units.Add(unit);
         }
+    }
+
+    public void SelectUnit()
+    {
+        if (!pressing)
+        {
+            pressing = true;
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit, 99999))
+            {   
+                /// Deselecting the old unit. And turning off the unit status.
+                if (GameManager.Instance.OldUnit != null)
+                {
+                    GameManager.Instance.OldUnit.GetComponent<MeshRenderer>().material.color = GameManager.Instance.OldUnit.GetComponent<Unit>().GetUnitTeamColor();
+                    GameManager.Instance.OldUnit = null;
+                    GameManager.Instance.unitStatusDisplay.SetActive(false);
+                }
+
+                /// Getting the right unit, marking it yellow and putting it in the oldunit to be able to see the status and able to deselect it again.
+                if(hit.collider.gameObject.name == "Strong Unit" || hit.collider.gameObject.name == "Weak Unit")
+                {
+                    if (hit.collider.tag == "Red")
+                    {
+                        hit.collider.gameObject.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                        GameManager.Instance.oldUnit = hit.collider.gameObject;
+
+                        GameManager.Instance.ShowUnitStats();
+                    }
+                    
+                    if (hit.collider.tag == "Blue")
+                    {
+                        hit.collider.gameObject.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                        GameManager.Instance.oldUnit = hit.collider.gameObject;
+
+                        GameManager.Instance.ShowUnitStats();
+                    }
+                }
+            }
+        }
+
     }
 
     public int GetPoints()
