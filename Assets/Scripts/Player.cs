@@ -17,13 +17,14 @@ public class Player : MonoBehaviour
     private float selectDir;
     private Vector3 camOffset;
     private bool isAttacking;
-    private float chargeTime = 3.5f;
 
     private float sensivityX = 2.5f;
     private float sensivityY = 1.5f;
 
     private float SelectedTime;
     private float ControlTime = 10f;
+    private float chargeTime = 2f;
+    private float fortifyTime = 2f;
     private float myDeltaTime;
 
     private Vector3 topDownPosition;
@@ -99,6 +100,11 @@ public class Player : MonoBehaviour
             StartCoroutine(Attack());
         }
 
+        if(Input.GetKeyDown(KeyCode.F) && controlState == ControlState.Controlling)
+        {
+            StartCoroutine(Fortify());
+        }
+
         if (myDeltaTime < Time.time && controlState == ControlState.Controlling)
         {
             controlState = ControlState.None;
@@ -130,9 +136,18 @@ public class Player : MonoBehaviour
     private IEnumerator Attack()
     {
         //startAnim
-        yield return new WaitForSeconds(chargeTime);
+        yield return new WaitForSeconds(chargeTime + curUnit.GetWeaponSpeed());
         bool hit = curUnit.Attack();
         isAttacking = false;
+    }
+
+    private IEnumerator Fortify()
+    {
+        yield return new WaitForSeconds(fortifyTime);
+        if (Input.GetKey(KeyCode.F))
+        {
+            curUnit.isFortified = true;
+        }
     }
 
     private void Click()
@@ -169,6 +184,7 @@ public class Player : MonoBehaviour
             foreach (Unit unit in blueUnits)
             {
                 unit.isControllable = true;
+                unit.isFortified = false;
             }
         }
         else
@@ -180,6 +196,7 @@ public class Player : MonoBehaviour
             foreach (Unit unit in redUnits)
             {
                 unit.isControllable = true;
+                unit.isFortified = false;
             }
         }
 

@@ -9,21 +9,29 @@ public class Unit : MonoBehaviour
     private float lookDirX;
     private float lookDirY;
 
-    private int m_Health;
-    private int m_Strength;
-    private int m_Defence;
-    private int m_Speed;
-    [SerializeField]private Team m_Team;
+    private float m_Health;
+    private float m_Strength;
+    private float m_Defence;
+    private float m_Speed;
+    [SerializeField] private Team m_Team;
+    [SerializeField] private Weapon weapon;
 
     private Vector3 unitPos;
     private float attackDist = 2f;
-    private bool isFortified = false;
     private float jumpForce = 7f;
     private bool controllable = true;
+    private bool fortified;
+
     public bool isControllable
     {
         get { return controllable; }
         set { controllable = value; }
+    }
+
+    public bool isFortified
+    {
+        get { return fortified; }
+        set { fortified = value; }
     }
 
     public void SetUp(int health, int strength, int defence, int speed, Team team)
@@ -83,6 +91,11 @@ public class Unit : MonoBehaviour
     {
         return targetTransform;
     }
+    
+    public float GetWeaponSpeed()
+    {
+        return weapon.speed;
+    }
 
     public Team GetTeam()
     {
@@ -102,7 +115,7 @@ public class Unit : MonoBehaviour
     {
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, attackDist))//attackDist * weapon.range
+        if(Physics.Raycast(ray, out hit, attackDist * weapon.range))
         {
             Unit unit = hit.collider.GetComponent<Unit>();
             if (unit != null)
@@ -110,7 +123,7 @@ public class Unit : MonoBehaviour
                 if(unit.GetTeam() != GetTeam())
                 {
                     Debug.Log("Hit an enemy unit");
-                    int damage = m_Strength; // * weapon.damage
+                    float damage = m_Strength * weapon.damage;
                     unit.Hit(damage, (hit.point - transform.position).normalized);
 
                     return true;
@@ -120,9 +133,9 @@ public class Unit : MonoBehaviour
         return false;
     }
 
-    public void Hit(int damage, Vector3 direction)
+    public void Hit(float damage, Vector3 direction)
     {
-        if (isFortified)
+        if (fortified)
         {
             damage -= m_Defence;
             if(damage < 0)
