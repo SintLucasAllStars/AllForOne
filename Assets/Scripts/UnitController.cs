@@ -51,7 +51,7 @@ public class UnitController : MonoBehaviour
                         return;
                     }
                     
-                    if (hit.collider != null && hit.transform.CompareTag("Ground"))
+                    if (hit.collider != null && !hit.transform.CompareTag("Unit"))
                     {
                         UnSelect();
                         return;

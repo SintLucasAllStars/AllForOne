@@ -455,6 +455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myTeam: 1
+  targetUnit: {fileID: 0}
   prefabUnit: {fileID: 6617670528764024307, guid: 814e6d7af05a8034a8fcb05ecdd22d33,
     type: 3}
   myTurn: 0
@@ -560,6 +561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraSpeed: 2
+  isControllingUnit: 0
 --- !u!1 &833277403
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +808,7 @@ Transform:
   m_GameObject: {fileID: 918647114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 20, y: 1, z: 20}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1154,6 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32a02d725d3f2545a45e920ba77a693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseSpeed: 100
   playerOne: {fileID: 1923333002}
   playerTwo: {fileID: 585712760}
   Text: {fileID: 1187632061}
@@ -1552,6 +1555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myTeam: 0
+  targetUnit: {fileID: 0}
   prefabUnit: {fileID: 6638144257660751955, guid: d6cc155c9931aca4f874cd931ee7e421,
     type: 3}
   myTurn: 0

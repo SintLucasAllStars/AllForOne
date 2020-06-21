@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public float mouseSpeed;
+
     public UnitController playerOne;
     public UnitController playerTwo;
 
@@ -83,8 +85,6 @@ public class GameManager : MonoBehaviour
         {
             endturnButton.interactable = true;
         }
-
-
     }
 
     public void UpdatePoint(UnitController uc)

@@ -40,6 +40,8 @@ public class CameraController : MonoBehaviour
     {
         StartCoroutine(LerpCamToUnit(0.5f, UnitTrans));
         isControllingUnit = true;
+
+        transform.SetParent(UnitTrans);
     }
 
     IEnumerator LerpCamToUnit(float time, Transform targetTrans)

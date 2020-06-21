@@ -38,8 +38,11 @@ public class Unit : MonoBehaviour
     public GameObject canvasGameobject;
 
     UnitController _unitController;
+
     public Transform camTrans;
-    
+    Vector3 camForward;
+    Vector3 move;
+
     private void Start()
     {
         _statName[0] = "Health ";
@@ -50,6 +53,8 @@ public class Unit : MonoBehaviour
         canvasGameobject.SetActive(true);
         canvasGameobject.GetComponent<Canvas>().worldCamera = Camera.main;
         combatButton = combatUI.GetComponentInChildren<Button>();
+
+        UpdateStatText();
     }
 
     private void Update()
@@ -61,7 +66,11 @@ public class Unit : MonoBehaviour
                 float x = Input.GetAxis("Horizontal") * Time.deltaTime * _speed; ;
                 float z = Input.GetAxis("Vertical") * Time.deltaTime * _speed;
 
-                transform.parent.Translate(x, 0, z);
+                camForward = Vector3.Scale(camTrans.forward, new Vector3(1, 0, 1)).normalized;
+                move = z * camForward + x * camTrans.right;
+
+                transform.parent.Translate(move);
+                transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * GameManager.instance.mouseSpeed);
             }
             //Debug.Log(CameraController.instance);
         }
@@ -149,7 +158,9 @@ public class Unit : MonoBehaviour
         {
             // TODO add timer for how long you can move and set in UnitController movedUnit true
             // make this unit moveable
-            CameraController.instance.SetCamForUnit(camTrans);
+            CameraController.instance.SetCamForUnit(this.camTrans);
+            Cursor.lockState = CursorLockMode.Locked;
+            canvasGameobject.SetActive(false);
         }
         else
         {
