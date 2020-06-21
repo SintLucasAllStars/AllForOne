@@ -19,6 +19,12 @@ public class Unit : MonoBehaviour
     private float attackDist = 2f;
     private bool isFortified = false;
     private float jumpForce = 7f;
+    private bool controllable = true;
+    public bool isControllable
+    {
+        get { return controllable; }
+        set { controllable = value; }
+    }
 
     public void SetUp(int health, int strength, int defence, int speed, Team team)
     {
@@ -45,7 +51,7 @@ public class Unit : MonoBehaviour
         unitPos = transform.TransformDirection(unitPos);
         if (rb.velocity.y < 0)
         {
-            unitPos.y += Physics.gravity.y * Time.fixedDeltaTime * 6f;
+            unitPos.y += Physics.gravity.y * Time.fixedDeltaTime * 2.5f;
         }
         rb.velocity = unitPos;
     }

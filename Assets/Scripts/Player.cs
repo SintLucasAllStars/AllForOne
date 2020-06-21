@@ -9,11 +9,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Unit curUnit;
     private Camera cam;
+    [SerializeField] private List<Unit> redUnits = new List<Unit>();
+    [SerializeField] private List<Unit> blueUnits = new List<Unit>();
 
     private Vector3 movedir;
     private Vector3 offset;
     private float selectDir;
     private Vector3 camOffset;
+    private bool isAttacking;
+    private float chargeTime = 3.5f;
 
     private float sensivityX = 2.5f;
     private float sensivityY = 1.5f;
@@ -56,9 +60,9 @@ public class Player : MonoBehaviour
             float horizontalMovement = Input.GetAxisRaw("Horizontal");
             float verticalMovement = Input.GetAxisRaw("Vertical");
             movedir = new Vector3(horizontalMovement, 0, verticalMovement).normalized;
+            movedir *= isAttacking ? 0.5f : 1f;
             curUnit.Move(movedir);
 
-            Debug.Log(curUnit.IsGrounded());
             if (Input.GetKeyDown(KeyCode.Space) && curUnit.IsGrounded())
             {
                 curUnit.Jump();
@@ -89,21 +93,32 @@ public class Player : MonoBehaviour
             Click();
         }
 
-        if(Input.GetMouseButtonDown(0) && controlState == ControlState.Controlling)
+        if(Input.GetMouseButtonDown(0) && controlState == ControlState.Controlling && !isAttacking)
         {
-            bool hitTarget = curUnit.Attack();
-            Debug.Log(hitTarget);
+            isAttacking = true;
+            StartCoroutine(Attack());
         }
 
         if (myDeltaTime < Time.time && controlState == ControlState.Controlling)
         {
-            controlState = ControlState.Selected;
+            controlState = ControlState.None;
             cam.transform.parent = null;
             curUnit.ResetTarget();
+            StopAllCoroutines();
 
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             movedir = Vector3.zero;
+            SelectedTime = 0;
+
+            bool endTurn = true;
+            foreach (Unit unit in currentTeam == Team.Red ? redUnits : blueUnits)
+            {
+                if (unit.isControllable)
+                {
+                    endTurn = false;
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && controlState == ControlState.None)
@@ -112,26 +127,34 @@ public class Player : MonoBehaviour
         }
     }
 
+    private IEnumerator Attack()
+    {
+        //startAnim
+        yield return new WaitForSeconds(chargeTime);
+        bool hit = curUnit.Attack();
+        isAttacking = false;
+    }
+
     private void Click()
     {
-        Debug.Log("click");
         controlState = ControlState.None;
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Unit unit = null;
         if(Physics.Raycast(ray, out hit))
         {
-            Debug.Log(hit.collider.name);
             unit = hit.collider.GetComponent<Unit>();
-            if(unit != null && unit.GetTeam() == currentTeam)
+            if(unit != null && unit.GetTeam() == currentTeam && unit.isControllable)
             {
                 controlState = ControlState.Selected;
                 camOffset = Vector3.zero;
                 curUnit = unit;
+                curUnit.isControllable = false;
                 SelectedTime = 0;
                 return;
             }
         }
+        SelectedTime = 0;
         curUnit = null;
     }
 
@@ -142,12 +165,22 @@ public class Player : MonoBehaviour
             currentTeam = Team.Blue;
             topDownPosition = topDownPositionBlue;
             topDownRotation = topDownRotationBlue;
+
+            foreach (Unit unit in blueUnits)
+            {
+                unit.isControllable = true;
+            }
         }
         else
         {
             currentTeam = Team.Red;
             topDownPosition = topDownPositionRed;
             topDownRotation = topDownRotationRed;
+
+            foreach (Unit unit in redUnits)
+            {
+                unit.isControllable = true;
+            }
         }
 
         SelectedTime = 0;
@@ -156,8 +189,6 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
-
-
         switch (controlState)
         {
             case ControlState.None:
