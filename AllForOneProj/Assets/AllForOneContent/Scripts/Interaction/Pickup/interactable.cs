@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class interactable : MonoBehaviour, IInteraction
 {
-	
+	protected Character m_CurrentCharacter;
 
 	public virtual void Drop(Character character)
 	{
-		
+		m_CurrentCharacter = null;
 	}
 
 	public virtual void Pickup(Character character)
@@ -18,6 +18,7 @@ public class interactable : MonoBehaviour, IInteraction
 		transform.localEulerAngles = new Vector3(0, 0, 0);
 		transform.localPosition = new Vector3(0, 0, 0);
 		GetComponent<Collider>().enabled = false;
+		m_CurrentCharacter = character;
 	}
 
 	public virtual void Use(Character character)

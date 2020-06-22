@@ -55,7 +55,7 @@ public class CameraManager : MonoBehaviour
     private void InterpToTarget()
     {
 		
-		if (GameMode.currentFlowState == FlowState.Round_Fight)
+		if (GameMode.currentFlowState == FlowState.Round_Fight && cameraTarget != null)
 		{
 				playerCamera.transform.position = cameraTarget.transform.position;
 				playerCamera.transform.rotation = cameraTarget.transform.rotation;

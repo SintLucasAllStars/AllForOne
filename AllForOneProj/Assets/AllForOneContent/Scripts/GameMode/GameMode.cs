@@ -7,7 +7,8 @@ public enum FlowState
 	Round_Buy,
 	Round_Select,
 	Round_ConfirmSelection,
-	Round_Fight
+	Round_Fight,
+	Round_End
 }
 
 public enum Team
@@ -25,24 +26,32 @@ public class GameMode : MonoBehaviour
 
 	public static float fightTime = 10;
 
-    // Start is called before the first frame update
-    void Start()
+	public static List<GameObject> m_TeamBlue = new List<GameObject>();
+	public static List<GameObject> m_TeamRed = new List<GameObject>();
+
+	// Start is called before the first frame update
+	void Start()
     {
 		StartMatch();
-    }
+		
+		m_TeamRed.AddRange(GameObject.FindGameObjectsWithTag("Red"));
+		m_TeamBlue.AddRange(GameObject.FindGameObjectsWithTag("Blue"));
+		
+		Debug.Log(m_TeamRed.Count);
+		Debug.Log(m_TeamBlue.Count);
+	}
+
 
 
 	public static void SetFlowState(FlowState newFlow)
 	{
 		currentFlowState = newFlow;
-		
 	}
 
 	public void StartMatch()
 	{
 		SetFlowState(FlowState.Round_Select);
 		currentTeam = Team.Red;
-		
 	}
 
 	public static void SwitchCurrentTeam()
@@ -56,8 +65,6 @@ public class GameMode : MonoBehaviour
 			currentTeam = Team.Red;
 		}
 	}
-
-
 
 	
 }

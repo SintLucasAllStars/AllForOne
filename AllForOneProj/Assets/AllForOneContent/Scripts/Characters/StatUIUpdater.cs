@@ -14,10 +14,10 @@ public class StatUIUpdater : MonoBehaviour
 
     public void UpdateText()
 	{
-		health.text = "Health: " + character.health.ToString();
-		strength.text = "Strength: " + character.strength.ToString();
-		speed.text = "Speed: " + character.speed.ToString();
-		defense.text = "Defense: " + character.defense.ToString();
+		health.text = "Health: " + character.m_PlayerStats.m_Health.ToString();
+		strength.text = "Strength: " + character.m_PlayerStats.m_Strength.ToString();
+		speed.text = "Speed: " + character.m_PlayerStats.m_Speed.ToString();
+		defense.text = "Defense: " + character.m_PlayerStats.m_Defense.ToString();
 		
 	}
 }

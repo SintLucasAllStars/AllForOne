@@ -7,19 +7,31 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-	public TMP_Text currentTeam;
-	public TMP_Text currentMode;
-	public TMP_Text currentTimer;
-	public Image crossHair;
+	[Header("Text")]
+	public TMP_Text m_CurrentTeam;
+	public TMP_Text m_CurrentMode;
+	public TMP_Text m_CurrentTimer;
+	public TMP_Text m_VictoryText;
 
-	bool countDownStarted;
+	[Header("Base")]
+	public Image m_CrossHair;
+	public Button m_QuitButton;
+	public PlayerController m_Pc;
+
+	[Header("PowerUps")]
+	public Image m_Rage;
+	public Image m_Adrenalin;
+	public Image m_TimeMachine;
+	public GameObject m_PowerUps;
+	
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		countDownStarted = false;
-		currentTimer.SetText("Time Left: " + 10);
-		crossHair.enabled = false;
+		m_QuitButton.gameObject.SetActive(false);
+		m_VictoryText.enabled = false;
+		m_CurrentTimer.SetText("Time Left: " + 10);
+		m_CrossHair.enabled = false;
 	}
 
 	// Update is called once per frame
@@ -29,6 +41,8 @@ public class UIManager : MonoBehaviour
 		SetModeText();
 		SetTimerText();
 		SetCrosshairEnabled();
+		SetPowerUps();
+		SetVicoryText();
 	}
 
 	void SetTeamText()
@@ -36,10 +50,10 @@ public class UIManager : MonoBehaviour
 		switch (GameMode.currentTeam)
 		{
 			case Team.Red:
-				currentTeam.text = "Team: Red";
+				m_CurrentTeam.text = "Team: Red";
 				break;
 			case Team.Blue:
-				currentTeam.text = "Team: Blue";
+				m_CurrentTeam.text = "Team: Blue";
 				break;
 			default:
 				break;
@@ -51,13 +65,13 @@ public class UIManager : MonoBehaviour
 		switch (GameMode.currentFlowState)
 		{
 			case FlowState.Round_Buy:
-				currentMode.text = "Hire Units";
+				m_CurrentMode.text = "Hire Units";
 				break;
 			case FlowState.Round_Select:
-				currentMode.text = "Select a Unit";
+				m_CurrentMode.text = "Select a Unit";
 				break;
 			case FlowState.Round_Fight:
-				currentMode.text = "";
+				m_CurrentMode.text = "";
 				break;
 			default:
 				break;
@@ -69,22 +83,29 @@ public class UIManager : MonoBehaviour
 		switch (GameMode.currentFlowState)
 		{
 			case FlowState.Round_Buy:
-				currentTimer.enabled = false;
+				m_CurrentTimer.enabled = false;
 				break;
 			case FlowState.Round_Select:
-				currentTimer.enabled = false;
+				m_CurrentTimer.enabled = false;
 
 				break;
 			case FlowState.Round_Fight:
-				if (!countDownStarted)
-				{
-					currentTimer.enabled = true;
-					StartCoroutine(CountDown());
-				}
+				m_CurrentTimer.enabled = true;
+				m_CurrentTimer.text = "Time Left: " + m_Pc.countDown.ToString();
 
 				break;
 			default:
 				break;
+		}
+	}
+
+	void SetVicoryText()
+	{
+		if(GameMode.currentFlowState == FlowState.Round_End)
+		{
+			m_VictoryText.enabled = true;
+			m_QuitButton.gameObject.SetActive(true);
+			m_VictoryText.text = m_Pc.victoryTxt;
 		}
 	}
 
@@ -93,31 +114,58 @@ public class UIManager : MonoBehaviour
 		switch (GameMode.currentFlowState)
 		{
 			case FlowState.Round_Buy:
-				crossHair.enabled = false;
+				m_CrossHair.enabled = false;
 				break;
 			case FlowState.Round_Select:
-				crossHair.enabled = false;
+				m_CrossHair.enabled = false;
 				break;
 			case FlowState.Round_Fight:
-				crossHair.enabled = true;
+				m_CrossHair.enabled = true;
 				break;
 			default:
 				break;
 		}
 	}
 
-	IEnumerator CountDown()
+	void SetPowerUps()
 	{
-		countDownStarted = true;
-		float countDown = 10;
-		do
-		{	
-			currentTimer.SetText("Time Left: " + countDown);
-			yield return new WaitForSeconds(1);
-			countDown--;
+		if (GameMode.currentFlowState == FlowState.Round_Fight)
+		{
+			m_PowerUps.SetActive(true);
+			if (m_Pc.possessedCharacter.currentPowerUps[2] != null)
+			{
+				m_Adrenalin.sprite = m_Pc.possessedCharacter.currentPowerUps[2].icon;
+				m_Adrenalin.color = new Color(255, 255, 255, 255);
+			}
+			else
+			{
+				m_Adrenalin.sprite = null;
+				m_Adrenalin.color = new Color(255, 255, 255, .25f);
+			}
+			if (m_Pc.possessedCharacter.currentPowerUps[1] != null)
+			{
+				m_Rage.sprite = m_Pc.possessedCharacter.currentPowerUps[1].icon;
+				m_Rage.color = new Color(255, 255, 255, 255);
+			}
+			else
+			{
+				m_Rage.sprite = null;
+				m_Rage.color = new Color(255, 255, 255, .25f);
+			}
+			if (m_Pc.possessedCharacter.currentPowerUps[0] != null)
+			{
+				m_TimeMachine.sprite = m_Pc.possessedCharacter.currentPowerUps[0].icon;
+				m_TimeMachine.color = new Color(255, 255, 255, 255);
+			}
+			else
+			{
+				m_TimeMachine.sprite = null;
+				m_TimeMachine.color = new Color(255, 255, 255, .25f);
+			}
 		}
-		while (countDown > 0);
-		countDownStarted = false;
-		countDown = 10;
+		else
+		{
+			m_PowerUps.SetActive(false);
+		}
 	}
 }
