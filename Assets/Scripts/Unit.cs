@@ -21,6 +21,10 @@ public class Unit : MonoBehaviour
     private float jumpForce = 7f;
     private bool controllable = true;
     private bool fortified;
+    private float rageDamage;
+    private bool raged;
+    private float adrenalineSpeed;
+    private bool adrenaline;
 
     public bool isControllable
     {
@@ -32,6 +36,26 @@ public class Unit : MonoBehaviour
     {
         get { return fortified; }
         set { fortified = value; }
+    }
+
+    public bool isRaged
+    {
+        get { return raged; }
+        set
+        {
+            raged = value;
+            rageDamage = raged ? (m_Strength * 0.1f) : 0.0f;
+        }
+    }
+
+    public bool isAdrenaline
+    {
+        get { return adrenaline; }
+        set
+        {
+            adrenaline = value;
+            adrenalineSpeed = adrenaline ? (m_Speed * 0.5f) : 0.0f;
+        }
     }
 
     public void SetUp(int health, int strength, int defence, int speed, Team team)
@@ -54,7 +78,7 @@ public class Unit : MonoBehaviour
 
     public void Move(Vector3 moveDir)
     {
-        unitPos = moveDir * (m_Speed * Time.fixedDeltaTime);
+        unitPos = moveDir * ((m_Speed + adrenalineSpeed) * Time.fixedDeltaTime);
         unitPos.y += rb.velocity.y;
         unitPos = transform.TransformDirection(unitPos);
         if (rb.velocity.y < 0)
@@ -115,7 +139,7 @@ public class Unit : MonoBehaviour
     {
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, attackDist * weapon.range))
+        if(Physics.Raycast(ray, out hit, attackDist + weapon.range))
         {
             Unit unit = hit.collider.GetComponent<Unit>();
             if (unit != null)
@@ -123,7 +147,7 @@ public class Unit : MonoBehaviour
                 if(unit.GetTeam() != GetTeam())
                 {
                     Debug.Log("Hit an enemy unit");
-                    float damage = m_Strength * weapon.damage;
+                    float damage = m_Strength * weapon.damage + rageDamage;
                     unit.Hit(damage, (hit.point - transform.position).normalized);
 
                     return true;
@@ -147,7 +171,7 @@ public class Unit : MonoBehaviour
         m_Health -= damage;
         if(m_Health <= 0)
         {
-            //Die
+            Destroy(gameObject);
         }
 
         rb.AddForce(direction * 10f, ForceMode.VelocityChange);
@@ -159,6 +183,19 @@ public class Unit : MonoBehaviour
     {
         m_Team = team;
         GetComponent<Renderer>().material = teamMat;
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.CompareTag("Weapon"))
+        {
+            weapon = col.GetComponent<PickUpWeapon>().PickUp();
+        }
+        else if (col.CompareTag("PowerUp"))
+        {
+            PowerUp power = col.GetComponent<PickUpPower>().PickUp();
+            FindObjectOfType<Player>().GetPower(power);
+        }
     }
 }
 

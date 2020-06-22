@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private ControlState controlState;
+    public ControlState controlState;
     private Team currentTeam;
     [SerializeField]
     private Unit curUnit;
     private Camera cam;
     [SerializeField] private List<Unit> redUnits = new List<Unit>();
     [SerializeField] private List<Unit> blueUnits = new List<Unit>();
+    private List<PowerUp> powerUps = new List<PowerUp>();
+    public PowerUp firstPower;
 
     private Vector3 movedir;
     private Vector3 offset;
     private float selectDir;
     private Vector3 camOffset;
     private bool isAttacking;
+    public bool adrenalinePower;
+    public bool ragePower;
+    public bool timeMachinePower;
 
     private float sensivityX = 2.5f;
     private float sensivityY = 1.5f;
@@ -25,7 +30,13 @@ public class Player : MonoBehaviour
     private float ControlTime = 10f;
     private float chargeTime = 2f;
     private float fortifyTime = 2f;
-    private float myDeltaTime;
+    private float adrenalineTime = 10f;
+    private float rageTime = 5f;
+    private float timeMachineTime = 3f;
+    public float myDeltaTime;
+    public float myAdrenalineTime;
+    public float myRageTime;
+    public float myTimeMachineTime;
 
     private Vector3 topDownPosition;
     private Vector3 topDownRotation;
@@ -81,6 +92,7 @@ public class Player : MonoBehaviour
             {
                 curUnit.GetComponent<Rigidbody>().mass = 1;
                 controlState = ControlState.Controlling;
+                curUnit.isControllable = false;
                 cam.transform.position = curUnit.GetCameraPos();
                 cam.transform.parent = curUnit.GetTarget();
                 Cursor.visible = false;
@@ -97,6 +109,7 @@ public class Player : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && controlState == ControlState.Controlling && !isAttacking)
         {
             isAttacking = true;
+            Debug.Log("Attack");
             StartCoroutine(Attack());
         }
 
@@ -107,29 +120,65 @@ public class Player : MonoBehaviour
 
         if (myDeltaTime < Time.time && controlState == ControlState.Controlling)
         {
-            controlState = ControlState.None;
-            cam.transform.parent = null;
-            curUnit.ResetTarget();
-            StopAllCoroutines();
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            movedir = Vector3.zero;
-            SelectedTime = 0;
-
-            bool endTurn = true;
-            foreach (Unit unit in currentTeam == Team.Red ? redUnits : blueUnits)
-            {
-                if (unit.isControllable)
-                {
-                    endTurn = false;
-                }
-            }
+            ReleaseControl();
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && controlState == ControlState.None)
         {
             SwitchPlayer();
+        }
+
+        //can only use power ups in the same order als picked up.
+        if(Input.GetKeyDown(KeyCode.E) && controlState != ControlState.None && firstPower != null)
+        {
+            if(firstPower.power == Power.Adrenaline)
+            {
+                adrenalinePower = true;
+                curUnit.isAdrenaline = true;
+                myAdrenalineTime = Time.time + adrenalineTime;
+                Debug.Log("Adrenaline Power");
+            }
+            else if (firstPower.power == Power.Rage)
+            {
+                ragePower = true;
+                curUnit.isRaged = true;
+                myRageTime = Time.time + rageTime;
+                Debug.Log("Rage Power");
+            }
+            else if (firstPower.power == Power.TimeMachine)
+            {
+                timeMachinePower = true;
+                myTimeMachineTime = Time.time + timeMachineTime;
+                Debug.Log("Time Power");
+            }
+
+            powerUps.Remove(firstPower);
+            if (powerUps.Count > 0)
+            {
+                firstPower = powerUps[0];
+            }
+        }
+
+        if (adrenalinePower && myAdrenalineTime < Time.time)
+        {
+            curUnit.isAdrenaline = false;
+            adrenalinePower = false;
+        }
+        else if (ragePower && myRageTime < Time.time)
+        {
+            curUnit.isRaged = false;
+            ragePower = false;
+        }
+        else if (timeMachinePower)
+        {
+            if(myTimeMachineTime < Time.time)
+            {
+                timeMachinePower = false;
+            }
+            else
+            {
+                myDeltaTime += Time.deltaTime;
+            }
         }
     }
 
@@ -147,6 +196,40 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.F))
         {
             curUnit.isFortified = true;
+            ReleaseControl();
+        }
+    }
+
+    public void GetPower(PowerUp powerUp)
+    {
+        powerUps.Add(powerUp);
+        firstPower = powerUps[0];
+    }
+
+    private void ReleaseControl()
+    {
+        controlState = ControlState.None;
+        cam.transform.parent = null;
+        curUnit.ResetTarget();
+        StopAllCoroutines();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        movedir = Vector3.zero;
+        SelectedTime = 0;
+
+        bool endTurn = true;
+        foreach (Unit unit in currentTeam == Team.Red ? redUnits : blueUnits)
+        {
+            if (unit.isControllable)
+            {
+                endTurn = false;
+            }
+        }
+
+        if (endTurn)
+        {
+            SwitchPlayer();//dont switch but highlight done button
         }
     }
 
@@ -164,7 +247,6 @@ public class Player : MonoBehaviour
                 controlState = ControlState.Selected;
                 camOffset = Vector3.zero;
                 curUnit = unit;
-                curUnit.isControllable = false;
                 SelectedTime = 0;
                 return;
             }
