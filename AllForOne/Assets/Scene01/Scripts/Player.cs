@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Security.Cryptography;
-using System.Threading;
+using UnityEngine.UI; 
 using UnityEngine;
 
 public class Player : MonoBehaviour
 { 
-    private Unit unit; 
+    private Unit unit;
+    public Transform CameraPosition; 
 
     //Input
     Vector2 movementInput;
@@ -23,47 +22,58 @@ public class Player : MonoBehaviour
     public float rotSmoothDuration = .12f;
     public Vector2 pitchMinMax = new Vector2(-40, 85);
 
+    //Third Person Movement
+    public float movementSpeed;
+
     //Top Down Camera
     [Header("Top Down Camera Variables")]
-    public float cameraSpeed; 
+    public float cameraSpeed;
 
+    //Variables 
     float pitch, yaw; 
     Vector3 rotSmoothing;
-    Vector3 curRotation; 
-    
+    Vector3 curRotation;
+    float startingTime = 10.0f;
+    float timeLeft = 0.0f; 
 
     enum currentState {None, Selected, Controlling };
-    private currentState curState; 
+    private currentState curState;
+
+
+    Unit curUnit; 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        timeLeft = startingTime; 
     }
 
     // Update is called once per frame
     void Update()
     {
         ControlState();
-        Click();
+        Click(); 
     }
 
     void Click()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && curState != currentState.Controlling)
         {
             RaycastHit hit;
             Debug.Log("click");
             curState = currentState.None;
+            curUnit = null; 
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.GetComponent<Unit>() != null)
-                {
-                    Debug.Log(hit.collider.name);
+                Debug.Log(hit.collider.name);
+                curUnit = hit.collider.GetComponent<Unit>();
+
+               if (curUnit != null)
+               {
                     target = hit.collider.transform;
                     curState = currentState.Selected;
-                }
+               }
             }
         }
 
@@ -78,30 +88,43 @@ public class Player : MonoBehaviour
                 pitch = 0;
                 target = null;
                 TopDownCamera();
+                Debug.Log(curState);
                 break;
             case currentState.Selected:
                 ThirdPersonCamera();
+                if (Input.GetKeyDown(KeyCode.Space) == true)
+                {
+                    curState = currentState.Controlling; 
+                }
+                Debug.Log(curState);
                 break;
             case currentState.Controlling:
+                ThirdPersonCamera();
+                curUnit.Move(mainCamera);
+                timeLeft -= 1.0f * Time.deltaTime;
+                Debug.Log(timeLeft);
+                if (timeLeft < 0)
+                {
+                    curState = currentState.None;
+                    timeLeft = 10.0f; 
+                }
+                
                 break;
             default:
                 break;
         }
     }
 
+    //Camera's 
     void TopDownCamera()
     {
-        float horizontal = Input.GetAxis("Horizontal") * cameraSpeed;
-        float vertical = Input.GetAxis("Vertical") * cameraSpeed;
-        
-        Vector3 TopDownTransform = new Vector3(horizontal, 0, vertical);
+        Vector2 _input = new Vector2(Input.GetAxisRaw("Horizontal") * cameraSpeed,Input.GetAxisRaw("Vertical") * cameraSpeed);
+
+        Vector3 TopDownTransform = new Vector3(_input.x, 0, _input.y);
         TopDownTransform += new Vector3(mainCamera.transform.position.x, 20, mainCamera.transform.position.z);
 
-        Vector3 TopDownRotation = new Vector3(60, 0, 0);
-
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, TopDownTransform, Time.deltaTime * cameraSpeed);
-        mainCamera.transform.eulerAngles = new Vector3(55, 0, 0);
-        //mainCamera.transform.eulerAngles = Vector3.Lerp(mainCamera.transform.eulerAngles, TopDownRotation, Time.deltaTime * cameraSpeed);
+        mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, CameraPosition.rotation, Time.deltaTime * cameraSpeed);
     }
 
     void ThirdPersonCamera()
@@ -114,4 +137,5 @@ public class Player : MonoBehaviour
         mainCamera.transform.eulerAngles = curRotation; 
         mainCamera.transform.position = target.transform.position - (mainCamera.transform.forward * distanceFromTarget); 
     }
+
 }
