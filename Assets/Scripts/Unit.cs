@@ -9,12 +9,12 @@ public class Unit : MonoBehaviour
     private float lookDirX;
     private float lookDirY;
 
-    private float m_Health;
-    private float m_Strength;
-    private float m_Defence;
-    private float m_Speed;
-    [SerializeField] private Team m_Team;
-    [SerializeField] private Weapon weapon;
+    public float m_Health;
+    public float m_Strength;
+    public float m_Defence;
+    public float m_Speed;
+    public Team m_Team;
+    public Weapon weapon;
 
     private Vector3 unitPos;
     private float attackDist = 2f;

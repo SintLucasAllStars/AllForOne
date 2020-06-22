@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     public ControlState controlState;
     private Team currentTeam;
     [SerializeField]
-    private Unit curUnit;
+    public Unit curUnit;
     private Camera cam;
     [SerializeField] private List<Unit> redUnits = new List<Unit>();
     [SerializeField] private List<Unit> blueUnits = new List<Unit>();
@@ -223,6 +223,7 @@ public class Player : MonoBehaviour
         controlState = ControlState.None;
         cam.transform.parent = null;
         curUnit.ResetTarget();
+        isAttacking = false;
         StopAllCoroutines();
 
         Cursor.visible = true;

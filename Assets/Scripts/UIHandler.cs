@@ -14,6 +14,9 @@ public class UIHandler : MonoBehaviour
     public Button turnDoneButton;
     public Color turnDone, turnUnDone;
     public Slider attackTimeSlider;
+    public GameObject UnitPanel;
+    public Slider health;
+    public TMP_Text strenght, defence, speed, Weapon;
 
     private void Start()
     {
@@ -33,8 +36,18 @@ public class UIHandler : MonoBehaviour
             controlTimeSlider.gameObject.SetActive(false);
         }
 
+        if(player.controlState == ControlState.Selected || player.controlState == ControlState.Controlling)
+        {
+            health.value = player.curUnit.m_Health;
+            strenght.text = "Str: " + player.curUnit.m_Strength;
+            defence.text = "Def: " + player.curUnit.m_Defence;
+            speed.text = "Spd: " + player.curUnit.m_Speed;
+            Weapon.text = player.curUnit.weapon.name;
+        }
+
         if(player.controlState == ControlState.None)
         {
+            UnitPanel.SetActive(false);
             turnDoneButton.gameObject.SetActive(true);
             var colors = turnDoneButton.colors;
             colors.normalColor = player.doEndTurn ? turnDone : turnUnDone;
@@ -44,6 +57,7 @@ public class UIHandler : MonoBehaviour
         if (player.controlState != ControlState.None)
         {
             turnDoneButton.gameObject.SetActive(false);
+            UnitPanel.SetActive(true);
         }
 
         powerUpAdrenaline.SetActive(player.adrenalinePower);
