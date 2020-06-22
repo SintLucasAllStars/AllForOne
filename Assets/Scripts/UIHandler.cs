@@ -11,6 +11,9 @@ public class UIHandler : MonoBehaviour
     public GameObject powerUpAdrenaline, powerUpRage, powerUpTime;
     public Slider powerUpAdrenalineSlider, powerUpRageSlider, powerUpTimeSlider;
     public TMP_Text nextPowerText;
+    public Button turnDoneButton;
+    public Color turnDone, turnUnDone;
+    public Slider attackTimeSlider;
 
     private void Start()
     {
@@ -28,6 +31,19 @@ public class UIHandler : MonoBehaviour
         if (player.controlState != ControlState.Controlling)
         {
             controlTimeSlider.gameObject.SetActive(false);
+        }
+
+        if(player.controlState == ControlState.None)
+        {
+            turnDoneButton.gameObject.SetActive(true);
+            var colors = turnDoneButton.colors;
+            colors.normalColor = player.doEndTurn ? turnDone : turnUnDone;
+            turnDoneButton.colors = colors;
+        }
+
+        if (player.controlState != ControlState.None)
+        {
+            turnDoneButton.gameObject.SetActive(false);
         }
 
         powerUpAdrenaline.SetActive(player.adrenalinePower);
@@ -49,17 +65,40 @@ public class UIHandler : MonoBehaviour
             powerUpTimeSlider.value = (player.myTimeMachineTime - Time.time);
         }
 
-        if (player.firstPower.power == Power.Adrenaline)
+        if(player.firstPower != null)
         {
-
+            if (player.firstPower.power == Power.Adrenaline)
+            {
+                nextPowerText.text = "Adrenaline";
+            }
+            else if (player.firstPower.power == Power.Rage)
+            {
+                nextPowerText.text = "Rage";
+            }
+            else if (player.firstPower.power == Power.TimeMachine)
+            {
+                nextPowerText.text = "Time machine";
+            }
         }
-        else if (player.firstPower.power == Power.Rage)
+        else
         {
-
+            nextPowerText.text = "";
         }
-        else if (player.firstPower.power == Power.TimeMachine)
+
+        attackTimeSlider.gameObject.SetActive(player.isAttacking);
+
+        if (player.isAttacking)
         {
-
+            attackTimeSlider.maxValue = player.GetChargeTime();
+            attackTimeSlider.value = (player.myAttackTime - Time.time);
         }
+    }
+
+    public void ResetDone()
+    {
+        turnDoneButton.gameObject.SetActive(false);
+        var colors = turnDoneButton.colors;
+        colors.normalColor = player.doEndTurn ? turnDone : turnUnDone;
+        turnDoneButton.colors = colors;
     }
 }

@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     private Vector3 offset;
     private float selectDir;
     private Vector3 camOffset;
-    private bool isAttacking;
+    public bool isAttacking;
     public bool adrenalinePower;
     public bool ragePower;
     public bool timeMachinePower;
@@ -34,9 +34,11 @@ public class Player : MonoBehaviour
     private float rageTime = 5f;
     private float timeMachineTime = 3f;
     public float myDeltaTime;
+    public float myAttackTime;
     public float myAdrenalineTime;
     public float myRageTime;
     public float myTimeMachineTime;
+    public bool doEndTurn;
 
     private Vector3 topDownPosition;
     private Vector3 topDownRotation;
@@ -131,7 +133,7 @@ public class Player : MonoBehaviour
         //can only use power ups in the same order als picked up.
         if(Input.GetKeyDown(KeyCode.E) && controlState != ControlState.None && firstPower != null)
         {
-            if(firstPower.power == Power.Adrenaline)
+            if (firstPower.power == Power.Adrenaline)
             {
                 adrenalinePower = true;
                 curUnit.isAdrenaline = true;
@@ -156,6 +158,10 @@ public class Player : MonoBehaviour
             if (powerUps.Count > 0)
             {
                 firstPower = powerUps[0];
+            }
+            else
+            {
+                firstPower = null;
             }
         }
 
@@ -182,10 +188,16 @@ public class Player : MonoBehaviour
         }
     }
 
+    public float GetChargeTime()
+    {
+        return chargeTime + curUnit.GetWeaponSpeed();
+    }
+
     private IEnumerator Attack()
     {
         //startAnim
-        yield return new WaitForSeconds(chargeTime + curUnit.GetWeaponSpeed());
+        myAttackTime = Time.time + GetChargeTime();
+        yield return new WaitForSeconds(GetChargeTime());
         bool hit = curUnit.Attack();
         isAttacking = false;
     }
@@ -226,11 +238,7 @@ public class Player : MonoBehaviour
                 endTurn = false;
             }
         }
-
-        if (endTurn)
-        {
-            SwitchPlayer();//dont switch but highlight done button
-        }
+        doEndTurn = endTurn;
     }
 
     private void Click()
@@ -255,7 +263,7 @@ public class Player : MonoBehaviour
         curUnit = null;
     }
 
-    private void SwitchPlayer()
+    public void SwitchPlayer()
     {
         if(currentTeam == Team.Red)
         {
@@ -282,6 +290,7 @@ public class Player : MonoBehaviour
             }
         }
 
+        doEndTurn = false;
         SelectedTime = 0;
         camOffset = Vector3.zero;
     }
