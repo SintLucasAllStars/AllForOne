@@ -9,9 +9,10 @@ public class UnitController : MonoBehaviour
     public Unit targetUnit;
 
     public GameObject prefabUnit;
-    public bool myTurn;
 
-    Camera _overviewCam;
+    [Space(5)]
+
+    public bool myTurn;
 
     // false start of turn true end of turn
     public bool _setupUnit = false;
@@ -21,6 +22,9 @@ public class UnitController : MonoBehaviour
     int unitPoints = 100;
     int _maxUnit = 2;
     int _currentAmountUnit = 0;
+
+    Camera _overviewCam;
+    public Transform defaultCamTrans;
 
     public List<Unit> myUnits = new List<Unit>();
 
@@ -66,9 +70,12 @@ public class UnitController : MonoBehaviour
     public void StartYourTurn()
     {
         myTurn = true;
+        CameraController.instance.LerpCamToTrans(defaultCamTrans);
 
-        if(!_setupTeam)
+        if (!_setupTeam)
             _setupUnit = false;
+        else
+            _movedUnit = false;
     }
 
     public void EndYourTurn()
@@ -76,7 +83,7 @@ public class UnitController : MonoBehaviour
         myTurn = false;
         UnSelect();
 
-        if(!_setupTeam)
+        if (!_setupTeam)
             _setupUnit = true;
     }
 
@@ -136,14 +143,18 @@ public class UnitController : MonoBehaviour
                 newUnit.GetComponent<Unit>().myTeam = myTeam;
                 _setupUnit = true;
 
+                // new vector is offset
+                Vector3 targetCam = newUnit.transform.position + new Vector3(0, 10, -5);
+                StartCoroutine(CameraController.instance.LerpCamToPos(0.2f, targetCam));
+
+                // When spawned shoot a new ray to target the unit
                 if (Physics.Raycast(_overviewCam.ScreenPointToRay(Input.mousePosition).origin,
                     _overviewCam.ScreenPointToRay(Input.mousePosition).direction, out RaycastHit newHit, 100,
                     Physics.DefaultRaycastLayers) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     hit = newHit;
                 }
-
-                // TODO: transfer this to gamemanger in the future 
+                
                 _currentAmountUnit++;
                 if (_currentAmountUnit == _maxUnit)
                 {
@@ -154,6 +165,16 @@ public class UnitController : MonoBehaviour
         if (hit.transform.GetComponent<Unit>() != null && hit.transform.GetComponent<Unit>().myTeam == myTeam)
         {
             SelectNewUnit(hit.transform.GetComponent<Unit>());
+        }
+    }
+
+    public void SetPlayerMoved()
+    {
+        _movedUnit = true;
+
+        for (int i = 0; i < myUnits.Count; i++)
+        {
+            myUnits[i].combatButton.interactable = false;
         }
     }
 

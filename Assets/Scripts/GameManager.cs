@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public float moveTime = 10;
     public float mouseSpeed;
 
     public UnitController playerOne;

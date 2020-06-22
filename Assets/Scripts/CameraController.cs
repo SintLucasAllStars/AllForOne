@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
 
     public float cameraSpeed;
 
-    Vector3 lastOverviewPos;
+    public Transform lastOverviewPos;
     public bool isControllingUnit;
 
     private void Awake()
@@ -36,15 +36,32 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    public void LerpCamToTrans(Transform target)
+    {
+        StartCoroutine(LerpCamToTrans(0.5f, target));
+    }
+
     public void SetCamForUnit(Transform UnitTrans)
     {
-        StartCoroutine(LerpCamToUnit(0.5f, UnitTrans));
+        StartCoroutine(LerpCamToTrans(0.5f, UnitTrans));
+
+        lastOverviewPos.position = transform.position;
+        lastOverviewPos.rotation = transform.rotation;
+
         isControllingUnit = true;
 
         transform.SetParent(UnitTrans);
     }
 
-    IEnumerator LerpCamToUnit(float time, Transform targetTrans)
+    public void SetCamForOverview()
+    {
+        StartCoroutine(LerpCamToTrans(0.5f, lastOverviewPos));
+
+        isControllingUnit = false;
+        transform.SetParent(null);
+    }
+
+    IEnumerator LerpCamToTrans(float time, Transform targetTrans)
     {
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
@@ -53,6 +70,18 @@ public class CameraController : MonoBehaviour
         {
             transform.position = Vector3.Lerp(startingPos, targetTrans.position, (elapsedTime / time));
             transform.rotation = Quaternion.Lerp(startingRot, targetTrans.rotation, (elapsedTime / time));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public IEnumerator LerpCamToPos(float time, Vector3 targetPos)
+    {
+        float elapsedTime = 0;
+        Vector3 startingPos = transform.position;
+        while (elapsedTime < time)
+        {
+            transform.position = Vector3.Lerp(startingPos, targetPos, (elapsedTime / time));
             elapsedTime += Time.deltaTime;
             yield return null;
         }

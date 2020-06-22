@@ -161,10 +161,24 @@ public class Unit : MonoBehaviour
             CameraController.instance.SetCamForUnit(this.camTrans);
             Cursor.lockState = CursorLockMode.Locked;
             canvasGameobject.SetActive(false);
+            StartCoroutine(EndControl(GameManager.instance.moveTime));
         }
         else
         {
             // player already moved this turn so can't move again
         }
+    }
+
+    IEnumerator EndControl(float t)
+    {
+        yield return new WaitForSeconds(t);
+        // release Unit set vars
+        transform.rotation = Quaternion.identity;
+        canvasGameobject.SetActive(true);
+
+        Cursor.lockState = CursorLockMode.None;
+        CameraController.instance.SetCamForOverview();
+        GameManager.instance.CheckIfEndTurn(_unitController);
+        _unitController.SetPlayerMoved();
     }
 }
