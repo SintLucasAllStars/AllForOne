@@ -47,6 +47,23 @@ public class TurnManager : MonoBehaviour
         StartCoroutine(TurnSystem());
     }
 
+    public int getCurrency()
+    {
+        int value = 0;
+
+        switch ((int)currentTurn)
+        {
+            case 1:
+                value = player1Currency;
+                break;
+            case 2:
+                value = player2Currency;
+                break;
+        }
+
+        return value;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.KeypadEnter))

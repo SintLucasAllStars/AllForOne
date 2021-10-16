@@ -63,9 +63,10 @@ public class CharacterCreater : MonoBehaviour
     {
         if (TurnManager.turnManager.BuyCharacter(cost))
         {
+            SetScreenActive(false);
             print(CreateStats().printStats());
             print(cost);
-            PlaceCharacter();
+            StartCoroutine(PlaceCharacter());
         }
     }
 
@@ -79,8 +80,23 @@ public class CharacterCreater : MonoBehaviour
         panel.SetActive(value);
     }
 
-    public void PlaceCharacter()
+    private IEnumerator PlaceCharacter()
+    {
+        
+
+        while (!Input.GetKey(KeyCode.Mouse0))
+        {
+            print("wait for input");
+            yield return new WaitForSeconds(.1f);
+        }
+
+        ResetCharacterCreater();
+    }
+
+    public void ResetCharacterCreater()
     {
         TurnManager.turnManager.EndTurn();
+        SetScreenActive(true);
+        currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
     }
 }
