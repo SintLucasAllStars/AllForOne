@@ -26,13 +26,15 @@ public class CharacterCreater : MonoBehaviour
     {
         panel = transform.GetChild(0).gameObject;
         costText = panel.transform.GetChild(0).GetComponent<Text>();
+        currencyText = panel.transform.GetChild(1).GetComponent<Text>();
 
         healthText = healthSlider.transform.GetChild(0).GetComponent<Text>();
         strengthText = strengthSlider.transform.GetChild(0).GetComponent<Text>();
         speedText = speedSlider.transform.GetChild(0).GetComponent<Text>();
         defenseText = defenseSlider.transform.GetChild(0).GetComponent<Text>();
 
-        costText.text = $"cost: {(int)((healthSlider.value * 3) + (strengthSlider.value * 2) + (speedSlider.value * 3) + (defenseSlider.value * 2))}";
+        cost = (int)((healthSlider.value * 3) + (strengthSlider.value * 2) + (speedSlider.value * 3) + (defenseSlider.value * 2));
+        costText.text = $"cost: {cost}";
     }
 
     public void ValueChange(int index)
@@ -59,8 +61,12 @@ public class CharacterCreater : MonoBehaviour
 
     public void CreateCharacter()
     {
-        print(CreateStats().printStats());
-        print(cost);
+        if (TurnManager.turnManager.BuyCharacter(cost))
+        {
+            print(CreateStats().printStats());
+            print(cost);
+            PlaceCharacter();
+        }
     }
 
     public CharacterStats CreateStats()
@@ -71,5 +77,10 @@ public class CharacterCreater : MonoBehaviour
     public void SetScreenActive(bool value)
     {
         panel.SetActive(value);
+    }
+
+    public void PlaceCharacter()
+    {
+        TurnManager.turnManager.EndTurn();
     }
 }
