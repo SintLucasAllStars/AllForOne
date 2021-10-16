@@ -13,13 +13,13 @@ public class TurnManager : MonoBehaviour
 
     private bool endTurn;
 
-    private enum GameMode
+    public enum GameMode
     {
         setup,
         action
     }
 
-    private GameMode currentGameMode;
+    public GameMode currentGameMode;
 
     public enum Turns
     {
@@ -64,28 +64,34 @@ public class TurnManager : MonoBehaviour
         return value;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            print(BuyCharacter(10));
-            EndTurn();
-        }
-    }
-
     private IEnumerator TurnSystem()
     {
         while (!gameOver)
         {
-            currentTurn = Turns.player1;
-            yield return new WaitUntil(() => endTurn);
-            endTurn = false;
-            currentTurn = Turns.player2;
-            yield return new WaitUntil(() => endTurn);
-            endTurn = false;
-        }
+            if (currentGameMode == GameMode.setup)
+            {
+                currentTurn = Turns.player1;
+                yield return new WaitUntil(() => endTurn || player1Currency <= 0);
+                endTurn = false;
+                currentTurn = Turns.player2;
+                yield return new WaitUntil(() => endTurn || player2Currency <= 0);
+                endTurn = false;
 
-        //TODO: endGame
+                if (player1Currency <= 0 && player2Currency <= 0)
+                {
+                    EndSetupFase();
+                }
+            }
+            else
+            {
+                currentTurn = Turns.player1;
+                yield return new WaitUntil(() => endTurn);
+                endTurn = false;
+                currentTurn = Turns.player2;
+                yield return new WaitUntil(() => endTurn);
+                endTurn = false;
+            }
+        }
     }
 
     public bool BuyCharacter(int cost)
@@ -111,6 +117,24 @@ public class TurnManager : MonoBehaviour
         }
 
         return value;
+    }
+
+    public void PlayerDoneSetupFase()
+    {
+        switch ((int)currentTurn)
+        {
+            case 1:
+                player1Currency = 0;
+                break;
+            case 2:
+                player2Currency = 0;
+                break;
+        }
+    }
+
+    public void EndSetupFase()
+    {
+        currentGameMode = GameMode.action;
     }
 
     public void EndTurn()

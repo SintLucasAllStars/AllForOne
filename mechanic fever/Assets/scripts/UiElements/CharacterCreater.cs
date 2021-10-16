@@ -7,6 +7,10 @@ public class CharacterCreater : MonoBehaviour
 {
     public int cost = 0;
 
+    public GameObject baseCharacter;
+    public GameObject characterPreviewSpawnPoint;
+    private GameObject characterPrefab;
+
     public Slider healthSlider;
     public Slider strengthSlider;
     public Slider speedSlider;
@@ -35,6 +39,18 @@ public class CharacterCreater : MonoBehaviour
 
         cost = (int)((healthSlider.value * 3) + (strengthSlider.value * 2) + (speedSlider.value * 3) + (defenseSlider.value * 2));
         costText.text = $"cost: {cost}";
+
+        characterPrefab = Instantiate(baseCharacter, characterPreviewSpawnPoint.transform.position, Quaternion.identity, characterPreviewSpawnPoint.transform);
+    }
+
+    public void Update()
+    {
+        //TODO: refactor a more elegent solution
+        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action)
+        {
+            SetScreenActive(false);
+            StopAllCoroutines();
+        }
     }
 
     public void ValueChange(int index)
@@ -64,8 +80,6 @@ public class CharacterCreater : MonoBehaviour
         if (TurnManager.turnManager.BuyCharacter(cost))
         {
             SetScreenActive(false);
-            print(CreateStats().printStats());
-            print(cost);
             StartCoroutine(PlaceCharacter());
         }
     }
@@ -82,20 +96,29 @@ public class CharacterCreater : MonoBehaviour
 
     private IEnumerator PlaceCharacter()
     {
-        
+        RaycastHit rayHit;
+        characterPrefab.transform.parent = null;
 
         while (!Input.GetKey(KeyCode.Mouse0))
         {
-            print("wait for input");
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
+            characterPrefab.transform.position = rayHit.point + (Vector3.up);
             yield return new WaitForSeconds(.1f);
         }
 
-        ResetCharacterCreater();
+        TurnManager.turnManager.EndTurn();
+
+        yield return new WaitForSeconds(.1f);
+
+        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.setup)
+        {
+            ResetCharacterCreater();
+        }
     }
 
     public void ResetCharacterCreater()
     {
-        TurnManager.turnManager.EndTurn();
+        characterPrefab = Instantiate(baseCharacter, characterPreviewSpawnPoint.transform.position, Quaternion.identity, characterPreviewSpawnPoint.transform);
         SetScreenActive(true);
         currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
     }

@@ -7,7 +7,7 @@ public class CharacterStats
     public int health { private set; get; }
     public int strength { private set; get; }
     public int speed { private set; get; }
-    public int defense;
+    private int defense;
 
     public bool fortified { private set; get; }
 
