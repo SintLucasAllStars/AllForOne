@@ -39,12 +39,18 @@ public class TurnManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        StartCoroutine(TurnSystem());
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public GameMode getGamemode()
     {
-        StartCoroutine(TurnSystem());
+        return currentGameMode;
+    }
+
+    public int getTurnIndex()
+    {
+        return (int)currentTurn;
     }
 
     public int getCurrency()
@@ -134,6 +140,11 @@ public class TurnManager : MonoBehaviour
 
     public void EndSetupFase()
     {
+        StopAllCoroutines();
+        StartCoroutine(TurnSystem());
+
+        //call action fase banner
+
         currentGameMode = GameMode.action;
     }
 

@@ -7,7 +7,9 @@ public class CharacterCreater : MonoBehaviour
 {
     public int cost = 0;
 
-    public GameObject baseCharacter;
+    public GameObject blueCharacteBase;
+    public GameObject redCharacterBase;
+
     public GameObject characterPreviewSpawnPoint;
     private GameObject characterPrefab;
 
@@ -26,6 +28,8 @@ public class CharacterCreater : MonoBehaviour
     private Text speedText;
     private Text defenseText;
 
+    private bool isCreatingCharacter;
+
     private void Start()
     {
         panel = transform.GetChild(0).gameObject;
@@ -40,16 +44,17 @@ public class CharacterCreater : MonoBehaviour
         cost = (int)((healthSlider.value * 3) + (strengthSlider.value * 2) + (speedSlider.value * 3) + (defenseSlider.value * 2));
         costText.text = $"cost: {cost}";
 
-        characterPrefab = Instantiate(baseCharacter, characterPreviewSpawnPoint.transform.position, Quaternion.identity, characterPreviewSpawnPoint.transform);
+        ResetCharacterCreater();
     }
 
     public void Update()
     {
         //TODO: refactor a more elegent solution
-        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action)
+        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action && !isCreatingCharacter)
         {
             SetScreenActive(false);
             StopAllCoroutines();
+            this.enabled = false;
         }
     }
 
@@ -79,6 +84,7 @@ public class CharacterCreater : MonoBehaviour
     {
         if (TurnManager.turnManager.BuyCharacter(cost))
         {
+            isCreatingCharacter = true;
             SetScreenActive(false);
             StartCoroutine(PlaceCharacter());
         }
@@ -102,7 +108,7 @@ public class CharacterCreater : MonoBehaviour
         while (!Input.GetKey(KeyCode.Mouse0))
         {
             Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
-            characterPrefab.transform.position = rayHit.point + (Vector3.up);
+            characterPrefab.transform.position = rayHit.point;
             yield return new WaitForSeconds(.1f);
         }
 
@@ -118,8 +124,30 @@ public class CharacterCreater : MonoBehaviour
 
     public void ResetCharacterCreater()
     {
-        characterPrefab = Instantiate(baseCharacter, characterPreviewSpawnPoint.transform.position, Quaternion.identity, characterPreviewSpawnPoint.transform);
+        switch (TurnManager.turnManager.getTurnIndex())
+        {
+            case 1:
+                characterPrefab = Instantiate(blueCharacteBase, characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
+                break;
+            case 2:
+                characterPrefab = Instantiate(redCharacterBase, characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
+                break;
+        }
+
         SetScreenActive(true);
         currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
+        isCreatingCharacter = false;
+    }
+
+    public void turnChange()
+    {
+        StartCoroutine(turnTimer());
+    }
+
+    private IEnumerator turnTimer()
+    {
+        yield return new WaitForSeconds(.1f);
+        Destroy(characterPrefab);
+        ResetCharacterCreater();
     }
 }

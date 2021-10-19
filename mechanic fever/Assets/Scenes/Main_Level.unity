@@ -348,7 +348,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 0
-  baseCharacter: {fileID: 7865893773177294640, guid: b96069bdb44a7bd4ab00acafac0e4b04, type: 3}
+  blueCharacteBase: {fileID: 6264595261078858417, guid: 7339b9751fc48804faacb7206aac95d3, type: 3}
+  redCharacterBase: {fileID: 1578502611578736553, guid: 6f9b2b63d7b53f7469d7a1586425cdf9, type: 3}
   characterPreviewSpawnPoint: {fileID: 1289389100}
   healthSlider: {fileID: 1548343209}
   strengthSlider: {fileID: 1048681765}
@@ -838,6 +839,18 @@ MonoBehaviour:
       - m_Target: {fileID: 963194229}
         m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
         m_MethodName: PlayerDoneSetupFase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 66960804}
+        m_TargetAssemblyTypeName: CharacterCreater, Assembly-CSharp
+        m_MethodName: turnChange
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1617,7 +1630,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 10, z: -10}
+  m_LocalPosition: {x: 0, y: 2.5, z: -2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 66960800}
@@ -2140,8 +2153,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289389100}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 2.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.9, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1657068416}
@@ -2236,8 +2249,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321890100}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 25, y: 0.1, z: 25}
+  m_LocalPosition: {x: 0, y: -0.05, z: 0}
+  m_LocalScale: {x: 10, y: 0.1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
