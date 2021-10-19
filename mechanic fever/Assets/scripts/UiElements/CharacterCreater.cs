@@ -12,6 +12,7 @@ public class CharacterCreater : MonoBehaviour
 
     public GameObject characterPreviewSpawnPoint;
     private GameObject characterPrefab;
+    private characterEquipmentHandler prefabEquipmentHandler;
 
     public Slider healthSlider;
     public Slider strengthSlider;
@@ -73,6 +74,19 @@ public class CharacterCreater : MonoBehaviour
                 break;
             case 3:
                 defenseText.text = $"Defense: {defenseSlider.value}";
+                if (defenseSlider.value >= 8)
+                {
+                    prefabEquipmentHandler.EquipArmorLevel(1);
+                }
+                else if (defenseSlider.value > 3)
+                {
+                    prefabEquipmentHandler.UnEquipArmor();
+                    prefabEquipmentHandler.EquipArmorLevel(0);
+                }
+                else
+                {
+                    prefabEquipmentHandler.UnEquipArmor();
+                }
                 break;
         }
 
@@ -134,6 +148,7 @@ public class CharacterCreater : MonoBehaviour
                 break;
         }
 
+        prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
         SetScreenActive(true);
         currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
         isCreatingCharacter = false;
