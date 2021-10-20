@@ -18,7 +18,7 @@ public class Gamemanager : MonoBehaviour
     private string[] teamTag;
 
     private int currentMoney = 100, maxCost = 100, minCost = 10, price, currentTeam, sliderAverage = 0;
-    private Text moneyText, priceText;
+    private Text moneyText, priceText, spawnBtnText;
 
     // Start is called before the first frame update
     void Start()
@@ -43,24 +43,19 @@ public class Gamemanager : MonoBehaviour
         UpdateMoney();
     }
 
-    //Spawns the unit into the game with the given values.
-    public void SpawnButtonClicked()
-    {
-        GameObject unit = Instantiate(unitToSpawn);
-        unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
-        unit.tag = teamTag[currentTeam];
-        spawnedUnits.Add(unit);
-    }
-
     //Sets thew values of the sliders.
     private void SetValues()
     {
+
+        for (int i = 0; i < sliders.Length; i++)
+        {
+            valueText[i].text = "" + sliders[i].value;
+        }
+
         //Gets the average of all the sliders.
         sliderAverage = (int)sliders[0].value + (int)sliders[1].value + (int)sliders[2].value + (int)sliders[3].value;
 
         sliderAverage /= sliders.Length;
-
-        print(sliderAverage);
     }
 
     private void UpdateMoney()
@@ -79,5 +74,33 @@ public class Gamemanager : MonoBehaviour
 
         priceText = GameObject.Find("PriceText").GetComponent<Text>();
         priceText.text = "Price: $" + price;
+    }
+
+    //Spawns the unit into the game with the given values.
+    public void SpawnButtonClicked()
+    {
+        if (currentMoney >= price)
+        {
+            currentMoney = currentMoney - price;
+            UpdateMoney();
+
+            GameObject unit = Instantiate(unitToSpawn);
+            unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
+            unit.tag = teamTag[currentTeam];
+            spawnedUnits.Add(unit);
+        }
+        else
+        {
+            spawnBtnText = GameObject.Find("SpawnBtnText").GetComponent<Text>();
+            StartCoroutine(ChangeBtnText());
+        }
+
+    }
+
+    private IEnumerator ChangeBtnText()
+    {
+        spawnBtnText.text = "Not enough money!";
+        yield return new WaitForSeconds(3);
+        spawnBtnText.text = "Spawn";
     }
 }
