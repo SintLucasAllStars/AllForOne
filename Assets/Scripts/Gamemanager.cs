@@ -55,11 +55,8 @@ public class Gamemanager : MonoBehaviour
     //Sets thew values of the sliders.
     private void SetValues()
     {
-        for (int i = 0; i < sliders.Length; i++)
-        {
-            valueText[i].text = "" + sliders[i].value;
-            sliderAverage = (int)sliders[i].value;
-        }
+        //Gets the average of all the sliders.
+        sliderAverage = (int)sliders[0].value + (int)sliders[1].value + (int)sliders[2].value + (int)sliders[3].value;
 
         sliderAverage /= sliders.Length;
 
@@ -69,6 +66,12 @@ public class Gamemanager : MonoBehaviour
     private void UpdateMoney()
     {
 
+        price = sliderAverage;
+
+        if (sliderAverage <= 10)
+        {
+            price = 10;
+        }
 
         //Sets all the text and vars like they should;
         moneyText = GameObject.Find("CurrentMoneyText").GetComponent<Text>();
