@@ -6,8 +6,8 @@ using UnityEngine.UI;
 [System.Serializable]
 public class Gamemanager : MonoBehaviour
 {
-    public WeaponClass[] weaponClasses;
-    public Unit[] units;
+    //private WeaponClass[] weaponClasses;
+    //private Unit[] units;
 
     public Text[] valueText;
     public Slider[] sliders;
@@ -17,7 +17,7 @@ public class Gamemanager : MonoBehaviour
 
     private string[] teamTag;
 
-    private int currentMoney = 100, maxCost = 100, minCost = 10, price, currentTeam, sliderAverage = 0;
+    private int currentMoney = 100, minCost = 10, price, currentTeam, sliderAverage = 0;
     private Text moneyText, priceText, spawnBtnText;
 
     // Start is called before the first frame update
@@ -46,7 +46,6 @@ public class Gamemanager : MonoBehaviour
     //Sets thew values of the sliders.
     private void SetValues()
     {
-
         for (int i = 0; i < sliders.Length; i++)
         {
             valueText[i].text = "" + sliders[i].value;
@@ -60,13 +59,15 @@ public class Gamemanager : MonoBehaviour
 
     private void UpdateMoney()
     {
-
         price = sliderAverage;
 
         if (sliderAverage <= 10)
         {
-            price = 10;
+            price = minCost;
         }
+
+        spawnBtnText = GameObject.Find("SpawnBtnText").GetComponent<Text>();
+        ChangeBtnText();
 
         //Sets all the text and vars like they should;
         moneyText = GameObject.Find("CurrentMoneyText").GetComponent<Text>();
@@ -89,18 +90,17 @@ public class Gamemanager : MonoBehaviour
             unit.tag = teamTag[currentTeam];
             spawnedUnits.Add(unit);
         }
-        else
-        {
-            spawnBtnText = GameObject.Find("SpawnBtnText").GetComponent<Text>();
-            StartCoroutine(ChangeBtnText());
-        }
-
     }
 
-    private IEnumerator ChangeBtnText()
+    private void ChangeBtnText()
     {
-        spawnBtnText.text = "Not enough money!";
-        yield return new WaitForSeconds(3);
-        spawnBtnText.text = "Spawn";
+        if (currentMoney >= price)
+        {
+            spawnBtnText.text = "Spawn";
+        }
+        else
+        {
+            spawnBtnText.text = "Not enough money!";
+        }       
     }
 }
