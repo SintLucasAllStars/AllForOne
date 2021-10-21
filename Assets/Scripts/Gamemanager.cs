@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
 public class Gamemanager : MonoBehaviour
 {
     //private WeaponClass[] weaponClasses;
@@ -18,7 +17,7 @@ public class Gamemanager : MonoBehaviour
     private string[] teamTag;
 
     private int currentMoney = 100, minCost = 10, price, currentTeam, sliderAverage = 0;
-    private Text moneyText, priceText, spawnBtnText;
+    private Text moneyText, priceText, spawnBtnText, headerText;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +28,9 @@ public class Gamemanager : MonoBehaviour
         teamTag = new string[2];
         teamTag[0] = "Blue";
         teamTag[1] = "Red";
+
+        headerText = GameObject.Find("HeaderText").GetComponent<Text>();
+        headerText.text = "Unit Selector - " + teamTag[currentTeam];
 
         UpdateMoney();
 
@@ -84,6 +86,8 @@ public class Gamemanager : MonoBehaviour
         {
             currentMoney = currentMoney - price;
             UpdateMoney();
+
+            UIManager.Instance.SwitchUnitSUI();
 
             GameObject unit = Instantiate(unitToSpawn);
             unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
