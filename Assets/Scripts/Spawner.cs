@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour
 {
     private MeshRenderer mr;
     private bool glow, placedUnit;
+    public static bool overlay;
 
     private Transform _transform;
 
@@ -16,7 +17,7 @@ public class Spawner : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (gameObject.tag == "Spawner")
+        if (gameObject.tag == "Spawner" && !overlay)
         {
             glow = true;
             Glowing();         
@@ -25,7 +26,7 @@ public class Spawner : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (gameObject.tag == "Spawner")
+        if (gameObject.tag == "Spawner" && !overlay)
         {
             glow = false;
             Glowing();
@@ -34,14 +35,14 @@ public class Spawner : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!placedUnit)
+        if (!placedUnit && !overlay)
         {
             _transform = gameObject.transform;
             Gamemanager.Instance.Spawn(_transform);
+            overlay = true;
             placedUnit = true;
+            StartCoroutine(ResetSpawner());
         }
-
-        StartCoroutine(ResetSpawner());
     }
 
     private IEnumerator ResetSpawner()
@@ -63,8 +64,5 @@ public class Spawner : MonoBehaviour
                 mr.material.DisableKeyword("_EMISSION");
                 break;
         }
-
     }
-
-
 }

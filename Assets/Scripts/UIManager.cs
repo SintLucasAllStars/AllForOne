@@ -15,17 +15,26 @@ public class UIManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        if (unitSelector[0].activeInHierarchy)
+        {
+            Spawner.overlay = true;
+        }
     }
     public void SwitchUnitSUI()
     {
         if (!unitSelector[0].activeInHierarchy)
         {
+            //turns on the UI.
             unitSelector[0].SetActive(true);
             Gamemanager.Instance.ResetValues();
+            Spawner.overlay = true;
         }
         else if (unitSelector[0].activeInHierarchy)
         {
+            //turns off the UI.
             unitSelector[0].SetActive(false);
+            Spawner.overlay = false;
         }
     }
 }
