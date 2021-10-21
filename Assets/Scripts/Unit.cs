@@ -1,8 +1,9 @@
+using UnityEngine;
+
 [System.Serializable]
-public class Unit
+public class Unit : MonoBehaviour
 {
     public int health, strength, speed, defense;
-    public string team;
 
     public int _health
     {
@@ -23,11 +24,6 @@ public class Unit
     {
         get { return this.defense; }
         set { this.defense = _defense; }
-    }
-    public string _team
-    {
-        get { return this.team; }
-        set { this.team = _team; }
     }
 
     //Constructor
