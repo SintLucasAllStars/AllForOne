@@ -8,6 +8,8 @@ public class Spawner : MonoBehaviour
     private bool glow, placedUnit;
     public static bool overlay;
 
+    private string spawnerTag = "Spawner";
+
     private Transform _transform;
 
     private void Awake()
@@ -17,7 +19,7 @@ public class Spawner : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (gameObject.tag == "Spawner" && !overlay)
+        if (gameObject.tag == spawnerTag && !overlay)
         {
             glow = true;
             Glowing();         
@@ -26,7 +28,7 @@ public class Spawner : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (gameObject.tag == "Spawner" && !overlay)
+        if (gameObject.tag == spawnerTag && !overlay)
         {
             glow = false;
             Glowing();
@@ -35,7 +37,7 @@ public class Spawner : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!placedUnit && !overlay)
+        if (gameObject.tag == spawnerTag && !placedUnit && !overlay)
         {
             _transform = gameObject.transform;
             Gamemanager.Instance.Spawn(_transform);
