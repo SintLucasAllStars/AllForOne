@@ -18,11 +18,12 @@ public class UIManager : MonoBehaviour
     }
     public void SwitchUnitSUI()
     {
-        if (!unitSelector[0])
+        if (!unitSelector[0].activeInHierarchy)
         {
             unitSelector[0].SetActive(true);
+            Gamemanager.Instance.ResetValues();
         }
-        else if (unitSelector[0])
+        else if (unitSelector[0].activeInHierarchy)
         {
             unitSelector[0].SetActive(false);
         }

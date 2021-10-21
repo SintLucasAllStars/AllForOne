@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Gamemanager : MonoBehaviour
 {
+    public static Gamemanager Instance;
     //private WeaponClass[] weaponClasses;
     //private Unit[] units;
 
@@ -18,6 +19,14 @@ public class Gamemanager : MonoBehaviour
 
     private int currentMoney = 100, minCost = 10, price, currentTeam, sliderAverage = 0;
     private Text moneyText, priceText, spawnBtnText, headerText;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -88,11 +97,22 @@ public class Gamemanager : MonoBehaviour
             UpdateMoney();
 
             UIManager.Instance.SwitchUnitSUI();
+        }
+    }
 
-            GameObject unit = Instantiate(unitToSpawn);
-            unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
-            unit.tag = teamTag[currentTeam];
-            spawnedUnits.Add(unit);
+    public void Spawn(Transform transformToSpawn)
+    {
+        GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
+        unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
+        unit.tag = teamTag[currentTeam];
+        spawnedUnits.Add(unit);
+    }
+
+    public void ResetValues()
+    {
+        for (int i = 0; i < sliders.Length; i++)
+        {
+            sliders[i].value = 1;
         }
     }
 
