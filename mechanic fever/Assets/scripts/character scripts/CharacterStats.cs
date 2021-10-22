@@ -45,9 +45,8 @@ public class CharacterStats
         }
         return value;
     }
-
-    public string printStats()
+    public override string ToString()
     {
-        return $"health: {health}, strength: {strength}, speed: {speed}, defense: {defense}";
+        return base.ToString() + $"||health: {health}, strength: {strength}, speed: {speed}, defense: {defense}";
     }
 }

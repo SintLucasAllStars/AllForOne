@@ -126,6 +126,8 @@ public class CharacterCreater : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
 
+        characterPrefab.GetComponent<CharacterController>().setStats(CreateStats());
+
         TurnManager.turnManager.EndTurn();
 
         yield return new WaitForSeconds(.1f);
