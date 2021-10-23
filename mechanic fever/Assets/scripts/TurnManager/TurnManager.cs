@@ -55,6 +55,31 @@ public class TurnManager : MonoBehaviour
         return (int)currentTurn;
     }
 
+    public Turns GetCurrentTurn()
+    {
+        return currentTurn;
+    }
+    public Turns getInversedTurn()
+    {
+        Turns value;
+
+        switch ((int)currentTurn)
+        {
+            case 1:
+                value = Turns.player2;
+                break;
+            case 2:
+                value = Turns.player1;
+                break;
+            default:
+                Debug.LogError($"Returned Defaulted Inversed Turn, (line: 71, {this.ToString()})");
+                value = Turns.player1;
+                break;
+        }
+
+        return value;
+    }
+
     public int getCurrency()
     {
         int value = 0;

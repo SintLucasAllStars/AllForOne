@@ -47,6 +47,7 @@ public class CharacterController : MonoBehaviour
     {
         this.stats = stats;
         print(this.stats.ToString());
+        tag = $"{stats.owner}Owned";
     }
 
     private void Start()
@@ -90,16 +91,23 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     #region control handelers
-    public void startCharacterControl()
+    public void startCharacterControl(CharacterSelecter selector)
     {
-        controllingCurrentCharacter = false;
-        StartCoroutine(controlTimer());
+        controllingCurrentCharacter = true;
+        StartCoroutine(controlTimer(selector));
     }
 
-    private IEnumerator controlTimer()
+    private IEnumerator controlTimer(CharacterSelecter selector)
     {
         yield return new WaitForSeconds(10);
+        ResetCharacter(selector);
+    }
+
+    private void ResetCharacter(CharacterSelecter selector)
+    {
+        StartCoroutine(selector.resetCamera());
         controllingCurrentCharacter = false;
+        animator.SetBool("walking", false);
     }
     #endregion
 }

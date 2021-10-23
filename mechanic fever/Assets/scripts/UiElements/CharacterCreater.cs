@@ -125,7 +125,7 @@ public class CharacterCreater : MonoBehaviour
 
         while (!Input.GetKey(KeyCode.Mouse0))
         {
-            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit, 100, ~(1 << 6));
             characterPrefab.transform.position = rayHit.point;
             yield return new WaitForSeconds(.1f);
         }
