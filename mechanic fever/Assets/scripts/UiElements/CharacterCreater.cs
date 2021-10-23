@@ -50,7 +50,6 @@ public class CharacterCreater : MonoBehaviour
 
     public void Update()
     {
-        //TODO: refactor a more elegent solution
         if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action && !isCreatingCharacter)
         {
             SetScreenActive(false);
@@ -102,11 +101,15 @@ public class CharacterCreater : MonoBehaviour
             SetScreenActive(false);
             StartCoroutine(PlaceCharacter());
         }
+        else
+        {
+            //TODO: create not enough points feedback
+        }
     }
 
     public CharacterStats CreateStats()
     {
-        return new CharacterStats((int)healthSlider.value, (int)strengthSlider.value, (int)speedSlider.value, (int)defenseSlider.value);
+        return new CharacterStats((int)healthSlider.value, (int)strengthSlider.value, (int)speedSlider.value, (int)defenseSlider.value, TurnManager.turnManager.currentTurn);
     }
 
     public void SetScreenActive(bool value)
@@ -118,6 +121,7 @@ public class CharacterCreater : MonoBehaviour
     {
         RaycastHit rayHit;
         characterPrefab.transform.parent = null;
+        characterPrefab.GetComponent<CharacterController>().setStats(CreateStats());
 
         while (!Input.GetKey(KeyCode.Mouse0))
         {
@@ -126,16 +130,16 @@ public class CharacterCreater : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
 
-        characterPrefab.GetComponent<CharacterController>().setStats(CreateStats());
-
-        TurnManager.turnManager.EndTurn();
-
-        yield return new WaitForSeconds(.1f);
-
         if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.setup)
         {
+            TurnManager.turnManager.EndTurn();
+
+            yield return new WaitForSeconds(.1f);
+
             ResetCharacterCreater();
         }
+
+        //TODO: end setup fase banner
     }
 
     public void ResetCharacterCreater()
@@ -153,6 +157,12 @@ public class CharacterCreater : MonoBehaviour
         prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
         SetScreenActive(true);
         currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
+
+        healthSlider.value = 5;
+        strengthSlider.value = 5;
+        speedSlider.value = 5;
+        defenseSlider.value = 5;
+
         isCreatingCharacter = false;
     }
 

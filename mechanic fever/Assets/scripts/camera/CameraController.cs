@@ -21,8 +21,11 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CameraMovement();
-        CameraRotation();
+        if (TurnManager.turnManager.controllingCamera)
+        {
+            CameraMovement();
+            CameraRotation();
+        }
     }
 
     private void CameraMovement()

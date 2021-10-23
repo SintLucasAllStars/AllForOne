@@ -5,7 +5,9 @@ using UnityEngine.Animations;
 
 public class CharacterController : MonoBehaviour
 {
-    private Animator Animator;
+    public bool controllingCurrentCharacter = false;
+
+    private Animator animator;
     private CharacterStats stats;
     #region stats property fields
     private int health
@@ -49,24 +51,55 @@ public class CharacterController : MonoBehaviour
 
     private void Start()
     {
-        Animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (stats != null)
+        if (stats != null && controllingCurrentCharacter)
         {
-            Movement();
+            if (Input.GetKey(KeyCode.Space))
+            {
+                animator.SetTrigger("Attack");
+            }
+            else
+            {
+                Movement();
+            }
         }
+    }
+
+    #region movement
+
+    private void updateMovementAnimation(float hDirection, float vDirection)
+    {
+        animator.SetBool("walking", vDirection != 0 || hDirection != 0);
+        animator.SetFloat("directionH", hDirection);
+        animator.SetFloat("directionV", vDirection);
     }
 
     private void Movement()
     {
-        float hDirection = Input.GetAxis("Horizontal") * Time.deltaTime;
-        float vDirection = Input.GetAxis("Vertical") * Time.deltaTime;
+        float hDirection = Input.GetAxis("Horizontal");
+        float vDirection = Input.GetAxis("Vertical");
 
-        Animator.SetBool("walking", vDirection != 0 || hDirection != 0);
-        transform.Translate(hDirection * speed, 0, vDirection * speed);
+        updateMovementAnimation(hDirection, vDirection);
+        transform.Translate(hDirection * speed * Time.deltaTime, 0, vDirection * speed * Time.deltaTime);
     }
+    #endregion
+
+    #region control handelers
+    public void startCharacterControl()
+    {
+        controllingCurrentCharacter = false;
+        StartCoroutine(controlTimer());
+    }
+
+    private IEnumerator controlTimer()
+    {
+        yield return new WaitForSeconds(10);
+        controllingCurrentCharacter = false;
+    }
+    #endregion
 }

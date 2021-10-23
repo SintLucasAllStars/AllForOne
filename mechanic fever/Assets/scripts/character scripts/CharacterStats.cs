@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterStats
 {
+    public TurnManager.Turns owner;
+
     public int health { private set; get; }
     public int strength { private set; get; }
     public int speed { private set; get; }
@@ -11,12 +13,13 @@ public class CharacterStats
 
     public bool fortified { private set; get; }
 
-    public CharacterStats(int health, int strength, int speed, int defense)
+    public CharacterStats(int health, int strength, int speed, int defense, TurnManager.Turns owner)
     {
         this.health = health;
         this.strength = strength;
         this.speed = speed;
         this.defense = defense;
+        this.owner = owner;
         fortified = false;
     }
 
@@ -47,6 +50,6 @@ public class CharacterStats
     }
     public override string ToString()
     {
-        return base.ToString() + $"||health: {health}, strength: {strength}, speed: {speed}, defense: {defense}";
+        return base.ToString() + $"||health: {health}, strength: {strength}, speed: {speed}, defense: {defense}, owner: {owner}";
     }
 }

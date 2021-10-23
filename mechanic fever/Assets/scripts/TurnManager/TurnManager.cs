@@ -9,6 +9,8 @@ public class TurnManager : MonoBehaviour
     public int player1Currency;
     public int player2Currency;
 
+    public bool controllingCamera = true;
+
     private bool gameOver;
 
     private bool endTurn;
@@ -70,6 +72,31 @@ public class TurnManager : MonoBehaviour
         return value;
     }
 
+    public bool BuyCharacter(int cost)
+    {
+        bool value = false;
+
+        switch ((int)currentTurn)
+        {
+            case 1:
+                if (cost <= player1Currency)
+                {
+                    player1Currency -= cost;
+                    value = true;
+                }
+                break;
+            case 2:
+                if (cost <= player2Currency)
+                {
+                    player2Currency -= cost;
+                    value = true;
+                }
+                break;
+        }
+
+        return value;
+    }
+
     private IEnumerator TurnSystem()
     {
         while (!gameOver)
@@ -100,30 +127,7 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    public bool BuyCharacter(int cost)
-    {
-        bool value = false;
-
-        switch ((int)currentTurn)
-        {
-            case 1:
-                if (cost <= player1Currency)
-                {
-                    player1Currency -= cost;
-                    value = true;
-                }
-                break;
-            case 2:
-                if (cost <= player2Currency)
-                {
-                    player2Currency -= cost;
-                    value = true;
-                }
-                break;
-        }
-
-        return value;
-    }
+    #region turn and fase ending
 
     public void PlayerDoneSetupFase()
     {
@@ -157,4 +161,5 @@ public class TurnManager : MonoBehaviour
     {
         gameOver = true;
     }
+    #endregion
 }
