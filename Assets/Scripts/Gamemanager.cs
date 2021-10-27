@@ -20,6 +20,7 @@ public class Gamemanager : MonoBehaviour
     private int currentMoney = 100, minCost = 10, price, currentTeam, sliderAverage = 0;
     private Text moneyText, priceText, spawnBtnText, headerText;
 
+    //Checksif there already is one instance of the script.
     private void Awake()
     {
         if (Instance == null)
@@ -68,6 +69,8 @@ public class Gamemanager : MonoBehaviour
         sliderAverage /= sliders.Length;
     }
 
+    //Aets the price of the object based on the values of the sliders.
+    //Gets the spawnBtn text.
     private void UpdateMoney()
     {
         price = sliderAverage;
@@ -88,7 +91,9 @@ public class Gamemanager : MonoBehaviour
         priceText.text = "Price: $" + price;
     }
 
-    //Spawns the unit into the game with the given values.
+    //User can click the spawn button.
+    //When the button is pressed the price of the unit wil be subtracted of the current money of the player.
+    //Turns of the UI element so the player can spawn the unit.
     public void SpawnButtonClicked()
     {
         if (currentMoney >= price)
@@ -100,6 +105,10 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
+    //Will handle the spawning of the units.
+    //Spawns with the correct values that has been set by the sliders.
+    //Adds an tag for the current team that is spawning the units.
+    //Adds the unit to an array.
     public void Spawn(Transform transformToSpawn)
     {
         GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
@@ -108,6 +117,7 @@ public class Gamemanager : MonoBehaviour
         spawnedUnits.Add(unit);
     }
 
+    //This will reset the values when an object has been spawned.
     public void ResetValues()
     {
         for (int i = 0; i < sliders.Length; i++)
@@ -116,6 +126,8 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
+    //This will change the text of the spawn button.
+    //Also checks your ballance and the current price in order to change or not.
     private void ChangeBtnText()
     {
         if (currentMoney >= price)
