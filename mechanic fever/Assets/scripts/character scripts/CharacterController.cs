@@ -108,6 +108,8 @@ public class CharacterController : MonoBehaviour
         StartCoroutine(selector.resetCamera());
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
+
+        TurnManager.turnManager.EndTurn();
     }
     #endregion
 }

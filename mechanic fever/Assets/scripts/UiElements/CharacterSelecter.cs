@@ -11,6 +11,8 @@ public class CharacterSelecter : MonoBehaviour
 
     private RaycastHit rayHit;
 
+    public Transform cameraBase;
+
     // Update is called once per frame
     void Update()
     {
@@ -62,5 +64,8 @@ public class CharacterSelecter : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, oldRotation, 0.5f);
             yield return new WaitForSeconds(0.1f);
         }
+
+        transform.parent = cameraBase;
+        TurnManager.turnManager.controllingCamera = true;
     }
 }
