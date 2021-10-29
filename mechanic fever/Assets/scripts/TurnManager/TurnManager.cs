@@ -9,6 +9,11 @@ public class TurnManager : MonoBehaviour
     public int player1Currency;
     public int player2Currency;
 
+    public int powerUpIndex = 0;
+
+    public List<PowerUp> player1Powerup = new List<PowerUp>();
+    public List<PowerUp> player2Powerup = new List<PowerUp>();
+
     public bool controllingCamera = true;
 
     private bool gameOver;
@@ -50,10 +55,7 @@ public class TurnManager : MonoBehaviour
         return currentGameMode;
     }
 
-    public int getTurnIndex()
-    {
-        return (int)currentTurn;
-    }
+    #region currency management
 
     public int getCurrency()
     {
@@ -97,6 +99,39 @@ public class TurnManager : MonoBehaviour
         return value;
     }
 
+    #endregion
+
+    #region turn management
+    public int getTurnIndex()
+    {
+        return (int)currentTurn;
+    }
+
+    public Turns GetCurrentTurn()
+    {
+        return currentTurn;
+    }
+    public Turns getInversedTurn()
+    {
+        Turns value;
+
+        switch ((int)currentTurn)
+        {
+            case 1:
+                value = Turns.player2;
+                break;
+            case 2:
+                value = Turns.player1;
+                break;
+            default:
+                Debug.LogError($"Returned Defaulted Inversed Turn, (line: 127, {this.ToString()})");
+                value = Turns.player1;
+                break;
+        }
+
+        return value;
+    }
+
     private IEnumerator TurnSystem()
     {
         while (!gameOver)
@@ -126,6 +161,7 @@ public class TurnManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
     #region turn and fase ending
 
@@ -160,6 +196,64 @@ public class TurnManager : MonoBehaviour
     public void EndGame()
     {
         gameOver = true;
+    }
+    #endregion
+
+    #region powerUps
+    public List<PowerUp> getPowerUpList()
+    {
+        List<PowerUp> value;
+
+        switch ((int)currentTurn)
+        {
+            case 1:
+                value = player1Powerup;
+                break;
+            case 2:
+                value = player2Powerup;
+                break;
+            default:
+                Debug.LogError($"Returned Defaulted Inversed Turn, (line: 216, {ToString()})");
+                value = player1Powerup;
+                break;
+        }
+
+        return value;
+    }
+
+    public void IncreasePowerupIndex()
+    {
+        int count = getPowerUpList().Count;
+        powerUpIndex++;
+        if (powerUpIndex > count)
+        {
+            powerUpIndex = 0;
+        }
+    }
+
+    public void DecreasePowerupIndex()
+    {
+        int count = getPowerUpList().Count;
+        powerUpIndex--;
+        if (powerUpIndex < 0)
+        {
+            powerUpIndex = count;
+        }
+    }
+
+    public PowerUp GetPowerUp()
+    {
+        return getPowerUpList()[powerUpIndex];
+    }
+
+    public void AddPowerUp(PowerUp powerup)
+    {
+        getPowerUpList().Add(powerup);
+    }
+
+    public void RemovePowerUp(PowerUp powerUp)
+    {
+        getPowerUpList().Remove(powerUp);
     }
     #endregion
 }

@@ -7,6 +7,7 @@ public class CharacterController : MonoBehaviour
 {
     public bool controllingCurrentCharacter = false;
 
+    private PowerUp activePowerUp;
     private Animator animator;
     private CharacterStats stats;
     #region stats property fields
@@ -46,7 +47,7 @@ public class CharacterController : MonoBehaviour
     public void setStats(CharacterStats stats)
     {
         this.stats = stats;
-        print(this.stats.ToString());
+        tag = $"{stats.owner}Owned";
     }
 
     private void Start()
@@ -57,9 +58,14 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            addPowerup();
+        }
+
         if (stats != null && controllingCurrentCharacter)
         {
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Mouse0))
             {
                 animator.SetTrigger("Attack");
             }
@@ -83,23 +89,45 @@ public class CharacterController : MonoBehaviour
     {
         float hDirection = Input.GetAxis("Horizontal");
         float vDirection = Input.GetAxis("Vertical");
+        float movementSpeed;
+
+        if (activePowerUp != null) { movementSpeed = speed + (speed * .5f); }
+        else { movementSpeed = speed; }
 
         updateMovementAnimation(hDirection, vDirection);
-        transform.Translate(hDirection * speed * Time.deltaTime, 0, vDirection * speed * Time.deltaTime);
+        transform.Translate(hDirection * movementSpeed * Time.deltaTime, 0, vDirection * movementSpeed * Time.deltaTime);
     }
     #endregion
 
     #region control handelers
-    public void startCharacterControl()
+    public void startCharacterControl(CharacterSelecter selector)
     {
-        controllingCurrentCharacter = false;
-        StartCoroutine(controlTimer());
+        controllingCurrentCharacter = true;
+        StartCoroutine(controlTimer(selector));
     }
 
-    private IEnumerator controlTimer()
+    private IEnumerator controlTimer(CharacterSelecter selector)
     {
         yield return new WaitForSeconds(10);
+        ResetCharacter(selector);
+    }
+
+    private void ResetCharacter(CharacterSelecter selector)
+    {
+        StartCoroutine(selector.resetCamera());
         controllingCurrentCharacter = false;
+        animator.SetBool("walking", false);
+
+        TurnManager.turnManager.EndTurn();
+    }
+    #endregion
+
+    #region power ups
+    public void addPowerup()
+    {
+        activePowerUp = TurnManager.turnManager.GetPowerUp();
+        TurnManager.turnManager.RemovePowerUp(activePowerUp);
+        activePowerUp.StartPowerUp();
     }
     #endregion
 }
