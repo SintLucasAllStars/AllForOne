@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class CharacterSelecter : MonoBehaviour
 {
@@ -12,24 +13,58 @@ public class CharacterSelecter : MonoBehaviour
     private RaycastHit rayHit;
 
     public Transform cameraBase;
+    public GameObject selectionPanel;
+    private GameObject selectedCharacter;
+
+    private Slider healthSlider;
+    private Slider strengthSlider;
+    private Slider speedSlider;
+    private Slider defenseSlider;
+    private Text healthText;
+    private Text strengthText;
+    private Text speedText;
+    private Text defenseText;
+
+    private void Start()
+    {
+        healthSlider = selectionPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+        strengthSlider = selectionPanel.transform.GetChild(0).GetChild(1).GetComponent<Slider>();
+        speedSlider = selectionPanel.transform.GetChild(0).GetChild(2).GetComponent<Slider>();
+        defenseSlider = selectionPanel.transform.GetChild(0).GetChild(3).GetComponent<Slider>();
+        healthText = healthSlider.transform.GetChild(0).GetComponent<Text>();
+        strengthText = strengthSlider.transform.GetChild(0).GetComponent<Text>();
+        speedText = speedSlider.transform.GetChild(0).GetComponent<Text>();
+        defenseText = defenseSlider.transform.GetChild(0).GetComponent<Text>();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0) && TurnManager.turnManager.controllingCamera)
             {
                 Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
 
                 if (rayHit.collider.CompareTag($"{TurnManager.turnManager.GetCurrentTurn()}Owned"))
                 {
-                    StartCoroutine(PositionCamera(rayHit.collider.gameObject));
+                    selectedCharacter = rayHit.collider.gameObject;
+                    openUiWindow();
+                }
+                else if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    closeUiWindow();
                 }
             }
         }
     }
 
+    private void selectCharacter(GameObject character)
+    {
+        character.GetComponent<CharacterController>().startCharacterControl(this);
+    }
+
+    #region cameraMovement
     private IEnumerator PositionCamera(GameObject character)
     {
         TurnManager.turnManager.controllingCamera = false;
@@ -49,11 +84,6 @@ public class CharacterSelecter : MonoBehaviour
         selectCharacter(character);
     }
 
-    private void selectCharacter(GameObject character)
-    {
-        character.GetComponent<CharacterController>().startCharacterControl(this);
-    }
-
     public IEnumerator resetCamera()
     {
         transform.parent = null;
@@ -68,4 +98,34 @@ public class CharacterSelecter : MonoBehaviour
         transform.parent = cameraBase;
         TurnManager.turnManager.controllingCamera = true;
     }
+    #endregion
+
+    #region ui Elements
+
+    public void TakeControl()
+    {
+        closeUiWindow();
+        StartCoroutine(PositionCamera(selectedCharacter));
+    }
+
+    private void openUiWindow()
+    {
+        healthSlider.value = selectedCharacter.GetComponent<CharacterController>().health;
+        strengthSlider.value = selectedCharacter.GetComponent<CharacterController>().strength;
+        speedSlider.value = selectedCharacter.GetComponent<CharacterController>().speed;
+        defenseSlider.value = selectedCharacter.GetComponent<CharacterController>().defense;
+        healthText.text = $"Health: {healthSlider.value}";
+        strengthText.text = $"strength: {strengthSlider.value}";
+        speedText.text = $"Speed: {speedSlider.value}";
+        defenseText.text = $"Defense: {defenseSlider.value}";
+
+        selectionPanel.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(selectedCharacter.transform.position) + new Vector3(100, 100, 0);
+        selectionPanel.SetActive(true);
+    }
+
+    private void closeUiWindow()
+    {
+        selectionPanel.SetActive(false);
+    }
+    #endregion
 }

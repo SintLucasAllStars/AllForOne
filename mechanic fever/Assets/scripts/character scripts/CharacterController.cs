@@ -11,7 +11,7 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private CharacterStats stats;
     #region stats property fields
-    private int health
+    public int health
     {
         get
         {
@@ -19,7 +19,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private int strength
+    public int strength
     {
         get
         {
@@ -27,7 +27,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private int speed
+    public int speed
     {
         get
         {
@@ -35,7 +35,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private int defense
+    public int defense
     {
         get
         {
@@ -80,6 +80,7 @@ public class CharacterController : MonoBehaviour
 
     private void updateMovementAnimation(float hDirection, float vDirection)
     {
+        animator.SetFloat("movementSpeed", ((activePowerUp != null && activePowerUp.currentPowerUp == PowerUp.powerUpTypes.adrenaline) ? speed + (speed * .5f) : speed) / 5);
         animator.SetBool("walking", vDirection != 0 || hDirection != 0);
         animator.SetFloat("directionH", hDirection);
         animator.SetFloat("directionV", vDirection);
@@ -128,6 +129,18 @@ public class CharacterController : MonoBehaviour
         activePowerUp = TurnManager.turnManager.GetPowerUp();
         TurnManager.turnManager.RemovePowerUp(activePowerUp);
         activePowerUp.StartPowerUp();
+    }
+    #endregion
+
+    #region death and hit mechanic's
+    public void TakeDamage(int damageValue)
+    {
+        if (stats.TakeDamage(damageValue -= defense))
+        {
+            Destroy(gameObject, 15);
+        }
+        animator.SetFloat("health", health);
+        animator.SetTrigger("takeDamage");
     }
     #endregion
 }

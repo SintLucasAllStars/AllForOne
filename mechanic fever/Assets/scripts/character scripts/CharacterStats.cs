@@ -26,10 +26,7 @@ public class CharacterStats
     public int getDefense()
     {
         int value = 0;
-        if (fortified)
-        {
-            value = defense;
-        }
+        if (fortified) {value = defense;}
         return value;
     }
 
