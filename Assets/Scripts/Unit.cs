@@ -1,8 +1,9 @@
+using UnityEngine;
+
 [System.Serializable]
-public class Unit
+public class Unit : MonoBehaviour
 {
     public int health, strength, speed, defense;
-    public string team;
 
     public int _health
     {
@@ -24,11 +25,6 @@ public class Unit
         get { return this.defense; }
         set { this.defense = _defense; }
     }
-    public string _team
-    {
-        get { return this.team; }
-        set { this.team = _team; }
-    }
 
     //Constructor
     public Unit(int health, int strength, int speed, int defense)
@@ -39,6 +35,7 @@ public class Unit
         this.defense = defense;
     }
 
+    //Spawns the object with the given values (values from Gamemanager script).
     public void SpawnWithValues(int health, int strength, int speed, int defense)
     {
         this.health = health;
