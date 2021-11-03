@@ -220,7 +220,7 @@ Transform:
   - {fileID: 638336990}
   - {fileID: 282618704}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &78826486
 GameObject:
@@ -313,7 +313,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671841911}
-        m_TargetAssemblyTypeName: Gamemanager, Assembly-CSharp
+        m_TargetAssemblyTypeName: UnitConfig, Assembly-CSharp
         m_MethodName: SliderChanged
         m_Mode: 1
         m_Arguments:
@@ -494,7 +494,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671841911}
-        m_TargetAssemblyTypeName: Gamemanager, Assembly-CSharp
+        m_TargetAssemblyTypeName: UnitConfig, Assembly-CSharp
         m_MethodName: SliderChanged
         m_Mode: 1
         m_Arguments:
@@ -606,7 +606,7 @@ RectTransform:
   - {fileID: 1685509875}
   - {fileID: 540608464}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -975,7 +975,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &403902757
 GameObject:
@@ -1527,7 +1527,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671841911}
-        m_TargetAssemblyTypeName: Gamemanager, Assembly-CSharp
+        m_TargetAssemblyTypeName: UnitConfig, Assembly-CSharp
         m_MethodName: SpawnButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -1971,7 +1971,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &786160841
 GameObject:
@@ -2465,7 +2465,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1046784712
 GameObject:
@@ -2633,7 +2633,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671841911}
-        m_TargetAssemblyTypeName: Gamemanager, Assembly-CSharp
+        m_TargetAssemblyTypeName: UnitConfig, Assembly-CSharp
         m_MethodName: SliderChanged
         m_Mode: 1
         m_Arguments:
@@ -3186,7 +3186,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671841911}
-        m_TargetAssemblyTypeName: Gamemanager, Assembly-CSharp
+        m_TargetAssemblyTypeName: UnitConfig, Assembly-CSharp
         m_MethodName: SliderChanged
         m_Mode: 1
         m_Arguments:
@@ -3197,6 +3197,49 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &1657145675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1657145678}
+  - component: {fileID: 1657145676}
+  m_Layer: 0
+  m_Name: ====  Gamemanager ====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1657145676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657145675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 699151253a1edc141ac2ab97e8317590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1657145678
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657145675}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1665416340
 GameObject:
   m_ObjectHideFlags: 0
@@ -3283,7 +3326,7 @@ GameObject:
   - component: {fileID: 1671841912}
   - component: {fileID: 1671841911}
   m_Layer: 0
-  m_Name: ==== GameManager ====
+  m_Name: === UnitConfigurator ===
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3298,19 +3341,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1671841910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 699151253a1edc141ac2ab97e8317590, type: 3}
+  m_Script: {fileID: 11500000, guid: f5a5c9420dc52d546aae38051747867a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   valueText:
-  - {fileID: 104178871}
-  - {fileID: 456950682}
-  - {fileID: 1247009441}
-  - {fileID: 2106255668}
+  - {fileID: 786160843}
+  - {fileID: 403902759}
+  - {fileID: 589000043}
+  - {fileID: 490748507}
   sliders:
   - {fileID: 1443088985}
   - {fileID: 1095373157}
   - {fileID: 151177474}
   - {fileID: 78826488}
+  teamTag: 
   unitToSpawn: {fileID: 1086976464810001765, guid: ffc771321c093bc409066ed05b64db84, type: 3}
 --- !u!4 &1671841912
 Transform:
@@ -3324,7 +3368,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1685509874
 GameObject:
@@ -3470,7 +3514,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1849286806
 MonoBehaviour:

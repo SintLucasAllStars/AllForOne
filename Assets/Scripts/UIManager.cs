@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
         {
             //turns on the UI.
             unitSelector[0].SetActive(true);
-            Gamemanager.Instance.ResetValues();
+            UnitConfig.Instance.ResetValues();
             Spawner.overlay = true;
         }
         else if (unitSelector[0].activeInHierarchy)
