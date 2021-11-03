@@ -9,6 +9,7 @@ public class Gamemanager : MonoBehaviour
 
     public string[] team;
     public int teamSelected = 0;
+    public int[] currentMoney;
 
     private void Awake()
     {
@@ -21,6 +22,10 @@ public class Gamemanager : MonoBehaviour
         team = new string[2];
         team[0] = "Blue";
         team[1] = "Red";
+
+        currentMoney = new int[2];
+        currentMoney[0] = 100;
+        currentMoney[1] = 100;
     }
 
     //Switching teams and assings them in other script that use it.
