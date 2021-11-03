@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player
+public class Unit
 {
     int health;
     int strength;
     int speed;
     int defense;
 
-    public Player(int health, int strength, int speed, int defense)
+    public Unit(int health, int strength, int speed, int defense)
     {
         this.health = health;
         this.strength = strength;
