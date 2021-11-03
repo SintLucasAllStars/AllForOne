@@ -10,7 +10,6 @@ public class UnitConfig : MonoBehaviour
     public Text[] valueText;
     public Slider[] sliders;
 
-    //private List<GameObject> spawnedUnits;
     public GameObject unitToSpawn;
 
     private int currentMoney, minCost = 10, price;
@@ -29,8 +28,6 @@ public class UnitConfig : MonoBehaviour
 
     private void Start()
     {
-        //spawnedUnits = new List<GameObject>();
-
         //Sets the default value for the text.
         UpdateConfig();
         SetValues();

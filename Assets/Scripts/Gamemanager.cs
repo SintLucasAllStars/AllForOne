@@ -48,7 +48,6 @@ public class Gamemanager : MonoBehaviour
     //Will handle the spawning of the units.
     //Spawns with the correct values that has been set by the sliders.
     //Adds an tag for the current team that is spawning the units.
-    //Adds the unit to an array.
     public void Spawn(Transform transformToSpawn)
     {
         GameObject unitToSpawn = UnitConfig.Instance.unitToSpawn;
@@ -57,6 +56,5 @@ public class Gamemanager : MonoBehaviour
         GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
         unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
         unit.tag = team[teamSelected];
-        //spawnedUnits.Add(unit);
     }
 }
