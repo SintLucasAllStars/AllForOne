@@ -14,7 +14,7 @@ public class CharacterSelecter : MonoBehaviour
 
     public Transform cameraBase;
     public GameObject selectionPanel;
-    private GameObject selectedCharacter;
+    public GameObject selectedCharacter;
 
     private Slider healthSlider;
     private Slider strengthSlider;
@@ -59,29 +59,29 @@ public class CharacterSelecter : MonoBehaviour
         }
     }
 
-    private void selectCharacter(GameObject character)
+    private void selectCharacter()
     {
-        character.GetComponent<CharacterController>().startCharacterControl(this);
+        selectedCharacter.GetComponent<CharacterController>().startCharacterControl();
     }
 
     #region cameraMovement
-    private IEnumerator PositionCamera(GameObject character)
+    private IEnumerator PositionCamera()
     {
         TurnManager.turnManager.controllingCamera = false;
 
         oldRotation = transform.rotation;
         oldPosition = transform.position;
 
-        while (transform.position != character.transform.position + chameraOffset && transform.rotation != character.transform.rotation)
+        while (transform.position != selectedCharacter.transform.position + chameraOffset && transform.rotation != selectedCharacter.transform.rotation)
         {
-            transform.position = Vector3.Lerp(transform.position, character.transform.position + chameraOffset, 0.5f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, character.transform.rotation, 0.5f);
+            transform.position = Vector3.Lerp(transform.position, selectedCharacter.transform.position + chameraOffset, 0.5f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, selectedCharacter.transform.rotation, 0.5f);
             yield return new WaitForSeconds(0.1f);
         }
 
-        transform.parent = character.transform;
+        transform.parent = selectedCharacter.transform;
 
-        selectCharacter(character);
+        selectCharacter();
     }
 
     public IEnumerator resetCamera()
@@ -105,7 +105,7 @@ public class CharacterSelecter : MonoBehaviour
     public void TakeControl()
     {
         closeUiWindow();
-        StartCoroutine(PositionCamera(selectedCharacter));
+        StartCoroutine(PositionCamera());
     }
 
     private void openUiWindow()

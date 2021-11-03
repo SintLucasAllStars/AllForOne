@@ -45,6 +45,7 @@ public class CharacterStats
         }
         return value;
     }
+
     public override string ToString()
     {
         return base.ToString() + $"||health: {health}, strength: {strength}, speed: {speed}, defense: {defense}, owner: {owner}";

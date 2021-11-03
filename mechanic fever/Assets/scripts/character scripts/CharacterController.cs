@@ -7,7 +7,7 @@ public class CharacterController : MonoBehaviour
 {
     public bool controllingCurrentCharacter = false;
 
-    private PowerUp activePowerUp;
+    public PowerUp[] activePowerUp;
     private Animator animator;
     private CharacterStats stats;
     #region stats property fields
@@ -27,11 +27,13 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public int Speed
+    public float Speed
     {
         get
         {
-            return stats.speed;
+            float value = stats.speed;
+            if(activePowerUp[0] != null) {value *= 1.5f;}
+            return value;
         }
     }
 
@@ -44,6 +46,9 @@ public class CharacterController : MonoBehaviour
     }
     #endregion
 
+    public List<PowerUp> powerups = new List<PowerUp>();
+    private int powerUpIndex = 0;
+
     public void setStats(CharacterStats stats)
     {
         this.stats = stats;
@@ -53,19 +58,21 @@ public class CharacterController : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+
+        activePowerUp = new PowerUp[3];
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            addPowerup();
-        }
-
         if (stats != null && controllingCurrentCharacter)
         {
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && powerups.Count > 0 && powerups[powerUpIndex] != null)
+            {
+                activatePowerup();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 animator.SetTrigger("Attack");
             }
@@ -80,7 +87,7 @@ public class CharacterController : MonoBehaviour
 
     private void updateMovementAnimation(float hDirection, float vDirection)
     {
-        animator.SetFloat("movementSpeed", ((activePowerUp != null && activePowerUp.currentPowerUp == PowerUp.powerUpTypes.adrenaline) ? Speed + (Speed * .5f) : Speed) / 5);
+        animator.SetFloat("movementSpeed", (float)Speed / 5);
         animator.SetBool("walking", vDirection != 0 || hDirection != 0);
         animator.SetFloat("directionH", hDirection);
         animator.SetFloat("directionV", vDirection);
@@ -90,45 +97,63 @@ public class CharacterController : MonoBehaviour
     {
         float hDirection = Input.GetAxis("Horizontal");
         float vDirection = Input.GetAxis("Vertical");
-        float movementSpeed;
-
-        if (activePowerUp != null) { movementSpeed = Speed + (Speed * .5f); }
-        else { movementSpeed = Speed; }
 
         updateMovementAnimation(hDirection, vDirection);
-        transform.Translate(hDirection * movementSpeed * Time.deltaTime, 0, vDirection * movementSpeed * Time.deltaTime);
+        transform.Translate(hDirection * Speed * Time.deltaTime, 0, vDirection * Speed * Time.deltaTime);
     }
     #endregion
 
     #region control handelers
-    public void startCharacterControl(CharacterSelecter selector)
+    public void startCharacterControl()
     {
         controllingCurrentCharacter = true;
-        StartCoroutine(controlTimer(selector));
+        TurnManager.turnManager.startTimer();
     }
 
-    private IEnumerator controlTimer(CharacterSelecter selector)
+    public void resetCharacter()
     {
-        yield return new WaitForSeconds(10);
-        ResetCharacter(selector);
-    }
-
-    private void ResetCharacter(CharacterSelecter selector)
-    {
-        StartCoroutine(selector.resetCamera());
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
-
-        TurnManager.turnManager.EndTurn();
     }
     #endregion
 
     #region power ups
-    public void addPowerup()
+    public void activatePowerup()
     {
-        activePowerUp = TurnManager.turnManager.GetPowerUp();
-        TurnManager.turnManager.RemovePowerUp(activePowerUp);
-        activePowerUp.StartPowerUp();
+        int activePowerTypeIndex = powerups[powerUpIndex].powerUpType;
+        activePowerUp[activePowerTypeIndex] = powerups[powerUpIndex];
+        removePowerUp(powerUpIndex);
+        activePowerUp[activePowerTypeIndex].StartPowerUp();
+    }
+
+    public void increasePowerupIndex()
+    {
+        int count = powerups.Count;
+        powerUpIndex++;
+        if (powerUpIndex > count)
+        {
+            powerUpIndex = 0;
+        }
+    }
+
+    public void decreasePowerupIndex()
+    {
+        int count = powerups.Count;
+        powerUpIndex--;
+        if (powerUpIndex < 0)
+        {
+            powerUpIndex = count;
+        }
+    }
+
+    public void addPowerUp(PowerUp powerup)
+    {
+        powerups.Add(powerup);
+    }
+
+    public void removePowerUp(int index)
+    {
+        powerups.RemoveAt(index);
     }
     #endregion
 

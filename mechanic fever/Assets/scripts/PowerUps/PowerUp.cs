@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
-    public enum powerUpTypes
-    {
-        adrenaline = 0,
-        rage = 1,
-        timeStop = 2
-    }
 
-    public powerUpTypes currentPowerUp;
+    public int powerUpType;
     private float duration;
-    private CharacterStats bonusStats;
 
-    public void StartPowerUp()
+    public void Awake()
     {
-        switch ((int)currentPowerUp)
+        switch (powerUpType)
         {
             case 0:
                 duration = 10;
@@ -29,15 +22,16 @@ public class PowerUp : MonoBehaviour
                 duration = 3;
                 break;
         }
+    }
 
+    public void StartPowerUp()
+    {
         StartCoroutine(PowerupTimer());
     }
 
     private IEnumerator PowerupTimer()
     {
-        print(currentPowerUp);
         yield return new WaitForSeconds(duration);
         Destroy(this);
-        print("end powerUp");
     }
 }

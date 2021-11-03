@@ -130,6 +130,9 @@ public class CharacterCreater : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
 
+        characterPrefab.GetComponent<CapsuleCollider>().enabled = true;
+        characterPrefab.GetComponent<Rigidbody>().useGravity = true;
+
         if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.setup)
         {
             TurnManager.turnManager.EndTurn();
