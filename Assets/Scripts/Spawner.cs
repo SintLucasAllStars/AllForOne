@@ -55,6 +55,7 @@ public class Spawner : MonoBehaviour
     //If player spawned an unit, the Unit selector UI will turn-on.
     private IEnumerator ResetSpawner()
     {
+        Gamemanager.Instance.TeamManager();
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.SwitchUnitSUI();
         placedUnit = false;

@@ -7,11 +7,36 @@ public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager Instance;
 
+    public string[] team;
+    public int teamSelected = 0;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+        }
+
+        //Creates the team array and add 2 values in it.
+        team = new string[2];
+        team[0] = "Blue";
+        team[1] = "Red";
+    }
+
+    //Switching teams and assings them in other script that use it.
+    public void TeamManager()
+    {
+        switch (teamSelected)
+        {
+            case 0:
+                teamSelected = 1;
+                break;
+            case 1:
+                teamSelected = 0;
+                break;
+            default:
+                Debug.LogError("Team cannot be assinged");
+                break;
         }
     }
 
@@ -23,11 +48,10 @@ public class Gamemanager : MonoBehaviour
     {
         GameObject unitToSpawn = UnitConfig.Instance.unitToSpawn;
         Slider[] sliders = UnitConfig.Instance.sliders;
-        string teamTag = UnitConfig.Instance.teamTag;
 
         GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
         unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
-        unit.tag = teamTag;
+        unit.tag = team[teamSelected];
         //spawnedUnits.Add(unit);
     }
 }

@@ -10,8 +10,6 @@ public class UnitConfig : MonoBehaviour
     public Text[] valueText;
     public Slider[] sliders;
 
-    public string teamTag;
-
     //private List<GameObject> spawnedUnits;
     public GameObject unitToSpawn;
 
@@ -31,9 +29,6 @@ public class UnitConfig : MonoBehaviour
     {
         //spawnedUnits = new List<GameObject>();
 
-        headerText = GameObject.Find("HeaderText").GetComponent<Text>();
-        headerText.text = "Unit Selector - " + teamTag;
-
         UpdatePrice();
         //Sets the default value for the text.
         SetValues();
@@ -49,6 +44,13 @@ public class UnitConfig : MonoBehaviour
     //Sets thew values of the sliders.
     private void SetValues()
     {
+        //Sets the team text.
+        var currentTeam = Gamemanager.Instance.team[Gamemanager.Instance.teamSelected];
+
+        headerText = GameObject.Find("HeaderText").GetComponent<Text>();
+        headerText.text = "Unit Selector - " + currentTeam;
+
+        //Sets all the values of the sliders.
         for (int i = 0; i < sliders.Length; i++)
         {
             valueText[i].text = sliders[i].value.ToString();
