@@ -9,6 +9,8 @@ public class CameraController : MonoBehaviour
     public float rotationPerPress;
     public float rotationSpeed;
 
+    public Vector2 boundries;
+
     private Transform mainCamera;
     private Quaternion targetRotation;
 
@@ -33,8 +35,8 @@ public class CameraController : MonoBehaviour
         float hDirection = Input.GetAxis("Horizontal");
         float vDirection = Input.GetAxis("Vertical");
 
-
         transform.position += (hDirection * speed * Time.deltaTime) * transform.right + transform.forward * (vDirection * speed * Time.deltaTime);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -boundries.x, boundries.x), 0, Mathf.Clamp(transform.position.z, -boundries.y, boundries.y));
     }
 
     private void CameraRotation()

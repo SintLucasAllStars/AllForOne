@@ -11,7 +11,7 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private CharacterStats stats;
     #region stats property fields
-    public int health
+    public int Health
     {
         get
         {
@@ -19,7 +19,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public int strength
+    public int Strength
     {
         get
         {
@@ -27,7 +27,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public int speed
+    public int Speed
     {
         get
         {
@@ -35,7 +35,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public int defense
+    public int Defense
     {
         get
         {
@@ -80,7 +80,7 @@ public class CharacterController : MonoBehaviour
 
     private void updateMovementAnimation(float hDirection, float vDirection)
     {
-        animator.SetFloat("movementSpeed", ((activePowerUp != null && activePowerUp.currentPowerUp == PowerUp.powerUpTypes.adrenaline) ? speed + (speed * .5f) : speed) / 5);
+        animator.SetFloat("movementSpeed", ((activePowerUp != null && activePowerUp.currentPowerUp == PowerUp.powerUpTypes.adrenaline) ? Speed + (Speed * .5f) : Speed) / 5);
         animator.SetBool("walking", vDirection != 0 || hDirection != 0);
         animator.SetFloat("directionH", hDirection);
         animator.SetFloat("directionV", vDirection);
@@ -92,8 +92,8 @@ public class CharacterController : MonoBehaviour
         float vDirection = Input.GetAxis("Vertical");
         float movementSpeed;
 
-        if (activePowerUp != null) { movementSpeed = speed + (speed * .5f); }
-        else { movementSpeed = speed; }
+        if (activePowerUp != null) { movementSpeed = Speed + (Speed * .5f); }
+        else { movementSpeed = Speed; }
 
         updateMovementAnimation(hDirection, vDirection);
         transform.Translate(hDirection * movementSpeed * Time.deltaTime, 0, vDirection * movementSpeed * Time.deltaTime);
@@ -135,11 +135,11 @@ public class CharacterController : MonoBehaviour
     #region death and hit mechanic's
     public void TakeDamage(int damageValue)
     {
-        if (stats.TakeDamage(damageValue -= defense))
+        if (stats.TakeDamage(damageValue -= Defense))
         {
             Destroy(gameObject, 15);
         }
-        animator.SetFloat("health", health);
+        animator.SetFloat("health", Health);
         animator.SetTrigger("takeDamage");
     }
     #endregion

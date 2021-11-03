@@ -110,10 +110,10 @@ public class CharacterSelecter : MonoBehaviour
 
     private void openUiWindow()
     {
-        healthSlider.value = selectedCharacter.GetComponent<CharacterController>().health;
-        strengthSlider.value = selectedCharacter.GetComponent<CharacterController>().strength;
-        speedSlider.value = selectedCharacter.GetComponent<CharacterController>().speed;
-        defenseSlider.value = selectedCharacter.GetComponent<CharacterController>().defense;
+        healthSlider.value = selectedCharacter.GetComponent<CharacterController>().Health;
+        strengthSlider.value = selectedCharacter.GetComponent<CharacterController>().Strength;
+        speedSlider.value = selectedCharacter.GetComponent<CharacterController>().Speed;
+        defenseSlider.value = selectedCharacter.GetComponent<CharacterController>().Defense;
         healthText.text = $"Health: {healthSlider.value}";
         strengthText.text = $"strength: {strengthSlider.value}";
         speedText.text = $"Speed: {speedSlider.value}";
