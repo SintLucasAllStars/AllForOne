@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Player
 {
-    float health;
-    float strength;
-    float speed;
-    float defense;
+    int health;
+    int strength;
+    int speed;
+    int defense;
 
-    public Player(float health, float strength, float speed, float defense)
+    public Player(int health, int strength, int speed, int defense)
     {
         this.health = health;
         this.strength = strength;
@@ -17,42 +17,42 @@ public class Player
         this.defense = defense;
     }
 
-    public void SetHealth(float health)
+    public void SetHealth(int health)
     {
         this.health = health;
     }
 
-    public float GetHealth()
+    public int GetHealth()
     {
         return this.health;
     }
 
-    public void SetStrength(float strength)
+    public void SetStrength(int strength)
     {
         this.strength = strength;
     }
 
-    public float GetStrength()
+    public int GetStrength()
     {
         return this.strength;
     }
 
-    public void SetSpeed(float speed)
+    public void SetSpeed(int speed)
     {
         this.speed = speed;
     }
 
-    public float GetSpeed()
+    public int GetSpeed()
     {
         return this.speed;
     }
 
-    public void SetDefense(float defense)
+    public void SetDefense(int defense)
     {
         this.defense = defense;
     }
 
-    public float GetDefense()
+    public int GetDefense()
     {
         return this.defense;
     }

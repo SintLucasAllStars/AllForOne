@@ -8,11 +8,11 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
 
     [Header("Customisable Player Stats")]
-    public float maxHealth;
+    public int maxHealth;
     [SerializeField] float currentHealth;
-    public float strength;
-    public float moveSpeed;
-    public float defense;
+    public int strength;
+    public int moveSpeed;
+    public int defense;
 
     [Space]
     [Header("Non-Customisable Stats")]
