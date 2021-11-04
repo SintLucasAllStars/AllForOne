@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
-
     public int powerUpType;
     private float duration;
 
-    public void Awake()
+    public void StartPowerUp()
     {
         switch (powerUpType)
         {
@@ -22,16 +21,21 @@ public class PowerUp : MonoBehaviour
                 duration = 3;
                 break;
         }
-    }
 
-    public void StartPowerUp()
-    {
+        if (powerUpType == 2) { TurnManager.turnManager.turnTimerPaused = true; }
+
         StartCoroutine(PowerupTimer());
     }
 
     private IEnumerator PowerupTimer()
     {
         yield return new WaitForSeconds(duration);
-        Destroy(this);
+        if (powerUpType == 2) { TurnManager.turnManager.turnTimerPaused = false; }
+        Destroy(this, 0.5f);
+    }
+
+    public void CancelPowerUp()
+    {
+        StopAllCoroutines();
     }
 }

@@ -19,11 +19,13 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public int Strength
+    public float Strength
     {
         get
         {
-            return stats.strength;
+            float value = stats.strength;
+            if (activePowerUp[0] != null) { value *= 1.1f; }
+            return value;
         }
     }
 
@@ -121,8 +123,13 @@ public class CharacterController : MonoBehaviour
     public void activatePowerup()
     {
         int activePowerTypeIndex = powerups[powerUpIndex].powerUpType;
+
+        if (activePowerUp[2] != null && activePowerTypeIndex == 2) { activePowerUp[2].CancelPowerUp(); }
+
         activePowerUp[activePowerTypeIndex] = powerups[powerUpIndex];
+
         removePowerUp(powerUpIndex);
+
         activePowerUp[activePowerTypeIndex].StartPowerUp();
     }
 
