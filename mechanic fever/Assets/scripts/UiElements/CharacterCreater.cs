@@ -31,6 +31,13 @@ public class CharacterCreater : MonoBehaviour
 
     private bool isCreatingCharacter;
 
+    public float Map(float value, float valueMin, float valueMax, float resultMin, float resultMax)
+    {
+        if (resultMin == resultMax) return resultMin;
+        if (valueMin == valueMax) return resultMax;
+        return resultMin + (value - valueMin) * (resultMax - resultMin) / (valueMax - valueMin);
+    }
+
     private void Start()
     {
         panel = transform.GetChild(0).gameObject;
@@ -42,8 +49,7 @@ public class CharacterCreater : MonoBehaviour
         speedText = speedSlider.transform.GetChild(0).GetComponent<Text>();
         defenseText = defenseSlider.transform.GetChild(0).GetComponent<Text>();
 
-        cost = (int)((healthSlider.value * 3) + (strengthSlider.value * 2) + (speedSlider.value * 3) + (defenseSlider.value * 2));
-        costText.text = $"cost: {cost}";
+        CalculatePrice();
 
         ResetCharacterCreater();
         equipmentManagment();
@@ -78,7 +84,17 @@ public class CharacterCreater : MonoBehaviour
                 break;
         }
 
-        cost = (int)((healthSlider.value * 3) + (strengthSlider.value * 2) + (speedSlider.value * 3) + (defenseSlider.value * 2));
+        CalculatePrice();
+    }
+
+    private void CalculatePrice()
+    {
+        float healthValue = Map(healthSlider.value, 1, 100, 3, 30);
+        float strenghtValue = Map(strengthSlider.value, 1, 100, 2, 20);
+        float speedValue = Map(speedSlider.value, 1, 100, 3, 30);
+        float defenseValue = Map(defenseSlider.value, 1, 100, 2, 20);
+
+        cost = (int)(healthValue + strenghtValue + speedValue + defenseValue);
         costText.text = $"cost: {cost}";
     }
 
@@ -150,10 +166,10 @@ public class CharacterCreater : MonoBehaviour
         SetScreenActive(true);
         currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
 
-        healthSlider.value = Random.Range(1, 11);
-        strengthSlider.value = Random.Range(1, 11);
-        speedSlider.value = Random.Range(1, 11);
-        defenseSlider.value = Random.Range(1, 11);
+        healthSlider.value = Random.Range(1, 101);
+        strengthSlider.value = Random.Range(1, 101);
+        speedSlider.value = Random.Range(1, 101);
+        defenseSlider.value = Random.Range(1, 101);
 
         isCreatingCharacter = false;
     }
