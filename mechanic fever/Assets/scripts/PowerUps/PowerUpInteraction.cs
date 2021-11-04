@@ -33,7 +33,7 @@ public class PowerUpInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag($"{TurnManager.turnManager.GetCurrentTurn()}Owned"))
+        if (other.CompareTag($"player{TurnManager.turnManager.turn}Owned"))
         {
             PowerUp powerInstance = other.gameObject.AddComponent<PowerUp>();
             powerInstance.powerUpType = (int)currentPowerUp;

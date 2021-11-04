@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterStats
 {
-    public TurnManager.Turns owner;
+    public string owner;
 
     public float health { private set; get; }
     public float strength { private set; get; }
@@ -13,13 +13,13 @@ public class CharacterStats
 
     public bool fortified { private set; get; }
 
-    public CharacterStats(float health, float strength, float speed, float defense, TurnManager.Turns owner)
+    public CharacterStats(float health, float strength, float speed, float defense, int ownerIndex)
     {
         this.health = health;
         this.strength = strength;
         this.speed = speed;
         this.defense = defense;
-        this.owner = owner;
+        owner = $"player{ownerIndex}";
         fortified = false;
     }
 
@@ -35,7 +35,7 @@ public class CharacterStats
         fortified = value;
     }
 
-    public bool TakeDamage(float damageValue)
+    public bool TakeDamage(float  damageValue)
     {
         bool value = false;
         health -= damageValue;

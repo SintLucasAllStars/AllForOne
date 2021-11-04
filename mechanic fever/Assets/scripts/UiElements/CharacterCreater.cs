@@ -105,7 +105,7 @@ public class CharacterCreater : MonoBehaviour
 
     public void CreateCharacter()
     {
-        if (TurnManager.turnManager.BuyCharacter(cost))
+        if (TurnManager.turnManager.GetPlayer().BuyCharacter(cost))
         {
             isCreatingCharacter = true;
             SetScreenActive(false);
@@ -124,7 +124,7 @@ public class CharacterCreater : MonoBehaviour
         speedValue = Map(speedSlider.value, 1, 100, 1, 10);
         defenseValue = Map(defenseSlider.value, 1, 100, 1, 10);
 
-        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, TurnManager.turnManager.currentTurn);
+        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, TurnManager.turnManager.turn);
     }
 
     public void SetScreenActive(bool value)
@@ -164,17 +164,17 @@ public class CharacterCreater : MonoBehaviour
     {
         switch (TurnManager.turnManager.getTurnIndex())
         {
-            case 1:
+            case 0:
                 characterPrefab = Instantiate(blueCharacteBase, characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
                 break;
-            case 2:
+            case 1:
                 characterPrefab = Instantiate(redCharacterBase, characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
                 break;
         }
 
         prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
         SetScreenActive(true);
-        currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
+        currencyText.text = $"current points: {TurnManager.turnManager.GetPlayer().getCurrency()}";
 
         healthSlider.value = Random.Range(1, 101);
         strengthSlider.value = Random.Range(1, 101);

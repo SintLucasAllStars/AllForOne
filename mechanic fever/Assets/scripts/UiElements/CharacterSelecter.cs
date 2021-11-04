@@ -46,7 +46,7 @@ public class CharacterSelecter : MonoBehaviour
             {
                 Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
 
-                if (rayHit.collider.CompareTag($"{TurnManager.turnManager.GetCurrentTurn()}Owned"))
+                if (rayHit.collider.CompareTag($"player{TurnManager.turnManager.turn}Owned"))
                 {
                     selectedCharacter = rayHit.collider.gameObject;
                     openUiWindow();

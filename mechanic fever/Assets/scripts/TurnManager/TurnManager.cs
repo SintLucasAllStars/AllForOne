@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,9 @@ public class TurnManager : MonoBehaviour
     public static TurnManager turnManager;
     public CharacterSelecter characterSelecter;
 
-    public int player1Currency;
-    public int player2Currency;
+    public int startingMoney;
+
+    public Player[] players;
 
     public bool controllingCamera = true;
 
@@ -29,13 +31,7 @@ public class TurnManager : MonoBehaviour
 
     public GameMode currentGameMode;
 
-    public enum Turns
-    {
-        player1 = 1,
-        player2 = 2,
-    }
-
-    public Turns currentTurn;
+    public int turn = 0;
 
     private void Awake()
     {
@@ -50,6 +46,14 @@ public class TurnManager : MonoBehaviour
 
         characterSelecter = GetComponent<CharacterSelecter>();
 
+        players = new Player[2];
+
+        for (int i = 0; i < 2; i++)
+        {
+            players[i] = new Player(startingMoney);
+            print(players[i]);
+        }
+
         StartCoroutine(TurnSystem());
     }
 
@@ -59,80 +63,16 @@ public class TurnManager : MonoBehaviour
     }
 
     #region currency management
-
-    public int getCurrency()
+    public Player GetPlayer()
     {
-        int value = 0;
-
-        switch ((int)currentTurn)
-        {
-            case 1:
-                value = player1Currency;
-                break;
-            case 2:
-                value = player2Currency;
-                break;
-        }
-
-        return value;
+        return players[turn];
     }
-
-    public bool BuyCharacter(int cost)
-    {
-        bool value = false;
-
-        switch ((int)currentTurn)
-        {
-            case 1:
-                if (cost <= player1Currency)
-                {
-                    player1Currency -= cost;
-                    value = true;
-                }
-                break;
-            case 2:
-                if (cost <= player2Currency)
-                {
-                    player2Currency -= cost;
-                    value = true;
-                }
-                break;
-        }
-
-        return value;
-    }
-
     #endregion
 
     #region turn management
     public int getTurnIndex()
     {
-        return (int)currentTurn;
-    }
-
-    public Turns GetCurrentTurn()
-    {
-        return currentTurn;
-    }
-    public Turns getInversedTurn()
-    {
-        Turns value;
-
-        switch ((int)currentTurn)
-        {
-            case 1:
-                value = Turns.player2;
-                break;
-            case 2:
-                value = Turns.player1;
-                break;
-            default:
-                Debug.LogError($"Returned Defaulted Inversed Turn, (line: 127, {this.ToString()})");
-                value = Turns.player1;
-                break;
-        }
-
-        return value;
+        return turn;
     }
 
     private IEnumerator TurnSystem()
@@ -141,24 +81,27 @@ public class TurnManager : MonoBehaviour
         {
             if (currentGameMode == GameMode.setup)
             {
-                currentTurn = Turns.player1;
-                yield return new WaitUntil(() => endTurn || player1Currency <= 0);
+                if (turn > players.Length - 1)
+                {
+                    turn = 0;
+                }
+                print(players[turn]);
+                yield return new WaitUntil(() => endTurn || players[turn].getCurrency() <= 0);
                 endTurn = false;
-                currentTurn = Turns.player2;
-                yield return new WaitUntil(() => endTurn || player2Currency <= 0);
-                endTurn = false;
+                turn++;
 
-                if (player1Currency <= 0 && player2Currency <= 0)
+                if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
                 {
                     EndSetupFase();
                 }
             }
             else
             {
-                currentTurn = Turns.player1;
-                yield return new WaitUntil(() => endTurn);
-                endTurn = false;
-                currentTurn = Turns.player2;
+                turn++;
+                if (turn > players.Length - 1)
+                {
+                    turn = 0;
+                }
                 yield return new WaitUntil(() => endTurn);
                 endTurn = false;
             }
@@ -191,15 +134,7 @@ public class TurnManager : MonoBehaviour
 
     public void PlayerDoneSetupFase()
     {
-        switch ((int)currentTurn)
-        {
-            case 1:
-                player1Currency = 0;
-                break;
-            case 2:
-                player2Currency = 0;
-                break;
-        }
+        GetPlayer().zeroCurrency();
     }
 
     public void EndSetupFase()
