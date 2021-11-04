@@ -6,14 +6,14 @@ public class CharacterStats
 {
     public TurnManager.Turns owner;
 
-    public int health { private set; get; }
-    public int strength { private set; get; }
-    public int speed { private set; get; }
-    private int defense;
+    public float health { private set; get; }
+    public float strength { private set; get; }
+    public float speed { private set; get; }
+    private float defense;
 
     public bool fortified { private set; get; }
 
-    public CharacterStats(int health, int strength, int speed, int defense, TurnManager.Turns owner)
+    public CharacterStats(float health, float strength, float speed, float defense, TurnManager.Turns owner)
     {
         this.health = health;
         this.strength = strength;
@@ -23,9 +23,9 @@ public class CharacterStats
         fortified = false;
     }
 
-    public int getDefense()
+    public float getDefense()
     {
-        int value = 0;
+        float value = 0;
         if (fortified) {value = defense;}
         return value;
     }
@@ -35,7 +35,7 @@ public class CharacterStats
         fortified = value;
     }
 
-    public bool TakeDamage(int damageValue)
+    public bool TakeDamage(float damageValue)
     {
         bool value = false;
         health -= damageValue;

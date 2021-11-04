@@ -11,7 +11,7 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private CharacterStats stats;
     #region stats property fields
-    public int Health
+    public float Health
     {
         get
         {
@@ -39,7 +39,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public int Defense
+    public float Defense
     {
         get
         {
@@ -55,6 +55,7 @@ public class CharacterController : MonoBehaviour
     {
         this.stats = stats;
         tag = $"{stats.owner}Owned";
+        print(stats.ToString());
     }
 
     private void Start()
@@ -165,7 +166,7 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     #region death and hit mechanic's
-    public void TakeDamage(int damageValue)
+    public void TakeDamage(float damageValue)
     {
         if (stats.TakeDamage(damageValue -= Defense))
         {

@@ -14,6 +14,11 @@ public class CharacterCreater : MonoBehaviour
     private GameObject characterPrefab;
     private characterEquipmentHandler prefabEquipmentHandler;
 
+    private float healthValue;
+    private float strenghtValue;
+    private float speedValue;
+    private float defenseValue;
+
     public Slider healthSlider;
     public Slider strengthSlider;
     public Slider speedSlider;
@@ -89,10 +94,10 @@ public class CharacterCreater : MonoBehaviour
 
     private void CalculatePrice()
     {
-        float healthValue = Map(healthSlider.value, 1, 100, 3, 30);
-        float strenghtValue = Map(strengthSlider.value, 1, 100, 2, 20);
-        float speedValue = Map(speedSlider.value, 1, 100, 3, 30);
-        float defenseValue = Map(defenseSlider.value, 1, 100, 2, 20);
+        healthValue = Map(healthSlider.value, 1, 100, 3, 30);
+        strenghtValue = Map(strengthSlider.value, 1, 100, 2, 20);
+        speedValue = Map(speedSlider.value, 1, 100, 3, 30);
+        defenseValue = Map(defenseSlider.value, 1, 100, 2, 20);
 
         cost = (int)(healthValue + strenghtValue + speedValue + defenseValue);
         costText.text = $"cost: {cost}";
@@ -114,7 +119,12 @@ public class CharacterCreater : MonoBehaviour
 
     public CharacterStats CreateStats()
     {
-        return new CharacterStats((int)healthSlider.value, (int)strengthSlider.value, (int)speedSlider.value, (int)defenseSlider.value, TurnManager.turnManager.currentTurn);
+        healthValue = healthSlider.value;
+        strenghtValue = Map(strengthSlider.value, 1, 100, 1, 10);
+        speedValue = Map(speedSlider.value, 1, 100, 1, 10);
+        defenseValue = Map(defenseSlider.value, 1, 100, 1, 10);
+
+        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, TurnManager.turnManager.currentTurn);
     }
 
     public void SetScreenActive(bool value)
