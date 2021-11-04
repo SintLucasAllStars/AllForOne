@@ -9,8 +9,6 @@ public class UIManager : MonoBehaviour
 
     public GameObject[] unitSelector;
 
-    //Checks if there already  is an instance in the scene.
-    //Checks if the overlay is already on, if so change the value of overlay (spawner script).
     private void Awake()
     {
         if (Instance == null)
@@ -23,16 +21,13 @@ public class UIManager : MonoBehaviour
             Spawner.overlay = true;
         }
     }
-
-    //Handles the switching of the UI.
-    //Based on, if the UI already is on or not.
     public void SwitchUnitSUI()
     {
         if (!unitSelector[0].activeInHierarchy)
         {
             //turns on the UI.
             unitSelector[0].SetActive(true);
-            UnitConfig.Instance.ResetValues();
+            Gamemanager.Instance.ResetValues();
             Spawner.overlay = true;
         }
         else if (unitSelector[0].activeInHierarchy)

@@ -35,6 +35,7 @@ public class Unit : MonoBehaviour
         this.defense = defense;
     }
 
+    //Spawns the object with the given values (values from Gamemanager script).
     public void SpawnWithValues(int health, int strength, int speed, int defense)
     {
         this.health = health;
