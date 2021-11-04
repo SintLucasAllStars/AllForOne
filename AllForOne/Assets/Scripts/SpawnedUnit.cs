@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitManager : MonoBehaviour
+public class SpawnedUnit : MonoBehaviour
 {
     private Unit unit;
     private UIManager ui;
