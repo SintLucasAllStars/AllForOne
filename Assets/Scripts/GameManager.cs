@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    public enum GamePhase { UnitBuying, UnitPlacing, UnitChoosing, UnitAction };
+    public GamePhase gamePhase;
+
+    [Header("References")]
+    public GameObject playerPrefab;
+
+    [Space]
     [Header("Game Stats")]
     [Tooltip("Starts counting from 0")] public int playerAmount = 1; // How many players are playing
     [SerializeField] int initialPoints = 100;

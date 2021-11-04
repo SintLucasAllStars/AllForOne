@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         sliderMan = GetComponent<SliderManager>();
+        GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
     }
 
     // Changes the player points text
@@ -57,16 +58,30 @@ public class UIManager : MonoBehaviour
 
             // Show map
             // Have player click a starting spot
+            GameManager.Instance.gamePhase = GameManager.GamePhase.UnitPlacing;
+
             // Instantiate player prefab with new Unit class using stats
+            //CreateUnit(GameManager.Instance.currentTurnPlayer, mouse raycast location, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3));
 
             // Add to unit list
             //GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add();
 
             GameManager.Instance.EndTurn();
+            UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], true);
+            sliderMan.RandomSliderValues();
+            GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
         }
         else
         {
             Debug.Log("Player does not have enough money.");
         }
+    }
+
+    void CreateUnit(int player, Vector3 location, int hea, int str, int spe, int def)
+    {
+        GameObject unit = Instantiate(GameManager.Instance.playerPrefab, location, Quaternion.identity);
+        unit.GetComponent<UnitMovement>().playerStats = new Unit(hea, str, spe, def);
+
+        GameManager.Instance.playerUnits[player].Add(unit);
     }
 }
