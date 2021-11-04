@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitBehaviour : MonoBehaviour
 {
     public Unit unit;
+    public Player player;
 
     //Getters
     public float Health 
@@ -86,6 +87,8 @@ public class UnitBehaviour : MonoBehaviour
         Debug.Log("strength " + Strength);
         Debug.Log("speed " + Speed);
         Debug.Log("defence " + Defence);
+
+        player.units.Add(this.gameObject);
     }
 
     private void Update()

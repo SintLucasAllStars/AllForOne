@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private List<GameObject> units = new List<GameObject>();
+    public List<GameObject> units = new List<GameObject>();
 
     public float money;
 
