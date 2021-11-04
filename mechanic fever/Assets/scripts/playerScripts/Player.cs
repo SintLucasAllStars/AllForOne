@@ -32,6 +32,7 @@ public class Player
         if (currency >= cost)
         {
             value = true;
+            currency -= cost;
         }
         
         return value;

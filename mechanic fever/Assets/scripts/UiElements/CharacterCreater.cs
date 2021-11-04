@@ -7,7 +7,7 @@ public class CharacterCreater : MonoBehaviour
 {
     public int cost = 0;
 
-    public GameObject blueCharacteBase;
+    public GameObject[] CharacterBases;
     public GameObject redCharacterBase;
 
     public GameObject characterPreviewSpawnPoint;
@@ -162,15 +162,8 @@ public class CharacterCreater : MonoBehaviour
 
     public void ResetCharacterCreater()
     {
-        switch (TurnManager.turnManager.getTurnIndex())
-        {
-            case 0:
-                characterPrefab = Instantiate(blueCharacteBase, characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
-                break;
-            case 1:
-                characterPrefab = Instantiate(redCharacterBase, characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
-                break;
-        }
+        characterPrefab = 
+            Instantiate(CharacterBases[TurnManager.turnManager.getTurnIndex()], characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
 
         prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
         SetScreenActive(true);
