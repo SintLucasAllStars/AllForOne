@@ -7,10 +7,9 @@ public class Spawner : MonoBehaviour
     private MeshRenderer mr;
     private bool glow, placedUnit;
     public static bool overlay;
+    private Transform _transform;
 
     private string spawnerTag = "Spawner";
-
-    private Transform _transform;
 
     //Gets the mesh of the spawners so they can be changed.
     private void Awake()
@@ -56,6 +55,7 @@ public class Spawner : MonoBehaviour
     //If player spawned an unit, the Unit selector UI will turn-on.
     private IEnumerator ResetSpawner()
     {
+        Gamemanager.Instance.TeamManager();
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.SwitchUnitSUI();
         placedUnit = false;
