@@ -35,12 +35,6 @@ public class UnitMovement : MonoBehaviour
         InitializePlayer();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void FixedUpdate()
     {
         // Calls the moveplayer function if canMove

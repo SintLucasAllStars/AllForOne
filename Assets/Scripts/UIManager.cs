@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
         if (sliderMan.GetUnitPrice() <= GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer])
         {
             // Remove slider values from point total and update text
-            GameManager.Instance.DecreasePlayerPoints(GameManager.Instance.currentTurnPlayer, sliderMan.GetCombinedMappedSliderValues(10, 50, 2, 20)); // TODO: Add different ranges
+            GameManager.Instance.DecreasePlayerPoints(GameManager.Instance.currentTurnPlayer, sliderMan.GetCombinedSliderValues());
             UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], false);
 
             // Remove Loadout UI
@@ -66,10 +66,14 @@ public class UIManager : MonoBehaviour
             // Add to unit list
             //GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add();
 
+            // Go to next player's turn
             GameManager.Instance.EndTurn();
             UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], true);
             sliderMan.RandomSliderValues();
             GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
+
+            // Return UI
+            //loadoutUI.SetActive(true);
         }
         else
         {
