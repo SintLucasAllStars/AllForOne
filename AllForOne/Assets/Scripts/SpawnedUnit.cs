@@ -9,7 +9,7 @@ public class SpawnedUnit : MonoBehaviour
     private UIManager ui;
 
     public int Health => unit.GetHealth();
-    public int Strenght => unit.GetStrenght();
+    public int Strength => unit.GetStrength();
     public int Speed => unit.GetSpeed();
     public int Defence => unit.GetDefence();
 
@@ -17,13 +17,13 @@ public class SpawnedUnit : MonoBehaviour
     {
         ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 
-        unit = new Unit(ui.GetHealthValue(), ui.GetStrenghtValue(), ui.GetSpeedValue(), ui.GetDefenceValue());
+        unit = new Unit(ui.GetHealthValue(), ui.GetStrengthValue(), ui.GetSpeedValue(), ui.GetDefenceValue());
     }
 
     private void Update()
     {
         Debug.Log(Health);
-        Debug.Log(Strenght);
+        Debug.Log(Strength);
         Debug.Log(Speed);
         Debug.Log(Defence);
     }

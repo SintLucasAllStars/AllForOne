@@ -5,14 +5,14 @@ using UnityEngine;
 public class Unit
 {
     private int health;
-    private int strenght;
+    private int strength;
     private int speed;
     private int defence;
 
-    public Unit(int health, int strenght, int speed, int defence)
+    public Unit(int health, int strength, int speed, int defence)
     {
         this.health = health;
-        this.strenght = strenght;
+        this.strength = strength;
         this.speed = speed;
         this.defence = defence;
     }
@@ -22,9 +22,9 @@ public class Unit
         return health;
     }
 
-    public int GetStrenght()
+    public int GetStrength()
     {
-        return strenght;
+        return strength;
     }
 
     public int GetSpeed()
