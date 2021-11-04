@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+public class StoreManager : MonoBehaviour
 {
-    public static UIManager instance { get; private set; }
+    public static StoreManager instance { get; private set; }
 
     [Header("Sliders")]
     public Slider healthSlider;
@@ -23,9 +23,12 @@ public class UIManager : MonoBehaviour
 
     [Space(10)]
     public GameObject unit;
+    public Player playerClient;
+    public Unit tempUnit;
 
     [Space(10)]
     public TextMeshProUGUI priceText;
+    public TextMeshProUGUI moneyText;
 
     private List<Slider> sliders = new List<Slider>();
 
@@ -50,6 +53,8 @@ public class UIManager : MonoBehaviour
         sliders.Add(defenceSlider);
 
         CalculateTotalPrice();
+
+        moneyText.SetText("Money: " + playerClient.money.ToString("000"));
     }
 
     // Update is called once per frame
@@ -58,6 +63,7 @@ public class UIManager : MonoBehaviour
         
     }
 
+    #region Get slider values
     public float GetHealth()
     {
         health = healthSlider.value;
@@ -81,22 +87,46 @@ public class UIManager : MonoBehaviour
         defence = defenceSlider.value;
         return defence;
     }
+    #endregion
 
     public void CalculateTotalPrice()
     {
-        float totalValue = 0;
+        float totalPrice = 0;
 
         for (int i = 0; i < sliders.Count; i++)
         {
-            totalValue += sliders[i].value;
-            price = totalValue;
+            totalPrice += sliders[i].value;
+            price = totalPrice;
         }
 
-        priceText.SetText("Price: " + totalValue.ToString("00"));
+        priceText.SetText("Price: " + totalPrice.ToString("00"));
     }
 
-    public void SpawnUnit()
+    public void Pay()
     {
-        Instantiate(unit);
+        // check if you have enough money.
+        if (price <= playerClient.money)
+        {
+            playerClient.money -= price;
+            moneyText.SetText("Money: " + playerClient.money.ToString("000"));
+            print("You have enough money");
+            //UnitManager.instance.OnCreation();
+            CreateUnit();
+        }
+        else if (price > playerClient.money)
+        {
+            print("You don't have enough money");
+        }
+    }
+
+    public void CreateUnit()
+    {
+        GameObject go = Instantiate(unit);
+        UnitBehaviour u = go.GetComponent<UnitBehaviour>();
+        u.unit = new Unit();
+        u.Health = GetHealth();
+        u.Strength = GetStrength();
+        u.Speed = GetSpeed();
+        u.Defence = GetDefence();
     }
 }

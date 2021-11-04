@@ -21,19 +21,20 @@ public class MoneyManager : MonoBehaviour
         
     }
 
-    public void Pay()
-    {
-        // check if you have enough money.
-        if (UIManager.instance.price <= money)
-        {
-            money -= UIManager.instance.price;
-            moneytext.SetText("Money: " + money.ToString("000"));
-            print("You have enough money");
-            UIManager.instance.SpawnUnit();
-        }
-        else if(UIManager.instance.price > money)
-        {
-            print("You don't have enough money");
-        }
-    }
+    //public void Pay()
+    //{
+    //    // check if you have enough money.
+    //    if (StoreManager.instance.price <= money)
+    //    {
+    //        money -= StoreManager.instance.price;
+    //        moneytext.SetText("Money: " + money.ToString("000"));
+    //        print("You have enough money");
+    //        UnitManager.instance.OnCreation();
+    //        StoreManager.instance.SpawnUnit();
+    //    }
+    //    else if(StoreManager.instance.price > money)
+    //    {
+    //        print("You don't have enough money");
+    //    }
+    //}
 }

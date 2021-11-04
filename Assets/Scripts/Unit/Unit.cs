@@ -2,19 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitClass
+public class Unit
 {
-    private float health;
-    private float strength;
-    private float speed;
-    private float defence;
+    public float health;
+    public float strength;
+    public float speed;
+    public float defence;
 
-    public UnitClass(float health, float strength, float speed, float defence)
+    public Unit(float health, float strength, float speed, float defence)
     {
         this.health = health;
         this.strength = strength;
         this.speed = speed;
         this.defence = defence;
+    }
+
+    public Unit()
+    {
+        this.health = 1;
+        this.strength = 1;
+        this.speed = 1;
+        this.defence = 1;
     }
 
     public float GetHealth()
