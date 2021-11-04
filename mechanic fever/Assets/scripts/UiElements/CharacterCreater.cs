@@ -46,6 +46,7 @@ public class CharacterCreater : MonoBehaviour
         costText.text = $"cost: {cost}";
 
         ResetCharacterCreater();
+        equipmentManagment();
     }
 
     public void Update()
@@ -73,19 +74,7 @@ public class CharacterCreater : MonoBehaviour
                 break;
             case 3:
                 defenseText.text = $"Defense: {defenseSlider.value}";
-                if (defenseSlider.value >= 8)
-                {
-                    prefabEquipmentHandler.EquipArmorLevel(1);
-                }
-                else if (defenseSlider.value > 3)
-                {
-                    prefabEquipmentHandler.UnEquipArmor();
-                    prefabEquipmentHandler.EquipArmorLevel(0);
-                }
-                else
-                {
-                    prefabEquipmentHandler.UnEquipArmor();
-                }
+                equipmentManagment();
                 break;
         }
 
@@ -161,12 +150,29 @@ public class CharacterCreater : MonoBehaviour
         SetScreenActive(true);
         currencyText.text = $"current points: {TurnManager.turnManager.getCurrency()}";
 
-        healthSlider.value = 5;
-        strengthSlider.value = 5;
-        speedSlider.value = 5;
-        defenseSlider.value = 5;
+        healthSlider.value = Random.Range(1, 11);
+        strengthSlider.value = Random.Range(1, 11);
+        speedSlider.value = Random.Range(1, 11);
+        defenseSlider.value = Random.Range(1, 11);
 
         isCreatingCharacter = false;
+    }
+
+    private void equipmentManagment()
+    {
+        if (defenseSlider.value >= 8)
+        {
+            prefabEquipmentHandler.EquipArmorLevel(1);
+        }
+        else if (defenseSlider.value > 3)
+        {
+            prefabEquipmentHandler.UnEquipArmor();
+            prefabEquipmentHandler.EquipArmorLevel(0);
+        }
+        else
+        {
+            prefabEquipmentHandler.UnEquipArmor();
+        }
     }
 
     public void turnChange()
