@@ -30,16 +30,35 @@ public class UIManager : MonoBehaviour
     {
         if (!unitSelector[0].activeInHierarchy)
         {
-            //turns on the UI.
-            unitSelector[0].SetActive(true);
-            UnitConfig.Instance.ResetValues();
-            Spawner.overlay = true;
+            TurnOnUI();
         }
         else if (unitSelector[0].activeInHierarchy)
         {
-            //turns off the UI.
-            unitSelector[0].SetActive(false);
-            Spawner.overlay = false;
+            TurnOffUI();
         }
+    }
+
+    private void TurnOnUI()
+    {
+        //turns on the UI.
+        unitSelector[0].SetActive(true);
+        UnitConfig.Instance.ResetValues();
+        Spawner.overlay = true;
+    }
+
+    public void TurnOffUI()
+    {
+        //turns off the UI.
+        unitSelector[0].SetActive(false);
+        Spawner.overlay = false;
+    }
+
+    public void SkipBtnPressed()
+    {
+        //Switch teams
+        Gamemanager.Instance.TeamManager();
+
+        //Update UI
+        UnitConfig.Instance.ResetValues();
     }
 }
