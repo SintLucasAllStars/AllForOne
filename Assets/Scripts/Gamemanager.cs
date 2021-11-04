@@ -7,6 +7,9 @@ public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager Instance;
 
+    public Material[] materials;
+    private Renderer rend;
+
     public string[] team;
     public int teamSelected = 0;
     public int[] currentMoney;
@@ -50,16 +53,22 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
-    //Will handle the spawning of the units.
-    //Spawns with the correct values that has been set by the sliders.
-    //Adds an tag for the current team that is spawning the units.
     public void Spawn(Transform transformToSpawn)
     {
+        //Will handle the spawning of the units.
         GameObject unitToSpawn = UnitConfig.Instance.unitToSpawn;
         Slider[] sliders = UnitConfig.Instance.sliders;
-
         GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
+
+        //Adds the color based of the team that is selected.
+        rend = unit.GetComponent<Renderer>();
+        rend.enabled = true;
+        rend.sharedMaterial = materials[teamSelected];
+
+        //Spawns with the correct values that has been set by the sliders.
         unit.GetComponent<Unit>().SpawnWithValues(((int)sliders[0].value), ((int)sliders[1].value), ((int)sliders[2].value), ((int)sliders[3].value));
+
+        //Adds an tag for the current team that is spawning the units.
         unit.tag = team[teamSelected];
     }
 }

@@ -29,6 +29,7 @@ public class UnitConfig : MonoBehaviour
     private void Start()
     {
         //Sets the default value for the text.
+        ResetValues();
         UpdateConfig();
         SetValues();
         UpdatePrice();
@@ -125,7 +126,7 @@ public class UnitConfig : MonoBehaviour
 
         for (int i = 0; i < sliders.Length; i++)
         {
-            sliders[i].value = 1;
+            sliders[i].value = Random.Range(1, 100);
         }
     }
 
