@@ -31,11 +31,11 @@ public class UIManager : MonoBehaviour
     //Based on, if the UI already is on or not.
     public void SwitchUnitSUI()
     {
-        if (!unitSelector[0].activeInHierarchy)
+        if (!unitSelector[0].activeInHierarchy && Gamemanager.Instance.unitConfig)
         {
             TurnOnUI();
         }
-        else if (unitSelector[0].activeInHierarchy)
+        else if(unitSelector[0].activeInHierarchy && Gamemanager.Instance.unitConfig)
         {
             TurnOffUI();
         }
