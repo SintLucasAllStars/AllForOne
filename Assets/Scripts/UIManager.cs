@@ -24,22 +24,47 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //This will handle the unitConfigUI
+    #region UnitConfig
+
     //Handles the switching of the UI.
     //Based on, if the UI already is on or not.
     public void SwitchUnitSUI()
     {
         if (!unitSelector[0].activeInHierarchy)
         {
-            //turns on the UI.
-            unitSelector[0].SetActive(true);
-            UnitConfig.Instance.ResetValues();
-            Spawner.overlay = true;
+            TurnOnUI();
         }
         else if (unitSelector[0].activeInHierarchy)
         {
-            //turns off the UI.
-            unitSelector[0].SetActive(false);
-            Spawner.overlay = false;
+            TurnOffUI();
         }
     }
+
+    private void TurnOnUI()
+    {
+        //turns on the UI.
+        unitSelector[0].SetActive(true);
+        UnitConfig.Instance.ResetValues();
+        Spawner.overlay = true;
+    }
+
+    public void TurnOffUI()
+    {
+        //turns off the UI.
+        unitSelector[0].SetActive(false);
+        Spawner.overlay = false;
+    }
+
+    //Skip an turn.
+    public void SkipBtnPressed()
+    {
+        //Switch teams
+        Gamemanager.Instance.TeamManager();
+
+        //Update UI
+        UnitConfig.Instance.ResetValues();
+    }
+
+    #endregion
 }

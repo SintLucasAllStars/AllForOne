@@ -14,6 +14,8 @@ public class Gamemanager : MonoBehaviour
     public int teamSelected = 0;
     public int[] currentMoney;
 
+    public bool unitConfig;
+
     private void Awake()
     {
         if (Instance == null)
