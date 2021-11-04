@@ -38,6 +38,14 @@ public class Gamemanager : MonoBehaviour
         currentMoney[1] = 100;
     }
 
+    public void CheckPlayerBalance()
+    {
+        if (currentMoney[0] < 10 && currentMoney[1] < 10)
+        {
+            SwitchToPlayMode();
+        }
+    }
+
     //Switching teams and assings them in other script that use it.
     public void TeamManager()
     {
@@ -72,5 +80,14 @@ public class Gamemanager : MonoBehaviour
 
         //Adds an tag for the current team that is spawning the units.
         unit.tag = team[teamSelected];
+
+        CheckPlayerBalance();
+    }
+
+    public void SwitchToPlayMode()
+    {
+        unitConfig = false;
+        print("playmode enabled");
+        print("disabled unitUI");
     }
 }
