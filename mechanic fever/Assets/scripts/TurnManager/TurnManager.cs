@@ -8,6 +8,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager turnManager;
     public CharacterSelecter characterSelecter;
 
+    public int playerAmount;
     public int startingMoney;
 
     public Player[] players;
@@ -46,12 +47,16 @@ public class TurnManager : MonoBehaviour
 
         characterSelecter = GetComponent<CharacterSelecter>();
 
-        players = new Player[2];
+        startGame();
+    }
 
-        for (int i = 0; i < 2; i++)
+    private void startGame()
+    {
+        players = new Player[playerAmount];
+
+        for (int i = 0; i < playerAmount; i++)
         {
             players[i] = new Player(startingMoney);
-            print(players[i]);
         }
 
         StartCoroutine(TurnSystem());
@@ -85,7 +90,6 @@ public class TurnManager : MonoBehaviour
                 {
                     turn = 0;
                 }
-                print(players[turn]);
                 yield return new WaitUntil(() => endTurn || players[turn].getCurrency() <= 0);
                 endTurn = false;
                 turn++;
@@ -97,13 +101,13 @@ public class TurnManager : MonoBehaviour
             }
             else
             {
-                turn++;
                 if (turn > players.Length - 1)
                 {
                     turn = 0;
                 }
                 yield return new WaitUntil(() => endTurn);
                 endTurn = false;
+                turn++;
             }
         }
     }
