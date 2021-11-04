@@ -6,7 +6,6 @@ using TMPro;
 [RequireComponent(typeof(SliderManager))]
 public class UIManager : MonoBehaviour
 {
-    GameManager manager;
     SliderManager sliderMan;
 
     [SerializeField] GameObject loadoutUI;
@@ -14,20 +13,19 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        manager = GameManager.instance;
         sliderMan = GetComponent<SliderManager>();
     }
 
     // Changes the player points text
-    public void UpdatePointText(int player, int value)
+    public void UpdatePointText(int player, int value, bool buying)
     {
-        if (player == manager.currentTurnPlayer)
+        if (buying)
         {
-            pointTexts[player].text = manager.playerPoints[player] + " - " + value;
+            pointTexts[player].text = GameManager.Instance.playerPoints[player] + " - " + value;
         }
         else
         {
-            pointTexts[player].text = manager.playerPoints[player].ToString();
+            pointTexts[player].text = GameManager.Instance.playerPoints[player].ToString();
         }
     }
 
@@ -35,10 +33,10 @@ public class UIManager : MonoBehaviour
     public void StopLoadout()
     {
         // Check if turn player actually has a unit
-        if (manager.GetUnitAmount(manager.currentTurnPlayer).Count > 0)
+        if (GameManager.Instance.GetUnitAmount(GameManager.Instance.currentTurnPlayer).Count > 0)
         {
-            manager.canDoLoadoutPhase[manager.currentTurnPlayer] = false;
-            manager.EndTurn();
+            GameManager.Instance.canDoLoadoutPhase[GameManager.Instance.currentTurnPlayer] = false;
+            GameManager.Instance.EndTurn();
         }
 
         Debug.Log("Player does not have any units.");
@@ -48,11 +46,11 @@ public class UIManager : MonoBehaviour
     public void DeploySoldier()
     {
         // Cannot deploy if price is too high
-        if (sliderMan.GetUnitPrice() <= manager.playerPoints[manager.currentTurnPlayer])
+        if (sliderMan.GetUnitPrice() <= GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer])
         {
             // Remove slider values from point total and update text
-            manager.DecreasePlayerPoints(manager.currentTurnPlayer, sliderMan.GetCombinedMappedSliderValues(10, 50, 2, 20));
-            UpdatePointText(manager.currentTurnPlayer, manager.playerPoints[manager.currentTurnPlayer]);
+            GameManager.Instance.DecreasePlayerPoints(GameManager.Instance.currentTurnPlayer, sliderMan.GetCombinedMappedSliderValues(10, 50, 2, 20)); // TODO: Add different ranges
+            UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], false);
 
             // Remove Loadout UI
             //loadoutUI.SetActive(false);
@@ -62,9 +60,9 @@ public class UIManager : MonoBehaviour
             // Instantiate player prefab with new Unit class using stats
 
             // Add to unit list
-            //manager.playerUnits[manager.currentTurnPlayer].Add();
+            //GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add();
 
-            manager.EndTurn();
+            GameManager.Instance.EndTurn();
         }
         else
         {

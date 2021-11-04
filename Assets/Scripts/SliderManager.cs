@@ -7,7 +7,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(UIManager))]
 public class SliderManager : MonoBehaviour
 {
-    GameManager manager;
     UIManager uiMan;
 
     [SerializeField] Slider[] sliders;
@@ -17,7 +16,6 @@ public class SliderManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        manager = GameManager.instance;
         uiMan = GetComponent<UIManager>();
 
         for (int i = 0; i < sliders.Length; i++)
@@ -42,7 +40,7 @@ public class SliderManager : MonoBehaviour
 
         // Apply total point cost to the UI
         // Note: Does not yet apply to actual points stat in manager
-        uiMan.UpdatePointText(manager.currentTurnPlayer, unitPrice);
+        uiMan.UpdatePointText(GameManager.Instance.currentTurnPlayer, unitPrice, true);
     }
 
     // Returns an int with the combined value of all sliders

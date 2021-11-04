@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    // Singleton
-    public static GameManager instance { get; private set; }
-
     [Header("Game Stats")]
     [Tooltip("Starts counting from 0")] public int playerAmount = 1; // How many players are playing
     [SerializeField] int initialPoints = 100;
@@ -17,20 +14,6 @@ public class GameManager : MonoBehaviour
     public bool[] canDoLoadoutPhase; // An array which keeps which players can still do the loadout phase
     public int currentTurnPlayer = 0; // Which player currently has their turn
     public List<GameObject>[] playerUnits; // Saves the gameobjects of each player's units
-
-    private void Awake()
-    {
-        // Singleton
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     // Start is called before the first frame update
     void Start()
