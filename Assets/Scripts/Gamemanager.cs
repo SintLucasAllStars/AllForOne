@@ -18,6 +18,11 @@ public class Gamemanager : MonoBehaviour
             Instance = this;
         }
 
+        CreateTeams();
+    }
+
+    private void CreateTeams()
+    {
         //Creates the team array and add 2 values in it.
         team = new string[2];
         team[0] = "Blue";
