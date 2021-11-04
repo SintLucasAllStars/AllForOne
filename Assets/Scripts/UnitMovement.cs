@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class UnitMovement : MonoBehaviour
 {
     Rigidbody rb;
 
     [Header("Customisable Player Stats")]
-    public float maxHealth;
+    public Unit playerStats;
     [SerializeField] float currentHealth;
-    public float strength;
-    public float moveSpeed;
-    public float defense;
 
     [Space]
     [Header("Non-Customisable Stats")]
@@ -60,13 +57,13 @@ public class PlayerMovement : MonoBehaviour
     {
         currentInputVector = Vector2.SmoothDamp(currentInputVector, input, ref inputVelocity, inputSmoothing);
         Vector3 movement = new Vector3(currentInputVector.x, 0, currentInputVector.y);
-        transform.Translate(movement * moveSpeed * Time.deltaTime);
+        transform.Translate(movement * playerStats.GetSpeed() * Time.deltaTime);
     }
 
     // Initialises the player
     void InitializePlayer()
     {
-        currentHealth = maxHealth;
+        currentHealth = playerStats.GetHealth();
     }
 
     // Movement input
