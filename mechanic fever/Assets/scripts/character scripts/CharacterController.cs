@@ -9,6 +9,11 @@ public class CharacterController : MonoBehaviour
 
     public PowerUp[] activePowerUp;
     private Animator animator;
+
+
+    private characterEquipmentHandler equipmentHandler;
+    private Weapon equipedWeapon;
+
     private CharacterStats stats;
     #region stats property fields
     public float Health
@@ -34,7 +39,7 @@ public class CharacterController : MonoBehaviour
         get
         {
             float value = stats.speed;
-            if(activePowerUp[0] != null) {value *= 1.5f;}
+            if (activePowerUp[0] != null) { value *= 1.5f; }
             return value;
         }
     }
@@ -55,12 +60,12 @@ public class CharacterController : MonoBehaviour
     {
         this.stats = stats;
         tag = $"{stats.owner}Owned";
-        print(stats.ToString());
     }
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        equipmentHandler = GetComponent<characterEquipmentHandler>();
 
         activePowerUp = new PowerUp[3];
     }
@@ -162,6 +167,13 @@ public class CharacterController : MonoBehaviour
     public void removePowerUp(int index)
     {
         powerups.RemoveAt(index);
+    }
+    #endregion
+
+    #region weapons and equipment
+    public void addWeapon(Weapon weapon)
+    {
+        equipedWeapon = weapon;
     }
     #endregion
 

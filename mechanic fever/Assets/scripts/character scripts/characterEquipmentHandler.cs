@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class characterEquipmentHandler : MonoBehaviour
 {
-
     public Transform armor_parts;
     public GameObject[] weapons;
 
@@ -29,7 +28,12 @@ public class characterEquipmentHandler : MonoBehaviour
         weapons[index].SetActive(true);
     }
 
-    public void UnEquipWeapon()
+    public void unEquipWeapon(int index)
+    {
+        weapons[index].SetActive(false);
+    }
+
+    public void UnEquipAllWeapon()
     {
         foreach (GameObject weapon in weapons)
         {
