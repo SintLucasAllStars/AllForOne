@@ -17,6 +17,15 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
     }
 
+    private void Update()
+    {
+        // If in unit placing phase, call this
+        if (GameManager.Instance.gamePhase == GameManager.GamePhase.UnitPlacing)
+        {
+            WaitUntilUnitPlaced();
+        }
+    }
+
     // Changes the player points text
     public void UpdatePointText(int player, int value, bool buying)
     {
@@ -54,26 +63,11 @@ public class UIManager : MonoBehaviour
             UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], false);
 
             // Remove Loadout UI
-            //loadoutUI.SetActive(false);
+            loadoutUI.SetActive(false);
 
             // Show map
             // Have player click a starting spot
             GameManager.Instance.gamePhase = GameManager.GamePhase.UnitPlacing;
-
-            // Instantiate player prefab with new Unit class using stats
-            //CreateUnit(GameManager.Instance.currentTurnPlayer, mouse raycast location, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3));
-
-            // Add to unit list
-            //GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add();
-
-            // Go to next player's turn
-            GameManager.Instance.EndTurn();
-            UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], true);
-            sliderMan.RandomSliderValues();
-            GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
-
-            // Return UI
-            //loadoutUI.SetActive(true);
         }
         else
         {
@@ -81,11 +75,33 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void CreateUnit(int player, Vector3 location, int hea, int str, int spe, int def)
+    void WaitUntilUnitPlaced()
+    {
+        if (UnitPlacer.Instance.unitPlaced)
+        {
+            // Instantiate player prefab with new Unit class using stats
+            // Add to unit list
+            GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add(
+                CreateUnit(UnitPlacer.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
+
+            // Go to next player's turn
+            GameManager.Instance.EndTurn();
+            UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], true);
+            sliderMan.RandomSliderValues();
+            GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
+
+            // Set unit placed back to false
+            UnitPlacer.Instance.unitPlaced = false;
+
+            // Return UI
+            loadoutUI.SetActive(true);
+        }
+    }
+
+    GameObject CreateUnit(Vector3 location, int hea, int str, int spe, int def)
     {
         GameObject unit = Instantiate(GameManager.Instance.playerPrefab, location, Quaternion.identity);
         unit.GetComponent<UnitMovement>().unitStats = new Unit(hea, str, spe, def);
-
-        GameManager.Instance.playerUnits[player].Add(unit);
+        return unit;
     }
 }

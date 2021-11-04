@@ -67,6 +67,7 @@ public class GameManager : Singleton<GameManager>
         {
             playerPoints[i] = initialPoints;
             canDoLoadoutPhase[i] = true;
+            playerUnits[i] = new List<GameObject>();
         }
     }
 }
