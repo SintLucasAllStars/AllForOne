@@ -24,6 +24,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //This will handle the unitConfigUI
+    #region UnitConfig
+
     //Handles the switching of the UI.
     //Based on, if the UI already is on or not.
     public void SwitchUnitSUI()
@@ -53,6 +56,7 @@ public class UIManager : MonoBehaviour
         Spawner.overlay = false;
     }
 
+    //Skip an turn.
     public void SkipBtnPressed()
     {
         //Switch teams
@@ -61,4 +65,6 @@ public class UIManager : MonoBehaviour
         //Update UI
         UnitConfig.Instance.ResetValues();
     }
+
+    #endregion
 }
