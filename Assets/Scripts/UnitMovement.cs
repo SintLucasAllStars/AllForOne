@@ -8,7 +8,7 @@ public class UnitMovement : MonoBehaviour
     Rigidbody rb;
 
     [Header("Customisable Player Stats")]
-    public Unit playerStats;
+    public Unit unitStats = new Unit(10, 10, 10, 10);
     [SerializeField] float currentHealth;
 
     [Space]
@@ -38,13 +38,15 @@ public class UnitMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Calls the moveplayer function if canMove
-        if (canMove)
-            MovePlayer(moveInput);
+
     }
 
     private void FixedUpdate()
     {
+        // Calls the moveplayer function if canMove
+        if (canMove)
+            MovePlayer(moveInput);
+
         // Apply gravity if going down
         if (rb.velocity.y < 0.1f)
         {
@@ -57,13 +59,13 @@ public class UnitMovement : MonoBehaviour
     {
         currentInputVector = Vector2.SmoothDamp(currentInputVector, input, ref inputVelocity, inputSmoothing);
         Vector3 movement = new Vector3(currentInputVector.x, 0, currentInputVector.y);
-        transform.Translate(movement * playerStats.GetSpeed() * Time.deltaTime);
+        transform.Translate(movement * unitStats.GetSpeed() * Time.deltaTime);
     }
 
     // Initialises the player
     void InitializePlayer()
     {
-        currentHealth = playerStats.GetHealth();
+        currentHealth = unitStats.GetHealth();
     }
 
     // Movement input

@@ -80,7 +80,7 @@ public class UIManager : MonoBehaviour
     void CreateUnit(int player, Vector3 location, int hea, int str, int spe, int def)
     {
         GameObject unit = Instantiate(GameManager.Instance.playerPrefab, location, Quaternion.identity);
-        unit.GetComponent<UnitMovement>().playerStats = new Unit(hea, str, spe, def);
+        unit.GetComponent<UnitMovement>().unitStats = new Unit(hea, str, spe, def);
 
         GameManager.Instance.playerUnits[player].Add(unit);
     }
