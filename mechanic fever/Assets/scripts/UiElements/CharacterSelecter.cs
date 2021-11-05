@@ -40,13 +40,13 @@ public class CharacterSelecter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action)
+        if (GameManager.turnManager.currentGameMode == GameManager.GameMode.action)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && TurnManager.turnManager.controllingCamera)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.turnManager.controllingCamera)
             {
                 Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
 
-                if (rayHit.collider.CompareTag($"player{TurnManager.turnManager.turn}Owned"))
+                if (rayHit.collider.CompareTag($"player{GameManager.turnManager.turn}Owned"))
                 {
                     selectedCharacter = rayHit.collider.gameObject;
                     openUiWindow();
@@ -67,7 +67,7 @@ public class CharacterSelecter : MonoBehaviour
     #region cameraMovement
     private IEnumerator PositionCamera()
     {
-        TurnManager.turnManager.controllingCamera = false;
+        GameManager.turnManager.controllingCamera = false;
 
         oldRotation = transform.rotation;
         oldPosition = transform.position;
@@ -96,7 +96,7 @@ public class CharacterSelecter : MonoBehaviour
         }
 
         transform.parent = cameraBase;
-        TurnManager.turnManager.controllingCamera = true;
+        GameManager.turnManager.controllingCamera = true;
     }
     #endregion
 

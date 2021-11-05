@@ -3,15 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static TurnManager turnManager;
-    public CharacterSelecter characterSelecter;
+    public static GameManager turnManager;
+    
+    private CharacterSelecter characterSelecter;
 
+    [Header("The Amount of players in game")]
+    [Space(10)]
     public int playerAmount;
+    [Header("The amount of money each player starts with")]
+    [Space(10)]
     public int startingMoney;
+    [Space(30)]
+    public Vector2 fieldSize;
 
-    public Player[] players;
+    private Player[] players;
 
     public bool controllingCamera = true;
 
@@ -67,12 +74,10 @@ public class TurnManager : MonoBehaviour
         return currentGameMode;
     }
 
-    #region currency management
     public Player GetPlayer()
     {
         return players[turn];
     }
-    #endregion
 
     #region turn management
     public int getTurnIndex()
@@ -144,11 +149,11 @@ public class TurnManager : MonoBehaviour
     public void EndSetupFase()
     {
         StopAllCoroutines();
+        currentGameMode = GameMode.action;
+        turn = 0;
         StartCoroutine(TurnSystem());
 
         //call action fase banner
-
-        currentGameMode = GameMode.action;
     }
 
     public void EndTurn()

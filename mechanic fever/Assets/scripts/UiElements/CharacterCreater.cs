@@ -62,7 +62,7 @@ public class CharacterCreater : MonoBehaviour
 
     public void Update()
     {
-        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.action && !isCreatingCharacter)
+        if (GameManager.turnManager.currentGameMode == GameManager.GameMode.action && !isCreatingCharacter)
         {
             SetScreenActive(false);
             StopAllCoroutines();
@@ -105,7 +105,7 @@ public class CharacterCreater : MonoBehaviour
 
     public void CreateCharacter()
     {
-        if (TurnManager.turnManager.GetPlayer().BuyCharacter(cost))
+        if (GameManager.turnManager.GetPlayer().BuyCharacter(cost))
         {
             isCreatingCharacter = true;
             SetScreenActive(false);
@@ -124,7 +124,7 @@ public class CharacterCreater : MonoBehaviour
         speedValue = Map(speedSlider.value, 1, 100, 1, 10);
         defenseValue = Map(defenseSlider.value, 1, 100, 1, 10);
 
-        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, TurnManager.turnManager.turn);
+        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, GameManager.turnManager.turn);
     }
 
     public void SetScreenActive(bool value)
@@ -148,9 +148,9 @@ public class CharacterCreater : MonoBehaviour
         characterPrefab.GetComponent<CapsuleCollider>().enabled = true;
         characterPrefab.GetComponent<Rigidbody>().useGravity = true;
 
-        if (TurnManager.turnManager.currentGameMode == TurnManager.GameMode.setup)
+        if (GameManager.turnManager.currentGameMode == GameManager.GameMode.setup)
         {
-            TurnManager.turnManager.EndTurn();
+            GameManager.turnManager.EndTurn();
 
             yield return new WaitForSeconds(.1f);
 
@@ -163,11 +163,11 @@ public class CharacterCreater : MonoBehaviour
     public void ResetCharacterCreater()
     {
         characterPrefab = 
-            Instantiate(CharacterBases[TurnManager.turnManager.getTurnIndex()], characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
+            Instantiate(CharacterBases[GameManager.turnManager.getTurnIndex()], characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
 
         prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
         SetScreenActive(true);
-        currencyText.text = $"current points: {TurnManager.turnManager.GetPlayer().getCurrency()}";
+        currencyText.text = $"current points: {GameManager.turnManager.GetPlayer().getCurrency()}";
 
         healthSlider.value = Random.Range(1, 101);
         strengthSlider.value = Random.Range(1, 101);

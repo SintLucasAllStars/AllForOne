@@ -25,12 +25,12 @@ public class characterEquipmentHandler : MonoBehaviour
 
     public void EquipWeapon(int index)
     {
-        weapons[index].SetActive(true);
+        weapons[index - 1].SetActive(true);
     }
 
     public void unEquipWeapon(int index)
     {
-        weapons[index].SetActive(false);
+        weapons[index - 1].SetActive(false);
     }
 
     public void UnEquipAllWeapon()

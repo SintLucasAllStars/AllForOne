@@ -68,6 +68,9 @@ public class CharacterController : MonoBehaviour
         equipmentHandler = GetComponent<characterEquipmentHandler>();
 
         activePowerUp = new PowerUp[3];
+
+        equipedWeapon = gameObject.AddComponent<Weapon>();
+        equipedWeapon.SetupWeapon(0);
     }
 
     // Update is called once per frame
@@ -115,7 +118,7 @@ public class CharacterController : MonoBehaviour
     public void startCharacterControl()
     {
         controllingCurrentCharacter = true;
-        TurnManager.turnManager.startTimer();
+        GameManager.turnManager.startTimer();
     }
 
     public void resetCharacter()
@@ -173,7 +176,10 @@ public class CharacterController : MonoBehaviour
     #region weapons and equipment
     public void addWeapon(Weapon weapon)
     {
+        if(equipedWeapon != null) { equipedWeapon.destroyWeapon(); }
         equipedWeapon = weapon;
+        animator.SetInteger("attackIndex", equipedWeapon.index);
+        equipmentHandler.EquipWeapon(equipedWeapon.index);
     }
     #endregion
 
