@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager turnManager;
+    public static GameManager gameManager;
     
     private CharacterSelecter characterSelecter;
+    private InteractableSpawning spawner;
 
     [Header("The Amount of players in game")]
     [Space(10)]
@@ -43,9 +44,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (turnManager is null)
+        if (gameManager is null)
         {
-            turnManager = this;
+            gameManager = this;
         }
         else
         {
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         }
 
         characterSelecter = GetComponent<CharacterSelecter>();
+        spawner = GetComponent<InteractableSpawning>();
 
         startGame();
     }
@@ -112,6 +114,8 @@ public class GameManager : MonoBehaviour
                 }
                 yield return new WaitUntil(() => endTurn);
                 endTurn = false;
+                spawner.spawnPowerUp();
+                spawner.spawnWeapon();
                 turn++;
             }
         }

@@ -16,7 +16,7 @@ public class WeaponInteraction : Interactable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag($"player{GameManager.turnManager.turn}Owned"))
+        if (other.CompareTag($"player{GameManager.gameManager.turn}Owned"))
         {
             Weapon weaponInstance = other.gameObject.AddComponent<Weapon>();
             weaponInstance.SetupWeapon((int)currentWeaponType);

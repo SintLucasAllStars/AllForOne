@@ -22,7 +22,7 @@ public class PowerUp : MonoBehaviour
                 break;
         }
 
-        if (powerUpType == 2) { GameManager.turnManager.turnTimerPaused = true; }
+        if (powerUpType == 2) { GameManager.gameManager.turnTimerPaused = true; }
 
         StartCoroutine(PowerupTimer());
     }
@@ -30,7 +30,7 @@ public class PowerUp : MonoBehaviour
     private IEnumerator PowerupTimer()
     {
         yield return new WaitForSeconds(duration);
-        if (powerUpType == 2) { GameManager.turnManager.turnTimerPaused = false; }
+        if (powerUpType == 2) { GameManager.gameManager.turnTimerPaused = false; }
         Destroy(this, 0.5f);
     }
 

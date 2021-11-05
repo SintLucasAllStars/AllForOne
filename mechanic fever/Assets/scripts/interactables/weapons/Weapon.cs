@@ -37,7 +37,7 @@ public class Weapon : MonoBehaviour
             case 4:
                 damage = 5;
                 speed = 3;
-                range = Mathf.Sqrt(Mathf.Pow(GameManager.turnManager.fieldSize.x, 2) + Mathf.Pow(GameManager.turnManager.fieldSize.y, 2));
+                range = Mathf.Sqrt(Mathf.Pow(GameManager.gameManager.fieldSize.x, 2) + Mathf.Pow(GameManager.gameManager.fieldSize.y, 2));
                 break;
             default:
                 damage = 1;

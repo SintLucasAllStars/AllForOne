@@ -2448,6 +2448,7 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2559,6 +2560,26 @@ MonoBehaviour:
   cameraBase: {fileID: 130442747}
   selectionPanel: {fileID: 1373345748}
   selectedCharacter: {fileID: 0}
+--- !u!114 &963194231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5fa1ef5c65cfe948857e508f4205a6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponPrefab:
+  - {fileID: 7241753943264309946, guid: 8e6366929ff35f14ca6b6e861f9a2c93, type: 3}
+  - {fileID: 5872166548129343454, guid: 0752381b3166e3b47b543c9dba5e618b, type: 3}
+  powerUpPrefab:
+  - {fileID: 1389275405342059773, guid: 65c5d933427ab9a46a8c8c0b2199314b, type: 3}
+  - {fileID: 6489680646465949902, guid: 078043efec24cb442aa6fc3a1577b47a, type: 3}
+  - {fileID: 5537629247237106387, guid: aa6cc1e3a617dd945a1e46a6f0d243d5, type: 3}
+  spawnOffSet: {x: 0, y: 1, z: 0}
 --- !u!1 &988241608
 GameObject:
   m_ObjectHideFlags: 0

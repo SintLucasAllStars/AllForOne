@@ -118,7 +118,7 @@ public class CharacterController : MonoBehaviour
     public void startCharacterControl()
     {
         controllingCurrentCharacter = true;
-        GameManager.turnManager.startTimer();
+        GameManager.gameManager.startTimer();
     }
 
     public void resetCharacter()
