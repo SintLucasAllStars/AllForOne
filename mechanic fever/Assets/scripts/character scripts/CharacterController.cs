@@ -8,6 +8,9 @@ public class CharacterController : MonoBehaviour
     public bool controllingCurrentCharacter = false;
 
     public PowerUp[] activePowerUp;
+
+    public GameObject deathParticle;
+
     private Animator animator;
 
 
@@ -60,6 +63,10 @@ public class CharacterController : MonoBehaviour
     {
         this.stats = stats;
         tag = $"{stats.owner}Owned";
+        if (insideCheck())
+        {
+            instantDeath();
+        }
     }
 
     private void Start()
@@ -76,6 +83,11 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            instantDeath();
+        }
+
         if (stats != null && controllingCurrentCharacter)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1) && powerups.Count > 0 && powerups[powerUpIndex] != null)
@@ -125,6 +137,10 @@ public class CharacterController : MonoBehaviour
     {
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
+        if (insideCheck())
+        {
+            instantDeath();
+        }
     }
     #endregion
 
@@ -176,7 +192,7 @@ public class CharacterController : MonoBehaviour
     #region weapons and equipment
     public void addWeapon(Weapon weapon)
     {
-        if(equipedWeapon != null) { equipedWeapon.destroyWeapon(); }
+        if (equipedWeapon != null) { equipedWeapon.destroyWeapon(); }
         equipedWeapon = weapon;
         animator.SetInteger("attackIndex", equipedWeapon.index);
         equipmentHandler.EquipWeapon(equipedWeapon.index);
@@ -184,6 +200,23 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     #region death and hit mechanic's
+    public bool insideCheck()
+    {
+        Vector3 hightOffset = new Vector3(0, 0.5f, 0);
+        RaycastHit hit;
+        Physics.Raycast(transform.position + hightOffset, -transform.up, out hit);
+        Debug.DrawRay(transform.position + hightOffset, -transform.up, Color.red, 20);
+        return !hit.collider.CompareTag("insideFlooring");
+    }
+
+    public void instantDeath()
+    {
+        Destroy(gameObject, 15);
+        Instantiate(deathParticle, gameObject.transform);
+        animator.SetFloat("health", 0);
+        animator.SetTrigger("takeDamage");
+    }
+
     public void TakeDamage(float damageValue)
     {
         if (stats.TakeDamage(damageValue -= Defense))

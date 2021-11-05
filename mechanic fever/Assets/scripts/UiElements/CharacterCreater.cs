@@ -136,7 +136,6 @@ public class CharacterCreater : MonoBehaviour
     {
         RaycastHit rayHit;
         characterPrefab.transform.parent = null;
-        characterPrefab.GetComponent<CharacterController>().setStats(CreateStats());
 
         while (!Input.GetKey(KeyCode.Mouse0))
         {
@@ -145,6 +144,7 @@ public class CharacterCreater : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
 
+        characterPrefab.GetComponent<CharacterController>().setStats(CreateStats());
         characterPrefab.GetComponent<CapsuleCollider>().enabled = true;
         characterPrefab.GetComponent<Rigidbody>().useGravity = true;
 
