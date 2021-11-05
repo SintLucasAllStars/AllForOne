@@ -9,28 +9,43 @@ public class UnitCreator : MonoBehaviour
     public Slider spSlider;
     public Slider stSlider;
     public Slider dSlider;
-    
+
+    public Text costText;
+    public Text hcText;
+    public Text spcText;
+    public Text stcText;
+    public Text dcText;
+
+    public Text healthPer;
+    public Text speedPer;
+    public Text strengthPer;
+    public Text defensePer;
+
+    private int hCost;
+    private int spCost;
+    private int stCost;
+    private int dCost;
     private int unitCost;
 
     void Start()
     {
-        //hSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
-        //spSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
-        //stSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
-        //dSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        hSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        spSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        stSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        dSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        CalculateCost();
+        UpdateStatPercentage();
     }
     
     void Update()
     {
-        
+
     }
     
     private void ValueChangeCheck()
     {
-        print("h: " + hSlider.value);
-        print("sp: " + spSlider.value);
-        print("st: " + stSlider.value);
-        print("d: " + dSlider.value);
+        CalculateCost();
+        UpdateStatPercentage();
     }
 
     public void PrintUnitValues()
@@ -40,12 +55,42 @@ public class UnitCreator : MonoBehaviour
 
     private int CalculateCost()
     {
-        int h = map(hSlider.value, 1, 100, 3, 30);
-        int sp = map(spSlider.value, 1, 100, 3, 30);
-        int st = map(stSlider.value, 1, 100, 2, 20);
-        int d = map(dSlider.value, 1, 100, 2, 20);
-        cost = Int(Mathf.Round(h + sp + st + d));
-        return cost;
+        hCost = (int)RemapHp(hSlider);
+        spCost = (int)RemapHp(spSlider);
+        stCost = (int)RemapSd(stSlider);
+        dCost = (int)RemapSd(dSlider);
+        unitCost = (hCost+spCost+stCost+dCost);
+        UpdateCostText();
+        return unitCost;
+    }
+
+    private void UpdateCostText()
+    {
+        hcText.text = hCost.ToString();
+        spcText.text = spCost.ToString();
+        stcText.text = stCost.ToString();
+        dcText.text = dCost.ToString();
+        costText.text = "COST: " + unitCost;
+    }
+
+    private void UpdateStatPercentage()
+    {
+        healthPer.text = "Health " + hSlider.value*10 + "%";
+        speedPer.text = "Speed " + spSlider.value*10 + "%";
+        strengthPer.text = "Strength " + stSlider.value*10 + "%";
+        defensePer.text = "Defense " + dSlider.value*10 + "%";
+    }
+
+    private float RemapHp(Slider sld)
+    {
+        float i = (3+(sld.value-1)*(30-3)/(10-1));
+        return i;
+    }
+    
+    private float RemapSd(Slider sld)
+    {
+        float i = (2+(sld.value-1)*(20-2)/(10-1));
+        return i;
     }
 
 }
