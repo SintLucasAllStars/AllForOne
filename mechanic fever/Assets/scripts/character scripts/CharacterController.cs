@@ -211,17 +211,18 @@ public class CharacterController : MonoBehaviour
 
     public void instantDeath()
     {
-        Destroy(gameObject, 15);
+        Destroy(gameObject, 10);
         Instantiate(deathParticle, gameObject.transform);
         animator.SetFloat("health", 0);
         animator.SetTrigger("takeDamage");
+        tag = "Untagged";
     }
 
     public void TakeDamage(float damageValue)
     {
         if (stats.TakeDamage(damageValue -= Defense))
         {
-            Destroy(gameObject, 15);
+            Destroy(gameObject, 10);
         }
         animator.SetFloat("health", Health);
         animator.SetTrigger("takeDamage");
