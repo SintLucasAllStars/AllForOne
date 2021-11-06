@@ -124,7 +124,7 @@ public class CharacterCreater : MonoBehaviour
         speedValue = Map(speedSlider.value, 1, 100, 1, 10);
         defenseValue = Map(defenseSlider.value, 1, 100, 1, 10);
 
-        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, GameManager.gameManager.turn);
+        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, GameManager.gameManager.getTurnIndex());
     }
 
     public void SetScreenActive(bool value)

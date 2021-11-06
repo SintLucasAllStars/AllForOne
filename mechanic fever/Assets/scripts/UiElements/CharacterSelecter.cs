@@ -14,6 +14,7 @@ public class CharacterSelecter : MonoBehaviour
 
     public Transform cameraBase;
     public GameObject selectionPanel;
+    [HideInInspector]
     public GameObject selectedCharacter;
 
     private Slider healthSlider;
@@ -46,7 +47,7 @@ public class CharacterSelecter : MonoBehaviour
             {
                 Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit);
 
-                if (rayHit.collider.CompareTag($"player{GameManager.gameManager.turn}Owned"))
+                if (rayHit.collider.CompareTag($"player{GameManager.gameManager.getTurnIndex()}Owned"))
                 {
                     selectedCharacter = rayHit.collider.gameObject;
                     openUiWindow();

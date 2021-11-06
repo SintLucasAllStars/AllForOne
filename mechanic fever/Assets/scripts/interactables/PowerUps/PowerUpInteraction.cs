@@ -15,7 +15,7 @@ public class PowerUpInteraction : Interactable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag($"player{GameManager.gameManager.turn}Owned"))
+        if (other.CompareTag($"player{GameManager.gameManager.getTurnIndex()}Owned"))
         {
             PowerUp powerInstance = other.gameObject.AddComponent<PowerUp>();
             powerInstance.powerUpType = (int)currentPowerUp;

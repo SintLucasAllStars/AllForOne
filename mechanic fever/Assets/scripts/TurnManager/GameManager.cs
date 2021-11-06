@@ -16,16 +16,24 @@ public class GameManager : MonoBehaviour
     [Header("The amount of money each player starts with")]
     [Space(10)]
     public int startingMoney;
-    [Space(30)]
+    [Header("time per turn for each player")]
+    [Space(10)]
+    public float timePerTurn;
+
+    [Header("cube size in which weapons and powerups spawn")]
+    [Space(10)]
     public Vector2 fieldSize;
+
 
     private Player[] players;
 
+    [HideInInspector]
     public bool controllingCamera = true;
 
-    public bool timerDone = true;
+    private bool timerDone = true;
+    [HideInInspector]
     public bool turnTimerPaused;
-    public float timePerTurn;
+    
     private float timer;
 
     private bool gameOver;
@@ -38,9 +46,10 @@ public class GameManager : MonoBehaviour
         action
     }
 
+    [HideInInspector]
     public GameMode currentGameMode;
 
-    public int turn = 0;
+    private int turn = 0;
 
     private void Awake()
     {

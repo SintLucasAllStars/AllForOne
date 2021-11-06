@@ -83,11 +83,6 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            instantDeath();
-        }
-
         if (stats != null && controllingCurrentCharacter)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1) && powerups.Count > 0 && powerups[powerUpIndex] != null)
@@ -205,7 +200,6 @@ public class CharacterController : MonoBehaviour
         Vector3 hightOffset = new Vector3(0, 0.5f, 0);
         RaycastHit hit;
         Physics.Raycast(transform.position + hightOffset, -transform.up, out hit);
-        Debug.DrawRay(transform.position + hightOffset, -transform.up, Color.red, 20);
         return !hit.collider.CompareTag("insideFlooring");
     }
 
