@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class CharacterSelecter : MonoBehaviour
 {
     public Vector3 chameraOffset;
+    public Vector3 rotationOffset;
     private Quaternion oldRotation;
     private Vector3 oldPosition;
 
@@ -76,7 +77,7 @@ public class CharacterSelecter : MonoBehaviour
         while (transform.position != selectedCharacter.transform.position + chameraOffset && transform.rotation != selectedCharacter.transform.rotation)
         {
             transform.position = Vector3.Lerp(transform.position, selectedCharacter.transform.position + chameraOffset, 0.5f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, selectedCharacter.transform.rotation, 0.5f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, selectedCharacter.transform.rotation * Quaternion.Euler(rotationOffset), 0.5f);
             yield return new WaitForSeconds(0.1f);
         }
 
@@ -87,6 +88,8 @@ public class CharacterSelecter : MonoBehaviour
 
     public IEnumerator resetCamera()
     {
+        yield return new WaitForSeconds(2f);
+
         transform.parent = null;
 
         while (transform.position != oldPosition && transform.rotation != oldRotation)

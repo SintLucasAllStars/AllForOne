@@ -317,35 +317,6 @@ public class LevelEditor : EditorWindow
                         Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
                     }
                 }
-
-                if (fowardFloor)
-                {
-                    wallOffSet = new Vector3(0, 0, 8);
-                    rotation = Quaternion.identity;
-
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
-                }
-                if (backwardsFloor)
-                {
-                    wallOffSet = new Vector3(0, 0, -8);
-                    rotation = Quaternion.identity;
-
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
-                }
-                if (rightFloor)
-                {
-                    wallOffSet = new Vector3(8, 0, 0);
-                    rotation = Quaternion.Euler(0, 90, 0);
-
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
-                }
-                if (leftFloor)
-                {
-                    wallOffSet = new Vector3(-8, 0, 0);
-                    rotation = Quaternion.Euler(0, 90, 0);
-
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
-                }
             }
             #endregion
         }

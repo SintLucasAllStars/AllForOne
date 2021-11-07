@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     public float rotationPerPress;
     public float rotationSpeed;
 
-    public Vector2 boundries;
+    private Vector2 boundries;
 
     private Transform mainCamera;
     private Quaternion targetRotation;
@@ -18,11 +18,14 @@ public class CameraController : MonoBehaviour
     {
         mainCamera = transform.GetChild(0);
         targetRotation = Quaternion.Euler(0, 0, 0);
+
+        boundries = GameManager.gameManager.fieldSize;
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (GameManager.gameManager.controllingCamera)
         {
             CameraMovement();

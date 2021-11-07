@@ -59,6 +59,8 @@ public class CharacterController : MonoBehaviour
     public List<PowerUp> powerups = new List<PowerUp>();
     private int powerUpIndex = 0;
 
+    private Quaternion targetRotation;
+
     public void setStats(CharacterStats stats)
     {
         this.stats = stats;
@@ -78,6 +80,8 @@ public class CharacterController : MonoBehaviour
 
         equipedWeapon = gameObject.AddComponent<Weapon>();
         equipedWeapon.SetupWeapon(0);
+
+        targetRotation = Quaternion.Euler(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -97,6 +101,7 @@ public class CharacterController : MonoBehaviour
             else
             {
                 Movement();
+                rotateCamera();
             }
         }
     }
@@ -118,6 +123,30 @@ public class CharacterController : MonoBehaviour
 
         updateMovementAnimation(hDirection, vDirection);
         transform.Translate(hDirection * Speed * Time.deltaTime, 0, vDirection * Speed * Time.deltaTime);
+    }
+
+    private void rotateCamera()
+    {
+        //float rotationDirection = 0;
+        //if (Input.GetKey(KeyCode.Q))
+        //{
+        //    rotationDirection = -1;
+        //}
+        //else if (Input.GetKey(KeyCode.E))
+        //{
+        //    rotationDirection = 1;
+        //}
+        //transform.Rotate(0, rotationDirection * Time.deltaTime * 100, 0);
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            targetRotation *= Quaternion.Euler(0, 45, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            targetRotation *= Quaternion.Euler(0, -45, 0);
+        }
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 180 * Time.deltaTime);
     }
     #endregion
 
