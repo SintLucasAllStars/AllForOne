@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.UIElements;
 
-public class CustomEditor : EditorWindow
+public class LevelEditor : EditorWindow
 {
     bool spawnMultipleObjects;
 
@@ -46,7 +45,7 @@ public class CustomEditor : EditorWindow
     public static void ShowMyEditor()
     {
         // This method is called when the user selects the menu item in the Editor
-        EditorWindow wnd = GetWindow<CustomEditor>();
+        EditorWindow wnd = GetWindow<LevelEditor>();
         wnd.titleContent = new GUIContent("Level Editor");
     }
 
@@ -61,7 +60,9 @@ public class CustomEditor : EditorWindow
         GUILayout.Space(10);
 
         WallSpawningEnabled = EditorGUILayout.BeginToggleGroup("spawn walls Around Object", WallSpawningEnabled);
+        GUILayout.Label("wall", EditorStyles.boldLabel);
         wall = EditorGUILayout.ObjectField(wall, typeof(Object), false);
+        GUILayout.Label("door way", EditorStyles.boldLabel);
         doorway = EditorGUILayout.ObjectField(doorway, typeof(Object), false);
 
         GUILayout.Space(25);
@@ -112,8 +113,10 @@ public class CustomEditor : EditorWindow
         GUILayout.Label("floor", EditorStyles.largeLabel);
         GUILayout.Space(10);
 
-        floorSpawningEnabled = EditorGUILayout.BeginToggleGroup("spawn walls Around Object", floorSpawningEnabled);
+        floorSpawningEnabled = EditorGUILayout.BeginToggleGroup("spawn floors Around Object", floorSpawningEnabled);
+        GUILayout.Label("outside floor", EditorStyles.boldLabel);
         outsideFloor = EditorGUILayout.ObjectField(outsideFloor, typeof(Object), false);
+        GUILayout.Label("inside floor", EditorStyles.boldLabel);
         insidefloor = EditorGUILayout.ObjectField(insidefloor, typeof(Object), false);
 
         GUILayout.Space(25);
@@ -122,19 +125,20 @@ public class CustomEditor : EditorWindow
 
         GUILayout.Space(25);
 
-        GUILayout.Label("selected object should spawn on the +z axis wall", EditorStyles.boldLabel);
+        GUILayout.Label("selected object should spawn on the +z axis", EditorStyles.boldLabel);
         fowardFloor = EditorGUILayout.Toggle("Spawn +z", fowardFloor);
-        GUILayout.Label("selected object should spawn on the +x axis wall", EditorStyles.boldLabel);
+        GUILayout.Label("selected object should spawn on the +x axis", EditorStyles.boldLabel);
         rightFloor = EditorGUILayout.Toggle("Spawn +x", rightFloor);
-        GUILayout.Label("selected object should spawn on the -x axis wall", EditorStyles.boldLabel);
+        GUILayout.Label("selected object should spawn on the -x axis", EditorStyles.boldLabel);
         leftFloor = EditorGUILayout.Toggle("Spawn -x", leftFloor);
-        GUILayout.Label("selected object should spawn on the -z axis wall", EditorStyles.boldLabel);
+        GUILayout.Label("selected object should spawn on the -z axis", EditorStyles.boldLabel);
         backwardsFloor = EditorGUILayout.Toggle("Spawn -z", backwardsFloor);
         EditorGUILayout.EndToggleGroup();
         #endregion
 
         GUILayout.Space(50);
         GUILayout.Label("Add Selected Objects", EditorStyles.largeLabel);
+
         if (GUILayout.Button("generate"))
         {
             spawnObjects();
@@ -251,34 +255,96 @@ public class CustomEditor : EditorWindow
 
                 Vector3 wallOffSet;
                 Quaternion rotation;
+                if(spawnObject.CompareTag("Untagged") && parentObject.CompareTag("insideFlooring") || spawnObject.CompareTag("insideFlooring") && parentObject.CompareTag("Untagged"))
+                {
+                    if (fowardFloor)
+                    {
+                        wallOffSet = new Vector3(0, 0, 7.5f);
+                        rotation = Quaternion.identity;
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                    if (backwardsFloor)
+                    {
+                        wallOffSet = new Vector3(0, 0, -7.5f);
+                        rotation = Quaternion.identity;
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                    if (rightFloor)
+                    {
+                        wallOffSet = new Vector3(7.5f, 0, 0);
+                        rotation = Quaternion.Euler(0, 90, 0);
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                    if (leftFloor)
+                    {
+                        wallOffSet = new Vector3(-7.5f, 0, 0);
+                        rotation = Quaternion.Euler(0, 90, 0);
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                }
+                else
+                {
+                    if (fowardFloor)
+                    {
+                        wallOffSet = new Vector3(0, 0, 8);
+                        rotation = Quaternion.identity;
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                    if (backwardsFloor)
+                    {
+                        wallOffSet = new Vector3(0, 0, -8);
+                        rotation = Quaternion.identity;
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                    if (rightFloor)
+                    {
+                        wallOffSet = new Vector3(8, 0, 0);
+                        rotation = Quaternion.Euler(0, 90, 0);
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                    if (leftFloor)
+                    {
+                        wallOffSet = new Vector3(-8, 0, 0);
+                        rotation = Quaternion.Euler(0, 90, 0);
+
+                        Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
+                    }
+                }
 
                 if (fowardFloor)
                 {
                     wallOffSet = new Vector3(0, 0, 8);
                     rotation = Quaternion.identity;
 
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation);
+                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
                 }
                 if (backwardsFloor)
                 {
                     wallOffSet = new Vector3(0, 0, -8);
                     rotation = Quaternion.identity;
 
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation);
+                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
                 }
                 if (rightFloor)
                 {
                     wallOffSet = new Vector3(8, 0, 0);
                     rotation = Quaternion.Euler(0, 90, 0);
 
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation);
+                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
                 }
                 if (leftFloor)
                 {
                     wallOffSet = new Vector3(-8, 0, 0);
                     rotation = Quaternion.Euler(0, 90, 0);
 
-                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation);
+                    Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform.parent);
                 }
             }
             #endregion
@@ -289,3 +355,4 @@ public class CustomEditor : EditorWindow
         }
     }
 }
+
