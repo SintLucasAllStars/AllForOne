@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
-    
+
     private CharacterSelecter characterSelecter;
     private InteractableSpawning spawner;
 
@@ -33,12 +33,10 @@ public class GameManager : MonoBehaviour
     private bool timerDone = true;
     [HideInInspector]
     public bool turnTimerPaused;
-    
+
     private float timer;
 
     private bool gameOver;
-
-    private bool endTurn;
 
     public enum GameMode
     {
@@ -76,8 +74,6 @@ public class GameManager : MonoBehaviour
         {
             players[i] = new Player(startingMoney);
         }
-
-        StartCoroutine(TurnSystem());
     }
 
     public GameMode getGamemode()
@@ -96,37 +92,31 @@ public class GameManager : MonoBehaviour
         return turn;
     }
 
-    private IEnumerator TurnSystem()
+    private void TurnSystem()
     {
-        while (!gameOver)
+        turn++;
+        
+        if (turn > players.Length - 1)
         {
-            if (currentGameMode == GameMode.setup)
-            {
-                if (turn > players.Length - 1)
-                {
-                    turn = 0;
-                }
-                yield return new WaitUntil(() => endTurn || players[turn].getCurrency() <= 0);
-                endTurn = false;
-                turn++;
+            turn = 0;
+        }
 
-                if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
-                {
-                    EndSetupFase();
-                }
-            }
-            else
+        if (currentGameMode == GameMode.setup)
+        {
+
+            if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
             {
-                if (turn > players.Length - 1)
-                {
-                    turn = 0;
-                }
-                yield return new WaitUntil(() => endTurn);
-                endTurn = false;
-                spawner.spawnPowerUp();
-                spawner.spawnWeapon();
-                turn++;
+                EndSetupFase();
             }
+            else if(players[turn].getCurrency() <= 0)
+            {
+                TurnSystem();
+            }
+        }
+        else
+        {
+            spawner.spawnPowerUp();
+            spawner.spawnWeapon();
         }
     }
 
@@ -157,21 +147,20 @@ public class GameManager : MonoBehaviour
     public void PlayerDoneSetupFase()
     {
         GetPlayer().zeroCurrency();
+        TurnSystem();
     }
 
     public void EndSetupFase()
     {
-        StopAllCoroutines();
         currentGameMode = GameMode.action;
         turn = 0;
-        StartCoroutine(TurnSystem());
 
         //call action fase banner
     }
 
     public void EndTurn()
     {
-        endTurn = true;
+        TurnSystem();
     }
 
     public void EndGame()

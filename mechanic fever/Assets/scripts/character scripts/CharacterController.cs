@@ -81,7 +81,7 @@ public class CharacterController : MonoBehaviour
         equipedWeapon = gameObject.AddComponent<Weapon>();
         equipedWeapon.SetupWeapon(0);
 
-        targetRotation = Quaternion.Euler(0, 0, 0);
+        targetRotation = transform.rotation;
     }
 
     // Update is called once per frame
@@ -96,7 +96,8 @@ public class CharacterController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                animator.SetTrigger("Attack");
+                updateAttackAnimation();
+                StartCoroutine(attackTimer());
             }
             else
             {
@@ -216,10 +217,34 @@ public class CharacterController : MonoBehaviour
     #region weapons and equipment
     public void addWeapon(Weapon weapon)
     {
-        if (equipedWeapon != null) { equipedWeapon.destroyWeapon(); }
+        if (equipedWeapon != null)
+        {
+            if (equipedWeapon.index != 0)
+            {
+                equipmentHandler.unEquipWeapon(equipedWeapon.index);
+            }
+            equipedWeapon.destroyWeapon();
+        }
         equipedWeapon = weapon;
         animator.SetInteger("attackIndex", equipedWeapon.index);
         equipmentHandler.EquipWeapon(equipedWeapon.index);
+    }
+    #endregion
+
+    #region attacks and damage
+    public void updateAttackAnimation()
+    {
+        animator.SetFloat("attackSpeed", equipedWeapon.speed * 0.1f);
+        animator.SetTrigger("Attack");
+    }
+
+    public IEnumerator attackTimer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds((float)(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length / 4 - 0.5f));
+        print("hit");
+        yield return new WaitForSeconds((float)(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length / 2 - 0.5f));
+        print("done");
     }
     #endregion
 
