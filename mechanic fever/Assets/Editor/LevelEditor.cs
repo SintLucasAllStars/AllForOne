@@ -25,6 +25,8 @@ public class LevelEditor : EditorWindow
     Object outsideFloor;
     Object insidefloor;
 
+    Vector2 scrollPos;
+
     public enum gameObjectTypes
     {
         wall = 0,
@@ -55,15 +57,17 @@ public class LevelEditor : EditorWindow
 
         GUILayout.Space(10);
 
+        scrollPos =
+    EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 50));
         #region wall and doorway
         GUILayout.Label("wall/doorway spawning", EditorStyles.largeLabel);
         GUILayout.Space(10);
 
         WallSpawningEnabled = EditorGUILayout.BeginToggleGroup("spawn walls Around Object", WallSpawningEnabled);
         GUILayout.Label("wall", EditorStyles.boldLabel);
-        wall = EditorGUILayout.ObjectField(wall, typeof(Object), false);
+        wall = EditorGUILayout.ObjectField(wall, typeof(GameObject), false);
         GUILayout.Label("door way", EditorStyles.boldLabel);
-        doorway = EditorGUILayout.ObjectField(doorway, typeof(Object), false);
+        doorway = EditorGUILayout.ObjectField(doorway, typeof(GameObject), false);
 
         GUILayout.Space(25);
         GUILayout.Label("which object would you like to spawn", EditorStyles.boldLabel);
@@ -115,9 +119,9 @@ public class LevelEditor : EditorWindow
 
         floorSpawningEnabled = EditorGUILayout.BeginToggleGroup("spawn floors Around Object", floorSpawningEnabled);
         GUILayout.Label("outside floor", EditorStyles.boldLabel);
-        outsideFloor = EditorGUILayout.ObjectField(outsideFloor, typeof(Object), false);
+        outsideFloor = EditorGUILayout.ObjectField(outsideFloor, typeof(GameObject), false);
         GUILayout.Label("inside floor", EditorStyles.boldLabel);
-        insidefloor = EditorGUILayout.ObjectField(insidefloor, typeof(Object), false);
+        insidefloor = EditorGUILayout.ObjectField(insidefloor, typeof(GameObject), false);
 
         GUILayout.Space(25);
         GUILayout.Label("which object would you like to spawn", EditorStyles.boldLabel);
@@ -136,6 +140,7 @@ public class LevelEditor : EditorWindow
         EditorGUILayout.EndToggleGroup();
         #endregion
 
+
         GUILayout.Space(50);
         GUILayout.Label("Add Selected Objects", EditorStyles.largeLabel);
 
@@ -143,6 +148,7 @@ public class LevelEditor : EditorWindow
         {
             spawnObjects();
         }
+        EditorGUILayout.EndScrollView();
     }
 
     private float offSetCalculation(bool positive, bool negative, float offsetValue)
@@ -188,35 +194,49 @@ public class LevelEditor : EditorWindow
 
                 Vector3 wallOffSet;
                 Quaternion rotation;
-                z = offSetCalculation(foward, backwards, 4);
-                x = offSetCalculation(right, left, 4);
+
+                float y;
+                switch (typeWallObject)
+                {
+                    case gameObjectTypes.wall:
+                        y = 4.25f;
+                        break;
+                    case gameObjectTypes.doorway:
+                        y = 5;
+                        break;
+                    default:
+                        y = 0;
+                        Debug.LogWarning("y offset calculation defaulted");
+                        break;
+                }
+
 
                 if (spawnMultipleObjects)
                 {
                     if (foward)
                     {
-                        wallOffSet = new Vector3(0, 4.25f, 4);
+                        wallOffSet = new Vector3(0, y, 4);
                         rotation = Quaternion.identity;
 
                         Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform);
                     }
                     if (backwards)
                     {
-                        wallOffSet = new Vector3(0, 4.25f, -4);
+                        wallOffSet = new Vector3(0, y, -4);
                         rotation = Quaternion.identity;
 
                         Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform);
                     }
                     if (right)
                     {
-                        wallOffSet = new Vector3(4, 4.25f, 0);
+                        wallOffSet = new Vector3(4, y, 0);
                         rotation = Quaternion.Euler(0, 90, 0);
 
                         Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform);
                     }
                     if (left)
                     {
-                        wallOffSet = new Vector3(-4, 4.25f, 0);
+                        wallOffSet = new Vector3(-4, y, 0);
                         rotation = Quaternion.Euler(0, 90, 0);
 
                         Instantiate(spawnObject, parentObject.transform.position + wallOffSet, rotation, parentObject.transform);
@@ -224,7 +244,9 @@ public class LevelEditor : EditorWindow
                 }
                 else
                 {
-                    wallOffSet = new Vector3(x, 4.25f, z);
+                    z = offSetCalculation(foward, backwards, 4);
+                    x = offSetCalculation(right, left, 4);
+                    wallOffSet = new Vector3(x, y, z);
                     rotation = Quaternion.identity;
                     if (right || left)
                     {
@@ -255,7 +277,7 @@ public class LevelEditor : EditorWindow
 
                 Vector3 wallOffSet;
                 Quaternion rotation;
-                if(spawnObject.CompareTag("Untagged") && parentObject.CompareTag("insideFlooring") || spawnObject.CompareTag("insideFlooring") && parentObject.CompareTag("Untagged"))
+                if (spawnObject.CompareTag("Untagged") && parentObject.CompareTag("insideFlooring") || spawnObject.CompareTag("insideFlooring") && parentObject.CompareTag("Untagged"))
                 {
                     if (fowardFloor)
                     {
