@@ -34,4 +34,13 @@ public class InteractableSpawning : MonoBehaviour
     {
         Instantiate(powerUpPrefab[Random.Range(0, powerUpPrefab.Length)], getSpawnPosition() + spawnOffSet, Quaternion.identity);
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        if(GameManager.gameManager != null)
+        {
+            Gizmos.DrawWireCube(Vector3.zero, new Vector3(GameManager.gameManager.fieldSize.x * 2, 1, GameManager.gameManager.fieldSize.y * 2));
+        }
+    }
 }

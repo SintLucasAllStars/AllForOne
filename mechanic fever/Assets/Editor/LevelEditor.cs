@@ -57,8 +57,8 @@ public class LevelEditor : EditorWindow
 
         GUILayout.Space(10);
 
-        scrollPos =
-    EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 50));
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 50));
+
         #region wall and doorway
         GUILayout.Label("wall/doorway spawning", EditorStyles.largeLabel);
         GUILayout.Space(10);

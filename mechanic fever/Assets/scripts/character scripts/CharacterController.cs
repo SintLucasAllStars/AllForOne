@@ -61,6 +61,9 @@ public class CharacterController : MonoBehaviour
 
     private Quaternion targetRotation;
 
+    private float attackResetTimer;
+    public float BaseTimeBetweenAttacks;
+
     public void setStats(CharacterStats stats)
     {
         this.stats = stats;
@@ -94,7 +97,7 @@ public class CharacterController : MonoBehaviour
                 activatePowerup();
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0) && attackResetTimer <= 0)
             {
                 updateAttackAnimation();
                 StartCoroutine(attackTimer());
@@ -104,6 +107,11 @@ public class CharacterController : MonoBehaviour
                 Movement();
                 rotateCamera();
             }
+        }
+
+        if (attackResetTimer > 0)
+        {
+            attackResetTimer -= Time.deltaTime * (equipedWeapon.speed * 0.1f);
         }
     }
 
@@ -162,6 +170,7 @@ public class CharacterController : MonoBehaviour
     {
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
+        attackResetTimer = 0;
         if (insideCheck())
         {
             instantDeath();
@@ -242,9 +251,26 @@ public class CharacterController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         yield return new WaitForSeconds((float)(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length / 4 - 0.5f));
-        print("hit");
-        yield return new WaitForSeconds((float)(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length / 2 - 0.5f));
-        print("done");
+        attackResetTimer = BaseTimeBetweenAttacks;
+        attackHit();
+    }
+
+    private void attackHit()
+    {
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.forward + (transform.up * 2), new Vector3(2, 2, 2 + equipedWeapon.range));
+        foreach (Collider hitObject in hitColliders)
+        {
+            CharacterController controller;
+            if (hitObject.TryGetComponent(out controller) && controller != this)
+            {
+                controller.TakeDamage(damageCalulation());
+            }
+        }
+    }
+
+    private float damageCalulation()
+    {
+        return equipedWeapon.damage;
     }
     #endregion
 
@@ -259,7 +285,7 @@ public class CharacterController : MonoBehaviour
 
     public void instantDeath()
     {
-        Destroy(gameObject, 10);
+        die();
         Instantiate(deathParticle, gameObject.transform);
         animator.SetFloat("health", 0);
         animator.SetTrigger("takeDamage");
@@ -270,10 +296,22 @@ public class CharacterController : MonoBehaviour
     {
         if (stats.TakeDamage(damageValue -= Defense))
         {
-            Destroy(gameObject, 10);
+            die();
         }
         animator.SetFloat("health", Health);
         animator.SetTrigger("takeDamage");
     }
+
+    private void die()
+    {
+        Destroy(gameObject, 10);
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+    }
     #endregion
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + transform.forward + (transform.up * 2), new Vector3(2, 2, 2 + equipedWeapon.range));
+    }
 }
