@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class CharacterCreater : MonoBehaviour
 {
+    [HideInInspector]
     public int cost = 0;
 
     public GameObject[] CharacterBases;
-    public GameObject redCharacterBase;
 
     public GameObject characterPreviewSpawnPoint;
     private GameObject characterPrefab;
