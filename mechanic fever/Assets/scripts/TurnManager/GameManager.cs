@@ -157,12 +157,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            timer = 0;
-        }
-
-
         if (!turnTimerPaused && timer > 0)
         {
             timer -= Time.deltaTime;
@@ -204,6 +198,10 @@ public class GameManager : MonoBehaviour
         TurnSystem();
     }
 
+    public void endTurnEarly()
+    {
+        timer = 0;
+    }
     #endregion
 
     #region Victory/draw Mechanic's

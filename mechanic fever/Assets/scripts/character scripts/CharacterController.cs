@@ -54,6 +54,20 @@ public class CharacterController : MonoBehaviour
             return stats.getDefense();
         }
     }
+
+    public bool fortified 
+    {
+        set
+        {
+            animator.SetBool("blocking", value);
+            stats.SetFortified(value);
+        }
+
+        get
+        {
+            return stats.fortified;
+        }
+    }
     #endregion
 
     public List<PowerUp> powerups = new List<PowerUp>();
@@ -63,6 +77,8 @@ public class CharacterController : MonoBehaviour
 
     private float attackResetTimer;
     public float BaseTimeBetweenAttacks;
+    public float BaseTimeToFortify;
+    private float fortifyTimer = 0;
 
     public void setStats(CharacterStats stats)
     {
@@ -96,16 +112,36 @@ public class CharacterController : MonoBehaviour
             {
                 activatePowerup();
             }
-
-            if (Input.GetKeyDown(KeyCode.Mouse0) && attackResetTimer <= 0)
+            else if (Input.GetKeyDown(KeyCode.R))
             {
-                updateAttackAnimation();
-                StartCoroutine(attackTimer());
+                increasePowerupIndex();
+            }
+            else if (Input.GetKeyDown(KeyCode.F))
+            {
+                decreasePowerupIndex();
+            }
+
+            if (Input.GetKey(KeyCode.Mouse1) )
+            {
+                fortifyTimer += Time.deltaTime;
+                if (fortifyTimer >= BaseTimeToFortify)
+                {
+                    fortified = true;
+                    GameManager.gameManager.endTurnEarly();
+                }
             }
             else
             {
-                Movement();
-                rotateCamera();
+                if (Input.GetKeyDown(KeyCode.Mouse0) && attackResetTimer <= 0)
+                {
+                    updateAttackAnimation();
+                    StartCoroutine(attackTimer());
+                }
+                else
+                {
+                    Movement();
+                    rotateCamera();
+                }
             }
         }
 
@@ -153,6 +189,7 @@ public class CharacterController : MonoBehaviour
     public void startCharacterControl()
     {
         controllingCurrentCharacter = true;
+        fortified = false;
         GameManager.gameManager.startTimer();
     }
 
@@ -161,6 +198,7 @@ public class CharacterController : MonoBehaviour
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
         attackResetTimer = 0;
+        fortifyTimer = 0;
         if (insideCheck())
         {
             instantDeath();
@@ -283,7 +321,7 @@ public class CharacterController : MonoBehaviour
 
     public void TakeDamage(float damageValue)
     {
-        if (stats.TakeDamage(damageValue -= Defense))
+        if (stats.TakeDamage(damageValue /= Defense))
         {
             die();
         }
