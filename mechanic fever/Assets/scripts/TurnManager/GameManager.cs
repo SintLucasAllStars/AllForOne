@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
 
     public Player[] players;
+    public Player winningPlayer;
 
     [HideInInspector]
     public bool controllingCamera = true;
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     private float timer;
 
-    private bool gameOver;
+    public bool gameOver;
 
     public enum GameMode
     {
@@ -49,19 +50,27 @@ public class GameManager : MonoBehaviour
 
     private int turn = 0;
 
+    public void setCharacterSelector(CharacterSelecter selecter)
+    {
+        characterSelecter = selecter;
+    }
+
+    public void setItemSpawner(InteractableSpawning spawner)
+    {
+        this.spawner = spawner;
+    }
+
     private void Awake()
     {
         if (gameManager is null)
         {
             gameManager = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(this);
         }
-
-        characterSelecter = GetComponent<CharacterSelecter>();
-        spawner = GetComponent<InteractableSpawning>();
 
         startGame();
     }
@@ -195,11 +204,9 @@ public class GameManager : MonoBehaviour
         TurnSystem();
     }
 
-    public void EndGame()
-    {
-        gameOver = true;
-    }
+    #endregion
 
+    #region Victory/draw Mechanic's
     private bool XorPlayerValue()
     {
         int i = 0;
@@ -212,6 +219,32 @@ public class GameManager : MonoBehaviour
         }
 
         return i == players.Length - 1;
+    }
+
+    private Player getWiningPlayer()
+    {
+        Player value = null;
+
+        foreach (Player player in players)
+        {
+            if (player.getUnitLenght() > 0)
+            {
+                value = player;
+            }
+        }
+
+        if (value == null)
+        {
+            Debug.LogError($"{this}: the winning player returned null");
+        }
+
+
+        return value;
+    }
+
+    public void EndGame()
+    {
+        gameOver = true;
     }
     #endregion
 }

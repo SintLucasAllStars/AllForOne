@@ -12,6 +12,11 @@ public class InteractableSpawning : MonoBehaviour
 
     private NavMeshHit hit;
 
+    private void Start()
+    {
+        GameManager.gameManager.setItemSpawner(this);
+    }
+
     public Vector3 getSpawnPosition()
     {
         float x = GameManager.gameManager.fieldSize.x / 2;
@@ -38,7 +43,7 @@ public class InteractableSpawning : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        if(GameManager.gameManager != null)
+        if (GameManager.gameManager != null)
         {
             Gizmos.DrawWireCube(Vector3.zero, new Vector3(GameManager.gameManager.fieldSize.x * 2, 1, GameManager.gameManager.fieldSize.y * 2));
         }

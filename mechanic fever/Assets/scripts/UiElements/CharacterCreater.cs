@@ -196,6 +196,7 @@ public class CharacterCreater : MonoBehaviour
 
     public void turnChange()
     {
+        GameManager.gameManager.PlayerDoneSetupFase();
         StartCoroutine(turnTimer());
     }
 
