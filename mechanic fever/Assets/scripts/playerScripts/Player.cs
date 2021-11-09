@@ -6,11 +6,31 @@ using System;
 [Serializable]
 public class Player
 {
+    public List<GameObject> units;
     private int currency;
 
     public Player(int maxMoney)
     {
         currency = maxMoney;
+        units = new List<GameObject>();
+    }
+
+    public void setUnits(GameObject[] givenUnits)
+    {
+        foreach(GameObject unit in givenUnits)
+        {
+            units.Add(unit);
+        }
+    }
+
+    public void UpdateUnitsList()
+    {
+        units.RemoveAll(n => n.CompareTag("Untagged"));
+    }
+
+    public int getUnitLenght()
+    {
+        return units.Count;
     }
 
     #region currency management

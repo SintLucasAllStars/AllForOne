@@ -136,21 +136,11 @@ public class CharacterController : MonoBehaviour
 
     private void rotateCamera()
     {
-        //float rotationDirection = 0;
-        //if (Input.GetKey(KeyCode.Q))
-        //{
-        //    rotationDirection = -1;
-        //}
-        //else if (Input.GetKey(KeyCode.E))
-        //{
-        //    rotationDirection = 1;
-        //}
-        //transform.Rotate(0, rotationDirection * Time.deltaTime * 100, 0);
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             targetRotation *= Quaternion.Euler(0, 45, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.Q))
         {
             targetRotation *= Quaternion.Euler(0, -45, 0);
         }
@@ -261,7 +251,7 @@ public class CharacterController : MonoBehaviour
         foreach (Collider hitObject in hitColliders)
         {
             CharacterController controller;
-            if (hitObject.TryGetComponent(out controller) && controller != this)
+            if (hitObject.TryGetComponent(out controller) && !hitObject.CompareTag(gameObject.tag))
             {
                 controller.TakeDamage(damageCalulation());
             }
@@ -270,7 +260,7 @@ public class CharacterController : MonoBehaviour
 
     private float damageCalulation()
     {
-        return equipedWeapon.damage;
+        return equipedWeapon.damage * Strength;
     }
     #endregion
 
@@ -289,7 +279,6 @@ public class CharacterController : MonoBehaviour
         Instantiate(deathParticle, gameObject.transform);
         animator.SetFloat("health", 0);
         animator.SetTrigger("takeDamage");
-        tag = "Untagged";
     }
 
     public void TakeDamage(float damageValue)
@@ -304,8 +293,8 @@ public class CharacterController : MonoBehaviour
 
     private void die()
     {
+        tag = "Untagged";
         Destroy(gameObject, 10);
-        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
     #endregion
 

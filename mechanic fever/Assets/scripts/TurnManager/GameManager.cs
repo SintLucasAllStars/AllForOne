@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public Vector2 fieldSize;
 
 
-    private Player[] players;
+    public Player[] players;
 
     [HideInInspector]
     public bool controllingCamera = true;
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
     private void TurnSystem()
     {
         turn++;
-        
+
         if (turn > players.Length - 1)
         {
             turn = 0;
@@ -108,13 +108,33 @@ public class GameManager : MonoBehaviour
             {
                 EndSetupFase();
             }
-            else if(players[turn].getCurrency() <= 0)
+            else if (players[turn].getCurrency() <= 0)
             {
                 TurnSystem();
             }
         }
         else
         {
+            foreach (Player player in players)
+            {
+                player.UpdateUnitsList();
+            }
+
+            if (Array.TrueForAll(players, n => n.getUnitLenght() <= 0))
+            {
+                print("draw");
+                //TODO: stale Mate code
+            }
+            else if (XorPlayerValue())
+            {
+                print("victory");
+                //TODO: victory code
+            }
+            else if (players[turn].getUnitLenght() <= 0)
+            {
+                TurnSystem();
+            }
+
             spawner.spawnPowerUp();
             spawner.spawnWeapon();
         }
@@ -128,11 +148,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            timer = 0;
+        }
+
+
         if (!turnTimerPaused && timer > 0)
         {
             timer -= Time.deltaTime;
         }
-        else if (timer < 0 && !timerDone)
+        else if (timer <= 0 && !timerDone)
         {
             timerDone = true;
             StartCoroutine(characterSelecter.resetCamera());
@@ -152,8 +178,14 @@ public class GameManager : MonoBehaviour
 
     public void EndSetupFase()
     {
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].setUnits(GameObject.FindGameObjectsWithTag($"player{i}Owned"));
+        }
+
         currentGameMode = GameMode.action;
         turn = 0;
+
 
         //call action fase banner
     }
@@ -166,6 +198,20 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         gameOver = true;
+    }
+
+    private bool XorPlayerValue()
+    {
+        int i = 0;
+        foreach (Player player in players)
+        {
+            if (player.getUnitLenght() <= 0)
+            {
+                i++;
+            }
+        }
+
+        return i == players.Length - 1;
     }
     #endregion
 }
