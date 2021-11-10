@@ -18,7 +18,7 @@ public class UnitMovement : MonoBehaviour
 
     [Space]
     [Header("Attributes")]
-    [SerializeField] bool canMove;
+    public bool canMove;
 
     [Space]
     [Header("Input")]
@@ -53,7 +53,7 @@ public class UnitMovement : MonoBehaviour
     {
         currentInputVector = Vector2.SmoothDamp(currentInputVector, input, ref inputVelocity, inputSmoothing);
         Vector3 movement = new Vector3(currentInputVector.x, 0, currentInputVector.y);
-        transform.Translate(movement * unitStats.GetSpeed() * Time.deltaTime);
+        transform.Translate(movement * (unitStats.GetSpeed() / 4) * Time.deltaTime);
     }
 
     // Initialises the player

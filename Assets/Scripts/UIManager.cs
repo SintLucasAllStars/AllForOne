@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] GameObject loadoutUI;
     [SerializeField] TextMeshProUGUI[] pointTexts;
+    [SerializeField] GameObject gameCanvas;
+    [SerializeField] TextMeshProUGUI playerTurnText;
 
     private void Start()
     {
@@ -106,6 +108,11 @@ public class UIManager : MonoBehaviour
         return unit;
     }
 
+    void ChangePlayerText(int turnPlayer)
+    {
+        playerTurnText.text = "Player " + (turnPlayer +1);
+    }
+
     void EndTurn()
     {
         GameManager.Instance.EndTurn();
@@ -113,6 +120,9 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.gamePhase == GameManager.GamePhase.UnitChoosing)
         {
             loadoutUI.SetActive(false);
+            gameCanvas.SetActive(true);
+
+            ChangePlayerText(GameManager.Instance.currentTurnPlayer);
         }
     }
 }
