@@ -57,5 +57,4 @@ public class Unit
         //Debugging purposes just in case
         return isDefending;
     }
-
 }

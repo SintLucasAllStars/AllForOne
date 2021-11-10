@@ -1,26 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using UnityEngine.UI;
-
-public class tempStats
-{
-    int health;
-    int strength;
-    int speed;
-    int defense;
-
-    public tempStats()
-    {
-        health = 0;
-        strength = 0;
-        speed = 0;
-        defense = 0;
-    }
-}
 
 public class CreateUnit : MonoBehaviour
 {
+    public InputField inputField;
+
+    public GameData gameData;
+    private Unit tempUnit;
+    public float[] priceValues = new float[4] { 3,2,3,2 };
+    public GameObject priceText;
+
+    private int team;
+    private string name = "this is not a placeholder";
+    private int health, strength, speed, defense;
+    private GameObject go;
+
     public enum UnitStats { 
         HEALTH = 0,
         STRENGTH = 1, 
@@ -34,24 +31,59 @@ public class CreateUnit : MonoBehaviour
     //Fetch the Texts and change the val
     //Take care of the unit points
 
-    public void HealthTest()
+    public void NameTextValue(InputField userInput)
     {
-
+        name = userInput.text;
+        Debug.Log(userInput.text);
     }
 
     //Catch all the values of the slider and set to values
     public void ValueChangeCheck(int i)
     {
+        team = (gameData.currentRound % 2) + 1;
+
         //Debug.Log(i + " : " + (UnitStats)i);
         bool isExpensive = false;
         if ((UnitStats)i == UnitStats.HEALTH || (UnitStats)i == UnitStats.SPEED) isExpensive = true;
         MapUnitPoints(unitSliders[i].value, isExpensive);
-        //Debug.Log(MapUnitPoints(unitSliders[i].value, isExpensive));
+        switch ((UnitStats)i)
+        {
+            case UnitStats.HEALTH:
+                health = Mathf.RoundToInt(MapUnitPoints(unitSliders[i].value, isExpensive).x);
+                priceValues[0] = MapUnitPoints(unitSliders[i].value, isExpensive).y;
+                break;
+            case UnitStats.STRENGTH:
+                strength = Mathf.RoundToInt(MapUnitPoints(unitSliders[i].value, isExpensive).x);
+                priceValues[1] = MapUnitPoints(unitSliders[i].value, isExpensive).y;
+                break;
+            case UnitStats.SPEED:
+                speed = Mathf.RoundToInt(MapUnitPoints(unitSliders[i].value, isExpensive).x);
+                priceValues[2] = MapUnitPoints(unitSliders[i].value, isExpensive).y;
+                break;
+            case UnitStats.DEFENSE:
+                defense = Mathf.RoundToInt(MapUnitPoints(unitSliders[i].value, isExpensive).x);
+                priceValues[3] = MapUnitPoints(unitSliders[i].value, isExpensive).y;
+                break;
+            default:
+                Debug.Log("This.. has turned into a difficult situation");
+                break;
+        }
+
+        priceText.GetComponent<TMPro.TextMeshProUGUI>().text = "Price: " + priceValues.Sum();
     }
 
     public void MakeUnit()
     {
-        //Fetch tempstats and parse these values.
+        tempUnit = new Unit(team, name, health, strength, speed, defense);
+        gameObject.GetComponent<Canvas>().enabled = false;
+        GameDataHandler();
+    }
+
+    public void GameDataHandler()
+    {
+        int curPlayer = (gameData.currentRound % 2) + 1;
+        gameData.RemovePoints(curPlayer, Mathf.RoundToInt(priceValues.Sum()));
+        gameData.AddUnit(go, tempUnit);
     }
 
     private Vector2 MapUnitPoints(float sliderCurrent, bool isExpensive)

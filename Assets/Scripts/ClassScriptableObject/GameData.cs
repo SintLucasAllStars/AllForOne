@@ -7,16 +7,20 @@ public class GameData : ScriptableObject
 {
     private Dictionary<GameObject, Unit> getUnit = new Dictionary<GameObject, Unit>();
     //private Dictionary<Unit, GameObject> getObj = new Dictionary<Unit, GameObject>();
-    private List<PlayerInfo> players = new List<PlayerInfo>();
-    private int currentRound;
+    private List<Player> players = new List<Player>();
+    public int currentRound;
+    public int playerCount;
+    public Player curPlayer;
+    public Unit curUnit;
+    // 1=blue, 2=red, 3=green, 4=yellow
     // Add to dict
     // Remove from dict
     // Data on current round
     // Reset data function
 
-    public void AddPlayer(PlayerInfo pi)
+    public void AddPlayer(Player player)
     {
-        players.Add(pi);
+        players.Add(player);
     }
 
     public void AddUnit(GameObject go, Unit u)
@@ -24,14 +28,21 @@ public class GameData : ScriptableObject
         getUnit.Add(go, u);
     }
 
-    public void NextPlaceRound()
+    public void RemovePoints(int team, int price)
     {
-
+        players[team - 1].removePoints(price);
     }
 
-    public void NextPlayRound()
+    public void NextPlaceRound()
     {
-        //if(GToU == empty)
+        curPlayer = players[currentRound % 2 + 1];
+    }
+
+    public bool selectUnit()
+    {
+        //Check if it is from the current team else return false
+        //Else set as curUnit and return true
+        return false;
     }
 
     private void ResetData()
