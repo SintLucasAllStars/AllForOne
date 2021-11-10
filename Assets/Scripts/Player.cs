@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class Player {
+    public float currency { get; }
+    public string name;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public Player(int playerNumber) {
+        name = $"Player {playerNumber}";
+        Debug.Log($"Created player: {name}");
     }
 }
