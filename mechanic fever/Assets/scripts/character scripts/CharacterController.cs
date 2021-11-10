@@ -103,8 +103,6 @@ public class CharacterController : MonoBehaviour
         targetRotation = transform.rotation;
 
         attackResetTimer = BaseTimeBetweenAttacks;
-        UiManager.uiManager.updateAttackTimer(BaseTimeBetweenAttacks, BaseTimeBetweenAttacks);
-        UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
     }
 
     // Update is called once per frame
@@ -127,6 +125,8 @@ public class CharacterController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.Mouse1))
             {
+                animator.SetBool("walking", false);
+
                 fortifyTimer += Time.deltaTime;
                 UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
                 if (fortifyTimer >= BaseTimeToFortify)
@@ -134,6 +134,11 @@ public class CharacterController : MonoBehaviour
                     fortified = true;
                     GameManager.gameManager.endTurnEarly();
                 }
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse1))
+            {
+                fortifyTimer = 0;
+                UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
             }
             else
             {
@@ -148,12 +153,12 @@ public class CharacterController : MonoBehaviour
                     rotateCamera();
                 }
             }
-        }
 
-        if (attackResetTimer <= BaseTimeBetweenAttacks)
-        {
-            attackResetTimer += Time.deltaTime * (equipedWeapon.speed * 0.1f);
-            UiManager.uiManager.updateAttackTimer(attackResetTimer, BaseTimeBetweenAttacks);
+            if (attackResetTimer <= BaseTimeBetweenAttacks)
+            {
+                attackResetTimer += Time.deltaTime * (equipedWeapon.speed * 0.1f);
+                UiManager.uiManager.updateAttackTimer(attackResetTimer, BaseTimeBetweenAttacks);
+            }
         }
     }
 
@@ -196,11 +201,17 @@ public class CharacterController : MonoBehaviour
     {
         controllingCurrentCharacter = true;
         fortified = false;
+
+        UiManager.uiManager.showUnitActionUi();
+        UiManager.uiManager.updateAttackTimer(BaseTimeBetweenAttacks, BaseTimeBetweenAttacks);
+        UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
+
         GameManager.gameManager.startTimer();
     }
 
     public void resetCharacter()
     {
+        UiManager.uiManager.disableUnitActionUi();
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
         attackResetTimer = BaseTimeBetweenAttacks;
@@ -291,18 +302,23 @@ public class CharacterController : MonoBehaviour
 
     private void attackHit()
     {
-        Vector3 weaponOffset = transform.position + (transform.up * 2);
         RaycastHit rayhit;
-        Collider[] hitColliders = Physics.OverlapBox(weaponOffset + (transform.forward * (equipedWeapon.range / 2)),
-            new Vector3(1.5f, 1.5f, 2 + equipedWeapon.range));
+        Vector3 weaponOffset = transform.position + (Vector3.up * 2);
+        Collider[] hitColliders = Physics.OverlapBox(weaponOffset + (transform.forward * ((equipedWeapon.range / 2) + 2)),
+            new Vector3(1.5f, 1.5f, 2) + (transform.forward * equipedWeapon.range));
         foreach (Collider hitObject in hitColliders)
         {
             CharacterController controller;
             if (!hitObject.CompareTag(gameObject.tag))
             {
-                if (Physics.Raycast(weaponOffset, weaponOffset + (transform.forward * (equipedWeapon.range / 2)), out rayhit) && rayhit.collider.TryGetComponent(out controller))
+                Debug.DrawLine(weaponOffset, transform.TransformDirection(Vector3.forward), Color.yellow, 100000);
+
+                if (Physics.Raycast(weaponOffset, transform.TransformDirection(Vector3.forward), out rayhit))
                 {
-                    controller.TakeDamage(damageCalulation());
+                    if (rayhit.collider.TryGetComponent(out controller))
+                    {
+                        controller.TakeDamage(damageCalulation());
+                    }
                 }
             }
         }
@@ -339,7 +355,7 @@ public class CharacterController : MonoBehaviour
             die();
         }
         animator.SetFloat("health", Health);
-        animator.SetInteger("RandomDeath", Random.Range(0,2));
+        animator.SetInteger("RandomDeath", Random.Range(0, 2));
         animator.SetTrigger("takeDamage");
     }
 

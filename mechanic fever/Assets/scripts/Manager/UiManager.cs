@@ -15,8 +15,10 @@ public class UiManager : MonoBehaviour
     private Text turnText;
     private Text turnTimer;
 
-    public Image fortifyBar;
-    public Image attackBar;
+    public GameObject unitActionUi;
+
+    private Image fortifyBar;
+    private Image attackBar;
     private void Awake()
     {
         if (uiManager is null)
@@ -33,6 +35,11 @@ public class UiManager : MonoBehaviour
         {
             actionScreens[i] = actionScreen.transform.GetChild(i).gameObject;
         }
+
+        unitActionUi = transform.GetChild(0).GetChild(2).gameObject;
+
+        fortifyBar = unitActionUi.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        attackBar = unitActionUi.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>();
     }
 
     public void controlStartMessage()
@@ -57,6 +64,16 @@ public class UiManager : MonoBehaviour
         actionScreens[playerIndex].SetActive(true);
 
         showMessage($"player {playerIndex + 1} turn", 1);
+    }
+
+    public void showUnitActionUi()
+    {
+        unitActionUi.SetActive(true);
+    }
+
+    public void disableUnitActionUi()
+    {
+        unitActionUi.SetActive(false);
     }
 
     public void disableAllActionScreens()
