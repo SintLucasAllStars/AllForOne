@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     private List<Player> playerList = new List<Player>();
@@ -9,6 +10,20 @@ public class GameManager : MonoBehaviour {
     public GameObject pawnMenu;
     public Camera camera;
     public LayerMask floorLayermask;
+
+    [Header("costs")]
+    public int healthCost = 1;
+    public int defenseCost = 1;
+    public int speedCost = 1;
+    public int strengthCost = 1;
+
+    private int currentCurrency;
+    
+    [Header("GUI elements")]
+    public Text guiHealthValue;
+    public Text guiCurrencyValue;
+    public Text guiPlayerName;
+    
     private void Start() {
         AddPlayer();
         AddPlayer();
@@ -30,7 +45,10 @@ public class GameManager : MonoBehaviour {
     }
 
     private Pawn currentPawn;
+    
     void ShowMenu() {
+        guiPlayerName.text = currentPlayer.name;
+        guiCurrencyValue.text = currentPlayer.currency.ToString();
         if (currentPlayer.canPlacePawns) {
             GameObject pawnInstance = Instantiate(pawnPrefab);
             pawnInstance.transform.position = Vector3.up * 0.5f;
@@ -44,7 +62,6 @@ public class GameManager : MonoBehaviour {
     }
 
     public void CloseMenu() {
-
         currentPlayer.canPlacePawns = false;
         pawnMenu.SetActive(false);
     }
@@ -52,6 +69,7 @@ public class GameManager : MonoBehaviour {
     public void PlacePawn() {
         pawnMenu.SetActive(false);
         currentPawn.gameObject.SetActive(true);
+        currentPlayer.currency = currentCurrency;
         StartCoroutine("PositionPawn");
     }
 
@@ -61,8 +79,7 @@ public class GameManager : MonoBehaviour {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayermask )) {
-                currentPawn.transform.position = hit.point;
-                print(hit.transform.position);
+                currentPawn.transform.position = hit.point + Vector3.up * 0.5f;
             }
             if (Input.GetMouseButtonDown(0)) {
                 placed = true;
@@ -71,22 +88,35 @@ public class GameManager : MonoBehaviour {
             yield return 0;
         }
     }
+
+    void CalculateNewCurrency() {
+        int cost;
+        CombatUnit cu = currentPawn.combatUnit;
+        cost = cu.defense + cu.health + cu.speed + cu.strength;
+        currentCurrency = currentPlayer.currency - cost;
+        guiCurrencyValue.text = currentCurrency.ToString();
+    }
     
     public void SetPawnHealth(float health) {
-        currentPawn.combatUnit.health = health;
+        currentPawn.combatUnit.health = (int)health;
+        guiHealthValue.text = health.ToString();
+        CalculateNewCurrency();
         //print($"current health {currentPawn.combatUnit.health}");
     }
 
     public void SetPawnStrength(float strength) {
-        currentPawn.combatUnit.strength = strength;
+        currentPawn.combatUnit.strength = (int)strength;
+        CalculateNewCurrency();
     }
 
     public void SetPawnDefense(float defense) {
-        currentPawn.combatUnit.defense = defense;
+        currentPawn.combatUnit.defense = (int)defense;
+        CalculateNewCurrency();
     }
 
     public void SetPawnSpeed(float speed) {
-        currentPawn.combatUnit.speed = speed;
+        currentPawn.combatUnit.speed = (int)speed;
+        CalculateNewCurrency();
     }
 
 }

@@ -1,8 +1,8 @@
 using UnityEngine;  
 
 public class CombatUnit {
-    public float strength { get; set; }
-    public float health { get; set; }
-    public float speed { get; set; }
-    public float defense { get; set; }
+    public int strength { get; set; }
+    public int health { get; set; }
+    public int speed { get; set; }
+    public int defense { get; set; }
 }
