@@ -7,13 +7,19 @@ public class UnitController : MonoBehaviour
     MeshRenderer mr;
     bool isSelected = false;
     bool playmode, glow;
-
+    private Rigidbody rbPlayer;
+    public float movementSpeed = 1f;
+    private Vector3 moveDirection = Vector3.zero;
     string currentTeam;
+
+    public GameObject unitCam, mapCam;
 
     //Gets the mesh of the spawners so they can be changed.
     private void Awake()
     {
         mr = gameObject.GetComponent<MeshRenderer>();
+        rbPlayer = gameObject.GetComponent<Rigidbody>();
+        mapCam = Camera.main.gameObject;
     }
 
     void GetValues()
@@ -46,16 +52,25 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    void SelectUnit()
+    private void OnMouseDown()
     {
         //When an unit is selected check if the right team is playing.
         //If it is not the right team then return an value.
+        if (gameObject.tag == currentTeam && !playmode)
+        {
+            StartCoroutine(SwitchAni());
+        }
     }
 
-    void EnableWalking()
+    IEnumerator SwitchAni()
     {
-        //This will enables the walking/movement for the unit if it passses the check.
+        //Play animation
+        isSelected = true;
+        yield return null;
+        unitCam.SetActive(true);
+        mapCam.SetActive(false);
     }
+
     private void Glowing()
     {
         switch (glow)
@@ -69,8 +84,18 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        //Handles the walking.
+        if (isSelected && !playmode)
+        {
+            //Handles the walking.
+            //sets the moveDirection to the input that has been given by the player.
+            //GetAxisRaw = doesn't add the force up.
+            moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+
+            //Moves the rigidbody.
+            rbPlayer.transform.Translate(moveDirection * Time.deltaTime * movementSpeed);
+            rbPlayer.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
     }
 }
