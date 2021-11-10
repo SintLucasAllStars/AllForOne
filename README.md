@@ -1,32 +1,5 @@
 # AllForOne Assignment --- Mechanic Fever
 
-## 2020 Corona special compromise
-This year, due to changes in schedulling, program and the online learning environment, there is an overload of assignments. Therefore here is a compromise option.
-
-You can develop half of the requirements of the game and you will be fully graded on that half of the game. 
-Keep in mind that now the assignment is cut in half, you need to follow the requirements as close as possible. **Read this file very carefully for your half and follow the requirements.**
-The two halves are divided as follows:
-
-### Half 1 - The unit creation:
-From the beginning of the game (top view map of the level), unit stats and player points management, Unit placement on the map. Everything until just before the first action turn. 
-Once all Units are bought and placed on the map by the players (in turns), the game goes into a screen that says: "Action gameplay comming soon... or not... Stay tuned... or not."
-
-### Half 2 - The action mechanics:
-This half starts already with 5 units placed on the map for each player, all with middle stats (50%). The rest of the game should all be there. Unit picking, 3rd person mechanics, unit health management, power up management and 
-
-### Which part to choose?
-This is up to you, here are some facts to help you:
-
-* Half 1 is less work, less features, but it is much more "custom". There is less code you can grab from other sources and you have a lot of decisions to make in terms of architecture. In this half you can really squeeze those "Code / architecture quality" points. It is also heavier on UI.
-* Half 2 is bigger and more features to test and polish. It includes more parts of the game and it is more prone for bugs and time consuming fixes. But in exchange it is all based on very common and readily available that should be standard or re-used from past projects. These, like movement, attack, camera movements, stat management should not take you a considerable ammount of time, they should be standard and done as quickly as possible, re-using any code you can from other projects, standard assets, google, etc...
-You should focus on how the mechanics interact with each other to create a compelling and complete game.
-
-### Both include:
-* Level design for the corridor system.
-* Turn management (for unit buying/placing on Half 1, for action gameplay on Half 2).
-
-(Deadline has been updated on the bottom of this file)
-
 ## DESCRIPTION
 On this assignment everyone makes the same game **"Mechanic Fever"**. How you make it is what matters...
 The assignment is focused on code elegance and production value. You do not need to add all the mechanics described, but prioritize carfully so that you end up with a game that makes sense and is playable.
@@ -178,7 +151,7 @@ https://assetstore.unity.com/packages/templates/packs/adam-ep2-ep3-photogrammetr
 You will deliver the assignment by forking this repository, developing the game on your fork and sending a pull request.
 On the pull request description Should be your name and a small description of the features that are there or missing.
 
-The deadline for the pull requests is the 22nd of June 2020.
+The deadline for the pull requests is the 12th of November 2021.
 
 #### Grading distribution
    * Code / architecture quality - 25 points max
