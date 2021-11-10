@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class UnitPlacer : Singleton<UnitPlacer>
+public class UnitClicker : Singleton<UnitClicker>
 {
     [SerializeField] Camera sceneCamera;
 
     public bool unitPlaced;
     public Vector3 unitLocation;
     [SerializeField] LayerMask placeMask;
+    [SerializeField] LayerMask unitMask;
 
     void OnClick()
     {
@@ -24,6 +25,20 @@ public class UnitPlacer : Singleton<UnitPlacer>
                 // Get location of raycast hit and save in unitLocation
                 unitLocation = hit.point;
                 unitPlaced = true;
+            }
+        }
+
+        // if in unit choosing, make the clicked player active
+        if (GameManager.Instance.gamePhase == GameManager.GamePhase.UnitChoosing)
+        {
+            RaycastHit hit;
+            Ray ray = sceneCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+            if (Physics.Raycast(ray, out hit, 100, unitMask))
+            {
+                // Get the unit script and set can move
+                UnitMovement unit = hit.collider.gameObject.GetComponent<UnitMovement>();
+                GameManager.Instance.StartPlayerSequence(unit);
             }
         }
     }

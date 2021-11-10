@@ -10,11 +10,14 @@ public class GameManager : Singleton<GameManager>
 
     [Header("References")]
     public GameObject playerPrefab;
+    public Timer timer;
 
     [Space]
     [Header("Game Stats")]
     [Tooltip("Starts counting from 0")] public int playerAmount = 1; // How many players are playing
     [SerializeField] int initialPoints = 100;
+    public float cameraTimer = 3;
+    public float playerTimer = 10;
 
     [Space]
     [Header("Player Data")]
@@ -22,12 +25,16 @@ public class GameManager : Singleton<GameManager>
     public bool[] canDoLoadoutPhase; // An array which keeps which players can still do the loadout phase
     public int currentTurnPlayer = 0; // Which player currently has their turn
     public List<GameObject>[] playerUnits; // Saves the gameobjects of each player's units
+    public bool playerActionActive;
 
     // Start is called before the first frame update
     void Start()
     {
         // Calls InitialiseValues on start once
         InitialiseValues();
+
+        // Make a new Timer
+        timer = new Timer();
     }
 
     public List<GameObject> GetUnitAmount(int player)
@@ -97,6 +104,43 @@ public class GameManager : Singleton<GameManager>
         {
             gamePhase = GamePhase.UnitChoosing;
         }
+    }
+
+    public void StartPlayerSequence(UnitMovement unit)
+    {
+        StartCoroutine(PlayerMoveSequence(unit, cameraTimer, playerTimer));
+    }
+
+    IEnumerator PlayerMoveSequence(UnitMovement unit, float cameraTimer, float playerTimer)
+    {
+        // Set camera
+
+        yield return new WaitForSeconds(cameraTimer);
+
+        // Start Timer
+        timer.StartTimer(playerTimer);
+
+        // Player can move
+        gamePhase = GamePhase.UnitAction;
+        unit.canMove = true;
+        playerActionActive = true;
+
+        // TODO: Make it the timer class instead
+        yield return new WaitForSeconds(playerTimer);
+
+        // Stop Timer
+        timer.StopTimer();
+
+        // Player can no longer move
+        playerActionActive = false;
+        unit.canMove = false;
+
+        // Set camera back
+
+
+        yield return new WaitForSeconds(cameraTimer);
+
+        gamePhase = GamePhase.UnitChoosing;
     }
 
     // Initialises all the game values

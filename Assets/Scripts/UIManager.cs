@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] pointTexts;
     [SerializeField] GameObject gameCanvas;
     [SerializeField] TextMeshProUGUI playerTurnText;
+    [SerializeField] TextMeshProUGUI playerTimerText;
 
     private void Start()
     {
@@ -25,6 +26,12 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.gamePhase == GameManager.GamePhase.UnitPlacing)
         {
             WaitUntilUnitPlaced();
+        }
+
+        if (GameManager.Instance.gamePhase == GameManager.GamePhase.UnitAction && GameManager.Instance.timer.GetIsTiming())
+        {
+            // Set player movement timer text
+            UpdatePlayerTimerText(GameManager.Instance.timer.Tick());
         }
     }
 
@@ -80,12 +87,12 @@ public class UIManager : MonoBehaviour
 
     void WaitUntilUnitPlaced()
     {
-        if (UnitPlacer.Instance.unitPlaced)
+        if (UnitClicker.Instance.unitPlaced)
         {
             // Instantiate player prefab with new Unit class using stats
             // Add to unit list
             GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add(
-                CreateUnit(UnitPlacer.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
+                CreateUnit(UnitClicker.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
 
             // Go to next player's turn
             EndTurn();
@@ -93,7 +100,7 @@ public class UIManager : MonoBehaviour
             sliderMan.RandomSliderValues();
 
             // Set unit placed back to false
-            UnitPlacer.Instance.unitPlaced = false;
+            UnitClicker.Instance.unitPlaced = false;
 
             // Return UI if gamephase is not unit choosing
             if (GameManager.Instance.gamePhase != GameManager.GamePhase.UnitChoosing)
@@ -111,6 +118,12 @@ public class UIManager : MonoBehaviour
     void ChangePlayerText(int turnPlayer)
     {
         playerTurnText.text = "Player " + (turnPlayer +1);
+    }
+
+    // Update timer text to the countdown timer
+    void UpdatePlayerTimerText(float playerTimer)
+    {
+        playerTimerText.text = playerTimer.ToString("f2");
     }
 
     void EndTurn()
