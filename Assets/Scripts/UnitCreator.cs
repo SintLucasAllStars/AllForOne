@@ -20,12 +20,21 @@ public class UnitCreator : MonoBehaviour
     public Text speedPer;
     public Text strengthPer;
     public Text defensePer;
+    
+    public Text currentPlayerPoints;
+    public Text currentPlayerText;
 
     private int hCost;
     private int spCost;
     private int stCost;
     private int dCost;
     private int unitCost;
+
+    private Player currentPlayer;
+    private Unit currentUnit;
+    public GameObject unitPrefab;
+    
+    public GameManager gameManager;
 
     void Start()
     {
@@ -35,22 +44,20 @@ public class UnitCreator : MonoBehaviour
         dSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
         CalculateCost();
         UpdateStatPercentage();
+        Invoke("InitFirstPlayer", 0.04f);
+        Invoke("UpdatePlayerDataUI", 0.05f);
+
     }
     
     void Update()
     {
-
+    
     }
     
     private void ValueChangeCheck()
     {
         CalculateCost();
         UpdateStatPercentage();
-    }
-
-    public void PrintUnitValues()
-    {
-        print(CalculateCost());
     }
 
     private int CalculateCost()
@@ -79,6 +86,30 @@ public class UnitCreator : MonoBehaviour
         speedPer.text = "Speed " + spSlider.value*10 + "%";
         strengthPer.text = "Strength " + stSlider.value*10 + "%";
         defensePer.text = "Defense " + dSlider.value*10 + "%";
+    }
+
+    public void BuyUnit()
+    {
+        if (unitCost <= currentPlayer.GetPoints())
+        {
+            currentUnit = new Unit((int)hSlider.value*10,(int)spSlider.value*10,(int)stSlider.value*10,(int)dSlider.value*10);
+            Instantiate(unitPrefab).GetComponent<UnitBehaviour>().AddStats(currentUnit);
+            print("unit cost: " + unitCost);
+            currentPlayer.SubtractPoints(unitCost);
+            currentPlayerPoints.text = "POINTS: " + currentPlayer.GetPoints();
+        }
+        
+    }
+
+    private void InitFirstPlayer()
+    {
+        currentPlayer = gameManager.one;
+    }
+
+    private void UpdatePlayerDataUI()
+    {
+        currentPlayerPoints.text = "POINTS: " + currentPlayer.GetPoints();
+        currentPlayerText.text = "PLAYER " + currentPlayer.GetPlayerNumber();
     }
 
     private float RemapHp(Slider sld)
