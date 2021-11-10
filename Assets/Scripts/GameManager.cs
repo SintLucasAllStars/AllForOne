@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -50,6 +51,51 @@ public class GameManager : Singleton<GameManager>
         else
         {
             currentTurnPlayer = 0;
+        }
+
+        // Different functionality for each phase
+        switch (gamePhase)
+        {
+            case GamePhase.UnitBuying:
+                // if can do loadout phase is false, skip that player's turn
+                if (!canDoLoadoutPhase[currentTurnPlayer])
+                {
+                    CheckLoadoutPhase();
+                }
+                break;
+
+            case GamePhase.UnitPlacing:
+                // Set gamePhase back to unitBuying
+                gamePhase = GamePhase.UnitBuying;
+
+                if (!canDoLoadoutPhase[currentTurnPlayer])
+                {
+                    CheckLoadoutPhase();
+                }
+                break;
+
+            case GamePhase.UnitChoosing:
+                break;
+
+            case GamePhase.UnitAction:
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void CheckLoadoutPhase()
+    {
+        // If all can do loadout phase are false, go to next phase
+        if (!canDoLoadoutPhase.All(x => !x))
+        {
+            Debug.Log("Cannot do loadout phase.");
+            EndTurn();
+        }
+        else
+        {
+            gamePhase = GamePhase.UnitChoosing;
         }
     }
 

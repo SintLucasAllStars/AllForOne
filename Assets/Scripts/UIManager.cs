@@ -46,10 +46,12 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.GetUnitAmount(GameManager.Instance.currentTurnPlayer).Count > 0)
         {
             GameManager.Instance.canDoLoadoutPhase[GameManager.Instance.currentTurnPlayer] = false;
-            GameManager.Instance.EndTurn();
+            EndTurn();
         }
-
-        Debug.Log("Player does not have any units.");
+        else
+        {
+            Debug.Log("Player does not have any units.");
+        }
     }
 
     // Deploys a soldier which the player can place, then ends turn
@@ -65,7 +67,6 @@ public class UIManager : MonoBehaviour
             // Remove Loadout UI
             loadoutUI.SetActive(false);
 
-            // Show map
             // Have player click a starting spot
             GameManager.Instance.gamePhase = GameManager.GamePhase.UnitPlacing;
         }
@@ -85,16 +86,16 @@ public class UIManager : MonoBehaviour
                 CreateUnit(UnitPlacer.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
 
             // Go to next player's turn
-            GameManager.Instance.EndTurn();
+            EndTurn();
             UpdatePointText(GameManager.Instance.currentTurnPlayer, GameManager.Instance.playerPoints[GameManager.Instance.currentTurnPlayer], true);
             sliderMan.RandomSliderValues();
-            GameManager.Instance.gamePhase = GameManager.GamePhase.UnitBuying;
 
             // Set unit placed back to false
             UnitPlacer.Instance.unitPlaced = false;
 
-            // Return UI
-            loadoutUI.SetActive(true);
+            // Return UI if gamephase is not unit choosing
+            if (GameManager.Instance.gamePhase != GameManager.GamePhase.UnitChoosing)
+                loadoutUI.SetActive(true);
         }
     }
 
@@ -103,5 +104,15 @@ public class UIManager : MonoBehaviour
         GameObject unit = Instantiate(GameManager.Instance.playerPrefab, location, Quaternion.identity);
         unit.GetComponent<UnitMovement>().unitStats = new Unit(hea, str, spe, def);
         return unit;
+    }
+
+    void EndTurn()
+    {
+        GameManager.Instance.EndTurn();
+
+        if (GameManager.Instance.gamePhase == GameManager.GamePhase.UnitChoosing)
+        {
+            loadoutUI.SetActive(false);
+        }
     }
 }
