@@ -14,7 +14,7 @@ public class Gamemanager : MonoBehaviour
     public int teamSelected = 0;
     public int[] currentMoney;
 
-    public bool unitConfig;
+    public bool unitConfig = true;
 
     private void Awake()
     {
@@ -84,10 +84,22 @@ public class Gamemanager : MonoBehaviour
         CheckPlayerBalance();
     }
 
+    //Switches the playmode
     public void SwitchToPlayMode()
     {
         unitConfig = false;
         print("playmode enabled");
         print("disabled unitUI");
+    }
+
+    //Handles the switching between 2d/3d.
+    void SwitchDimension()
+    {
+        if (!unitConfig)
+        {
+            Debug.Log("Switching");
+            //Gets the camera on the unit that is being selected.
+            //switch between map mode and 3d player mode.
+        }
     }
 }
