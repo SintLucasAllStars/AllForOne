@@ -23,10 +23,15 @@ public class Player
         }
     }
 
-    public void UpdateUnitsList()
+    public void RemoveUnit(GameObject unit)
     {
-        units.RemoveAll(n => n.CompareTag("Untagged"));
+        units.Remove(unit);
     }
+
+    //public void UpdateUnitsList()
+    //{
+    //    units.RemoveAll(n => n.CompareTag("Untagged"));
+    //}
 
     public int getUnitLenght()
     {

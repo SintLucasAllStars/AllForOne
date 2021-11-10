@@ -14,6 +14,7 @@ public class CharacterSelecter : MonoBehaviour
     private RaycastHit rayHit;
 
     public Transform cameraBase;
+    public Transform cam;
     public GameObject selectionPanel;
     [HideInInspector]
     public GameObject selectedCharacter;
@@ -66,6 +67,7 @@ public class CharacterSelecter : MonoBehaviour
 
     private void selectCharacter()
     {
+        UiManager.uiManager.controlStartMessage();
         selectedCharacter.GetComponent<CharacterController>().startCharacterControl();
     }
 
@@ -74,19 +76,20 @@ public class CharacterSelecter : MonoBehaviour
     {
         GameManager.gameManager.controllingCamera = false;
 
-        oldRotation = transform.rotation;
-        oldPosition = transform.position;
+        oldRotation = cam.rotation;
+        oldPosition = cam.position;
 
         Vector3 offset = (cameraOffset.y * selectedCharacter.transform.up) + (cameraOffset.z * selectedCharacter.transform.forward);
 
-        while (transform.position != selectedCharacter.transform.position + offset && transform.rotation != selectedCharacter.transform.rotation)
+        while (Vector3.Distance(cam.position, selectedCharacter.transform.position + offset) >= 0.5f 
+            && cam.rotation != selectedCharacter.transform.rotation)
         {
-            transform.position = Vector3.Lerp(transform.position, selectedCharacter.transform.position + offset, 0.5f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, selectedCharacter.transform.rotation * Quaternion.Euler(rotationOffset), 0.5f);
+            cam.position = Vector3.Lerp(cam.position, selectedCharacter.transform.position + offset, 0.5f);
+            cam.rotation = Quaternion.Lerp(cam.rotation, selectedCharacter.transform.rotation * Quaternion.Euler(rotationOffset), 0.5f);
             yield return new WaitForSeconds(0.1f);
         }
 
-        transform.parent = selectedCharacter.transform;
+        cam.parent = selectedCharacter.transform;
 
         selectCharacter();
     }
@@ -95,16 +98,16 @@ public class CharacterSelecter : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        transform.parent = null;
+        cam.parent = null;
 
-        while (transform.position != oldPosition && transform.rotation != oldRotation)
+        while (cam.position != oldPosition && cam.rotation != oldRotation)
         {
-            transform.position = Vector3.Lerp(transform.position, oldPosition, 0.5f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, oldRotation, 0.5f);
+            cam.position = Vector3.Lerp(cam.position, oldPosition, 0.5f);
+            cam.rotation = Quaternion.Lerp(cam.rotation, oldRotation, 0.5f);
             yield return new WaitForSeconds(0.1f);
         }
 
-        transform.parent = cameraBase;
+        cam.parent = cameraBase;
         GameManager.gameManager.controllingCamera = true;
     }
     #endregion

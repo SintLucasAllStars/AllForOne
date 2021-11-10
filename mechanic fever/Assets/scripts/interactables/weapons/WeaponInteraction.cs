@@ -9,7 +9,8 @@ public class WeaponInteraction : Interactable
         punch = 0,
         powerPunch = 1,
         sword = 2,
-        hammer = 3
+        hammer = 3,
+        bow = 4
     }
 
     public weaponTypes currentWeaponType;

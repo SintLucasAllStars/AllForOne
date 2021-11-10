@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterStats
 {
     public string owner;
+    public int ownerNumber;
 
     public float health { private set; get; }
     public float strength { private set; get; }
@@ -19,6 +20,7 @@ public class CharacterStats
         this.strength = strength;
         this.speed = speed;
         this.defense = defense;
+        ownerNumber = ownerIndex;
         owner = $"player{ownerIndex}";
         fortified = false;
     }

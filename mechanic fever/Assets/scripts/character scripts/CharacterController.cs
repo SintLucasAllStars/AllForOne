@@ -55,7 +55,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public bool fortified 
+    public bool fortified
     {
         set
         {
@@ -101,6 +101,10 @@ public class CharacterController : MonoBehaviour
         equipedWeapon.SetupWeapon(0);
 
         targetRotation = transform.rotation;
+
+        attackResetTimer = BaseTimeBetweenAttacks;
+        UiManager.uiManager.updateAttackTimer(BaseTimeBetweenAttacks, BaseTimeBetweenAttacks);
+        UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
     }
 
     // Update is called once per frame
@@ -121,9 +125,10 @@ public class CharacterController : MonoBehaviour
                 decreasePowerupIndex();
             }
 
-            if (Input.GetKey(KeyCode.Mouse1) )
+            if (Input.GetKey(KeyCode.Mouse1))
             {
                 fortifyTimer += Time.deltaTime;
+                UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
                 if (fortifyTimer >= BaseTimeToFortify)
                 {
                     fortified = true;
@@ -132,7 +137,7 @@ public class CharacterController : MonoBehaviour
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && attackResetTimer <= 0)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && attackResetTimer >= BaseTimeBetweenAttacks)
                 {
                     updateAttackAnimation();
                     StartCoroutine(attackTimer());
@@ -145,9 +150,10 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        if (attackResetTimer > 0)
+        if (attackResetTimer <= BaseTimeBetweenAttacks)
         {
-            attackResetTimer -= Time.deltaTime * (equipedWeapon.speed * 0.1f);
+            attackResetTimer += Time.deltaTime * (equipedWeapon.speed * 0.1f);
+            UiManager.uiManager.updateAttackTimer(attackResetTimer, BaseTimeBetweenAttacks);
         }
     }
 
@@ -197,7 +203,7 @@ public class CharacterController : MonoBehaviour
     {
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
-        attackResetTimer = 0;
+        attackResetTimer = BaseTimeBetweenAttacks;
         fortifyTimer = 0;
         if (insideCheck())
         {
@@ -277,21 +283,27 @@ public class CharacterController : MonoBehaviour
 
     public IEnumerator attackTimer()
     {
+        attackResetTimer = 0;
         yield return new WaitForSeconds(0.5f);
         yield return new WaitForSeconds((float)(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length / 4 - 0.5f));
-        attackResetTimer = BaseTimeBetweenAttacks;
         attackHit();
     }
 
     private void attackHit()
     {
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.forward + (transform.up * 2), new Vector3(2, 2, 2 + equipedWeapon.range));
+        Vector3 weaponOffset = transform.position + (transform.up * 2);
+        RaycastHit rayhit;
+        Collider[] hitColliders = Physics.OverlapBox(weaponOffset + (transform.forward * (equipedWeapon.range / 2)),
+            new Vector3(1.5f, 1.5f, 2 + equipedWeapon.range));
         foreach (Collider hitObject in hitColliders)
         {
             CharacterController controller;
-            if (hitObject.TryGetComponent(out controller) && !hitObject.CompareTag(gameObject.tag))
+            if (!hitObject.CompareTag(gameObject.tag))
             {
-                controller.TakeDamage(damageCalulation());
+                if (Physics.Raycast(weaponOffset, weaponOffset + (transform.forward * (equipedWeapon.range / 2)), out rayhit) && rayhit.collider.TryGetComponent(out controller))
+                {
+                    controller.TakeDamage(damageCalulation());
+                }
             }
         }
     }
@@ -316,6 +328,7 @@ public class CharacterController : MonoBehaviour
         die();
         Instantiate(deathParticle, gameObject.transform);
         animator.SetFloat("health", 0);
+        animator.SetInteger("RandomDeath", Random.Range(0, 2));
         animator.SetTrigger("takeDamage");
     }
 
@@ -326,19 +339,15 @@ public class CharacterController : MonoBehaviour
             die();
         }
         animator.SetFloat("health", Health);
+        animator.SetInteger("RandomDeath", Random.Range(0,2));
         animator.SetTrigger("takeDamage");
     }
 
     private void die()
     {
         tag = "Untagged";
-        Destroy(gameObject, 10);
+        GameManager.gameManager.unitDeath(gameObject, stats.ownerNumber);
+        //Destroy(gameObject, 10);
     }
     #endregion
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + transform.forward + (transform.up * 2), new Vector3(2, 2, 2 + equipedWeapon.range));
-    }
 }

@@ -36,13 +36,6 @@ public class CharacterCreater : MonoBehaviour
 
     private bool isCreatingCharacter;
 
-    public float Map(float value, float valueMin, float valueMax, float resultMin, float resultMax)
-    {
-        if (resultMin == resultMax) return resultMin;
-        if (valueMin == valueMax) return resultMax;
-        return resultMin + (value - valueMin) * (resultMax - resultMin) / (valueMax - valueMin);
-    }
-
     private void Start()
     {
         panel = transform.GetChild(0).gameObject;
@@ -94,10 +87,10 @@ public class CharacterCreater : MonoBehaviour
 
     private void CalculatePrice()
     {
-        healthValue = Map(healthSlider.value, 1, 100, 3, 30);
-        strenghtValue = Map(strengthSlider.value, 1, 100, 2, 20);
-        speedValue = Map(speedSlider.value, 1, 100, 3, 30);
-        defenseValue = Map(defenseSlider.value, 1, 100, 2, 20);
+        healthValue = GameManager.Map(healthSlider.value, 1, 100, 3, 30);
+        strenghtValue = GameManager.Map(strengthSlider.value, 1, 100, 2, 20);
+        speedValue = GameManager.Map(speedSlider.value, 1, 100, 3, 30);
+        defenseValue = GameManager.Map(defenseSlider.value, 1, 100, 2, 20);
 
         cost = (int)(healthValue + strenghtValue + speedValue + defenseValue);
         costText.text = $"cost: {cost}";
@@ -113,16 +106,16 @@ public class CharacterCreater : MonoBehaviour
         }
         else
         {
-            //TODO: create not enough points feedback
+            UiManager.uiManager.LoadWarning();
         }
     }
 
     public CharacterStats CreateStats()
     {
         healthValue = healthSlider.value;
-        strenghtValue = Map(strengthSlider.value, 1, 100, 1, 10);
-        speedValue = Map(speedSlider.value, 1, 100, 1, 10);
-        defenseValue = Map(defenseSlider.value, 1, 100, 1, 10);
+        strenghtValue = GameManager.Map(strengthSlider.value, 1, 100, 1, 10);
+        speedValue = GameManager.Map(speedSlider.value, 1, 100, 1, 10);
+        defenseValue = GameManager.Map(defenseSlider.value, 1, 100, 1, 10);
 
         return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, GameManager.gameManager.getTurnIndex());
     }
