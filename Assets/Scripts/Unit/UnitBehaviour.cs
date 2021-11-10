@@ -83,10 +83,10 @@ public class UnitBehaviour : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("health " + Health);
-        Debug.Log("strength " + Strength);
-        Debug.Log("speed " + Speed);
-        Debug.Log("defence " + Defence);
+        //Debug.Log("health " + Health);
+        //Debug.Log("strength " + Strength);
+        //Debug.Log("speed " + Speed);
+        //Debug.Log("defence " + Defence);
 
         player.units.Add(this.gameObject);
     }

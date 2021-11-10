@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public List<GameObject> units = new List<GameObject>();
-
+    public int playerNum;
     public float money;
 
     // Start is called before the first frame update
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
         }
         else if (price > money)
         {
-            
+            print("Not enough money");
         }
     }
 }

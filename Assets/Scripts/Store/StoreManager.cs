@@ -22,13 +22,15 @@ public class StoreManager : MonoBehaviour
     private float defence;
 
     [Space(10)]
-    public GameObject unit;
-    public Player playerClient;
+    public GameObject blueUnit;
+    public GameObject redUnit;
+    public Player currentPlayerClient;
     public Unit tempUnit;
 
     [Space(10)]
     public TextMeshProUGUI priceText;
     public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI unitText;
 
     private List<Slider> sliders = new List<Slider>();
 
@@ -54,7 +56,7 @@ public class StoreManager : MonoBehaviour
 
         CalculateTotalPrice();
 
-        moneyText.SetText("Money: " + playerClient.money.ToString("000"));
+        moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
     }
 
     // Update is called once per frame
@@ -105,15 +107,14 @@ public class StoreManager : MonoBehaviour
     public void Pay()
     {
         // check if you have enough money.
-        if (price <= playerClient.money)
+        if (price <= currentPlayerClient.money)
         {
-            playerClient.money -= price;
-            moneyText.SetText("Money: " + playerClient.money.ToString("000"));
+            currentPlayerClient.money -= price;
+            moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
             print("You have enough money");
-            //UnitManager.instance.OnCreation();
             CreateUnit();
         }
-        else if (price > playerClient.money)
+        else if (price > currentPlayerClient.money)
         {
             print("You don't have enough money");
         }
@@ -121,7 +122,7 @@ public class StoreManager : MonoBehaviour
 
     public void CreateUnit()
     {
-        GameObject go = Instantiate(unit);
+        GameObject go = Instantiate(blueUnit);
         UnitBehaviour u = go.GetComponent<UnitBehaviour>();
         u.unit = new Unit();
         u.Health = GetHealth();
@@ -129,4 +130,11 @@ public class StoreManager : MonoBehaviour
         u.Speed = GetSpeed();
         u.Defence = GetDefence();
     }
+
+    void OnChangePlayerClient()
+    {
+        moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
+        unitText.SetText("Units: " + currentPlayerClient.units.Count.ToString() + "/5");
+    }
+
 }
