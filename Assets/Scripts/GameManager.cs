@@ -19,20 +19,43 @@ public class GameManager : MonoBehaviour {
 
     private int currentCurrency;
     
-    [Header("GUI elements")]
+    [Header("GUI elements - text")]
     public Text guiHealthValue;
+    public Text guiDefenseValue;
+    public Text guiSpeedValue;
+    public Text guiStrengthValue;
+    [Space]
     public Text guiCurrencyValue;
     public Text guiPlayerName;
+
+    [Header("GUI elements - Sliders")]
+    public Slider healthSlider;
+    public Slider defenseSlider;
+    public Slider speedSlider;
+    public Slider strengthSlider;
     
     private void Start() {
         AddPlayer();
         AddPlayer();
-        NextTurn();
-        ShowMenu();
+        GameDecisionMaker();
     }
 
     void AddPlayer() {
         playerList.Add(new Player(playerList.Count +1));
+    }
+
+    void GameDecisionMaker() {
+        NextTurn();
+        if (currentPlayer.canPlacePawns)
+            ShowMenu();
+        else {
+            Battle();
+        }
+            
+    }
+
+    private void Battle() {
+        print("Batling!");
     }
 
     private int playerIndex;
@@ -61,16 +84,10 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void CloseMenu() {
+    public void EndTurn() {
         currentPlayer.canPlacePawns = false;
         pawnMenu.SetActive(false);
-    }
-
-    public void PlacePawn() {
-        pawnMenu.SetActive(false);
-        currentPawn.gameObject.SetActive(true);
-        currentPlayer.currency = currentCurrency;
-        StartCoroutine("PositionPawn");
+        GameDecisionMaker();
     }
 
     private IEnumerator PositionPawn() {
@@ -88,6 +105,20 @@ public class GameManager : MonoBehaviour {
             yield return 0;
         }
     }
+    
+    // Called from gui
+    public void PlacePawn() {
+        StartCoroutine(PlacePawnCoroutine());
+    }
+
+    IEnumerator PlacePawnCoroutine() {
+        pawnMenu.SetActive(false);
+        currentPawn.gameObject.SetActive(true);
+        currentPlayer.currency = currentCurrency;
+        yield return StartCoroutine(PositionPawn());
+        GameDecisionMaker();
+    }
+
 
     void CalculateNewCurrency() {
         int cost;
@@ -106,17 +137,23 @@ public class GameManager : MonoBehaviour {
 
     public void SetPawnStrength(float strength) {
         currentPawn.combatUnit.strength = (int)strength;
+        guiStrengthValue.text = strength.ToString();
         CalculateNewCurrency();
     }
 
     public void SetPawnDefense(float defense) {
         currentPawn.combatUnit.defense = (int)defense;
+        guiDefenseValue.text = defense.ToString();
         CalculateNewCurrency();
     }
 
     public void SetPawnSpeed(float speed) {
         currentPawn.combatUnit.speed = (int)speed;
+        guiSpeedValue.text = speed.ToString();
         CalculateNewCurrency();
     }
 
+    void UpdateGuiStats() {
+        
+    }
 }
