@@ -92,6 +92,12 @@ public class CharacterController : MonoBehaviour
 
     private void Start()
     {
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
+
+    private void Init()
+    {
         animator = GetComponent<Animator>();
         equipmentHandler = GetComponent<characterEquipmentHandler>();
 

@@ -14,6 +14,12 @@ public class InteractableSpawning : MonoBehaviour
 
     private void Start()
     {
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
+
+    private void Init()
+    {
         GameManager.gameManager.setItemSpawner(this);
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour
     [Header("cube size in which weapons and powerups spawn")]
     [Space(10)]
     public Vector2 fieldSize;
+
+    public UnityEvent OnReset = new UnityEvent();
 
 
     public Player[] players;
@@ -83,6 +86,11 @@ public class GameManager : MonoBehaviour
 
     public void startGame()
     {
+        currentGameMode = GameMode.setup;
+        timer = 0;
+        timerDone = true;
+        controllingCamera = true;
+
         players = new Player[playerAmount];
 
         for (int i = 0; i < playerAmount; i++)
@@ -109,45 +117,36 @@ public class GameManager : MonoBehaviour
 
     private void TurnSystem()
     {
-        if (!gameOver)
+        turn++;
+
+        if (turn > players.Length - 1)
         {
-            turn++;
+            turn = 0;
+        }
 
-            if (turn > players.Length - 1)
+        if (currentGameMode == GameMode.setup)
+        {
+
+            if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
             {
-                turn = 0;
+                EndSetupFase();
             }
-
-            if (currentGameMode == GameMode.setup)
+            else if (players[turn].getCurrency() <= 0)
             {
-
-                if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
-                {
-                    EndSetupFase();
-                }
-                else if (players[turn].getCurrency() <= 0)
-                {
-                    TurnSystem();
-                }
-            }
-            else
-            {
-                if (players[turn].getUnitLenght() <= 0)
-                {
-                    TurnSystem();
-                    return;
-                }
-                spawner.spawnPowerUp();
-                spawner.spawnWeapon();
-
-                StartCoroutine(UiManager.uiManager.enableActionSceenOverTime(turn, 2));
-
+                TurnSystem();
             }
         }
         else
         {
-            UiManager.uiManager.disableAllActionScreens();
-            print("victory");
+            if (players[turn].getUnitLenght() <= 0)
+            {
+                TurnSystem();
+                return;
+            }
+            spawner.spawnPowerUp();
+            spawner.spawnWeapon();
+
+            StartCoroutine(UiManager.uiManager.enableActionSceenOverTime(turn, 2));
         }
     }
 
@@ -164,7 +163,13 @@ public class GameManager : MonoBehaviour
             Application.Quit(0);
         }
 
-        if (!turnTimerPaused && timer > 0)
+        if (gameOver)
+        {
+            timerDone = true;
+            characterSelecter.selectedCharacter.GetComponent<CharacterController>().resetCharacter();
+            UiManager.uiManager.disableUnitActionUi();
+        }
+        else if (!turnTimerPaused && timer > 0)
         {
             UiManager.uiManager.updateUnitControlTimer(timer);
             timer -= Time.deltaTime;
@@ -221,7 +226,16 @@ public class GameManager : MonoBehaviour
         if (XorPlayerValue())
         {
             gameOver = true;
+            UiManager.uiManager.disableAllActionScreens();
+            StartCoroutine(delayedVictory());
         }
+    }
+
+    private IEnumerator delayedVictory()
+    {
+        yield return new WaitForSeconds(0.1f);
+        gameOver = false;
+        LoadLevel(0);
     }
 
     private bool XorPlayerValue()
@@ -268,10 +282,12 @@ public class GameManager : MonoBehaviour
     public void LoadLevel(int levelIndex)
     {
         SceneManager.LoadScene(levelIndex);
+        OnReset.Invoke();
     }
 
     public void LoadLevel(string levelName)
     {
         SceneManager.LoadScene(levelName);
+        OnReset.Invoke();
     }
 }

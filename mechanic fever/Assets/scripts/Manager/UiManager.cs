@@ -80,6 +80,11 @@ public class UiManager : MonoBehaviour
 
     public void disableAllActionScreens()
     {
+        if (turnTimer != null)
+        {
+            turnTimer.text = "";
+        }
+
         foreach (GameObject screen in actionScreens)
         {
             screen.SetActive(false);
@@ -101,7 +106,7 @@ public class UiManager : MonoBehaviour
         showActionScreen(playerIndex);
     }
 
-    private void showMessage(string text, float time)
+    public void showMessage(string text, float time)
     {
         turnText.text = text;
         turnScreen.SetActive(true);

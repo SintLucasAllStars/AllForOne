@@ -30,6 +30,12 @@ public class CharacterSelecter : MonoBehaviour
 
     private void Start()
     {
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
+
+    private void Init()
+    {
         healthSlider = selectionPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
         strengthSlider = selectionPanel.transform.GetChild(0).GetChild(1).GetComponent<Slider>();
         speedSlider = selectionPanel.transform.GetChild(0).GetChild(2).GetComponent<Slider>();
@@ -38,7 +44,6 @@ public class CharacterSelecter : MonoBehaviour
         strengthText = strengthSlider.transform.GetChild(0).GetComponent<Text>();
         speedText = speedSlider.transform.GetChild(0).GetComponent<Text>();
         defenseText = defenseSlider.transform.GetChild(0).GetComponent<Text>();
-
 
         GameManager.gameManager.setCharacterSelector(this);
     }

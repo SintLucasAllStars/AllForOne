@@ -38,6 +38,12 @@ public class CharacterCreater : MonoBehaviour
 
     private void Start()
     {
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
+
+    private void Init()
+    {
         panel = transform.GetChild(0).gameObject;
         costText = panel.transform.GetChild(0).GetComponent<Text>();
         currencyText = panel.transform.GetChild(1).GetChild(0).GetComponent<Text>();
@@ -51,16 +57,6 @@ public class CharacterCreater : MonoBehaviour
 
         ResetCharacterCreater();
         equipmentManagment();
-    }
-
-    public void Update()
-    {
-        if (GameManager.gameManager.currentGameMode == GameManager.GameMode.action && !isCreatingCharacter)
-        {
-            SetScreenActive(false);
-            StopAllCoroutines();
-            this.enabled = false;
-        }
     }
 
     public void ValueChange(int index)
@@ -150,12 +146,18 @@ public class CharacterCreater : MonoBehaviour
             ResetCharacterCreater();
         }
 
+        if (GameManager.gameManager.currentGameMode == GameManager.GameMode.action)
+        {
+            SetScreenActive(false);
+            StopAllCoroutines();
+        }
+
         //TODO: end setup fase banner
     }
 
     public void ResetCharacterCreater()
     {
-        characterPrefab = 
+        characterPrefab =
             Instantiate(CharacterBases[GameManager.gameManager.getTurnIndex()], characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
 
         prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
@@ -196,7 +198,16 @@ public class CharacterCreater : MonoBehaviour
     private IEnumerator turnTimer()
     {
         yield return new WaitForSeconds(.1f);
+
+        if (GameManager.gameManager.currentGameMode == GameManager.GameMode.action)
+        {
+            SetScreenActive(false);
+            StopAllCoroutines();
+        }
+        else
+        {
+            ResetCharacterCreater();
+        }
         Destroy(characterPrefab);
-        ResetCharacterCreater();
     }
 }

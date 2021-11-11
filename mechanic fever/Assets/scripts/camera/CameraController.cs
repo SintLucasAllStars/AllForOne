@@ -11,12 +11,17 @@ public class CameraController : MonoBehaviour
 
     private Vector2 boundries;
 
-    private Transform mainCamera;
+    public Transform mainCamera;
     private Quaternion targetRotation;
 
     private void Start()
     {
-        mainCamera = transform.GetChild(0);
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
+
+    private void Init()
+    {
         targetRotation = Quaternion.Euler(0, 0, 0);
 
         boundries = GameManager.gameManager.fieldSize;

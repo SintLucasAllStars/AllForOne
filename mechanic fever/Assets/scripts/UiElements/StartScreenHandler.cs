@@ -22,8 +22,13 @@ public class StartScreenHandler : MonoBehaviour
     private int LevelIndex;
 
     #region LevelSelection
+    private void Start()
+    {
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
 
-    public void Start()
+    private void Init()
     {
         LevelIndex = LevelSelection.value;
         levelPreview.sprite = levelPreviews[LevelIndex];

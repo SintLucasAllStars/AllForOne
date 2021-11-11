@@ -12,6 +12,12 @@ public class Interactable : MonoBehaviour
 
     private void Start()
     {
+        Init();
+        GameManager.gameManager.OnReset.AddListener(Init);
+    }
+
+    private void Init()
+    {
         yStartValue = transform.position.y;
     }
 
