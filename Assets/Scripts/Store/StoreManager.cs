@@ -131,7 +131,7 @@ public class StoreManager : MonoBehaviour
         u.Strength = GetStrength();
         u.Speed = GetSpeed();
         u.Defence = GetDefence();
-        MovePanel(storePanel.transform.position, 3);
+        MovePanel(new Vector3(storePanel.transform.position.x, storePanel.transform.position.y + 10, storePanel.transform.position.z), 3);
     }
 
     void OnChangePlayerClient()
