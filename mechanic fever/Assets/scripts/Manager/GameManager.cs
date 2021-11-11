@@ -233,7 +233,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator delayedVictory()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(2);
         gameOver = false;
         LoadLevel(0);
     }

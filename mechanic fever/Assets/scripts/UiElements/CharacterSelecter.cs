@@ -134,7 +134,7 @@ public class CharacterSelecter : MonoBehaviour
         speedText.text = $"Speed: {speedSlider.value}";
         defenseText.text = $"Defense: {defenseSlider.value}";
 
-        selectionPanel.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(selectedCharacter.transform.position) + new Vector3(100, 100, 0);
+        //selectionPanel.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(selectedCharacter.transform.position) + new Vector3(100, 100, 0);
         selectionPanel.SetActive(true);
     }
 

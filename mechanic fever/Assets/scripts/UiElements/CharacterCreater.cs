@@ -199,6 +199,8 @@ public class CharacterCreater : MonoBehaviour
     {
         yield return new WaitForSeconds(.1f);
 
+        Destroy(characterPrefab);
+
         if (GameManager.gameManager.currentGameMode == GameManager.GameMode.action)
         {
             SetScreenActive(false);
@@ -208,6 +210,6 @@ public class CharacterCreater : MonoBehaviour
         {
             ResetCharacterCreater();
         }
-        Destroy(characterPrefab);
+
     }
 }

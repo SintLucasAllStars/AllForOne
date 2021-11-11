@@ -224,6 +224,8 @@ public class CharacterController : MonoBehaviour
     public void resetCharacter()
     {
         UiManager.uiManager.disableUnitActionUi();
+        UiManager.uiManager.disablePowerUpUi();
+
         controllingCurrentCharacter = false;
         animator.SetBool("walking", false);
         attackResetTimer = BaseTimeBetweenAttacks;
