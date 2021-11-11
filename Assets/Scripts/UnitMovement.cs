@@ -9,7 +9,7 @@ public class UnitMovement : MonoBehaviour
 
     [Header("Customisable Player Stats")]
     public Unit unitStats = new Unit(0, 10, 10, 10, 10);
-    [SerializeField] float currentHealth;
+    [SerializeField] int currentHealth;
     public MeshRenderer unitShirt;
 
     [Space]
@@ -72,15 +72,21 @@ public class UnitMovement : MonoBehaviour
         transform.Translate(movement * (unitStats.GetSpeed() / 4) * Time.deltaTime);
     }
 
-    // Initialises the player
-    void InitializePlayer()
+    // Decreases health, called when player is hit
+    public void DecreaseHealth(int value)
     {
-        currentHealth = unitStats.GetHealth();
+        unitStats.SetHealth(currentHealth - value);
     }
 
     public void ChangeColor(Color color)
     {
         unitShirt.material.color = color;
+    }
+
+    // Initialises the player
+    void InitializePlayer()
+    {
+        currentHealth = unitStats.GetHealth();
     }
 
     // Movement input

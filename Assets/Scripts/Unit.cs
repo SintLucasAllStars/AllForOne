@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class Unit
 {
+    [SerializeField]
     int owner;
 
+    [SerializeField]
     int health;
+    [SerializeField]
     int strength;
+    [SerializeField]
     int speed;
+    [SerializeField]
     int defense;
 
     public Unit(int ownedByPlayer, int health, int strength, int speed, int defense)
