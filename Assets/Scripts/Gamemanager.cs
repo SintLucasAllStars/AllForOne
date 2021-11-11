@@ -81,12 +81,12 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
-    public void Spawn(Transform transformToSpawn)
+    public void Spawn(Vector3 spawnPos)
     {
         //Will handle the spawning of the units.
         GameObject unitToSpawn = UnitConfig.Instance.unitToSpawn;
         Slider[] sliders = UnitConfig.Instance.sliders;
-        GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
+        GameObject unit = Instantiate(unitToSpawn, spawnPos, Quaternion.identity);
 
         //Adds the color based of the team that is selected.
         rend = unit.GetComponent<Renderer>();

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Spawner : MonoBehaviour
 {
@@ -41,13 +42,25 @@ public class Spawner : MonoBehaviour
     //Spawns the object (in gamemanager script).
     private void OnMouseDown()
     {
-        if (gameObject.tag == spawnerTag && !placedUnit && !overlay)
+        float length = 10000f;
+        LayerMask mask;
+        Vector3 hitpos;
+
+        mask = LayerMask.GetMask("Spawner");
+
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (!EventSystem.current.IsPointerOverGameObject() && !placedUnit && !overlay)
         {
-            _transform = gameObject.transform;
-            Gamemanager.Instance.Spawn(_transform);
-            overlay = true;
-            placedUnit = true;
-            StartCoroutine(ResetSpawner());
+            if (Physics.Raycast(ray, out hit, length, mask))
+            {
+                hitpos = hit.point;
+                Gamemanager.Instance.Spawn(hitpos);
+                overlay = true;
+                placedUnit = true;
+                StartCoroutine(ResetSpawner());
+            }
         }
     }
 
