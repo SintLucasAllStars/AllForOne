@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour {
             }
         }
         else {
-            battlePhase.InitBattle();
+            StartCoroutine(battlePhase.InitBattle());
         }
     }
 }

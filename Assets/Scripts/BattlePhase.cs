@@ -10,11 +10,18 @@ public class BattlePhase : MonoBehaviour {
 
     public Text currentTurnText;
     public LayerMask pawnLayer;
-    private HashSet<GameObject> coloredPawns = new HashSet<GameObject>();
+    private HashSet<GameObject> ColoredPawnObjects = new HashSet<GameObject>();
+    private Pawn slectedPawn;
 
-    public void InitBattle() {
+    public IEnumerator InitBattle() {
         currentTurnText.gameObject.SetActive(true);
-        StartCoroutine(SelectPawn());
+        yield return StartCoroutine(SelectPawn());
+        yield return StartCoroutine(TakeControl());
+    }
+
+    private IEnumerator TakeControl() {
+        slectedPawn.gameObject.GetComponentInChildren<MeshRenderer>().material.color /= 4;
+        yield return null;
     }
 
     public void GuiUpdatePlayer() {
@@ -23,25 +30,30 @@ public class BattlePhase : MonoBehaviour {
     }
 
     private IEnumerator SelectPawn() {
-        bool placed = false;
-        while (!placed) {
+        while (!slectedPawn) {
             Ray ray = gameManager.camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, pawnLayer)) {
-                GameObject highlitedGameobject = hit.collider.gameObject;
-                if (!coloredPawns.Contains(highlitedGameobject)) {
-                    coloredPawns.Add(highlitedGameobject);
-                    highlitedGameobject.GetComponentInChildren<MeshRenderer>().material.color = Color.magenta;
+                GameObject highlightedGameObject = hit.collider.gameObject;
+                if (gameManager.currentPlayer == highlightedGameObject.GetComponentInParent<Pawn>().player) {
+                    if (!ColoredPawnObjects.Contains(highlightedGameObject)) {
+                        ColoredPawnObjects.Add(highlightedGameObject);
+                        highlightedGameObject.GetComponent<MeshRenderer>().material.color /= 4;
+                    }
+                    // read mouse button
                     if (Input.GetMouseButtonDown(0)) {
-                        placed = true;
+                        print("selected");
+                        slectedPawn = highlightedGameObject.GetComponentInParent<Pawn>();
                     }
                 }
             }
             else {
-                foreach (GameObject pawnObject in coloredPawns) {
-                        pawnObject.GetComponent<MeshRenderer>().material.color = pawnObject.GetComponentInParent<Pawn>().player.color;
+                foreach (GameObject pawnObject in ColoredPawnObjects) {
+                    pawnObject.GetComponent<MeshRenderer>().material.color =
+                        pawnObject.GetComponentInParent<Pawn>().player.color;
                 }
-                coloredPawns.Clear();
+
+                ColoredPawnObjects.Clear();
             }
 
 
