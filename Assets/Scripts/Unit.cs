@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Unit
 {
+    int owner;
+
     int health;
     int strength;
     int speed;
     int defense;
 
-    public Unit(int health, int strength, int speed, int defense)
+    public Unit(int ownedByPlayer, int health, int strength, int speed, int defense)
     {
+        this.owner = ownedByPlayer;
         this.health = health;
         this.strength = strength;
         this.speed = speed;
@@ -55,5 +58,10 @@ public class Unit
     public int GetDefense()
     {
         return this.defense;
+    }
+
+    public int GetOwner()
+    {
+        return owner;
     }
 }

@@ -92,7 +92,7 @@ public class UIManager : Singleton<UIManager>
             // Instantiate player prefab with new Unit class using stats
             // Add to unit list
             GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add(GameManager.Instance.CreateUnit
-                (UnitClicker.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
+                (UnitClicker.Instance.unitLocation, GameManager.Instance.currentTurnPlayer, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
 
             // Go to next player's turn
             EndTurn();

@@ -24,6 +24,7 @@ public class UnitClicker : Singleton<UnitClicker>
             {
                 // Get location of raycast hit and save in unitLocation
                 unitLocation = hit.point;
+                unitLocation.y += .5f;
                 unitPlaced = true;
             }
         }
@@ -37,7 +38,7 @@ public class UnitClicker : Singleton<UnitClicker>
             if (Physics.Raycast(ray, out hit, 100, unitMask))
             {
                 // Start player sequence in the game manager
-                GameManager.Instance.StartPlayerSequence(hit.collider.gameObject);
+                GameManager.Instance.StartPlayerSequence(hit.collider.transform.root.gameObject);
             }
         }
     }
