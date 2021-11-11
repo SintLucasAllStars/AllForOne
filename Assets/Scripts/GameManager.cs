@@ -40,13 +40,13 @@ public class GameManager : MonoBehaviour {
     #endregion
 
     private void Start() {
-        AddPlayer();
-        AddPlayer();
+        AddPlayer(Color.blue);
+        AddPlayer(Color.red);
         NextStep();
     }
 
-    void AddPlayer() {
-        playerList.Add(new Player(playerList.Count + 1));
+    void AddPlayer(Color color) {
+        playerList.Add(new Player(playerList.Count + 1, color));
     }
 
     void NextStep() {
@@ -150,13 +150,13 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator PlacePawnCoroutine() {
         pawnMenu.SetActive(false);
+        currentPawn.GetComponentInChildren<MeshRenderer>().material.color = currentPlayer.color;
         currentPawn.gameObject.SetActive(true);
         currentPlayer.currency = currentCurrency;
         print($"{currentPlayer.name} currency: {currentPlayer.currency} local currency {currentCurrency}");
         yield return StartCoroutine(PositionPawn());
         NextStep();
     }
-
 
     void CalculateNewCurrency() {
         int cost;
