@@ -18,6 +18,8 @@ public class SpawnedUnit : MonoBehaviour
         ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 
         unit = new Unit(ui.GetHealthValue(), ui.GetStrengthValue(), ui.GetSpeedValue(), ui.GetDefenceValue());
+
+        GameManager.instance.AddUnit(gameObject);
     }
 
     private void Update()

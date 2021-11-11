@@ -16,23 +16,13 @@ public class UIManager : MonoBehaviour
     public Text defenceText;
     public Text totalAvailablePrice;
     public Text totalAmountUnit;
-    public Text UnitAmountText;
 
     private int healthValue;
     private int strengthValue;
     private int speedValue;
     private int defenceValue;
-    private int unitAmount;
-
-    private float totalPrice;
-    private float priceUnit;
     
     public GameObject unit;
-
-    private void Start()
-    {
-        totalPrice = 100;
-    }
 
     private void Update()
     {
@@ -40,22 +30,21 @@ public class UIManager : MonoBehaviour
         strengthText.text = GetStrengthValue().ToString("00");
         speedText.text = GetSpeedValue().ToString("00");
         defenceText.text = GetDefenceValue().ToString("00");
-        totalAvailablePrice.text = totalPrice.ToString("000");
-        totalAmountUnit.text = priceUnit.ToString("000");
-        UnitAmountText.text = unitAmount.ToString("00") + "/10";
+        totalAvailablePrice.text = GameManager.instance.totalPrice_1.ToString("000");
+        totalAmountUnit.text = GameManager.instance.priceUnit.ToString("000");
 
-        priceUnit = map(GetHealthValue(), 1, 100, 3, 30) + map(GetStrengthValue(), 1, 100, 3, 30) + map(GetSpeedValue(), 1, 100, 2, 20) + map(GetDefenceValue(), 1, 100, 2, 20);
+        GameManager.instance.priceUnit = map(GetHealthValue(), 1, 100, 3, 30) + map(GetStrengthValue(), 1, 100, 3, 30) + map(GetSpeedValue(), 1, 100, 2, 20) + map(GetDefenceValue(), 1, 100, 2, 20);
     }
 
     public void OnClick()
     {
-        if (totalPrice >= priceUnit && unitAmount < 10)
+        GameManager.instance.playerTurn = !GameManager.instance.playerTurn;
+
+        if (GameManager.instance.totalPrice_1 >= GameManager.instance.priceUnit)
         {
             Instantiate(unit);
 
-            totalPrice -= priceUnit;
-
-            unitAmount++;
+            GameManager.instance.totalPrice_1 -= GameManager.instance.priceUnit;
         }
     }
 

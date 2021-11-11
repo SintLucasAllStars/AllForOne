@@ -6,7 +6,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
+    [SerializeField]
+    private List<GameObject> UnitsPlayer_1;
+    [SerializeField]
+    private List<GameObject> UnitsPlayer_2;
 
+    public bool playerTurn;
+
+    public float totalPrice_1;
+    public float totalPrice_2;
+    public float priceUnit;
 
     private void Awake()
     {
@@ -17,6 +26,30 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        UnitsPlayer_1 = new List<GameObject>();
+        
+        UnitsPlayer_2 = new List<GameObject>();
+
+        playerTurn = false;
+
+        totalPrice_1 = 100;
+        totalPrice_2 = 100;
+    }
+
+    public void AddUnit(GameObject unit)
+    {
+        if (playerTurn)
+        {
+            UnitsPlayer_1.Add(unit);
+        }
+        else if (!playerTurn)
+        {
+            UnitsPlayer_2.Add(unit);
         }
     }
 }
