@@ -6,22 +6,13 @@ public class Player
 {
     private int playerNumber;
     private int points = 100;
-    private List<GameObject> units;
-    void Start()
-    {
-        units = new List<GameObject>();
-    }
+    private List<GameObject> units = new List<GameObject>();
 
     public Player(int num)
     {
         playerNumber = num;
     }
     
-    void Update()
-    {
-        
-    }
-
     public int GetPoints()
     {
         return points;
@@ -35,5 +26,15 @@ public class Player
     public void SubtractPoints(int p)
     {
         points -= p;
+    }
+
+    public List<GameObject> GetList()
+    {
+        return units;
+    }
+
+    public void AddUnit(GameObject unit)
+    {
+        units.Add(unit);
     }
 }

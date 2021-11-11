@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public Player one;
-    public Player two;
+    public Player one = new Player(1);
+    public Player two = new Player(2);
+    
+    public GameObject unitStoreUI;
+    public GameObject CurrentPointsUI;
     
     void Start()
     {
-        one = new Player(1);
-        two = new Player(2);
+        
     }
     
     void Update()
     {
         
+    }
+
+    private void StartGame()
+    {
+        unitStoreUI.SetActive(false);
+        CurrentPointsUI.SetActive(false);
     }
 }

@@ -8,19 +8,13 @@ public class Unit
     private int speed;
     private int strength;
     private int defense;
-
-    void Start()
-    {
-        
-    }
-
+    
     public Unit(int h, int sp, int st, int d)
     {
         health = h;
         speed = sp;
         strength = st;
         defense = d;
-
     }
 
     public int GetHealth()
