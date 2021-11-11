@@ -5,7 +5,7 @@ using UnityEngine;
 public class UnitBehaviour : MonoBehaviour
 {
     public Unit unit;
-    public Player player;
+    public GameObject player;
 
     //Getters
     public float Health 
@@ -83,12 +83,9 @@ public class UnitBehaviour : MonoBehaviour
 
     private void Start()
     {
-        //Debug.Log("health " + Health);
-        //Debug.Log("strength " + Strength);
-        //Debug.Log("speed " + Speed);
-        //Debug.Log("defence " + Defence);
+        player = GameObject.Find("Player1");
 
-        //player.units.Add(this.gameObject);
+        player.GetComponent<Player>().units.Add(unit);
     }
 
     private void Update()
@@ -97,5 +94,11 @@ public class UnitBehaviour : MonoBehaviour
         float z = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
 
         transform.Translate(h, 0, z);
+    }
+
+    void RemoveUnit()
+    {
+        //unit is dead
+        player.GetComponent<Player>().units.Remove(unit);
     }
 }
