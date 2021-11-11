@@ -7,9 +7,8 @@ public class UnitConfig : MonoBehaviour
 {
     public static UnitConfig Instance;
 
-    [HideInInspector]
+    Glowing();
     public Text[] valueText;
-    [HideInInspector]
     public Slider[] sliders;
 
     public GameObject unitToSpawn;

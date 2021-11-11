@@ -6,22 +6,28 @@ using UnityEngine.UI;
 public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager Instance;
-
+    [HideInInspector]
     public Material[] materials;
+    [HideInInspector]
     private Renderer rend;
-
+    [HideInInspector]
     public string[] team;
+    [HideInInspector]
     public int teamSelected = 0;
+    [HideInInspector]
     public int[] currentMoney;
-
+    [HideInInspector]
     public List<GameObject> unitControllerList;
 
     public bool unitConfig = true;
 
+    [HideInInspector]
     public float timer = 10;
+    [HideInInspector]
     public bool EnableTimer = false;
-
+    [HideInInspector]
     public GameObject mapCam;
+    [HideInInspector]
     public int unitSelected;
 
     private void Awake()
@@ -115,9 +121,9 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
+    //Handels the switching of the camera and enable/disable the preferd unit/team.
     public void SwitchAni()
     {
-
         UnitController unitScript = unitControllerList[unitSelected].GetComponent<UnitController>();
 
         Debug.Log(unitScript);
@@ -174,7 +180,6 @@ public class Gamemanager : MonoBehaviour
         if (timer <= 0)
         {
             //Resets Timer value.
-            EnableTimer = false;
             timer = 10f;
             TeamManager();
             UIManager.Instance.UpdateUI();

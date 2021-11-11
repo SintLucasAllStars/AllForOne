@@ -60,6 +60,7 @@ public class UnitController : MonoBehaviour
         //If it is not the right team then return an value.
         if (!isSelected && gameObject.tag == currentTeam && !playmode)
         {
+            Glowing();
             Gamemanager.Instance.unitSelected = entry;
             Gamemanager.Instance.SwitchAni();
             unitCam.SetActive(true);
