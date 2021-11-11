@@ -8,17 +8,18 @@ public class UnitMovement : MonoBehaviour
     Rigidbody rb;
 
     [Header("Customisable Player Stats")]
-    public Unit playerStats;
+    public Unit unitStats = new Unit(10, 10, 10, 10);
     [SerializeField] float currentHealth;
 
     [Space]
     [Header("Non-Customisable Stats")]
     [SerializeField] float gravity = 2;
     [SerializeField] float inputSmoothing = 0.2f;
+    [SerializeField] float turningSpeed = 4.5f;
 
     [Space]
     [Header("Attributes")]
-    [SerializeField] bool canMove;
+    public bool canMove;
 
     [Space]
     [Header("Input")]
@@ -35,16 +36,27 @@ public class UnitMovement : MonoBehaviour
         InitializePlayer();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        // Calls the moveplayer function if canMove
         if (canMove)
-            MovePlayer(moveInput);
+        {
+            // For rotating the player
+            if (moveInput != Vector2.zero)
+            {
+                Vector3 cameraDirection = transform.position - Camera.main.transform.position;
+                cameraDirection.y = 0;
+                cameraDirection.Normalize();
+                transform.LookAt(transform.position + cameraDirection);
+            }
+        }
     }
 
     private void FixedUpdate()
     {
+        // Calls the moveplayer function if canMove
+        if (canMove)
+            MovePlayer(moveInput);
+
         // Apply gravity if going down
         if (rb.velocity.y < 0.1f)
         {
@@ -57,13 +69,13 @@ public class UnitMovement : MonoBehaviour
     {
         currentInputVector = Vector2.SmoothDamp(currentInputVector, input, ref inputVelocity, inputSmoothing);
         Vector3 movement = new Vector3(currentInputVector.x, 0, currentInputVector.y);
-        transform.Translate(movement * playerStats.GetSpeed() * Time.deltaTime);
+        transform.Translate(movement * (unitStats.GetSpeed() / 4) * Time.deltaTime);
     }
 
     // Initialises the player
     void InitializePlayer()
     {
-        currentHealth = playerStats.GetHealth();
+        currentHealth = unitStats.GetHealth();
     }
 
     // Movement input
