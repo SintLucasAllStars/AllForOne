@@ -11,47 +11,55 @@ public class GameManager : MonoBehaviour {
     public Camera camera;
     public LayerMask floorLayermask;
 
-    [Header("costs")]
-    public int healthCost = 1;
+    [Header("costs")] public int healthCost = 1;
     public int defenseCost = 1;
     public int speedCost = 1;
     public int strengthCost = 1;
 
     private int currentCurrency;
-    
-    [Header("GUI elements - text")]
-    public Text guiHealthValue;
+
+    #region GUI
+    [Header("GUI elements - text")] public Text guiHealthValue;
     public Text guiDefenseValue;
     public Text guiSpeedValue;
     public Text guiStrengthValue;
-    [Space]
-    public Text guiCurrencyValue;
+    [Space] public Text guiCurrencyValue;
     public Text guiPlayerName;
 
-    [Header("GUI elements - Sliders")]
-    public Slider healthSlider;
+    [Header("GUI elements - Sliders")] public Slider healthSlider;
     public Slider defenseSlider;
     public Slider speedSlider;
     public Slider strengthSlider;
-    
+    #endregion
+
     private void Start() {
         AddPlayer();
         AddPlayer();
-        GameDecisionMaker();
+        NextStep();
     }
 
     void AddPlayer() {
-        playerList.Add(new Player(playerList.Count +1));
+        playerList.Add(new Player(playerList.Count + 1));
     }
 
-    void GameDecisionMaker() {
+    void NextStep() {
         NextTurn();
-        if (currentPlayer.canPlacePawns)
-            ShowMenu();
-        else {
-            Battle();
+        if (PlayersCanPlacePawns()) {
+            if (currentPlayer.canPlacePawns)
+                ShowMenu();
+            else {
+                NextTurn();
+                ShowMenu();
+            }
         }
-            
+    }
+
+    bool PlayersCanPlacePawns() {
+        bool result = false;
+        foreach (Player player in playerList) {
+            result |= player.canPlacePawns;
+        }
+        return result;
     }
 
     private void Battle() {
@@ -60,17 +68,19 @@ public class GameManager : MonoBehaviour {
 
     private int playerIndex;
     private Player currentPlayer;
+
     void NextTurn() {
         currentPlayer = playerList[playerIndex++];
-        
+
         if (playerIndex >= playerList.Count)
             playerIndex = 0;
     }
 
     private Pawn currentPawn;
-    
+
     void ShowMenu() {
         guiPlayerName.text = currentPlayer.name;
+        currentCurrency = currentPlayer.currency;
         guiCurrencyValue.text = currentPlayer.currency.ToString();
         if (currentPlayer.canPlacePawns) {
             GameObject pawnInstance = Instantiate(pawnPrefab);
@@ -80,6 +90,7 @@ public class GameManager : MonoBehaviour {
             if (!currentPawn) {
                 Debug.LogError("Pawn not found");
             }
+
             pawnMenu.SetActive(true);
         }
     }
@@ -87,7 +98,7 @@ public class GameManager : MonoBehaviour {
     public void EndTurn() {
         currentPlayer.canPlacePawns = false;
         pawnMenu.SetActive(false);
-        GameDecisionMaker();
+        NextStep();
     }
 
     private IEnumerator PositionPawn() {
@@ -95,9 +106,10 @@ public class GameManager : MonoBehaviour {
         while (!placed) {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayermask )) {
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayermask)) {
                 currentPawn.transform.position = hit.point + Vector3.up * 0.5f;
             }
+
             if (Input.GetMouseButtonDown(0)) {
                 placed = true;
             }
@@ -105,7 +117,7 @@ public class GameManager : MonoBehaviour {
             yield return 0;
         }
     }
-    
+
     // Called from gui
     public void PlacePawn() {
         StartCoroutine(PlacePawnCoroutine());
@@ -115,8 +127,9 @@ public class GameManager : MonoBehaviour {
         pawnMenu.SetActive(false);
         currentPawn.gameObject.SetActive(true);
         currentPlayer.currency = currentCurrency;
+        print($"{currentPlayer.name} currency: {currentPlayer.currency} local currency {currentCurrency}");
         yield return StartCoroutine(PositionPawn());
-        GameDecisionMaker();
+        NextStep();
     }
 
 
@@ -125,9 +138,8 @@ public class GameManager : MonoBehaviour {
         CombatUnit cu = currentPawn.combatUnit;
         cost = cu.defense + cu.health + cu.speed + cu.strength;
         currentCurrency = currentPlayer.currency - cost;
-        guiCurrencyValue.text = currentCurrency.ToString();
-    }
-    
+        guiCurrencyValue.text = currentCurrency.ToString(); }
+
     public void SetPawnHealth(float health) {
         currentPawn.combatUnit.health = (int)health;
         guiHealthValue.text = health.ToString();
@@ -154,6 +166,5 @@ public class GameManager : MonoBehaviour {
     }
 
     void UpdateGuiStats() {
-        
     }
 }
