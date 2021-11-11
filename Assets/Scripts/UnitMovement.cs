@@ -15,10 +15,11 @@ public class UnitMovement : MonoBehaviour
     [Header("Non-Customisable Stats")]
     [SerializeField] float gravity = 2;
     [SerializeField] float inputSmoothing = 0.2f;
+    [SerializeField] float turningSpeed = 4.5f;
 
     [Space]
     [Header("Attributes")]
-    [SerializeField] bool canMove;
+    public bool canMove;
 
     [Space]
     [Header("Input")]
@@ -33,6 +34,21 @@ public class UnitMovement : MonoBehaviour
 
         // Initialise the player
         InitializePlayer();
+    }
+
+    private void Update()
+    {
+        if (canMove)
+        {
+            // For rotating the player
+            if (moveInput != Vector2.zero)
+            {
+                Vector3 cameraDirection = transform.position - Camera.main.transform.position;
+                cameraDirection.y = 0;
+                cameraDirection.Normalize();
+                transform.LookAt(transform.position + cameraDirection);
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -53,7 +69,7 @@ public class UnitMovement : MonoBehaviour
     {
         currentInputVector = Vector2.SmoothDamp(currentInputVector, input, ref inputVelocity, inputSmoothing);
         Vector3 movement = new Vector3(currentInputVector.x, 0, currentInputVector.y);
-        transform.Translate(movement * unitStats.GetSpeed() * Time.deltaTime);
+        transform.Translate(movement * (unitStats.GetSpeed() / 4) * Time.deltaTime);
     }
 
     // Initialises the player
