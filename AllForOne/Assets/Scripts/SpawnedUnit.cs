@@ -21,12 +21,4 @@ public class SpawnedUnit : MonoBehaviour
 
         GameManager.instance.AddUnit(gameObject);
     }
-
-    private void Update()
-    {
-        Debug.Log(Health);
-        Debug.Log(Strength);
-        Debug.Log(Speed);
-        Debug.Log(Defence);
-    }
 }

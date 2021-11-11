@@ -16,13 +16,20 @@ public class UIManager : MonoBehaviour
     public Text defenceText;
     public Text totalAvailablePrice;
     public Text totalAmountUnit;
+    public Text player;
 
     private int healthValue;
     private int strengthValue;
     private int speedValue;
     private int defenceValue;
-    
-    public GameObject unit;
+
+    private bool canBuy;
+
+    private void Start()
+    {
+        totalAvailablePrice.text = "100";
+        totalAvailablePrice.text = "100";
+    }
 
     private void Update()
     {
@@ -30,21 +37,58 @@ public class UIManager : MonoBehaviour
         strengthText.text = GetStrengthValue().ToString("00");
         speedText.text = GetSpeedValue().ToString("00");
         defenceText.text = GetDefenceValue().ToString("00");
-        totalAvailablePrice.text = GameManager.instance.totalPrice_1.ToString("000");
         totalAmountUnit.text = GameManager.instance.priceUnit.ToString("000");
+
+        if (!GameManager.instance.playerTurn && canBuy)
+        {
+            totalAvailablePrice.text = GameManager.instance.totalPrice_1.ToString("000");
+
+            player.text = "Player 1";
+        }
+        else if (GameManager.instance.playerTurn && canBuy)
+        {
+            totalAvailablePrice.text = GameManager.instance.totalPrice_2.ToString("000");
+
+            player.text = "Player 2";
+        }
 
         GameManager.instance.priceUnit = map(GetHealthValue(), 1, 100, 3, 30) + map(GetStrengthValue(), 1, 100, 3, 30) + map(GetSpeedValue(), 1, 100, 2, 20) + map(GetDefenceValue(), 1, 100, 2, 20);
     }
 
     public void OnClick()
     {
-        GameManager.instance.playerTurn = !GameManager.instance.playerTurn;
-
-        if (GameManager.instance.totalPrice_1 >= GameManager.instance.priceUnit)
+        if (!GameManager.instance.placeUnit)
         {
-            Instantiate(unit);
+            if (!GameManager.instance.playerTurn)
+            {
+                if (GameManager.instance.totalPrice_1 > GameManager.instance.priceUnit)
+                {
+                    GameManager.instance.totalPrice_1 -= GameManager.instance.priceUnit;
 
-            GameManager.instance.totalPrice_1 -= GameManager.instance.priceUnit;
+                    canBuy = true;
+
+                    GameManager.instance.placeUnit = true;
+                }
+                else
+                {
+                    canBuy = false;
+                }
+            }
+            else
+            {
+                if (GameManager.instance.totalPrice_2 > GameManager.instance.priceUnit)
+                {
+                    GameManager.instance.totalPrice_2 -= GameManager.instance.priceUnit;
+
+                    canBuy = true;
+
+                    GameManager.instance.placeUnit = true;
+                }
+                else
+                {
+                    canBuy = false;
+                }
+            }
         }
     }
 

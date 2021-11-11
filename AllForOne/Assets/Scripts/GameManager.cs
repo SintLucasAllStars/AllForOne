@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> UnitsPlayer_2;
 
     public bool playerTurn;
+    public bool placeUnit;
 
     public float totalPrice_1;
     public float totalPrice_2;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
         UnitsPlayer_2 = new List<GameObject>();
 
         playerTurn = false;
+        placeUnit = false;
 
         totalPrice_1 = 100;
         totalPrice_2 = 100;
