@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
         if (!unitSelector[currentUI].activeInHierarchy)
         {
             TurnOnUI();
+            Gamemanager.Instance.SwitchHouseSelector();
         }
         else if (unitSelector[currentUI].activeInHierarchy)
         {
