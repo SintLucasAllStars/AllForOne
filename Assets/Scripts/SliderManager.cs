@@ -7,8 +7,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(UIManager))]
 public class SliderManager : MonoBehaviour
 {
-    UIManager uiMan;
-
     [SerializeField] Slider[] sliders;
     [SerializeField] TextMeshProUGUI[] numbers;
     [SerializeField] int unitPrice;
@@ -16,8 +14,6 @@ public class SliderManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiMan = GetComponent<UIManager>();
-
         // Make the sliders have a random value and update numbers
         RandomSliderValues();
         for (int i = 0; i < sliders.Length; i++)
@@ -42,7 +38,7 @@ public class SliderManager : MonoBehaviour
 
         // Apply total point cost to the UI
         // Note: Does not yet apply to actual points stat in manager
-        uiMan.UpdatePointText(GameManager.Instance.currentTurnPlayer, unitPrice, true);
+        UIManager.Instance.UpdatePointText(GameManager.Instance.currentTurnPlayer, unitPrice, true);
     }
 
     // Makes every sliders have a random value

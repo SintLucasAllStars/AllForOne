@@ -36,9 +36,8 @@ public class UnitClicker : Singleton<UnitClicker>
 
             if (Physics.Raycast(ray, out hit, 100, unitMask))
             {
-                // Get the unit script and set can move
-                UnitMovement unit = hit.collider.gameObject.GetComponent<UnitMovement>();
-                GameManager.Instance.StartPlayerSequence(unit);
+                // Start player sequence in the game manager
+                GameManager.Instance.StartPlayerSequence(hit.collider.gameObject);
             }
         }
     }

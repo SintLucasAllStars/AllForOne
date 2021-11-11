@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Cinemachine;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -11,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     [Header("References")]
     public GameObject playerPrefab;
     public Timer timer;
+    public GameObject[] vCams;
 
     [Space]
     [Header("Game Stats")]
@@ -26,6 +28,7 @@ public class GameManager : Singleton<GameManager>
     public int currentTurnPlayer = 0; // Which player currently has their turn
     public List<GameObject>[] playerUnits; // Saves the gameobjects of each player's units
     public bool playerActionActive;
+    UnitMovement currentMovingUnit;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +38,31 @@ public class GameManager : Singleton<GameManager>
 
         // Make a new Timer
         timer = new Timer();
+    }
+
+    void Update()
+    {
+        if (gamePhase == GamePhase.UnitAction)
+        {
+            // If the movement timer is over
+            if (timer.Tick() <= 0)
+            {
+                // Stop Timer
+                timer.StopTimer();
+
+                // Player can no longer move
+                playerActionActive = false;
+                currentMovingUnit.canMove = false;
+
+                // Set camera back
+                ChangeCamera(0);
+
+                timer.ResetTimer();
+
+                EndTurn();
+            }
+            
+        }
     }
 
     public List<GameObject> GetUnitAmount(int player)
@@ -85,6 +113,12 @@ public class GameManager : Singleton<GameManager>
                 break;
 
             case GamePhase.UnitAction:
+                // Reset timer value
+                UIManager.Instance.UpdatePlayerTimerText(timer.GetCurrentDuration());
+                // Set player turn text to current player
+                UIManager.Instance.ChangePlayerText(currentTurnPlayer);
+
+                gamePhase = GamePhase.UnitChoosing;
                 break;
 
             default:
@@ -106,41 +140,59 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void StartPlayerSequence(UnitMovement unit)
+    public void StartPlayerSequence(GameObject unit)
     {
         StartCoroutine(PlayerMoveSequence(unit, cameraTimer, playerTimer));
     }
 
-    IEnumerator PlayerMoveSequence(UnitMovement unit, float cameraTimer, float playerTimer)
+    IEnumerator PlayerMoveSequence(GameObject unit, float cameraTimer, float playerTimer)
     {
-        // Set camera
+        // Get unitmovement
+        UnitMovement unitMovement = unit.GetComponent<UnitMovement>();
 
-        yield return new WaitForSeconds(cameraTimer);
+        // Set camera and follow target
+        SetCameraFollowTarget(1, unit);
+        yield return StartCoroutine(ChangeCameraSequence(1, cameraTimer));
 
         // Start Timer
         timer.StartTimer(playerTimer);
 
         // Player can move
         gamePhase = GamePhase.UnitAction;
-        unit.canMove = true;
+        currentMovingUnit = unitMovement;
+        currentMovingUnit.canMove = true;
         playerActionActive = true;
+    }
 
-        // TODO: Make it the timer class instead
-        yield return new WaitForSeconds(playerTimer);
-
-        // Stop Timer
-        timer.StopTimer();
-
-        // Player can no longer move
-        playerActionActive = false;
-        unit.canMove = false;
-
-        // Set camera back
-
+    IEnumerator ChangeCameraSequence(int cam, float cameraTimer)
+    {
+        ChangeCamera(cam);
 
         yield return new WaitForSeconds(cameraTimer);
+    }
 
-        gamePhase = GamePhase.UnitChoosing;
+    void ChangeCamera(int camToChangeTo)
+    {
+        for (int i = 0; i < vCams.Length; i++)
+        {
+            vCams[i].SetActive(false);
+        }
+
+        vCams[camToChangeTo].SetActive(true);
+    }
+
+    void SetCameraFollowTarget(int camToChange, GameObject followTarget)
+    {
+        CinemachineFreeLook cam = vCams[camToChange].GetComponent<CinemachineFreeLook>();
+        cam.Follow = followTarget.transform;
+        cam.LookAt = followTarget.transform;
+    }
+
+    public GameObject CreateUnit(Vector3 location, int hea, int str, int spe, int def)
+    {
+        GameObject unit = Instantiate(playerPrefab, location, Quaternion.identity);
+        unit.GetComponent<UnitMovement>().unitStats = new Unit(hea, str, spe, def);
+        return unit;
     }
 
     // Initialises all the game values

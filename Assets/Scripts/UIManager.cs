@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(SliderManager))]
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     SliderManager sliderMan;
 
@@ -91,8 +91,8 @@ public class UIManager : MonoBehaviour
         {
             // Instantiate player prefab with new Unit class using stats
             // Add to unit list
-            GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add(
-                CreateUnit(UnitClicker.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
+            GameManager.Instance.playerUnits[GameManager.Instance.currentTurnPlayer].Add(GameManager.Instance.CreateUnit
+                (UnitClicker.Instance.unitLocation, sliderMan.GetSliderValue(0), sliderMan.GetSliderValue(1), sliderMan.GetSliderValue(2), sliderMan.GetSliderValue(3)));
 
             // Go to next player's turn
             EndTurn();
@@ -108,20 +108,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    GameObject CreateUnit(Vector3 location, int hea, int str, int spe, int def)
-    {
-        GameObject unit = Instantiate(GameManager.Instance.playerPrefab, location, Quaternion.identity);
-        unit.GetComponent<UnitMovement>().unitStats = new Unit(hea, str, spe, def);
-        return unit;
-    }
-
-    void ChangePlayerText(int turnPlayer)
+    public void ChangePlayerText(int turnPlayer)
     {
         playerTurnText.text = "Player " + (turnPlayer +1);
     }
 
     // Update timer text to the countdown timer
-    void UpdatePlayerTimerText(float playerTimer)
+    public void UpdatePlayerTimerText(float playerTimer)
     {
         playerTimerText.text = playerTimer.ToString("f2");
     }
