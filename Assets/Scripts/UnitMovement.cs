@@ -8,14 +8,13 @@ public class UnitMovement : MonoBehaviour
     Rigidbody rb;
 
     [Header("Customisable Player Stats")]
-    public Unit unitStats = new Unit(10, 10, 10, 10);
+    public Unit unitStats = new Unit(0, 10, 10, 10, 10);
     [SerializeField] float currentHealth;
 
     [Space]
     [Header("Non-Customisable Stats")]
     [SerializeField] float gravity = 2;
     [SerializeField] float inputSmoothing = 0.2f;
-    [SerializeField] float turningSpeed = 4.5f;
 
     [Space]
     [Header("Attributes")]

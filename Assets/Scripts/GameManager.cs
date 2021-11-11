@@ -142,7 +142,15 @@ public class GameManager : Singleton<GameManager>
 
     public void StartPlayerSequence(GameObject unit)
     {
-        StartCoroutine(PlayerMoveSequence(unit, cameraTimer, playerTimer));
+        // If current turn player owns the selected unit
+        if (unit.GetComponent<UnitMovement>().unitStats.GetOwner() == currentTurnPlayer)
+        {
+            StartCoroutine(PlayerMoveSequence(unit, cameraTimer, playerTimer));
+        }
+        else
+        {
+            Debug.Log("Player does not own this unit!");
+        }
     }
 
     IEnumerator PlayerMoveSequence(GameObject unit, float cameraTimer, float playerTimer)
@@ -185,10 +193,10 @@ public class GameManager : Singleton<GameManager>
         cam.LookAt = followTarget.transform;
     }
 
-    public GameObject CreateUnit(Vector3 location, int hea, int str, int spe, int def)
+    public GameObject CreateUnit(Vector3 location, int owner, int hea, int str, int spe, int def)
     {
         GameObject unit = Instantiate(playerPrefab, location, Quaternion.identity);
-        unit.GetComponent<UnitMovement>().unitStats = new Unit(hea, str, spe, def);
+        unit.GetComponent<UnitMovement>().unitStats = new Unit(owner, hea, str, spe, def);
         return unit;
     }
 
