@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player {
@@ -5,6 +6,7 @@ public class Player {
     public string name;
     public bool canPlacePawns = true;
     public Color color { get; set; }
+    public List<Pawn> pawns = new List<Pawn>();
 
     public Player(int playerNumber, Color color) {
         name = $"Player {playerNumber}";

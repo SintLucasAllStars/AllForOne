@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,18 @@ public class GameManager : MonoBehaviour {
     public Player currentPlayer;
     [HideInInspector]
     public PlacementPhase placementPhase;
+    [HideInInspector]
+    public BattlePhase battlePhase;
+
+    public Camera camera;
+
+    private void Awake() {
+        placementPhase = FindObjectOfType<PlacementPhase>();
+        placementPhase.gameManager = this;
+        
+        battlePhase = FindObjectOfType<BattlePhase>();
+        battlePhase.gameManager = this;
+    }
 
     private void Start() {
         AddPlayer(Color.blue);
@@ -25,6 +38,7 @@ public class GameManager : MonoBehaviour {
 
         if (playerIndex >= playerList.Count)
             playerIndex = 0;
+        battlePhase.GuiUpdatePlayer();
     }
 
     public void NextStep() {
@@ -38,6 +52,7 @@ public class GameManager : MonoBehaviour {
             }
         }
         else {
+            battlePhase.InitBattle();
         }
     }
 }

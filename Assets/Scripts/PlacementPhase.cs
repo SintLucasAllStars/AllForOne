@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class PlacementPhase : MonoBehaviour {
     public GameObject pawnPrefab;
     public GameObject pawnMenu;
-    public Camera camera;
     public LayerMask floorLayermask;
-    private GameManager gameManager;
+    [HideInInspector]
+    public GameManager gameManager;
 
     [Header("costs")]
     public int healthCost = 1;
@@ -44,11 +44,6 @@ public class PlacementPhase : MonoBehaviour {
     public Button placePawnButton;
 
     #endregion
-
-    private void Awake() {
-        gameManager = FindObjectOfType<GameManager>();
-        gameManager.placementPhase = this;
-    }
 
     public bool PlayersCanPlacePawns() {
         bool result = false;
@@ -105,7 +100,7 @@ public class PlacementPhase : MonoBehaviour {
     private IEnumerator PositionPawn() {
         bool placed = false;
         while (!placed) {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = gameManager.camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayermask)) {
                 currentPawn.transform.position = hit.point + Vector3.up * 0.5f;
@@ -128,6 +123,8 @@ public class PlacementPhase : MonoBehaviour {
         pawnMenu.SetActive(false);
         currentPawn.GetComponentInChildren<MeshRenderer>().material.color = gameManager.currentPlayer.color;
         currentPawn.gameObject.SetActive(true);
+        currentPawn.player = gameManager.currentPlayer;
+        gameManager.currentPlayer.pawns.Add(currentPawn);
         gameManager.currentPlayer.currency = currentCurrency;
         if (gameManager.currentPlayer.currency == 0)
             gameManager.currentPlayer.canPlacePawns = false;
