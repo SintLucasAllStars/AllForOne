@@ -10,6 +10,7 @@ public class UnitMovement : MonoBehaviour
     [Header("Customisable Player Stats")]
     public Unit unitStats = new Unit(0, 10, 10, 10, 10);
     [SerializeField] float currentHealth;
+    public MeshRenderer unitShirt;
 
     [Space]
     [Header("Non-Customisable Stats")]
@@ -75,6 +76,11 @@ public class UnitMovement : MonoBehaviour
     void InitializePlayer()
     {
         currentHealth = unitStats.GetHealth();
+    }
+
+    public void ChangeColor(Color color)
+    {
+        unitShirt.material.color = color;
     }
 
     // Movement input

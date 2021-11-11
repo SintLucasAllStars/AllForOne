@@ -24,6 +24,7 @@ public class UnitClicker : Singleton<UnitClicker>
             {
                 // Get location of raycast hit and save in unitLocation
                 unitLocation = hit.point;
+                unitLocation.y += .5f;
                 unitPlaced = true;
             }
         }
