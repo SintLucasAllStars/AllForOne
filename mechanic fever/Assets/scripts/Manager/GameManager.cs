@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -79,10 +80,10 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
 
-        startGame();
+        //startGame();
     }
 
-    private void startGame()
+    public void startGame()
     {
         players = new Player[playerAmount];
 
@@ -160,6 +161,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit(0);
+        }
+
         if (!turnTimerPaused && timer > 0)
         {
             UiManager.uiManager.updateUnitControlTimer(timer);
@@ -260,4 +266,14 @@ public class GameManager : MonoBehaviour
         gameOver = true;
     }
     #endregion
+
+    public void LoadLevel(int levelIndex)
+    {
+        SceneManager.LoadScene(levelIndex);
+    }
+
+    public void LoadLevel(string levelName)
+    {
+        SceneManager.LoadScene(levelName);
+    }
 }

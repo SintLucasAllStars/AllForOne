@@ -149,7 +149,7 @@ public class UiManager : MonoBehaviour
                 powerUpText.text = "rage";
                 break;
             case 2:
-                powerUpText.text = "time Stop";
+                powerUpText.text = "time Stop ";
                 break;
             default:
                 disablePowerUpUi();
