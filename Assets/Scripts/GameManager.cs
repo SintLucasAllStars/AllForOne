@@ -20,18 +20,23 @@ public class GameManager : MonoBehaviour {
 
     #region GUI
 
-    [Header("GUI elements - text")] public Text guiHealthValue;
+    [Header("GUI elements - text")]
+    public Text guiHealthValue;
     public Text guiDefenseValue;
     public Text guiSpeedValue;
     public Text guiStrengthValue;
     [Space] public Text guiCurrencyValue;
     public Text guiPlayerName;
 
-    [Header("GUI elements - Sliders")] public Slider healthSlider;
+    [Header("GUI elements - Sliders")]
+    public Slider healthSlider;
     public Slider defenseSlider;
     public Slider speedSlider;
     public Slider strengthSlider;
-
+    
+    [Header("GUI elements - Buttons")]
+    public Button placePawnButton;
+    
     #endregion
 
     private void Start() {
@@ -158,6 +163,7 @@ public class GameManager : MonoBehaviour {
         CombatUnit cu = currentPawn.combatUnit;
         cost = cu.defense + cu.health + cu.speed + cu.strength;
         currentCurrency = currentPlayer.currency - cost;
+        placePawnButton.gameObject.SetActive(currentCurrency >= 0);
         guiCurrencyValue.text = currentCurrency.ToString();
     }
 
