@@ -42,15 +42,18 @@ public class UiManager : MonoBehaviour
         attackBar = unitActionUi.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>();
     }
 
-    public void controlStartMessage()
-    {
-        showMessage("Start", 0.5f);
-    }
-
+    #region character creation ui
     public void LoadWarning()
     {
         warningScreen.SetActive(true);
         StartCoroutine(disableOverTime(warningScreen, 5));
+    }
+    #endregion
+
+    #region player border ui
+    public void controlStartMessage()
+    {
+        showMessage("Start", 0.5f);
     }
 
     public void showActionScreen(int playerIndex)
@@ -66,16 +69,6 @@ public class UiManager : MonoBehaviour
         showMessage($"player {playerIndex + 1} turn", 1);
     }
 
-    public void showUnitActionUi()
-    {
-        unitActionUi.SetActive(true);
-    }
-
-    public void disableUnitActionUi()
-    {
-        unitActionUi.SetActive(false);
-    }
-
     public void disableAllActionScreens()
     {
         foreach (GameObject screen in actionScreens)
@@ -87,15 +80,10 @@ public class UiManager : MonoBehaviour
     public void updateUnitControlTimer(float time)
     {
         turnTimer.text = time.ToString("00.0");
-        if(time <= 0)
+        if (time <= 0)
         {
             turnTimer.text = "";
         }
-    }
-    private IEnumerator disableOverTime(GameObject selectedObject, float time)
-    {
-        yield return new WaitForSeconds(time);
-        selectedObject.SetActive(false);
     }
 
     public IEnumerator enableActionSceenOverTime(int playerIndex, float time)
@@ -111,6 +99,18 @@ public class UiManager : MonoBehaviour
 
         StartCoroutine(disableOverTime(turnScreen, time));
     }
+    #endregion
+
+    #region action UI
+    public void showUnitActionUi()
+    {
+        unitActionUi.SetActive(true);
+    }
+
+    public void disableUnitActionUi()
+    {
+        unitActionUi.SetActive(false);
+    }
 
     public void updateFortified(float value, float baseTime)
     {
@@ -121,4 +121,15 @@ public class UiManager : MonoBehaviour
     {
         attackBar.fillAmount = GameManager.Map(value, 0, baseTime, 0, 1);
     }
+    #endregion
+
+    #region powerUpUi
+
+    #endregion
+
+    private IEnumerator disableOverTime(GameObject selectedObject, float time)
+    {
+        yield return new WaitForSeconds(time);
+        selectedObject.SetActive(false);
+    } 
 }

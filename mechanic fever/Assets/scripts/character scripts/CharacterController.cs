@@ -311,8 +311,6 @@ public class CharacterController : MonoBehaviour
             CharacterController controller;
             if (!hitObject.CompareTag(gameObject.tag))
             {
-                Debug.DrawLine(weaponOffset, transform.TransformDirection(Vector3.forward), Color.yellow, 100000);
-
                 if (Physics.Raycast(weaponOffset, transform.TransformDirection(Vector3.forward), out rayhit))
                 {
                     if (rayhit.collider.TryGetComponent(out controller))

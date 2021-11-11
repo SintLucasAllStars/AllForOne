@@ -40,7 +40,7 @@ public class CharacterCreater : MonoBehaviour
     {
         panel = transform.GetChild(0).gameObject;
         costText = panel.transform.GetChild(0).GetComponent<Text>();
-        currencyText = panel.transform.GetChild(1).GetComponent<Text>();
+        currencyText = panel.transform.GetChild(1).GetChild(0).GetComponent<Text>();
 
         healthText = healthSlider.transform.GetChild(0).GetComponent<Text>();
         strengthText = strengthSlider.transform.GetChild(0).GetComponent<Text>();

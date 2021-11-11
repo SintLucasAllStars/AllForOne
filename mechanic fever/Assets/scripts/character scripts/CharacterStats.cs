@@ -27,7 +27,7 @@ public class CharacterStats
 
     public float getDefense()
     {
-        float value = 0;
+        float value = 1;
         if (fortified) {value = defense;}
         return value;
     }
