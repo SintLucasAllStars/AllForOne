@@ -24,6 +24,7 @@ public class StoreManager : MonoBehaviour
     [Space(10)]
     public GameObject blueUnit;
     public GameObject redUnit;
+    public GameObject storePanel;
     public Player currentPlayerClient;
     public Unit tempUnit;
 
@@ -57,6 +58,7 @@ public class StoreManager : MonoBehaviour
         CalculateTotalPrice();
 
         moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
+        unitText.SetText("Units: " + currentPlayerClient.units.Count.ToString() + "/5");
     }
 
     // Update is called once per frame
@@ -129,12 +131,18 @@ public class StoreManager : MonoBehaviour
         u.Strength = GetStrength();
         u.Speed = GetSpeed();
         u.Defence = GetDefence();
+        MovePanel(storePanel.transform.position, 3);
     }
 
     void OnChangePlayerClient()
     {
         moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
         unitText.SetText("Units: " + currentPlayerClient.units.Count.ToString() + "/5");
+    }
+
+    public void MovePanel(Vector3 toPos, float time)
+    {
+        storePanel.transform.position = Vector3.Lerp(storePanel.transform.position, toPos, time);
     }
 
 }

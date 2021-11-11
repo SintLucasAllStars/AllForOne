@@ -88,11 +88,14 @@ public class UnitBehaviour : MonoBehaviour
         //Debug.Log("speed " + Speed);
         //Debug.Log("defence " + Defence);
 
-        player.units.Add(this.gameObject);
+        //player.units.Add(this.gameObject);
     }
 
     private void Update()
     {
+        float h = Input.GetAxis("Horizontal") * Speed * Time.deltaTime;
+        float z = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
 
+        transform.Translate(h, 0, z);
     }
 }
