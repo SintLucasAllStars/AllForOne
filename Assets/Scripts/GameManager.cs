@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     private int currentCurrency;
 
     #region GUI
+
     [Header("GUI elements - text")] public Text guiHealthValue;
     public Text guiDefenseValue;
     public Text guiSpeedValue;
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour {
     public Slider defenseSlider;
     public Slider speedSlider;
     public Slider strengthSlider;
+
     #endregion
 
     private void Start() {
@@ -59,6 +61,7 @@ public class GameManager : MonoBehaviour {
         foreach (Player player in playerList) {
             result |= player.canPlacePawns;
         }
+
         return result;
     }
 
@@ -91,8 +94,25 @@ public class GameManager : MonoBehaviour {
                 Debug.LogError("Pawn not found");
             }
 
+            UpdateStats();
             pawnMenu.SetActive(true);
         }
+    }
+
+    void UpdateStats() {
+        // update gui elements
+        guiDefenseValue.text = defenseSlider.value.ToString();
+        guiHealthValue.text = healthSlider.value.ToString();
+        guiSpeedValue.text = speedSlider.value.ToString();
+        guiStrengthValue.text = strengthSlider.value.ToString();
+
+        // ensure the pawn stats correspond with gui
+        CombatUnit cu = currentPawn.combatUnit;
+        cu.defense = (int)defenseSlider.value;
+        cu.health = (int)healthSlider.value;
+        cu.speed = (int)speedSlider.value;
+        cu.strength = (int)strengthSlider.value;
+        CalculateNewCurrency();
     }
 
     public void EndTurn() {
@@ -138,7 +158,8 @@ public class GameManager : MonoBehaviour {
         CombatUnit cu = currentPawn.combatUnit;
         cost = cu.defense + cu.health + cu.speed + cu.strength;
         currentCurrency = currentPlayer.currency - cost;
-        guiCurrencyValue.text = currentCurrency.ToString(); }
+        guiCurrencyValue.text = currentCurrency.ToString();
+    }
 
     public void SetPawnHealth(float health) {
         currentPawn.combatUnit.health = (int)health;
@@ -163,8 +184,5 @@ public class GameManager : MonoBehaviour {
         currentPawn.combatUnit.speed = (int)speed;
         guiSpeedValue.text = speed.ToString();
         CalculateNewCurrency();
-    }
-
-    void UpdateGuiStats() {
     }
 }
