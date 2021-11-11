@@ -8,6 +8,9 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     public GameObject[] unitSelector;
+    public int currentUI = 0;
+
+    public Text timerText;
 
     //Checks if there already  is an instance in the scene.
     //Checks if the overlay is already on, if so change the value of overlay (spawner script).
@@ -24,18 +27,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //This will handle the unitConfigUI
-    #region UnitConfig
-
     //Handles the switching of the UI.
     //Based on, if the UI already is on or not.
     public void SwitchUnitSUI()
     {
-        if (!unitSelector[0].activeInHierarchy && Gamemanager.Instance.unitConfig)
+        if (!unitSelector[currentUI].activeInHierarchy)
         {
             TurnOnUI();
         }
-        else if(unitSelector[0].activeInHierarchy && Gamemanager.Instance.unitConfig)
+        else if (unitSelector[currentUI].activeInHierarchy)
         {
             TurnOffUI();
         }
@@ -44,15 +44,15 @@ public class UIManager : MonoBehaviour
     private void TurnOnUI()
     {
         //turns on the UI.
-        unitSelector[0].SetActive(true);
+        unitSelector[currentUI].SetActive(true);
         UnitConfig.Instance.ResetValues();
         Spawner.overlay = true;
     }
 
-    public void TurnOffUI()
+    private void TurnOffUI()
     {
         //turns off the UI.
-        unitSelector[0].SetActive(false);
+        unitSelector[currentUI].SetActive(false);
         Spawner.overlay = false;
     }
 
@@ -66,5 +66,21 @@ public class UIManager : MonoBehaviour
         UnitConfig.Instance.ResetValues();
     }
 
-    #endregion
+    private void Update()
+    {
+        timerText.text = "Time: " + Mathf.Round(Gamemanager.Instance.timer);
+    }
+
+    public void UpdateUI()
+    {
+        Text teamText;
+        teamText = GameObject.Find("HeaderText").GetComponent<Text>();
+
+        //Sets the team text.
+        var currentTeam = Gamemanager.Instance.team[Gamemanager.Instance.teamSelected];
+
+        teamText = GameObject.Find("HeaderText").GetComponent<Text>();
+        teamText.text = "Unit Selector - " + currentTeam;
+    }
 }
+
