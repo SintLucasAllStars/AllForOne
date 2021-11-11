@@ -53,12 +53,15 @@ public class GameManager : MonoBehaviour {
         NextTurn();
         if (PlayersCanPlacePawns()) {
             if (currentPlayer.canPlacePawns)
-                ShowMenu();
+                ShowPawnMenu();
             else {
                 NextTurn();
-                ShowMenu();
+                ShowPawnMenu();
             }
         }
+        else {
+        }
+            
     }
 
     bool PlayersCanPlacePawns() {
@@ -66,13 +69,9 @@ public class GameManager : MonoBehaviour {
         foreach (Player player in playerList) {
             result |= player.canPlacePawns;
         }
-
         return result;
     }
 
-    private void Battle() {
-        print("Batling!");
-    }
 
     private int playerIndex;
     private Player currentPlayer;
@@ -85,9 +84,9 @@ public class GameManager : MonoBehaviour {
     }
 
     private Pawn currentPawn;
-
-    void ShowMenu() {
+    void ShowPawnMenu() {
         guiPlayerName.text = currentPlayer.name;
+        guiPlayerName.color = currentPlayer.color;
         currentCurrency = currentPlayer.currency;
         guiCurrencyValue.text = currentPlayer.currency.ToString();
         if (currentPlayer.canPlacePawns) {
@@ -153,6 +152,8 @@ public class GameManager : MonoBehaviour {
         currentPawn.GetComponentInChildren<MeshRenderer>().material.color = currentPlayer.color;
         currentPawn.gameObject.SetActive(true);
         currentPlayer.currency = currentCurrency;
+        if (currentPlayer.currency == 0) 
+            currentPlayer.canPlacePawns = false;
         print($"{currentPlayer.name} currency: {currentPlayer.currency} local currency {currentCurrency}");
         yield return StartCoroutine(PositionPawn());
         NextStep();
@@ -167,6 +168,7 @@ public class GameManager : MonoBehaviour {
         guiCurrencyValue.text = currentCurrency.ToString();
     }
 
+    #region SliderNumberUpdate 
     public void SetPawnHealth(float health) {
         currentPawn.combatUnit.health = (int)health;
         guiHealthValue.text = health.ToString();
@@ -190,5 +192,10 @@ public class GameManager : MonoBehaviour {
         currentPawn.combatUnit.speed = (int)speed;
         guiSpeedValue.text = speed.ToString();
         CalculateNewCurrency();
+    }
+    #endregion
+    
+    private void Battle() {
+        print("Batling!");
     }
 }
