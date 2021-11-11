@@ -147,9 +147,6 @@ public class GameManager : Singleton<GameManager>
 
     IEnumerator PlayerMoveSequence(GameObject unit, float cameraTimer, float playerTimer)
     {
-        // Get unitmovement
-        UnitMovement unitMovement = unit.GetComponent<UnitMovement>();
-
         // Set camera and follow target
         SetCameraFollowTarget(1, unit);
         yield return StartCoroutine(ChangeCameraSequence(1, cameraTimer));
@@ -159,7 +156,7 @@ public class GameManager : Singleton<GameManager>
 
         // Player can move
         gamePhase = GamePhase.UnitAction;
-        currentMovingUnit = unitMovement;
+        currentMovingUnit = unit.GetComponent<UnitMovement>();
         currentMovingUnit.canMove = true;
         playerActionActive = true;
     }

@@ -15,6 +15,7 @@ public class UnitMovement : MonoBehaviour
     [Header("Non-Customisable Stats")]
     [SerializeField] float gravity = 2;
     [SerializeField] float inputSmoothing = 0.2f;
+    [SerializeField] float turningSpeed = 4.5f;
 
     [Space]
     [Header("Attributes")]
@@ -33,6 +34,21 @@ public class UnitMovement : MonoBehaviour
 
         // Initialise the player
         InitializePlayer();
+    }
+
+    private void Update()
+    {
+        if (canMove)
+        {
+            // For rotating the player
+            if (moveInput != Vector2.zero)
+            {
+                Vector3 cameraDirection = transform.position - Camera.main.transform.position;
+                cameraDirection.y = 0;
+                cameraDirection.Normalize();
+                transform.LookAt(transform.position + cameraDirection);
+            }
+        }
     }
 
     private void FixedUpdate()
