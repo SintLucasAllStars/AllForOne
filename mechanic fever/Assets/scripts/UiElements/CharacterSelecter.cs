@@ -96,8 +96,6 @@ public class CharacterSelecter : MonoBehaviour
 
     public IEnumerator resetCamera()
     {
-        yield return new WaitForSeconds(2f);
-
         cam.parent = null;
 
         while (cam.position != oldPosition && cam.rotation != oldRotation)

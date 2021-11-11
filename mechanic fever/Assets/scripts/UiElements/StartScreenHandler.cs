@@ -66,18 +66,24 @@ public class StartScreenHandler : MonoBehaviour
     {
         GameManager config = GameManager.gameManager;
         int playerAmountGiven = int.Parse(PlayerAmountInput.text);
-        if (playerAmountGiven < 2)
-        {
-            playerAmountGiven = 2;
-        }
-        else if(playerAmountGiven > 4)
-        {
-            playerAmountGiven = 4;
-        }
+
 
         config.playerAmount = playerAmountGiven;
         config.startingMoney = int.Parse(PlayerStartingMoneyInput.text);
         config.timePerTurn = int.Parse(TimePerTurnInput.text);
+    }
+
+    public void PlayerAmountChange()
+    {
+        int playerAmountGiven = int.Parse(PlayerAmountInput.text);
+        if (playerAmountGiven < 2)
+        {
+            PlayerAmountInput.text = "2";
+        }
+        else if (playerAmountGiven > 4)
+        {
+            PlayerAmountInput.text = "4";
+        }
     }
     #endregion
 

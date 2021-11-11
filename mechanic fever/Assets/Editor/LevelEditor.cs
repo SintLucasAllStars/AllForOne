@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
 public class LevelEditor : EditorWindow
 {
+#if UNITY_EDITOR
     bool spawnMultipleObjects;
 
     bool WallSpawningEnabled;
@@ -347,5 +349,5 @@ public class LevelEditor : EditorWindow
             Debug.LogWarning("Please select a gameObject to spawn from");
         }
     }
+#endif
 }
-

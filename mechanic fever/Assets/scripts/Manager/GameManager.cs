@@ -79,8 +79,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
-
-        //startGame();
     }
 
     public void startGame()
@@ -139,11 +137,11 @@ public class GameManager : MonoBehaviour
                     TurnSystem();
                     return;
                 }
+                spawner.spawnPowerUp();
+                spawner.spawnWeapon();
 
                 StartCoroutine(UiManager.uiManager.enableActionSceenOverTime(turn, 2));
 
-                spawner.spawnPowerUp();
-                spawner.spawnWeapon();
             }
         }
         else
@@ -249,6 +247,7 @@ public class GameManager : MonoBehaviour
             if (player.getUnitLenght() > 0)
             {
                 value = player;
+                break;
             }
         }
 
@@ -256,7 +255,6 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError($"{this}: the winning player returned null");
         }
-
 
         return value;
     }
