@@ -8,17 +8,22 @@ public class UiManager : MonoBehaviour
     public static UiManager uiManager;
 
     public GameObject warningScreen;
-    public GameObject actionScreen;
 
+    public GameObject actionScreen;
     private GameObject[] actionScreens;
     private GameObject turnScreen;
     private Text turnText;
     private Text turnTimer;
 
-    public GameObject unitActionUi;
-
+    private GameObject unitActionUi;
     private Image fortifyBar;
     private Image attackBar;
+
+    private GameObject unitPowerUpUI;
+    private Image powerUpImage;
+    private Text powerUpText;
+    public Sprite[] powerUpImages;
+
     private void Awake()
     {
         if (uiManager is null)
@@ -40,6 +45,10 @@ public class UiManager : MonoBehaviour
 
         fortifyBar = unitActionUi.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         attackBar = unitActionUi.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>();
+
+        unitPowerUpUI = transform.GetChild(0).GetChild(3).gameObject;
+        powerUpImage = unitPowerUpUI.transform.GetChild(0).GetComponent<Image>();
+        powerUpText = unitPowerUpUI.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>();
     }
 
     #region character creation ui
@@ -124,12 +133,41 @@ public class UiManager : MonoBehaviour
     #endregion
 
     #region powerUpUi
+    public void showPowerUpUi()
+    {
+        unitPowerUpUI.SetActive(true);
+    }
 
+    public void cycleThroughPowerups(int powerUpIndex)
+    {
+        switch (powerUpIndex)
+        {
+            case 0:
+                powerUpText.text = "adrenaline";
+                break;
+            case 1:
+                powerUpText.text = "rage";
+                break;
+            case 2:
+                powerUpText.text = "time Stop";
+                break;
+            default:
+                disablePowerUpUi();
+                return;
+        }
+
+        powerUpImage.sprite = powerUpImages[powerUpIndex];
+    }
+
+    public void disablePowerUpUi()
+    {
+        unitPowerUpUI.SetActive(false);
+    }
     #endregion
 
     private IEnumerator disableOverTime(GameObject selectedObject, float time)
     {
         yield return new WaitForSeconds(time);
         selectedObject.SetActive(false);
-    } 
+    }
 }

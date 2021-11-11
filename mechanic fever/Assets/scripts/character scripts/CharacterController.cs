@@ -206,6 +206,12 @@ public class CharacterController : MonoBehaviour
         UiManager.uiManager.updateAttackTimer(BaseTimeBetweenAttacks, BaseTimeBetweenAttacks);
         UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
 
+        if(powerups.Count > 0)
+        {
+            UiManager.uiManager.cycleThroughPowerups(powerups[0].powerUpType);
+            UiManager.uiManager.showPowerUpUi();
+        }
+
         GameManager.gameManager.startTimer();
     }
 
@@ -235,16 +241,29 @@ public class CharacterController : MonoBehaviour
         removePowerUp(powerUpIndex);
 
         activePowerUp[activePowerTypeIndex].StartPowerUp();
+
+        powerUpIndex = 0;
+
+        if(powerups.Count <= 0)
+        {
+            UiManager.uiManager.cycleThroughPowerups(-1);
+        }
+        else
+        {
+            UiManager.uiManager.cycleThroughPowerups(powerups[powerUpIndex].powerUpType);
+        }
     }
 
     public void increasePowerupIndex()
     {
         int count = powerups.Count;
         powerUpIndex++;
-        if (powerUpIndex > count)
+        if (powerUpIndex >= count)
         {
             powerUpIndex = 0;
         }
+
+        UiManager.uiManager.cycleThroughPowerups(powerups[powerUpIndex].powerUpType);
     }
 
     public void decreasePowerupIndex()
@@ -253,13 +272,18 @@ public class CharacterController : MonoBehaviour
         powerUpIndex--;
         if (powerUpIndex < 0)
         {
-            powerUpIndex = count;
+            powerUpIndex = count - 1;
         }
+
+        UiManager.uiManager.cycleThroughPowerups(powerups[powerUpIndex].powerUpType);
     }
 
     public void addPowerUp(PowerUp powerup)
     {
         powerups.Add(powerup);
+
+        UiManager.uiManager.cycleThroughPowerups(powerups[powerUpIndex].powerUpType);
+        UiManager.uiManager.showPowerUpUi();
     }
 
     public void removePowerUp(int index)
