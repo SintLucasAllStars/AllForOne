@@ -1,25 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UnitController : MonoBehaviour
 {
+    public static UnitController Instance;
+
     MeshRenderer mr;
-    bool isSelected = false;
+    public bool isSelected;
     bool playmode, glow;
     private Rigidbody rbPlayer;
     public float movementSpeed = 1f;
     private Vector3 moveDirection = Vector3.zero;
     string currentTeam;
-
-    public GameObject unitCam, mapCam;
+    public GameObject unitCam;
+    public int entry;
 
     //Gets the mesh of the spawners so they can be changed.
     private void Awake()
     {
+        Gamemanager.Instance.unitControllerList.Add(gameObject);
         mr = gameObject.GetComponent<MeshRenderer>();
         rbPlayer = gameObject.GetComponent<Rigidbody>();
-        mapCam = Camera.main.gameObject;
+        entry = Gamemanager.Instance.unitControllerList.Count -1;
     }
 
     void GetValues()
@@ -32,9 +36,8 @@ public class UnitController : MonoBehaviour
     {
         GetValues();
 
-        if (gameObject.tag == currentTeam && !playmode)
+        if (!isSelected && gameObject.tag == currentTeam && !playmode)
         {
-            Debug.Log(currentTeam);
             glow = true;
             Glowing();
         }
@@ -44,9 +47,8 @@ public class UnitController : MonoBehaviour
     {
         GetValues();
 
-        if (gameObject.tag == currentTeam && !playmode)
+        if (!isSelected && gameObject.tag == currentTeam && !playmode)
         {
-            Debug.Log(currentTeam);
             glow = false;
             Glowing();
         }
@@ -56,19 +58,12 @@ public class UnitController : MonoBehaviour
     {
         //When an unit is selected check if the right team is playing.
         //If it is not the right team then return an value.
-        if (gameObject.tag == currentTeam && !playmode)
+        if (!isSelected && gameObject.tag == currentTeam && !playmode)
         {
-            StartCoroutine(SwitchAni());
+            Gamemanager.Instance.unitSelected = entry;
+            Gamemanager.Instance.SwitchAni();
+            unitCam.SetActive(true);
         }
-    }
-
-    IEnumerator SwitchAni()
-    {
-        //Play animation
-        isSelected = true;
-        yield return null;
-        unitCam.SetActive(true);
-        mapCam.SetActive(false);
     }
 
     private void Glowing()

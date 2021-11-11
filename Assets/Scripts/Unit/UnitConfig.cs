@@ -38,12 +38,7 @@ public class UnitConfig : MonoBehaviour
     private void UpdateConfig()
     {
         currentMoney = Gamemanager.Instance.currentMoney[Gamemanager.Instance.teamSelected];
-
-        //Sets the team text.
-        var currentTeam = Gamemanager.Instance.team[Gamemanager.Instance.teamSelected];
-
-        headerText = GameObject.Find("HeaderText").GetComponent<Text>();
-        headerText.text = "Unit Selector - " + currentTeam;
+        UIManager.Instance.UpdateUI();
     }
 
 
@@ -87,22 +82,25 @@ public class UnitConfig : MonoBehaviour
     //Gets the spawnBtn text.
     private void UpdatePrice()
     {
-        price = (int)sliderAverage;
-
-        if (sliderAverage <= 10)
+        if (Gamemanager.Instance.unitConfig)
         {
-            price = minCost;
+            price = (int)sliderAverage;
+
+            if (sliderAverage <= 10)
+            {
+                price = minCost;
+            }
+
+            spawnBtnText = GameObject.Find("SpawnBtnText").GetComponent<Text>();
+            ChangeBtnText();
+
+            //Sets all the text and vars like they should;
+            moneyText = GameObject.Find("CurrentMoneyText").GetComponent<Text>();
+            moneyText.text = "Money: $" + currentMoney;
+
+            priceText = GameObject.Find("PriceText").GetComponent<Text>();
+            priceText.text = "Price: $" + price;
         }
-
-        spawnBtnText = GameObject.Find("SpawnBtnText").GetComponent<Text>();
-        ChangeBtnText();
-
-        //Sets all the text and vars like they should;
-        moneyText = GameObject.Find("CurrentMoneyText").GetComponent<Text>();
-        moneyText.text = "Money: $" + currentMoney;
-
-        priceText = GameObject.Find("PriceText").GetComponent<Text>();
-        priceText.text = "Price: $" + price;
     }
 
     //This will change the text of the spawn button.

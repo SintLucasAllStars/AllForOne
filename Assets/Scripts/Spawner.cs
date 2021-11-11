@@ -23,7 +23,7 @@ public class Spawner : MonoBehaviour
         if (gameObject.tag == spawnerTag && !overlay)
         {
             glow = true;
-            Glowing();         
+            Glowing();       
         }
     }
 

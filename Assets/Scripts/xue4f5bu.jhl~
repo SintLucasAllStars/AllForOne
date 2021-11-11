@@ -14,15 +14,13 @@ public class Gamemanager : MonoBehaviour
     public int teamSelected = 0;
     public int[] currentMoney;
 
-    public List<GameObject> unitControllerList;
-
     public bool unitConfig = true;
 
     public float timer = 10;
     public bool EnableTimer = false;
 
     public GameObject mapCam;
-    public int unitSelected;
+    public bool IsSelected;
 
     private void Awake()
     {
@@ -32,8 +30,6 @@ public class Gamemanager : MonoBehaviour
         }
 
         mapCam = Camera.main.gameObject;
-
-        List<GameObject> unitControllerList = new List<GameObject>();
 
         CreateTeams();
     }
@@ -117,29 +113,23 @@ public class Gamemanager : MonoBehaviour
 
     public void SwitchAni()
     {
-
-        UnitController unitScript = unitControllerList[unitSelected].GetComponent<UnitController>();
-
-        Debug.Log(unitScript);
-        print(unitSelected);
-
-        switch (unitScript.isSelected)
+        switch (UnitController.Instance.isSelected)
         {
             case true:
-                unitScript.isSelected = false;
+                UnitController.Instance.isSelected = false;
                 break;
             case false:
-                unitScript.isSelected = true;
+                UnitController.Instance.isSelected = true;
                 break;
         }
 
-        switch (unitScript.unitCam.activeInHierarchy)
+        switch (unitCam.activeInHierarchy)
         {
             case true:
-                unitScript.unitCam.SetActive(false);
+                unitCam.SetActive(false);
                 break;
             case false:
-                unitScript.unitCam.SetActive(true);
+                unitCam.SetActive(true);
                 break;
         }
 
@@ -153,13 +143,13 @@ public class Gamemanager : MonoBehaviour
                 break;
         }
 
-        switch (EnableTimer)
+        switch (Gamemanager.Instance.EnableTimer)
         {
             case true:
-                EnableTimer = false;
+                Gamemanager.Instance.EnableTimer = false;
                 break;
             case false:
-                EnableTimer = true;
+                Gamemanager.Instance.EnableTimer = true;
                 break;
         }
     }
