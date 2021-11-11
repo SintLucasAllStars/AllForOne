@@ -114,7 +114,8 @@ public class StoreManager : MonoBehaviour
             currentPlayerClient.money -= price;
             moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
             print("You have enough money");
-            CreateUnit();
+            //CreateUnit();
+            storePanel.SetActive(false);
         }
         else if (price > currentPlayerClient.money)
         {
@@ -122,27 +123,22 @@ public class StoreManager : MonoBehaviour
         }
     }
 
-    public void CreateUnit()
+    public void CreateUnit(Vector3 spawnPos)
     {
-        GameObject go = Instantiate(blueUnit);
+        GameObject go = Instantiate(blueUnit, spawnPos, Quaternion.identity);
         UnitBehaviour u = go.GetComponent<UnitBehaviour>();
         u.unit = new Unit();
         u.Health = GetHealth();
         u.Strength = GetStrength();
         u.Speed = GetSpeed();
         u.Defence = GetDefence();
-        MovePanel(new Vector3(storePanel.transform.position.x, storePanel.transform.position.y + 10, storePanel.transform.position.z), 3);
     }
 
     void OnChangePlayerClient()
     {
+        storePanel.SetActive(true);
         moneyText.SetText("Money: " + currentPlayerClient.money.ToString("000"));
         unitText.SetText("Units: " + currentPlayerClient.units.Count.ToString() + "/5");
-    }
-
-    public void MovePanel(Vector3 toPos, float time)
-    {
-        storePanel.transform.position = Vector3.Lerp(storePanel.transform.position, toPos, time);
     }
 
 }
