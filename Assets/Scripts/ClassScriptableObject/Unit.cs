@@ -2,6 +2,7 @@ using System;
 
 public class Unit
 {
+    private bool placed;
     private int team;
     private string name;
     private int health, strength, speed, defense;
@@ -17,6 +18,7 @@ public class Unit
         this.strength = strength;
         this.speed = speed;
         this.defense = defense;
+        placed = false;
 
         if (health + strength + speed + defense > 100)
         {
@@ -49,6 +51,11 @@ public class Unit
         }
 
         return health;
+    }
+
+    public bool isPlaced()
+    {
+        return placed;
     }
 
     public bool Fortified(bool fortified)

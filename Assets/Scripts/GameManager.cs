@@ -35,17 +35,24 @@ public class GameManager : MonoBehaviour
 
     public void AddUnit()
     {
+        //Unit placement handling
+        while(!gameData.curUnit.isPlaced())
+
         unitCount++;
-        //Call unit placement
+        
 
         if (unitCount == 10)
         {
-            //Start game logic
+            GameLoop(true);
         }
     }
 
-    private void GameLoop()
+    private void GameLoop(bool start)
     {
+        if (start)
+        {
+
+        }
         //gameData.curPlayer;
     }
 }

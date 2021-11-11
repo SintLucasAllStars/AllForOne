@@ -29,11 +29,6 @@ public class CameraScript : MonoBehaviour
         gamestate = state;
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if(gamestate == gameState.GAMING)
