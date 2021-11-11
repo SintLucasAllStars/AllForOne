@@ -34,8 +34,6 @@ public class CharacterCreater : MonoBehaviour
     private Text speedText;
     private Text defenseText;
 
-    private bool isCreatingCharacter;
-
     private void Start()
     {
         Init();
@@ -96,7 +94,6 @@ public class CharacterCreater : MonoBehaviour
     {
         if (GameManager.gameManager.GetPlayer().BuyCharacter(cost))
         {
-            isCreatingCharacter = true;
             SetScreenActive(false);
             StartCoroutine(PlaceCharacter());
         }
@@ -168,8 +165,6 @@ public class CharacterCreater : MonoBehaviour
         strengthSlider.value = Random.Range(1, 101);
         speedSlider.value = Random.Range(1, 101);
         defenseSlider.value = Random.Range(1, 101);
-
-        isCreatingCharacter = false;
     }
 
     private void equipmentManagment()
