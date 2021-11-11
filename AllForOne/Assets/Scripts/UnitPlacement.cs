@@ -18,7 +18,35 @@ public class UnitPlacement : MonoBehaviour
                 {
                     Instantiate(unit, hit.point, Quaternion.identity);
 
-                    GameManager.instance.playerTurn = !GameManager.instance.playerTurn;
+                    if (GameManager.instance.totalPrice_1 < 10)
+                    {
+                        GameManager.instance.cannotBuy_1 = true;
+                    }
+
+                    if (GameManager.instance.totalPrice_2 < 10)
+                    {
+                        GameManager.instance.cannotBuy_2 = true;
+                    }
+
+                    if (!GameManager.instance.cannotBuy_1 && !GameManager.instance.cannotBuy_2)
+                    {
+                        GameManager.instance.playerTurn = !GameManager.instance.playerTurn;
+                    }
+
+                    if (GameManager.instance.cannotBuy_1)
+                    {
+                        GameManager.instance.playerTurn = true;
+                    }
+
+                    if (GameManager.instance.cannotBuy_2)
+                    {
+                        GameManager.instance.playerTurn = false;
+                    }
+
+                    if (GameManager.instance.cannotBuy_1 && GameManager.instance.cannotBuy_2)
+                    {
+                        GameManager.instance.startGame = true;
+                    }
 
                     GameManager.instance.placeUnit = false;
                 }

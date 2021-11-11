@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     public bool playerTurn;
     public bool placeUnit;
+    public bool cannotBuy_1;
+    public bool cannotBuy_2;
+    public bool startGame;
 
     public float totalPrice_1;
     public float totalPrice_2;

@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour
         {
             if (!GameManager.instance.playerTurn)
             {
-                if (GameManager.instance.totalPrice_1 > GameManager.instance.priceUnit)
+                if (GameManager.instance.totalPrice_1 >= GameManager.instance.priceUnit)
                 {
                     GameManager.instance.totalPrice_1 -= GameManager.instance.priceUnit;
 
@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                if (GameManager.instance.totalPrice_2 > GameManager.instance.priceUnit)
+                if (GameManager.instance.totalPrice_2 >= GameManager.instance.priceUnit)
                 {
                     GameManager.instance.totalPrice_2 -= GameManager.instance.priceUnit;
 
