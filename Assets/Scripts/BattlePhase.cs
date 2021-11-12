@@ -23,12 +23,16 @@ public class BattlePhase : MonoBehaviour {
     private IEnumerator TakeControl() {
         selectedPawn.gameObject.GetComponentInChildren<MeshRenderer>().material.color /= 4;
         // selectedPawn.GetComponentInChildren<Rigidbody>().detectCollisions = false;
-        GameObject controler = Instantiate(thirdPersonControler);
-        controler.transform.position = selectedPawn.transform.position - Vector3.up * 0.5f;
-        selectedPawn.transform.SetParent(controler.transform);
-        CameraFollowPawn cameraFollowPawn = gameManager.camera.gameObject.GetComponent<CameraFollowPawn>();
-        cameraFollowPawn.enabled = true;
-        cameraFollowPawn.pawn = selectedPawn;
+        // GameObject controler = Instantiate(thirdPersonControler);
+        // controler.transform.position = selectedPawn.transform.position - Vector3.up * 0.5f;
+        // selectedPawn.transform.SetParent(controler.transform);
+        // CameraFollowPawn cameraFollowPawn = gameManager.camera.gameObject.GetComponent<CameraFollowPawn>();
+        // cameraFollowPawn.enabled = true;
+        // cameraFollowPawn.pawn = selectedPawn;
+        selectedPawn.gameObject.AddComponent<DTL_ExtendedFlyCam>();
+        // gameManager.camera.transform.SetParent(selectedPawn.transform);
+        selectedPawn.GetComponentInChildren<Camera>().enabled = true;
+        gameManager.camera.gameObject.SetActive(false);
         yield return null;
     }
 
