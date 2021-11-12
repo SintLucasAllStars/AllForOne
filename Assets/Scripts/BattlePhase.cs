@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,11 +31,21 @@ public class BattlePhase : MonoBehaviour {
         // CameraFollowPawn cameraFollowPawn = gameManager.camera.gameObject.GetComponent<CameraFollowPawn>();
         // cameraFollowPawn.enabled = true;
         // cameraFollowPawn.pawn = selectedPawn;
-        selectedPawn.gameObject.AddComponent<DTL_ExtendedFlyCam>();
-        selectedPawn.gameObject.AddComponent<PawnCombat>().battlePhase = this;
+        CharControler charControler = selectedPawn.gameObject.AddComponent<CharControler>();
+        PawnCombat pawnCombat = selectedPawn.gameObject.AddComponent<PawnCombat>();
+        pawnCombat.battlePhase = this;
         // gameManager.camera.transform.SetParent(selectedPawn.transform);
         selectedPawn.GetComponentInChildren<Camera>().enabled = true;
         gameManager.camera.gameObject.SetActive(false);
+        
+        yield return new WaitForSeconds(10);
+        print("returning");
+        
+        selectedPawn.GetComponentInChildren<Camera>().enabled = false;
+        gameManager.camera.gameObject.SetActive(true);
+        Destroy(pawnCombat);
+        Destroy(charControler);
+        
         yield return null;
     }
 

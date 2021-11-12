@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DTL_ExtendedFlyCam : MonoBehaviour {
+public class CharControler : MonoBehaviour {
     /*
         EXTENDED FLYCAM
             Desi Quintans (CowfaceGames.com), 17 August 2012.
