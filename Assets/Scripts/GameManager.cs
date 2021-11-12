@@ -32,8 +32,8 @@ public class GameManager : MonoBehaviour {
     void AddPlayer(Color color) {
         playerList.Add(new Player(playerList.Count + 1, color));
     }
-    
-    void NextTurn() {
+
+    public void NextTurn() {
         currentPlayer = playerList[playerIndex++];
 
         if (playerIndex >= playerList.Count)

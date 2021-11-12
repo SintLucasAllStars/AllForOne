@@ -10,7 +10,6 @@ public class BattlePhase : MonoBehaviour {
     [HideInInspector]
     public GameManager gameManager;
 
-    public GameObject thirdPersonControler;
     public Text currentTurnText;
     public LayerMask pawnLayer;
     private HashSet<GameObject> ColoredPawnObjects = new HashSet<GameObject>();
@@ -18,34 +17,30 @@ public class BattlePhase : MonoBehaviour {
 
     public IEnumerator InitBattle() {
         currentTurnText.gameObject.SetActive(true);
-        yield return StartCoroutine(SelectPawn());
-        yield return StartCoroutine(TakeControl());
+        while (true) {
+            yield return StartCoroutine(SelectPawn());
+            yield return StartCoroutine(TakeControl());
+            gameManager.NextTurn();
+        }
     }
 
     private IEnumerator TakeControl() {
         selectedPawn.gameObject.GetComponentInChildren<MeshRenderer>().material.color /= 4;
-        // selectedPawn.GetComponentInChildren<Rigidbody>().detectCollisions = false;
-        // GameObject controler = Instantiate(thirdPersonControler);
-        // controler.transform.position = selectedPawn.transform.position - Vector3.up * 0.5f;
-        // selectedPawn.transform.SetParent(controler.transform);
-        // CameraFollowPawn cameraFollowPawn = gameManager.camera.gameObject.GetComponent<CameraFollowPawn>();
-        // cameraFollowPawn.enabled = true;
-        // cameraFollowPawn.pawn = selectedPawn;
         CharControler charControler = selectedPawn.gameObject.AddComponent<CharControler>();
         PawnCombat pawnCombat = selectedPawn.gameObject.AddComponent<PawnCombat>();
         pawnCombat.battlePhase = this;
-        // gameManager.camera.transform.SetParent(selectedPawn.transform);
         selectedPawn.GetComponentInChildren<Camera>().enabled = true;
         gameManager.camera.gameObject.SetActive(false);
-        
-        yield return new WaitForSeconds(10);
+
+        yield return new WaitForSeconds(5);
         print("returning");
-        
+
         selectedPawn.GetComponentInChildren<Camera>().enabled = false;
         gameManager.camera.gameObject.SetActive(true);
         Destroy(pawnCombat);
         Destroy(charControler);
-        
+        selectedPawn = null;
+
         yield return null;
     }
 
@@ -65,6 +60,7 @@ public class BattlePhase : MonoBehaviour {
                         ColoredPawnObjects.Add(highlightedGameObject);
                         highlightedGameObject.GetComponent<MeshRenderer>().material.color /= 4;
                     }
+
                     // read mouse button
                     if (Input.GetMouseButtonDown(0)) {
                         print("selected");
