@@ -24,7 +24,7 @@ public class Gamemanager : MonoBehaviour
 
     public Camera[] houseCam;
     public GameObject[] houses;
-
+    [HideInInspector]
     public int activeCam;
 
     [HideInInspector]
@@ -127,9 +127,6 @@ public class Gamemanager : MonoBehaviour
     {
         UnitController unitScript = unitControllerList[unitSelected].GetComponent<UnitController>();
 
-        Debug.Log(unitScript);
-        print(unitSelected);
-
         switch (unitScript.isSelected)
         {
             case true:
@@ -166,11 +163,10 @@ public class Gamemanager : MonoBehaviour
                 EnableTimer = false;
                 break;
             case false:
-                SwitchHouseSelector();
                 EnableTimer = true;
+                houseCam[activeCam].enabled = false;
                 break;
         }
-
     }
 
     public void SwitchHouseSelector()
