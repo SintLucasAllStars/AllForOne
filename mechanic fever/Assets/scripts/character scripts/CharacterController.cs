@@ -393,7 +393,7 @@ public class CharacterController : MonoBehaviour
     {
         tag = "Untagged";
         GameManager.gameManager.unitDeath(gameObject, stats.ownerNumber);
-        //Destroy(gameObject, 10);
+        Destroy(gameObject, 10);
     }
     #endregion
 }
