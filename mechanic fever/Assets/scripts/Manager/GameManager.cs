@@ -46,10 +46,6 @@ public class GameManager : MonoBehaviour
     private bool countMatchTime;
     private float matchTime = 0;
 
-
-
-
-
     public enum GameMode
     {
         setup,
@@ -104,6 +100,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playerAmount; i++)
         {
             players[i] = new Player(startingMoney);
+            players[i].SetPlayerName($"player {i + 1}");
         }
 
         StartMatchTimer();

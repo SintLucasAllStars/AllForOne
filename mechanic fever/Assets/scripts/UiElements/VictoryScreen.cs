@@ -9,6 +9,7 @@ public class VictoryScreen : MonoBehaviour
     public GameObject survivingUnits;
     private Transform[] spawnPoints;
     public Text matchTimeText;
+    public Text victorName;
 
     private void Start()
     {
@@ -23,6 +24,8 @@ public class VictoryScreen : MonoBehaviour
         loadInSpawnPoints();
 
         spawnSurvivingUnits();
+
+        VictorName();
     }
 
     private void loadInSpawnPoints()
@@ -50,6 +53,11 @@ public class VictoryScreen : MonoBehaviour
             unitAnimator.SetBool("Victory", true);
             i++;
         }
+    }
+
+    public void VictorName()
+    {
+        victorName.text = GameManager.gameManager.winningPlayer.GetPlayerName() + " wins";
     }
 
     private void SetMatchTime()

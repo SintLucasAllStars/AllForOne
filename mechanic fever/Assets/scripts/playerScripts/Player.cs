@@ -9,6 +9,8 @@ public class Player
     public List<GameObject> units;
     private int currency;
 
+    public string PlayerName;
+
     public Player(int maxMoney)
     {
         currency = maxMoney;
@@ -33,10 +35,15 @@ public class Player
         units.Remove(unit);
     }
 
-    //public void UpdateUnitsList()
-    //{
-    //    units.RemoveAll(n => n.CompareTag("Untagged"));
-    //}
+    public string GetPlayerName()
+    {
+        return PlayerName;
+    }
+
+    public void SetPlayerName(string value)
+    {
+        PlayerName = value;
+    }
 
     public List<GameObject> GetUnitList()
     {
