@@ -23,6 +23,11 @@ public class Player
         }
     }
 
+    public GameObject getUnit(int index)
+    {
+        return units[index];
+    }
+
     public void RemoveUnit(GameObject unit)
     {
         units.Remove(unit);
@@ -32,6 +37,11 @@ public class Player
     //{
     //    units.RemoveAll(n => n.CompareTag("Untagged"));
     //}
+
+    public List<GameObject> GetUnitList()
+    {
+        return units;
+    }
 
     public int getUnitLenght()
     {

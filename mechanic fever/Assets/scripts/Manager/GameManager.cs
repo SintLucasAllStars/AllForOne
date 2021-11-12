@@ -43,6 +43,13 @@ public class GameManager : MonoBehaviour
 
     public bool gameOver;
 
+    private bool countMatchTime;
+    private float matchTime = 0;
+
+
+
+
+
     public enum GameMode
     {
         setup,
@@ -87,6 +94,7 @@ public class GameManager : MonoBehaviour
     public void startGame()
     {
         currentGameMode = GameMode.setup;
+        matchTime = 0;
         timer = 0;
         timerDone = true;
         controllingCamera = true;
@@ -97,6 +105,8 @@ public class GameManager : MonoBehaviour
         {
             players[i] = new Player(startingMoney);
         }
+
+        StartMatchTimer();
     }
 
     public GameMode getGamemode()
@@ -158,6 +168,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (countMatchTime)
+        {
+            matchTime += Time.deltaTime;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit(0);
@@ -203,7 +218,6 @@ public class GameManager : MonoBehaviour
         UiManager.uiManager.showActionScreen(0);
         turn = 0;
 
-
         //call action fase banner
     }
 
@@ -225,8 +239,17 @@ public class GameManager : MonoBehaviour
 
         if (XorPlayerValue())
         {
+            StartCoroutine(characterSelecter.resetCamera());
             gameOver = true;
             UiManager.uiManager.disableAllActionScreens();
+            winningPlayer = getWiningPlayer();
+
+            for (int i = 0; i < winningPlayer.getUnitLenght(); i++)
+            {
+                DontDestroyOnLoad(winningPlayer.getUnit(i));
+            }
+
+            StopMatchTimer();
             StartCoroutine(delayedVictory());
         }
     }
@@ -235,7 +258,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         gameOver = false;
-        LoadLevel(0);
+        LoadLevel(1);
     }
 
     private bool XorPlayerValue()
@@ -277,6 +300,22 @@ public class GameManager : MonoBehaviour
     {
         gameOver = true;
     }
+
+    public void StartMatchTimer()
+    {
+        countMatchTime = true;
+    }
+
+    public void StopMatchTimer()
+    {
+        countMatchTime = false;
+    }
+
+    public float GetMatchTime()
+    {
+        return matchTime;
+    }
+
     #endregion
 
     public void LoadLevel(int levelIndex)
