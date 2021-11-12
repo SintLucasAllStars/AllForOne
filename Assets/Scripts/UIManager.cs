@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
         if (!unitSelector[currentUI].activeInHierarchy)
         {
             TurnOnUI();
+            Gamemanager.Instance.SwitchHouseSelector();
         }
         else if (unitSelector[currentUI].activeInHierarchy)
         {
@@ -80,7 +81,15 @@ public class UIManager : MonoBehaviour
         var currentTeam = Gamemanager.Instance.team[Gamemanager.Instance.teamSelected];
 
         teamText = GameObject.Find("HeaderText").GetComponent<Text>();
-        teamText.text = "Unit Selector - " + currentTeam;
+        if (Gamemanager.Instance.unitConfig)
+        {
+            teamText.text = "Unit Selector - " + currentTeam;
+        }
+        else
+        {
+            teamText.text = "Current Team playing - " + currentTeam;
+        }
+
     }
 }
 

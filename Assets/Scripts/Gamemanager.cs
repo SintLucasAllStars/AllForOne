@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Gamemanager : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class Gamemanager : MonoBehaviour
     public List<GameObject> unitControllerList;
 
     public bool unitConfig = true;
+
+    public Camera[] houseCam;
+    public GameObject[] houses;
+    [HideInInspector]
+    public int activeCam;
 
     [HideInInspector]
     public float timer = 10;
@@ -42,6 +48,12 @@ public class Gamemanager : MonoBehaviour
         List<GameObject> unitControllerList = new List<GameObject>();
 
         CreateTeams();
+
+        //Turns the house cams off on start.
+        foreach (Camera item in houseCam)
+        {
+            item.enabled = false;
+        }
     }
 
     private void CreateTeams()
@@ -81,12 +93,12 @@ public class Gamemanager : MonoBehaviour
         }
     }
 
-    public void Spawn(Transform transformToSpawn)
+    public void Spawn(Vector3 spawnPos)
     {
         //Will handle the spawning of the units.
         GameObject unitToSpawn = UnitConfig.Instance.unitToSpawn;
         Slider[] sliders = UnitConfig.Instance.sliders;
-        GameObject unit = Instantiate(unitToSpawn, transformToSpawn.position, Quaternion.identity);
+        GameObject unit = Instantiate(unitToSpawn, spawnPos, Quaternion.identity);
 
         //Adds the color based of the team that is selected.
         rend = unit.GetComponent<Renderer>();
@@ -110,24 +122,10 @@ public class Gamemanager : MonoBehaviour
         UIManager.Instance.currentUI = 1;
     }
 
-    //Handles the switching between 2d/3d.
-    void SwitchDimension()
-    {
-        if (!unitConfig)
-        {
-            Debug.Log("Switching");
-            //Gets the camera on the unit that is being selected.
-            //switch between map mode and 3d player mode.
-        }
-    }
-
     //Handels the switching of the camera and enable/disable the preferd unit/team.
     public void SwitchAni()
     {
         UnitController unitScript = unitControllerList[unitSelected].GetComponent<UnitController>();
-
-        Debug.Log(unitScript);
-        print(unitSelected);
 
         switch (unitScript.isSelected)
         {
@@ -166,7 +164,20 @@ public class Gamemanager : MonoBehaviour
                 break;
             case false:
                 EnableTimer = true;
+                houseCam[activeCam].enabled = false;
                 break;
+        }
+    }
+
+    public void SwitchHouseSelector()
+    {
+        if (!houseCam[activeCam].enabled)
+        {
+            houseCam[activeCam].enabled = true;
+        }
+        else if (houseCam[activeCam].enabled)
+        {
+            houseCam[activeCam].enabled = false;
         }
     }
 
