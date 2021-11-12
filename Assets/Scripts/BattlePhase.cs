@@ -8,10 +8,11 @@ public class BattlePhase : MonoBehaviour {
     [HideInInspector]
     public GameManager gameManager;
 
+    public GameObject thirdPersonControler;
     public Text currentTurnText;
     public LayerMask pawnLayer;
     private HashSet<GameObject> ColoredPawnObjects = new HashSet<GameObject>();
-    private Pawn slectedPawn;
+    private Pawn selectedPawn;
 
     public IEnumerator InitBattle() {
         currentTurnText.gameObject.SetActive(true);
@@ -20,7 +21,11 @@ public class BattlePhase : MonoBehaviour {
     }
 
     private IEnumerator TakeControl() {
-        slectedPawn.gameObject.GetComponentInChildren<MeshRenderer>().material.color /= 4;
+        selectedPawn.gameObject.GetComponentInChildren<MeshRenderer>().material.color /= 4;
+        // selectedPawn.GetComponentInChildren<Rigidbody>().detectCollisions = false;
+        GameObject controler = Instantiate(thirdPersonControler);
+        controler.transform.position = selectedPawn.transform.position - Vector3.up * 0.5f;
+        selectedPawn.transform.SetParent(controler.transform);
         yield return null;
     }
 
@@ -30,7 +35,7 @@ public class BattlePhase : MonoBehaviour {
     }
 
     private IEnumerator SelectPawn() {
-        while (!slectedPawn) {
+        while (!selectedPawn) {
             Ray ray = gameManager.camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, pawnLayer)) {
@@ -43,7 +48,7 @@ public class BattlePhase : MonoBehaviour {
                     // read mouse button
                     if (Input.GetMouseButtonDown(0)) {
                         print("selected");
-                        slectedPawn = highlightedGameObject.GetComponentInParent<Pawn>();
+                        selectedPawn = highlightedGameObject.GetComponentInParent<Pawn>();
                     }
                 }
             }
