@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,7 @@ public class BattlePhase : MonoBehaviour {
         // cameraFollowPawn.enabled = true;
         // cameraFollowPawn.pawn = selectedPawn;
         selectedPawn.gameObject.AddComponent<DTL_ExtendedFlyCam>();
+        selectedPawn.gameObject.AddComponent<PawnCombat>().battlePhase = this;
         // gameManager.camera.transform.SetParent(selectedPawn.transform);
         selectedPawn.GetComponentInChildren<Camera>().enabled = true;
         gameManager.camera.gameObject.SetActive(false);

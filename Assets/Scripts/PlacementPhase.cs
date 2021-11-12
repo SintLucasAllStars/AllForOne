@@ -106,7 +106,7 @@ public class PlacementPhase : MonoBehaviour {
                 currentPawn.transform.position = hit.point + Vector3.up * 0.5f;
             }
 
-            if (Input.GetMouseButtonDown(0)) {
+            if (Input.GetButton("Fire1")) {
                 placed = true;
             }
 
