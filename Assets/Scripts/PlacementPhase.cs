@@ -154,6 +154,7 @@ public class PlacementPhase : MonoBehaviour {
     public void SetPawnStrength(float strength) {
         currentPawn.combatUnit.strength = (int)strength;
         guiStrengthValue.text = strength.ToString();
+        currentPawn.transform.localScale = (.5f + .1f * currentPawn.combatUnit.strength) * Vector3.one;
         CalculateNewCurrency();
     }
 

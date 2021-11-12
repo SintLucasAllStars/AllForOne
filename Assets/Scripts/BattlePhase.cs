@@ -40,12 +40,13 @@ public class BattlePhase : MonoBehaviour {
         Destroy(pawnCombat);
         Destroy(charControler);
         selectedPawn = null;
+        Cursor.visible = true;
 
         yield return null;
     }
 
     public void GuiUpdatePlayer() {
-        currentTurnText.text = gameManager.currentPlayer.name;
+        currentTurnText.text = $"{gameManager.currentPlayer.name}, pawns left: {gameManager.currentPlayer.pawns.Count}";
         currentTurnText.color = gameManager.currentPlayer.color;
     }
 
