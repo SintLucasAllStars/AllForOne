@@ -1,53 +1,38 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Spawner : MonoBehaviour
 {
-    private MeshRenderer mr;
-    private bool glow, placedUnit;
+    private bool placedUnit;
     public static bool overlay;
-    private Transform _transform;
-
-    private string spawnerTag = "Spawner";
-
-    //Gets the mesh of the spawners so they can be changed.
-    private void Awake()
-    {
-        mr = gameObject.GetComponent<MeshRenderer>();
-    }
-
-    //Only activates the glow effect if the overlay is off.
-    private void OnMouseEnter()
-    {
-        if (gameObject.tag == spawnerTag && !overlay)
-        {
-            glow = true;
-            Glowing();       
-        }
-    }
-
-    //Only de-activates the glow effect if the overlay is off.
-    private void OnMouseExit()
-    {
-        if (gameObject.tag == spawnerTag && !overlay)
-        {
-            glow = false;
-            Glowing();
-        }
-    }
 
     //Checks if the cursor is on an spawner object.
     //Spawns the object (in gamemanager script).
     private void OnMouseDown()
     {
-        if (gameObject.tag == spawnerTag && !placedUnit && !overlay)
+        float length = 10f;
+        LayerMask mask;
+        Vector3 hitpos;
+
+        mask = LayerMask.GetMask("Spawner");
+
+        Camera cam = Gamemanager.Instance.houseCam[Gamemanager.Instance.activeCam];
+        print("test");
+
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+        if (!EventSystem.current.IsPointerOverGameObject() && !placedUnit && !overlay)
         {
-            _transform = gameObject.transform;
-            Gamemanager.Instance.Spawn(_transform);
-            overlay = true;
-            placedUnit = true;
-            StartCoroutine(ResetSpawner());
+            if (Physics.Raycast(ray, out hit, length, mask))
+            {
+                hitpos = hit.point;
+                Gamemanager.Instance.Spawn(hitpos);
+                overlay = true;
+                placedUnit = true;
+                StartCoroutine(ResetSpawner());
+            }
         }
     }
 
@@ -59,20 +44,5 @@ public class Spawner : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.SwitchUnitSUI();
         placedUnit = false;
-    }
-
-    //Handles the glow effect on the spawn cubes.
-    //Glows when the mouse hovers over the object, if not, no glow.
-    private void Glowing()
-    {
-        switch (glow)
-        {
-            case true:
-                mr.material.EnableKeyword("_EMISSION");
-                break;
-            case false:
-                mr.material.DisableKeyword("_EMISSION");
-                break;
-        }
     }
 }

@@ -60,6 +60,7 @@ public class UnitController : MonoBehaviour
         //If it is not the right team then return an value.
         if (!isSelected && gameObject.tag == currentTeam && !playmode)
         {
+            glow = false;
             Glowing();
             Gamemanager.Instance.unitSelected = entry;
             Gamemanager.Instance.SwitchAni();
@@ -82,6 +83,7 @@ public class UnitController : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (isSelected && !playmode)
         {
             //Handles the walking.
