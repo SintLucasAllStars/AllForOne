@@ -16,6 +16,7 @@ public class Pawn : MonoBehaviour {
         // play special effects
         if (combatUnit.health <= 0) {
             //die and more special effects
+            player.PawnDeath(this);
             Destroy(gameObject);
         }
     }

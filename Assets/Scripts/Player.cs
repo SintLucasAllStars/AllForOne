@@ -8,6 +8,14 @@ public class Player {
     public Color color { get; set; }
     public List<Pawn> pawns = new List<Pawn>();
 
+    public void PawnDeath(Pawn pawn) {
+        pawns.Remove(pawn);
+        if (pawns.Count == 0) {
+            // other player wins with a few fireworks thingies
+            Debug.Log($"{name} lost!");
+        }
+    }
+
     public Player(int playerNumber, Color color) {
         name = $"Player {playerNumber}";
         Debug.Log($"Created player: {name}");
