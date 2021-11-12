@@ -26,6 +26,9 @@ public class BattlePhase : MonoBehaviour {
         GameObject controler = Instantiate(thirdPersonControler);
         controler.transform.position = selectedPawn.transform.position - Vector3.up * 0.5f;
         selectedPawn.transform.SetParent(controler.transform);
+        CameraFollowPawn cameraFollowPawn = gameManager.camera.gameObject.GetComponent<CameraFollowPawn>();
+        cameraFollowPawn.enabled = true;
+        cameraFollowPawn.pawn = selectedPawn;
         yield return null;
     }
 
