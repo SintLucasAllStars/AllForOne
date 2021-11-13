@@ -14,6 +14,7 @@ public class UnitPlacement : MonoBehaviour
     private Unit currentUnit;
     public GameObject unitPrefab;
     public UnitCreator unitCreator;
+    public GameManager gameManager;
     
     void Update()
     {
@@ -28,11 +29,11 @@ public class UnitPlacement : MonoBehaviour
                 worldPosition = hitData.point;
                 GameObject unit = Instantiate(unitPrefab,worldPosition, Quaternion.identity);
                 unit.GetComponent<UnitBehaviour>().AddStats(currentUnit);
-                unitCreator.GetPlayer().AddUnit(unit);
+                gameManager.GetCurrentPlayer().AddUnit(unit);
                 
                 currentUnit = null;
                 // Flip to the other player and update the UI accordingly.
-                unitCreator.FlipPlayer();
+                gameManager.FlipPlayer();
                 unitCreator.ActivateGUI();
                 unitCreator.UpdatePlayerDataUI();
             }

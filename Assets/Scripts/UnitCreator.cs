@@ -23,8 +23,6 @@ public class UnitCreator : MonoBehaviour
     
     public Text currentPlayerPoints;
     public Text currentPlayerText;
-    
-    private Color blueText = new Vector4(0.5f,0.5f,1f,1f);
 
     private int hCost;
     private int spCost;
@@ -32,8 +30,6 @@ public class UnitCreator : MonoBehaviour
     private int dCost;
     private int unitCost;
 
-    private Player currentPlayer;
-    private bool firstPlayerTurn;
     private Unit currentUnit;
     public GameObject unitStoreUI;
     
@@ -49,15 +45,7 @@ public class UnitCreator : MonoBehaviour
         dSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
         CalculateCost();
         UpdateStatPercentage();
-        
-        Invoke("InitFirstPlayer", 0.04f);
-        // Delay updating UI values on start of game, so that the gameManager has time to instantiate.
-        Invoke("UpdatePlayerDataUI", 0.05f);
-    }
-    
-    void Update()
-    {
-    
+        Invoke("UpdatePlayerDataUI",0.001f);
     }
     
     private void ValueChangeCheck()
@@ -96,7 +84,9 @@ public class UnitCreator : MonoBehaviour
 
     public void BuyUnit()
     {
-        
+        Player currentPlayer = gameManager.GetCurrentPlayer();
+
+
         if (unitCost <= currentPlayer.GetPoints()) //Place unit if its cost does not exceed the currentPlayer's points.
         {
             currentUnit = new Unit((int)hSlider.value*10,(int)spSlider.value*10,(int)stSlider.value*10,(int)dSlider.value*10);
@@ -109,24 +99,10 @@ public class UnitCreator : MonoBehaviour
         }
     }
 
-    private void InitFirstPlayer()
-    {
-        currentPlayer = gameManager.one;
-        firstPlayerTurn = true;
-    }
-
     public void UpdatePlayerDataUI()
     {
-        currentPlayerPoints.text = "POINTS: " + currentPlayer.GetPoints();
-        currentPlayerText.text = "PLAYER " + currentPlayer.GetPlayerNumber();
-        if (currentPlayer == gameManager.one)
-        {
-            currentPlayerText.color = Color.red;
-        }
-        else if (currentPlayer == gameManager.two)
-        {
-            currentPlayerText.color = blueText;
-        }
+        currentPlayerPoints.text = "POINTS: " + gameManager.GetCurrentPlayer().GetPoints();
+        gameManager.UpdateCurrentPlayerText();
     }
 
     public void ActivateGUI()
@@ -144,25 +120,5 @@ public class UnitCreator : MonoBehaviour
     {
         float i = (2+(sld.value-1)*(20-2)/(10-1));
         return i;
-    }
-
-    public Player GetPlayer()
-    {
-        return currentPlayer;
-    }
-
-    public void FlipPlayer()
-    {
-        firstPlayerTurn = !firstPlayerTurn;
-            
-        // Flip between players one and two.
-        if (!firstPlayerTurn)
-        {
-            currentPlayer = gameManager.two;
-        }
-        else if (firstPlayerTurn)
-        {
-            currentPlayer = gameManager.one;
-        }
     }
 }
