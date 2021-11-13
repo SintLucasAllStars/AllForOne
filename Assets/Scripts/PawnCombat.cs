@@ -14,11 +14,16 @@ public class PawnCombat : MonoBehaviour {
         pawn = GetComponent<Pawn>();
         layerMask = battlePhase.pawnLayer;
         camera = GetComponentInChildren<Camera>();
+        pawn.isFortified = false;
+        pawn.fortifyIndicator.SetActive(false);
     }
 
     private void Update() {
         if (Input.GetButtonDown("Fire1")) {
             Attack();
+        }
+        if (Input.GetButtonDown("Fire2")) {
+            Fortify();
         }
     }
 
@@ -30,5 +35,11 @@ public class PawnCombat : MonoBehaviour {
                 hit.collider.gameObject.GetComponentInParent<Pawn>().TakeDamage(pawn.combatUnit.strength);
             }
         }
+    }
+
+    void Fortify() {
+        pawn.isFortified = true;
+        pawn.fortifyIndicator.SetActive(true);
+        StopCoroutine(battlePhase.CheckIsFortified());
     }
 }

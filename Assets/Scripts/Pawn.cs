@@ -6,16 +6,20 @@ using UnityEngine;
 public class Pawn : MonoBehaviour {
     public CombatUnit combatUnit;
     public Player player;
+    [HideInInspector]
+    public bool isFortified;
+    public GameObject fortifyIndicator;
 
     private void Awake() {
         combatUnit = new CombatUnit();
     }
 
     public void TakeDamage(int damage) {
+        if (isFortified)
+            damage /= combatUnit.defense;
         combatUnit.health -= damage;
-        // play special effects
+
         if (combatUnit.health <= 0) {
-            //die and more special effects
             player.PawnDeath(this);
             Destroy(gameObject);
         }

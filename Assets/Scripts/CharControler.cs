@@ -24,7 +24,7 @@ public class CharControler : MonoBehaviour {
     public float normalMoveSpeed = 10;
     public float slowMoveFactor = 0.25f;
     public float fastMoveFactor = 3;
-    public float rotationOffsetY = 90;
+    public float rotationOffsetY = 0;
 
     private float rotationX = 0.0f;
     private float rotationY = 0.0f;

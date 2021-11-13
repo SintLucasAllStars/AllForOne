@@ -32,8 +32,7 @@ public class BattlePhase : MonoBehaviour {
         selectedPawn.GetComponentInChildren<Camera>().enabled = true;
         gameManager.camera.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(5);
-        print("returning");
+        yield return StartCoroutine(CheckIsFortified());
 
         selectedPawn.GetComponentInChildren<Camera>().enabled = false;
         gameManager.camera.gameObject.SetActive(true);
@@ -44,6 +43,22 @@ public class BattlePhase : MonoBehaviour {
 
         yield return null;
     }
+
+    public IEnumerator CheckIsFortified() {
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        int timeStep = 10;
+        while (timeStep-- >= 0) {
+            if (selectedPawn.isFortified) {
+                print("Fortifying");
+                break;
+            }
+
+            yield return wait;
+        }
+
+        print("returning");
+    }
+
 
     public void GuiUpdatePlayer() {
         currentTurnText.text = $"{gameManager.currentPlayer.name}, pawns left: {gameManager.currentPlayer.pawns.Count}";
