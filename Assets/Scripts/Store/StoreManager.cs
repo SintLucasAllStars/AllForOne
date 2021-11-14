@@ -32,6 +32,7 @@ public class StoreManager : MonoBehaviour
     public TextMeshProUGUI priceText;
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI unitText;
+    public TextMeshProUGUI PlacingText;
 
     private List<Slider> sliders = new List<Slider>();
 
@@ -116,6 +117,7 @@ public class StoreManager : MonoBehaviour
             print("You have enough money");
             //CreateUnit();
             storePanel.SetActive(false);
+            PlacingText.gameObject.SetActive(true);
         }
         else if (price > currentPlayerClient.money)
         {
