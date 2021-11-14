@@ -36,6 +36,7 @@ public class UnitPlacement : MonoBehaviour
                 gameManager.FlipPlayer();
                 unitCreator.ActivateGUI();
                 unitCreator.UpdatePlayerDataUI();
+                gameManager.CheckPlayerPoints();
             }
         }
     }

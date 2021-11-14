@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject unitStoreUI;
     public GameObject CurrentPointsUI;
     public Text currentPlayerText;
+    public GameObject selectUnitText;
 
     public UnitCreator unitCreator;
     public UnitPlacement unitPlacement;
@@ -74,6 +75,15 @@ public class GameManager : MonoBehaviour
         else if (firstPlayerTurn)
         {
             currentPlayer = one;
+        }
+    }
+    
+    public void CheckPlayerPoints()
+    {
+        //If both players can't create more units the game starts.
+        if (one.GetPoints() < 10 && two.GetPoints() < 10)
+        {
+            StartGame();
         }
     }
 }
