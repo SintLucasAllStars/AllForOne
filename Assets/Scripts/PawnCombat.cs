@@ -14,7 +14,6 @@ public class PawnCombat : MonoBehaviour {
         pawn = GetComponent<Pawn>();
         layerMask = battlePhase.pawnLayer;
         camera = GetComponentInChildren<Camera>();
-        pawn.isFortified = false;
         pawn.fortifyIndicator.SetActive(false);
     }
 

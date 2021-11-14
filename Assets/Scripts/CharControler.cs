@@ -30,7 +30,7 @@ public class CharControler : MonoBehaviour {
     private float rotationY = 0.0f;
 
     void Start() {
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update() {

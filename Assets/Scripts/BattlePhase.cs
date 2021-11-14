@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +8,7 @@ public class BattlePhase : MonoBehaviour {
     public GameManager gameManager;
 
     public Text currentTurnText;
+    public Text controlsText;
     public LayerMask pawnLayer;
     private HashSet<GameObject> ColoredPawnObjects = new HashSet<GameObject>();
     private Pawn selectedPawn;
@@ -31,6 +29,7 @@ public class BattlePhase : MonoBehaviour {
         pawnCombat.battlePhase = this;
         selectedPawn.GetComponentInChildren<Camera>().enabled = true;
         gameManager.camera.gameObject.SetActive(false);
+        controlsText.gameObject.SetActive(true);
 
         yield return StartCoroutine(CheckIsFortified());
 
@@ -39,14 +38,15 @@ public class BattlePhase : MonoBehaviour {
         Destroy(pawnCombat);
         Destroy(charControler);
         selectedPawn = null;
-        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        controlsText.gameObject.SetActive(false);
 
         yield return null;
     }
 
     public IEnumerator CheckIsFortified() {
         WaitForSeconds wait = new WaitForSeconds(0.5f);
-        int timeStep = 10;
+        int timeStep = 20;
         while (timeStep-- >= 0) {
             if (selectedPawn.isFortified) {
                 print("Fortifying");
@@ -81,6 +81,7 @@ public class BattlePhase : MonoBehaviour {
                     if (Input.GetMouseButtonDown(0)) {
                         print("selected");
                         selectedPawn = highlightedGameObject.GetComponentInParent<Pawn>();
+                        selectedPawn.isFortified = false;
                     }
                 }
             }

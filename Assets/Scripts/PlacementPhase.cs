@@ -12,10 +12,11 @@ public class PlacementPhase : MonoBehaviour {
     public GameManager gameManager;
 
     [Header("costs")]
-    public int healthCost = 1;
-    public int defenseCost = 1;
-    public int speedCost = 1;
-    public int strengthCost = 1;
+    int cost;
+    public int healthCost = 3;
+    public int defenseCost = 2;
+    public int speedCost = 3;
+    public int strengthCost = 2;
 
     private int currentCurrency;
 
@@ -134,12 +135,11 @@ public class PlacementPhase : MonoBehaviour {
     }
 
     void CalculateNewCurrency() {
-        int cost;
         CombatUnit cu = currentPawn.combatUnit;
-        cost = cu.defense + cu.health + cu.speed + cu.strength;
+        cost = (cu.defense * defenseCost) + (cu.health * healthCost) + (cu.speed * speedCost) + (cu.strength * strengthCost);
         currentCurrency = gameManager.currentPlayer.currency - cost;
         placePawnButton.gameObject.SetActive(currentCurrency >= 0);
-        guiCurrencyValue.text = currentCurrency.ToString();
+        guiCurrencyValue.text = $"{gameManager.currentPlayer.currency.ToString()} / {currentCurrency.ToString()}";
     }
 
     #region SliderNumberUpdate

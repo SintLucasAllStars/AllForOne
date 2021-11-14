@@ -6,20 +6,22 @@ public class Player {
     public string name;
     public bool canPlacePawns = true;
     public Color color { get; set; }
+    public GameManager gameManager { get; set; }
     public List<Pawn> pawns = new List<Pawn>();
 
     public void PawnDeath(Pawn pawn) {
         pawns.Remove(pawn);
         if (pawns.Count == 0) {
             // other player wins with a few fireworks thingies
-            Debug.Log($"{name} lost!");
+            gameManager.StartWinstate();
         }
     }
 
-    public Player(int playerNumber, Color color) {
+    public Player(int playerNumber, Color color, GameManager gameManager) {
         name = $"Player {playerNumber}";
         Debug.Log($"Created player: {name}");
         currency = 100;
         this.color = color;
+        this.gameManager = gameManager;
     }
 }
