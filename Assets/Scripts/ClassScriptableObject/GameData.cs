@@ -18,9 +18,29 @@ public class GameData : ScriptableObject
     // Data on current round
     // Reset data function
 
+    public void StartVals()
+    {
+        curPlayer = players[0];
+    }
+
     public void AddPlayer(Player player)
     {
         players.Add(player);
+    }
+
+    public void SwitchPlayer()
+    {
+        // It gave error that lol
+        Player temp = curPlayer;
+        foreach (Player p in players)
+        {
+            if(curPlayer != p)
+            {
+                temp = p;
+            }
+            
+        }
+        curPlayer = temp;
     }
 
     public void AddUnit(GameObject go, Unit u)

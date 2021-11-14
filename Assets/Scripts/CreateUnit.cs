@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class CreateUnit : MonoBehaviour
 {
     public InputField inputField;
-
     public GameData gameData;
     private Unit tempUnit;
     public float[] priceValues = new float[4] { 3,2,3,2 };
@@ -16,7 +15,6 @@ public class CreateUnit : MonoBehaviour
     private int team;
     private string name = "this is not a placeholder";
     private int health, strength, speed, defense;
-    private GameObject go;
 
     public enum UnitStats { 
         HEALTH = 0,
@@ -77,13 +75,13 @@ public class CreateUnit : MonoBehaviour
         tempUnit = new Unit(team, name, health, strength, speed, defense);
         gameObject.GetComponent<Canvas>().enabled = false;
         GameDataHandler();
+        GameManager.instance.PlaceUnit(tempUnit);
     }
 
     public void GameDataHandler()
     {
         int curPlayer = (gameData.currentRound % 2) + 1;
         gameData.RemovePoints(curPlayer, Mathf.RoundToInt(priceValues.Sum()));
-        gameData.AddUnit(go, tempUnit);
     }
 
     private Vector2 MapUnitPoints(float sliderCurrent, bool isExpensive)
