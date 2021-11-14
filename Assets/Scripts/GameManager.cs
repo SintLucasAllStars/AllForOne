@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
@@ -64,7 +65,8 @@ public class GameManager : MonoBehaviour {
                 yield return new WaitForSeconds(3);
                 while (true) {
                     if (Input.anyKey) {
-                        Application.Quit();
+                        Cursor.lockState = CursorLockMode.None;
+                        SceneManager.LoadScene(0);
                     }
 
                     yield return null;
@@ -98,6 +100,7 @@ public class GameManager : MonoBehaviour {
             yield return null;
         }
     }
+
     IEnumerator DecreasePitch() {
         while (transitionTime <= 1) {
             audioSource.pitch = Mathf.Lerp(1, 0.4f, transitionTime);
