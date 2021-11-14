@@ -6,6 +6,12 @@ public class UnitBehaviour : MonoBehaviour
 {
     public Unit unit;
     public GameObject player;
+    public CapsuleCollider coll;
+    public float extraHeight;
+    public float jumpForce;
+    public float jumpButtonReleaseDamping;
+
+    public Rigidbody rb;
 
     //Getters
     public float Health 
@@ -93,7 +99,40 @@ public class UnitBehaviour : MonoBehaviour
         float h = Input.GetAxis("Horizontal") * Speed * Time.deltaTime;
         float z = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
 
+        if (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce);
+        }
+
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * jumpButtonReleaseDamping);
+        }
+
         transform.Translate(h, 0, z);
+    }
+
+    private bool IsGrounded()
+    {
+        //Vector3 size = new Vector3(coll.center.x - 0.1f, coll.center.y, coll.center.z);
+        RaycastHit raycastHit;
+
+        Color rayColor;
+        if (Physics.Raycast(transform.position, Vector3.down, out raycastHit, 1f))
+        {
+            if (raycastHit.collider != null)
+            {
+                rayColor = Color.green;
+            }
+            else
+            {
+                rayColor = Color.red;
+                print(raycastHit.collider.name);
+            }
+        }
+
+        Debug.DrawRay(transform.position, Vector3.down * (transform.position.y + extraHeight), Color.green);
+        return raycastHit.collider != null;
     }
 
     void RemoveUnit()

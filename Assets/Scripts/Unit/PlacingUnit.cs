@@ -6,11 +6,15 @@ public class PlacingUnit : MonoBehaviour
 {
     private LayerMask placingArea;
 
+    public Transform topDownPos;
+
     private bool isPlacing;
 
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = topDownPos.position;
+        transform.rotation = topDownPos.rotation;
         string[] layers = {"PlacingArea"};
         placingArea = LayerMask.GetMask(layers);
         isPlacing = true;
