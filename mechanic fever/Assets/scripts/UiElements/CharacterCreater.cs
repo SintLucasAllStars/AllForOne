@@ -165,6 +165,8 @@ public class CharacterCreater : MonoBehaviour
         strengthSlider.value = Random.Range(1, 101);
         speedSlider.value = Random.Range(1, 101);
         defenseSlider.value = Random.Range(1, 101);
+
+        UiManager.uiManager.disableWarning();
     }
 
     private void equipmentManagment()

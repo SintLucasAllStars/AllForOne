@@ -214,8 +214,6 @@ public class GameManager : MonoBehaviour
         currentGameMode = GameMode.action;
         UiManager.uiManager.showActionScreen(0);
         turn = 0;
-
-        //call action fase banner
     }
 
     public void EndTurn()

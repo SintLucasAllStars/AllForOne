@@ -57,6 +57,12 @@ public class UiManager : MonoBehaviour
         warningScreen.SetActive(true);
         StartCoroutine(disableOverTime(warningScreen, 5));
     }
+
+    public void disableWarning()
+    {
+        StopAllCoroutines();
+        warningScreen.SetActive(false);
+    }
     #endregion
 
     #region player border ui
@@ -67,6 +73,8 @@ public class UiManager : MonoBehaviour
 
     public void showActionScreen(int playerIndex)
     {
+        disableWarning();
+
         disableAllActionScreens();
 
         turnTimer = actionScreens[playerIndex].transform.GetChild(1).GetChild(0).GetComponent<Text>();
