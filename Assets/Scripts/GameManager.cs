@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer = one;
     }
-    
+
     void Update()
     {
         //timer -= Time.deltaTime;
@@ -34,10 +34,14 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
+        // Deactivate unit creator UI and functionality.
         unitStoreUI.SetActive(false);
         CurrentPointsUI.SetActive(false);
         unitCreator.enabled = false;
         unitPlacement.enabled = false;
+
+        selectUnitText.SetActive(true);
+
     }
 
     public void UpdateCurrentPlayerText()
@@ -80,7 +84,7 @@ public class GameManager : MonoBehaviour
     
     public void CheckPlayerPoints()
     {
-        //If both players can't create more units the game starts.
+        // If both players can't create more units the game starts.
         if (one.GetPoints() < 10 && two.GetPoints() < 10)
         {
             StartGame();
