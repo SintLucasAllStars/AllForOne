@@ -1503,6 +1503,7 @@ GameObject:
   - component: {fileID: 7104265786396825200}
   - component: {fileID: 7104265786396825207}
   - component: {fileID: 7104265786396825206}
+  - component: {fileID: 2404307126767694235}
   m_Layer: 0
   m_Name: RedUnit
   m_TagString: RedUnit
@@ -1582,13 +1583,13 @@ MonoBehaviour:
   locomotionType: 0
   freeSpeed:
     movementSmooth: 6
-    animationSmooth: 0.2
+    animationSmooth: 0
     rotationSpeed: 16
     walkByDefault: 0
     rotateWithCamera: 0
-    walkSpeed: 2
-    runningSpeed: 4
-    sprintSpeed: 6
+    walkSpeed: 1
+    runningSpeed: 3
+    sprintSpeed: 1
   strafeSpeed:
     movementSmooth: 6
     animationSmooth: 0.2
@@ -1601,8 +1602,8 @@ MonoBehaviour:
   jumpWithRigidbodyForce: 0
   jumpAndRotate: 1
   jumpTimer: 0.3
-  jumpHeight: 4
-  airSpeed: 5
+  jumpHeight: 2
+  airSpeed: 2
   airSmooth: 6
   extraGravity: -10
   limitFallVelocity: -15
@@ -1619,16 +1620,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7104265786396825205}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5deb9ff5611cb9d4596d397ac57ee8c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   horizontalInput: Horizontal
   verticallInput: Vertical
-  jumpInput: 32
-  strafeInput: 9
-  sprintInput: 304
+  jumpInput: 0
+  strafeInput: 0
+  sprintInput: 0
   rotateCameraXInput: Mouse X
   rotateCameraYInput: Mouse Y
   cc: {fileID: 0}
@@ -1664,6 +1665,19 @@ CapsuleCollider:
   m_Height: 1.9
   m_Direction: 1
   m_Center: {x: 0, y: 0.95, z: 0}
+--- !u!114 &2404307126767694235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7104265786396825205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c527d94808a58def95f0ec4be19c684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tpInput: {fileID: 7104265786396825200}
 --- !u!1 &7104265786403145684
 GameObject:
   m_ObjectHideFlags: 0

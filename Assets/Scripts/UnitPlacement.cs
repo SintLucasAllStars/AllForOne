@@ -12,7 +12,10 @@ public class UnitPlacement : MonoBehaviour
     public Camera overviewCamera;
     
     private Unit currentUnit;
-    public GameObject unitPrefab;
+    private GameObject unit;
+
+    public GameObject redUnitPrefab;
+    public GameObject blueUnitPrefab;
     public UnitCreator unitCreator;
     public GameManager gameManager;
     
@@ -27,10 +30,27 @@ public class UnitPlacement : MonoBehaviour
             if (Physics.Raycast(ray, out hitData, 50, layerMask))
             {
                 worldPosition = hitData.point;
-                GameObject unit = Instantiate(unitPrefab,worldPosition, Quaternion.identity);
-                unit.GetComponent<UnitBehaviour>().AddStats(currentUnit);
-                gameManager.GetCurrentPlayer().AddUnit(unit);
+                Player current = gameManager.GetCurrentPlayer();
                 
+
+                // Change instantiated prefab based on current player and pass stats including owner.
+                if (current.GetPlayerNumber() == 1)
+                {
+                    unit = Instantiate(redUnitPrefab, worldPosition, Quaternion.identity);
+                    UnitBehaviour ub = unit.GetComponent<UnitBehaviour>();
+                    ub.AddStats(currentUnit, gameManager.GetCurrentPlayer().GetPlayerNumber());
+                    ub.PassGameManager(gameManager);
+                    current.AddUnit(unit);
+                }
+                else if (current.GetPlayerNumber() == 2)
+                {
+                    unit = Instantiate(blueUnitPrefab, worldPosition, Quaternion.identity);
+                    UnitBehaviour ub = unit.GetComponent<UnitBehaviour>();
+                    ub.AddStats(currentUnit,gameManager.GetCurrentPlayer().GetPlayerNumber());
+                    ub.PassGameManager(gameManager);
+                    current.AddUnit(unit);
+                }
+
                 currentUnit = null;
                 // Flip to the other player and update the UI accordingly.
                 gameManager.FlipPlayer();

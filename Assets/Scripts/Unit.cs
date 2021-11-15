@@ -21,7 +21,12 @@ public class Unit
     {
         return health;
     }
-    
+
+    public void SubtractHealth(int hp)
+    {
+        health -= hp;
+    }
+
     public int GetSpeed()
     {
         return speed;
