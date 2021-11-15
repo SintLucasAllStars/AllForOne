@@ -14,7 +14,7 @@ public class ThirdPersonTarget : MonoBehaviour
     Vector3 rotate;
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()

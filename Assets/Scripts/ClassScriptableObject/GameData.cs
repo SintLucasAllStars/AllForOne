@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameData : ScriptableObject
 {
     private Dictionary<GameObject, Unit> getUnit = new Dictionary<GameObject, Unit>();
+    private Dictionary<GameObject, Player> getPlayer = new Dictionary<GameObject, Player>();
     //private Dictionary<Unit, GameObject> getObj = new Dictionary<Unit, GameObject>();
     private List<Player> players = new List<Player>();
     public int currentRound;
@@ -46,6 +47,7 @@ public class GameData : ScriptableObject
     public void AddUnit(GameObject go, Unit u)
     {
         getUnit.Add(go, u);
+        getPlayer.Add(go, curPlayer);
     }
 
     public void RemovePoints(int team, int price)

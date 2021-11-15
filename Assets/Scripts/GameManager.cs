@@ -12,6 +12,14 @@ public class GameManager : MonoBehaviour
     private int unitCount;
     bool placeUnit = false;
 
+    GameState gameState = GameState.PLACING;
+
+    public enum GameState
+    {
+        PLACING = 0,
+        PLAYING = 1
+    };
+
     //Sets cam target active and inactive
     //Start game
     //Next round
@@ -34,7 +42,9 @@ public class GameManager : MonoBehaviour
         gameData.AddPlayer(new Player(1, 100, Color.red));
         gameData.AddPlayer(new Player(2, 100, Color.blue));
         gameData.StartVals();
-        canvas.transform.GetChild(0).GetComponent<Image>().color = gameData.curPlayer.getColor();
+        Color tempColor = gameData.curPlayer.getColor();
+        tempColor.a = 0.5f;
+        canvas.transform.GetChild(0).GetComponent<Image>().color = tempColor;
 
     }
 
@@ -51,15 +61,28 @@ public class GameManager : MonoBehaviour
                 //Add tag check for (can spawn on here or no)
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    if(hit.transform.tag == "placeableground"){ }
-                    placeUnit = false;
-                    GameObject temp = Instantiate(unitPref, hit.point, Quaternion.identity);
-                    gameData.AddUnit(temp, gameData.curUnit);
-                    temp.GetComponentInChildren<PlayerMovement>().enabled = false;
-                    temp.transform.GetChild(2).gameObject.SetActive(false);
+                    if(gameState == GameState.PLACING) { PlaceLogic(hit); }
                 }
             }
         }
+    }
+
+    private void PlaceLogic(RaycastHit hit)
+    {
+        if (hit.transform.tag == "placeableground") { }
+        placeUnit = false;
+        GameObject temp = Instantiate(unitPref, hit.point, Quaternion.identity);
+        gameData.AddUnit(temp, gameData.curUnit);
+        temp.GetComponentInChildren<PlayerMovement>().enabled = false;
+        temp.transform.GetChild(2).gameObject.SetActive(false);
+        temp.GetComponentInChildren<Renderer>().material.color = gameData.curPlayer.getColor();
+        gameData.SwitchPlayer();
+        canvas.SetActive(true);
+        Color tempColor = gameData.curPlayer.getColor();
+        tempColor.a = 0.5f;
+        canvas.transform.GetChild(0).GetComponent<Image>().color = tempColor;
+        canvas.GetComponent<Canvas>().enabled = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void AddUnit()
