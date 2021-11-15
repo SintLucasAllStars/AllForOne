@@ -10,6 +10,9 @@ public class UnitBehaviour : MonoBehaviour
     private int unitOwner = 0;
     private GameManager gameManager;
     public vThirdPersonInput tpInput;
+    public Rigidbody rb;
+    public Animator anim;
+    public AnimationClip idle;
 
     public void AddStats(Unit unit, int owner)
     {
@@ -42,11 +45,17 @@ public class UnitBehaviour : MonoBehaviour
     public void LockMovement()
     {
         tpInput.enabled = false;
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        anim.enabled = false;
     }
 
     public void UnlockMovement()
     {
         tpInput.enabled = true;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        anim.enabled = true;
     }
 
     private void OnMouseDown()
@@ -55,9 +64,8 @@ public class UnitBehaviour : MonoBehaviour
         Pass this unit as the active unit, then start the gameplay. */
         if (gameManager.IsUnitSelectionScreen() && gameManager.GetCurrentPlayer().GetPlayerNumber() == unitOwner)
         {
-            print("This unit is selected by " + unitOwner);
             gameManager.SetGameplayActive(this);
-            tpInput.enabled = true;
+            UnlockMovement();
         }
     }
 
