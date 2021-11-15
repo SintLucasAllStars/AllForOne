@@ -12,7 +12,7 @@ public class CreateUnit : MonoBehaviour
     public float[] priceValues = new float[4] { 3,2,3,2 };
     public GameObject priceText;
 
-    private int playersDone = 0;
+    public int playersDone = 0;
     private int team;
     private string name = "this is not a placeholder";
     private int health, strength, speed, defense;
@@ -73,7 +73,6 @@ public class CreateUnit : MonoBehaviour
 
     public void MakeUnit()
     {
-        if (gameData.curPlayer.isDone()) { playersDone++; gameData.SwitchPlayer(); }
         GameDataHandler();
         tempUnit = new Unit(team, name, health, strength, speed, defense); 
     }
@@ -88,9 +87,10 @@ public class CreateUnit : MonoBehaviour
                 gameObject.GetComponent<Canvas>().enabled = false;
             }
         }
-        else { gameData.curPlayer.SetDone(true); }
-        if (playersDone >= 2)
-        { GameManager.instance.StartGame();}
+        else if( gameData.curPlayer.isDone()) { gameData.SwitchPlayer(); MakeUnit(); playersDone += 1; }
+        else { gameData.curPlayer.SetDone(true); gameData.SwitchPlayer(); }
+        if (playersDone == 2) { GameManager.instance.StartGame(); }
+        else { MakeUnit(); }
     }
 
     private Vector2 MapUnitPoints(float sliderCurrent, bool isExpensive)
