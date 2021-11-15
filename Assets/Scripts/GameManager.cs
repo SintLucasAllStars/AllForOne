@@ -219,6 +219,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DestroyUnit(GameObject unit)
+    {
+        if (currentPlayer == one)
+        {
+            two.RemoveUnit(unit);
+            Destroy(unit.transform.gameObject);
+        }
+        else if (currentPlayer == two)
+        {
+            one.RemoveUnit(unit);
+            Destroy(unit.transform.gameObject);
+        }
+            
+    }
+
     private void CheckEscape()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
