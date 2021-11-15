@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager Instance;
+
     [HideInInspector]
     public Material[] materials;
     [HideInInspector]
@@ -21,12 +22,11 @@ public class Gamemanager : MonoBehaviour
     public List<GameObject> unitControllerList;
 
     public bool unitConfig = true;
-
     public Camera[] houseCam;
     public GameObject[] houses;
+
     [HideInInspector]
     public int activeCam;
-
     [HideInInspector]
     public float timer = 10;
     [HideInInspector]
