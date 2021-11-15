@@ -7,9 +7,6 @@ public class Movement : MonoBehaviour
 
     public Transform PlayerCam;
 
-    //##ANIMATION#
-    //private Animator anim;
-
     //##MOVEMENT##
     private float WalkSpeed = 12;
     private float stepOffset;
@@ -30,7 +27,6 @@ public class Movement : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<CharacterController>();
-        //anim = GetComponentInChildren<Animator>();
         stepOffset = controller.stepOffset;
     }
     private void FixedUpdate()
@@ -53,16 +49,11 @@ public class Movement : MonoBehaviour
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, playerRotation, ref TurnSmoothVelocity, TurnSmoothTime);
 
             controller.Move(transform.forward * WalkSpeed * Time.deltaTime);
-
-            //##walk animation##
-            //if (isGrounded) anim.SetTrigger("isWalking");
         }
 
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -1.5f;
-            //anim.SetBool("isJumping", false);
-            //anim.SetBool("isHover", false);
             controller.stepOffset = stepOffset;
         }
 
@@ -71,7 +62,6 @@ public class Movement : MonoBehaviour
         //######## JUMP #########
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            //anim.SetBool("isJumping", true);
             velocity.y = Mathf.Sqrt(-1f * jumpHeight * gravity);
             controller.stepOffset = 0;
         }
