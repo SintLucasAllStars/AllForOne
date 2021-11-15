@@ -37,4 +37,9 @@ public class Player
     {
         units.Add(unit);
     }
+
+    public void RemoveUnit(GameObject unit)
+    {
+        units.Remove(unit);
+    }
 }

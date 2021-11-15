@@ -79,7 +79,6 @@ public class UnitCreator : MonoBehaviour
         {
             currentUnit = new Unit((int)hSlider.value*10,(int)spSlider.value*10,(int)stSlider.value*10,(int)dSlider.value*10);
             unitPlacement.SetCurrentUnit(currentUnit);
-            print("unit cost: " + unitCost);
             currentPlayer.SubtractPoints(unitCost);
             UpdatePlayerDataUI();
 

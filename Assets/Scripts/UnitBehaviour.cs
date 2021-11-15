@@ -60,4 +60,9 @@ public class UnitBehaviour : MonoBehaviour
             tpInput.enabled = true;
         }
     }
+
+    public bool CheckIfInside()
+    {
+        return isInside;
+    }
 }

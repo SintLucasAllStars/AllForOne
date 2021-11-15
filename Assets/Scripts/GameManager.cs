@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //using Invector;
 
 public class GameManager : MonoBehaviour
@@ -18,8 +19,12 @@ public class GameManager : MonoBehaviour
 
     public GameObject unitStoreUI;
     public GameObject CurrentPointsUI;
+    public GameObject playerDisplay;
+    public GameObject winScreen;
+    public GameObject menuScreen;
     public Text currentPlayerText;
     public Text gameplayTimerText;
+    public Text winText;
     public GameObject selectUnitText;
 
     public UnitCreator unitCreator;
@@ -41,6 +46,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         UpdateTimer();
+        CheckEscape();
     }
 
     private void StartGame()
@@ -77,7 +83,40 @@ public class GameManager : MonoBehaviour
         unitCam.enabled = true;
     }
 
+    private void GameFinished()
+    {
+        playerDisplay.SetActive(false);
+        unitCam.enabled = false;
+        gameplayActive = false;
 
+        if (one.GetList().Count > 0)
+        {
+            winText.text = "PLAYER 1 WON";
+            winText.color = Color.red;
+            
+        }
+        else if (two.GetList().Count > 0)
+        {
+            winText.text = "PLAYER 2 WON";
+            winText.color = blueText;
+        }
+        winScreen.SetActive(true);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("main");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ExitMenu()
+    {
+        menuScreen.SetActive(false);
+    }
 
     public void UpdateCurrentPlayerText()
     {
@@ -151,8 +190,47 @@ public class GameManager : MonoBehaviour
             timer = gameplayTime;
             gameplayTimerText.text = "";
             gameplayTimerText.color = Color.white;
+            CheckRoundEnd();
+        }
+    }
+
+    private void CheckRoundEnd()
+    {
+        DestroyUnitOutside();
+
+        if (one.GetList().Count <= 0 || two.GetList().Count <= 0)
+        {
+            GameFinished();
+        }
+        else
+        {
             SetUnitSelectionScreenActive();
-            FlipPlayer();    
+            FlipPlayer();
+        }        
+    }
+
+    private void DestroyUnitOutside()
+    {
+        if (activeUnit.CheckIfInside() == false)
+        {
+            // Remove unit from player and remove it from the scene.
+            currentPlayer.RemoveUnit(activeUnit.gameObject);
+            Destroy(activeUnit.gameObject);
+        }
+    }
+
+    private void CheckEscape()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!menuScreen.activeSelf)
+            {
+                menuScreen.SetActive(true);
+            }
+            else if (menuScreen.activeSelf)
+            {
+                menuScreen.SetActive(false);
+            }
         }
     }
 }
