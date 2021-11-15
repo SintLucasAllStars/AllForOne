@@ -52,7 +52,22 @@ public class GameData : ScriptableObject
 
     public void RemovePoints(int team, int price)
     {
-        players[team - 1].removePoints(price);
+        curPlayer.removePoints(price);
+    }
+
+    public bool CanBuy()
+    {
+        if (curPlayer.getPoints() < 10) { return false; }
+
+        return true;
+    }
+
+    public bool BalCheck(int price)
+    {
+        int i = curPlayer.getPoints() - price;
+        if (i < 0) { return false; }
+        else { curPlayer.removePoints(price); }
+        return true;
     }
 
     public void NextPlaceRound()

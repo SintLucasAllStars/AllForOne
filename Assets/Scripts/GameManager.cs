@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     private int unitCount;
     bool placeUnit = false;
 
-    GameState gameState = GameState.PLACING;
+    public GameState gameState = GameState.PLACING;
 
     public enum GameState
     {
@@ -26,6 +26,11 @@ public class GameManager : MonoBehaviour
     //Timer
     //Units/wincondition
     //Basically gameplay loop
+
+    public void StartGame()
+    {
+        gameState = GameState.PLAYING;
+    }
 
     public static GameManager instance { get; private set; }
     void Awake()
