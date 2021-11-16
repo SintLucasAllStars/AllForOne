@@ -116,15 +116,15 @@ public class UnitController : MonoBehaviour
     {
         if (stats != null && controllingCurrentCharacter)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl) && powerups.Count > 0 && powerups[powerUpIndex] != null)
+            if (Input.GetKeyDown(KeyCode.Alpha1) && powerups.Count > 0 && powerups[powerUpIndex] != null)
             {
                 activatePowerup();
             }
-            else if (Input.GetKeyDown(KeyCode.F))
+            else if (Input.GetKeyDown(KeyCode.R))
             {
                 increasePowerupIndex();
             }
-            else if (Input.GetKeyDown(KeyCode.E))
+            else if (Input.GetKeyDown(KeyCode.F))
             {
                 decreasePowerupIndex();
             }
