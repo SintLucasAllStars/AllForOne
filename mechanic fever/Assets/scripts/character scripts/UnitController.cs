@@ -103,8 +103,8 @@ public class UnitController : MonoBehaviour
 
         activePowerUp = new PowerUp[3];
 
-        equipedWeapon = gameObject.AddComponent<Weapon>();
-        equipedWeapon.SetupWeapon(0);
+        equipedWeapon = gameObject.AddComponent<Punch>();
+        equipedWeapon.WeaponSetup();
 
         targetRotation = transform.rotation;
 
@@ -248,7 +248,7 @@ public class UnitController : MonoBehaviour
 
         removePowerUp(powerUpIndex);
 
-        activePowerUp[activePowerTypeIndex].StartPowerUp();
+        activePowerUp[activePowerTypeIndex].ActivatePowerUp();
 
         powerUpIndex = 0;
 
