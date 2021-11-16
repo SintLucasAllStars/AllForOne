@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterCreater : MonoBehaviour
+public class UnitCreater : MonoBehaviour
 {
     [HideInInspector]
     public int cost = 0;
@@ -12,7 +12,7 @@ public class CharacterCreater : MonoBehaviour
 
     public GameObject characterPreviewSpawnPoint;
     private GameObject characterPrefab;
-    private characterEquipmentHandler prefabEquipmentHandler;
+    private UnitCharacterEquimentManager prefabEquipmentHandler;
 
     private float healthValue;
     private float strenghtValue;
@@ -103,14 +103,14 @@ public class CharacterCreater : MonoBehaviour
         }
     }
 
-    public CharacterStats CreateStats()
+    public UnitStats CreateStats()
     {
         healthValue = healthSlider.value;
         strenghtValue = GameManager.Map(strengthSlider.value, 1, 100, 1, 10);
         speedValue = GameManager.Map(speedSlider.value, 1, 100, 1, 10);
         defenseValue = GameManager.Map(defenseSlider.value, 1, 100, 1, 10);
 
-        return new CharacterStats(healthValue, strenghtValue, speedValue, defenseValue, GameManager.gameManager.getTurnIndex());
+        return new UnitStats(healthValue, strenghtValue, speedValue, defenseValue, GameManager.gameManager.getTurnIndex());
     }
 
     public void SetScreenActive(bool value)
@@ -130,7 +130,7 @@ public class CharacterCreater : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
 
-        characterPrefab.GetComponent<CharacterController>().setStats(CreateStats());
+        characterPrefab.GetComponent<UnitController>().setStats(CreateStats());
         characterPrefab.GetComponent<CapsuleCollider>().enabled = true;
         characterPrefab.GetComponent<Rigidbody>().useGravity = true;
 
@@ -157,7 +157,7 @@ public class CharacterCreater : MonoBehaviour
         characterPrefab =
             Instantiate(CharacterBases[GameManager.gameManager.getTurnIndex()], characterPreviewSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0), characterPreviewSpawnPoint.transform);
 
-        prefabEquipmentHandler = characterPrefab.GetComponent<characterEquipmentHandler>();
+        prefabEquipmentHandler = characterPrefab.GetComponent<UnitCharacterEquimentManager>();
         SetScreenActive(true);
         currencyText.text = $"current points: {GameManager.gameManager.GetPlayer().getCurrency()}";
 

@@ -17,9 +17,24 @@ public class PowerUpInteraction : Interactable
     {
         if (other.CompareTag($"player{GameManager.gameManager.getTurnIndex()}Owned"))
         {
-            PowerUp powerInstance = other.gameObject.AddComponent<PowerUp>();
+            PowerUp powerInstance;
+            switch (currentPowerUp)
+            {
+                case powerUpTypes.adrenaline:
+                    powerInstance = other.gameObject.AddComponent<Adrenaline>();
+                    break;
+                case powerUpTypes.rage:
+                    powerInstance = other.gameObject.AddComponent<Rage>();
+                    break;
+                case powerUpTypes.timeStop:
+                    powerInstance = other.gameObject.AddComponent<TimeStop>();
+                    break;
+                default:
+                    powerInstance = other.gameObject.AddComponent<PowerUp>();
+                    break;
+            }
             powerInstance.powerUpType = (int)currentPowerUp;
-            other.GetComponent<CharacterController>().addPowerUp(powerInstance);
+            other.GetComponent<UnitController>().addPowerUp(powerInstance);
             Destroy(gameObject);
         }
     }

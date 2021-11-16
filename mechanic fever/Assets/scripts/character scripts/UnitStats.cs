@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats
+public class UnitStats
 {
     public string owner;
     public int ownerNumber;
@@ -14,7 +14,7 @@ public class CharacterStats
 
     public bool fortified { private set; get; }
 
-    public CharacterStats(float health, float strength, float speed, float defense, int ownerIndex)
+    public UnitStats(float health, float strength, float speed, float defense, int ownerIndex)
     {
         this.health = health;
         this.strength = strength;

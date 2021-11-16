@@ -124,36 +124,39 @@ public class GameManager : MonoBehaviour
 
     private void TurnSystem()
     {
-        turn++;
-
-        if (turn > players.Length - 1)
+        if (!gameOver)
         {
-            turn = 0;
-        }
+            turn++;
 
-        if (currentGameMode == GameMode.setup)
-        {
+            if (turn > players.Length - 1)
+            {
+                turn = 0;
+            }
 
-            if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
+            if (currentGameMode == GameMode.setup)
             {
-                EndSetupFase();
-            }
-            else if (players[turn].getCurrency() <= 0)
-            {
-                TurnSystem();
-            }
-        }
-        else
-        {
-            if (players[turn].getUnitLenght() <= 0)
-            {
-                TurnSystem();
-                return;
-            }
-            spawner.spawnPowerUp();
-            spawner.spawnWeapon();
 
-            StartCoroutine(UiManager.uiManager.enableActionSceenOverTime(turn, 2));
+                if (Array.TrueForAll(players, n => n.getCurrency() <= 0))
+                {
+                    EndSetupFase();
+                }
+                else if (players[turn].getCurrency() <= 0)
+                {
+                    TurnSystem();
+                }
+            }
+            else
+            {
+                if (players[turn].getUnitLenght() <= 0)
+                {
+                    TurnSystem();
+                    return;
+                }
+                spawner.spawnPowerUp();
+                spawner.spawnWeapon();
+
+                StartCoroutine(UiManager.uiManager.enableActionSceenOverTime(turn, 2));
+            }
         }
     }
 
@@ -175,10 +178,10 @@ public class GameManager : MonoBehaviour
             Application.Quit(0);
         }
 
-        if (gameOver)
+        if (gameOver && characterSelecter.selectedCharacter != null)
         {
             timerDone = true;
-            characterSelecter.selectedCharacter.GetComponent<CharacterController>().resetCharacter();
+            characterSelecter.selectedCharacter.GetComponent<UnitController>().resetCharacter();
             UiManager.uiManager.disableUnitActionUi();
         }
         else if (!turnTimerPaused && timer > 0)
@@ -190,7 +193,7 @@ public class GameManager : MonoBehaviour
         {
             timerDone = true;
             StartCoroutine(characterSelecter.resetCamera());
-            characterSelecter.selectedCharacter.GetComponent<CharacterController>().resetCharacter();
+            characterSelecter.selectedCharacter.GetComponent<UnitController>().resetCharacter();
             EndTurn();
         }
     }
@@ -210,6 +213,8 @@ public class GameManager : MonoBehaviour
         {
             players[i].setUnits(GameObject.FindGameObjectsWithTag($"player{i}Owned"));
         }
+
+        CheckVictoryCondition();
 
         currentGameMode = GameMode.action;
         UiManager.uiManager.showActionScreen(0);
@@ -232,10 +237,15 @@ public class GameManager : MonoBehaviour
     {
         players[playerIndex].RemoveUnit(unit);
 
+        CheckVictoryCondition();
+    }
+
+    private void CheckVictoryCondition()
+    {
         if (XorPlayerValue())
         {
-            StartCoroutine(characterSelecter.resetCamera());
             gameOver = true;
+            StartCoroutine(characterSelecter.resetCamera());
             UiManager.uiManager.disableAllActionScreens();
             winningPlayer = getWiningPlayer();
 
@@ -251,9 +261,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator delayedVictory()
     {
-        yield return new WaitForSeconds(2);
-        gameOver = false;
+        yield return new WaitForSeconds(1);
         LoadLevel(1);
+        gameOver = false;
+        UiManager.uiManager.disableAllActionScreens();
     }
 
     private bool XorPlayerValue()
