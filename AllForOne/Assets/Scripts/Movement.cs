@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     public Transform PlayerCam;
 
     //##MOVEMENT##
-    private float WalkSpeed = 12;
+    public float WalkSpeed = 12;
     private float stepOffset;
 
     private Vector3 velocity;
@@ -18,17 +18,40 @@ public class Movement : MonoBehaviour
     public LayerMask groundMask;
     private float groundDistance = 0.4f;
 
+    public bool isRunBoost;
+    public float PowerupTimer;
+
     private bool isGrounded;
     private float jumpHeight = 4.3f;
 
     private float TurnSmoothVelocity;
     private float TurnSmoothTime = 0.08f;
+    Vector3 offset;
 
+    RaycastHit hit;
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         stepOffset = controller.stepOffset;
     }
+
+    private void Update()
+    {
+        //attack player
+        offset = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z); 
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (Physics.Raycast(offset, transform.forward, out hit, 3) && hit.transform.CompareTag("p1") || hit.transform.CompareTag("p2"))
+            {
+                Destroy(hit.transform.gameObject);
+            }
+        }
+
+        if (isRunBoost) RunPowerup();
+        Debug.DrawRay(offset, transform.forward);
+    }
+
     private void FixedUpdate()
     {
 
@@ -65,5 +88,13 @@ public class Movement : MonoBehaviour
             velocity.y = Mathf.Sqrt(-1f * jumpHeight * gravity);
             controller.stepOffset = 0;
         }
+    }
+
+    public void RunPowerup()
+    {
+        PowerupTimer -= Time.deltaTime;
+
+        if (PowerupTimer >= 0) { WalkSpeed = 24; }
+        else { WalkSpeed = 12; isRunBoost = false; }
     }
 }

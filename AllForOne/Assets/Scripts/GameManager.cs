@@ -5,28 +5,47 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public SpawnUnit spawner;
+    private bool canSpawn = true;
+    private int unitsSpawned;
+    public Camera mainCam;
 
-    //p1 spawns unit
-    //p2 spawns unit
+    RaycastHit hit2;
 
-
-    //p1 clicks and walks unit
-    //p2 clicks and walks unit
-
-    //p1 clicks loop again
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        //test system
+        if (canSpawn)
         {
-            spawner.spawnUnit();
-            spawner.switchTeam();
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                //spawn unit swap team at 6 stop spawning
+                spawner.spawnUnit();
+                spawner.switchTeam();
+                unitsSpawned++;
+                if (unitsSpawned == 6) { canSpawn = false; }
+            }
+        }
+
+        if (!canSpawn)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit2, Mathf.Infinity))
+                {
+                    if (hit2.transform.CompareTag("p1"))
+                    {
+                        hit2.transform.gameObject.GetComponentInChildren<Movement>().enabled = false;
+                        mainCam.enabled = false;
+                    }
+
+                    if (hit2.transform.CompareTag("p2"))
+                    {
+                        hit2.transform.gameObject.GetComponentInChildren<Movement>().enabled = false;
+                        mainCam.enabled = false;
+                    }
+                }
+            }
         }
     }
 }

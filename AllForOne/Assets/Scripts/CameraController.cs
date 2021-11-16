@@ -37,7 +37,8 @@ public class CameraController : MonoBehaviour
         Vector3 playerRotation = new Vector3(camY, camX);
         transform.eulerAngles = playerRotation;
 
-        camDistance = Input.GetAxis("MouseScroll");
+        //if you press v and scroll the camera goes in and out
+        if (Input.GetKey(KeyCode.V)) { camDistance = Input.GetAxis("MouseScroll"); }
         camOffset = camOffset + -camDistance * 3f;
         camOffset = Mathf.Clamp(camOffset, CamDistMax.x, CamDistMax.y);
 

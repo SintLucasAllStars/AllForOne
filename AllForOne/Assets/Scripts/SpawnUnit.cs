@@ -9,7 +9,6 @@ public class SpawnUnit : MonoBehaviour
     public LayerMask CanSpawn;
 
     public bool isRed;
-    List<UnitStats> p1Units;
 
 
     public void switchTeam()
