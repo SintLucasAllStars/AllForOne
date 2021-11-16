@@ -5,6 +5,10 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
     public GameObject player;
+    private GameObject currentPlayer;
+    public GameObject mainCamera;
+
+    public GameObject cameraMapPoint;
 
     public float timer;
     public float setTimer;
@@ -21,6 +25,11 @@ public class Game : MonoBehaviour
     private void Update()
     {
         SwitchTurn();
+
+        if (GameManager.instance.startGame && !startTimer)
+        {
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraMapPoint.transform.position, 0.125f);
+        }
     }
 
     private void SwitchTurn()
@@ -40,7 +49,9 @@ public class Game : MonoBehaviour
                 {
                     Debug.Log("Test");
 
-                    player.GetComponent<SpawnedUnit>().enabled = true;
+                    currentPlayer = hit.collider.gameObject;
+
+                    currentPlayer.GetComponent<SpawnedUnit>().enabled = true;
 
                     startTimer = true;
                 }
@@ -51,7 +62,9 @@ public class Game : MonoBehaviour
                 {
                     Debug.Log("Test 2");
 
-                    player.GetComponent<SpawnedUnit>().enabled = true;
+                    currentPlayer = hit.collider.gameObject;
+
+                    currentPlayer.GetComponent<SpawnedUnit>().enabled = true;
 
                     startTimer = true;
                 }
@@ -64,6 +77,8 @@ public class Game : MonoBehaviour
 
             startTimer = false;
 
+            currentPlayer.GetComponent<SpawnedUnit>().enabled = false;
+
             GameManager.instance.gameTurn = false;
         }
 
@@ -72,6 +87,8 @@ public class Game : MonoBehaviour
             timer = setTimer;
 
             startTimer = false;
+
+            currentPlayer.GetComponent<SpawnedUnit>().enabled = false;
 
             GameManager.instance.gameTurn = true;
         }
