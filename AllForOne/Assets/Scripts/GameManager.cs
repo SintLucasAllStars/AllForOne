@@ -6,16 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
-    [SerializeField]
-    private List<GameObject> UnitsPlayer_1;
-    [SerializeField]
-    private List<GameObject> UnitsPlayer_2;
+    public List<GameObject> UnitsPlayer_1;
+    public List<GameObject> UnitsPlayer_2;
 
     public bool playerTurn;
     public bool placeUnit;
     public bool cannotBuy_1;
     public bool cannotBuy_2;
     public bool startGame;
+    public bool gameTurn;
 
     public float totalPrice_1;
     public float totalPrice_2;
@@ -39,6 +38,8 @@ public class GameManager : MonoBehaviour
         
         UnitsPlayer_2 = new List<GameObject>();
 
+        startGame = false;
+        gameTurn = true;
         playerTurn = false;
         placeUnit = false;
 

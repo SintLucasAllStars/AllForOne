@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
 
     private bool canBuy;
 
+    public GameObject canvas;
+
     private void Start()
     {
         totalAvailablePrice.text = "100";
@@ -33,6 +35,11 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.startGame)
+        {
+            canvas.SetActive(false);
+        }
+
         healthText.text = GetHealthValue().ToString("00");
         strengthText.text = GetStrengthValue().ToString("00");
         speedText.text = GetSpeedValue().ToString("00");
