@@ -216,6 +216,12 @@ public class GameManager : MonoBehaviour
 
         CheckVictoryCondition();
 
+        if(Array.TrueForAll(players, x => x.getUnitLenght() <= 0))
+        {
+            HardReset();
+            return;
+        }
+
         currentGameMode = GameMode.action;
         UiManager.uiManager.showActionScreen(0);
         turn = 0;
@@ -264,6 +270,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         LoadLevel(1);
         gameOver = false;
+        UiManager.uiManager.disableAllActionScreens();
+    }
+
+    private void HardReset()
+    {
+        LoadLevel(0);
         UiManager.uiManager.disableAllActionScreens();
     }
 
