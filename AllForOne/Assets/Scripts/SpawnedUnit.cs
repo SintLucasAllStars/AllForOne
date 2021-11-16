@@ -46,12 +46,15 @@ public class SpawnedUnit : MonoBehaviour
 
     private void Update()
     {
+        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, gameObject.transform.position + offset, 0.125f);
+    }
+
+    private void FixedUpdate()
+    {
         float h = Input.GetAxis("Horizontal") * Time.deltaTime * Speed / 2;
         float z = Input.GetAxis("Vertical") * Time.deltaTime * Speed / 2;
 
         transform.Translate(h, 0, z);
-
-        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, gameObject.transform.position + offset, 0.125f);
     }
 
     private void OnCollisionEnter(Collision collision)
