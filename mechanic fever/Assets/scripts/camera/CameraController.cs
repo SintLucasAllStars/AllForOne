@@ -40,13 +40,9 @@ public class CameraController : MonoBehaviour
 
     private void CameraMovement()
     {
-<<<<<<< HEAD
-        float hDirection = Input.GetAxis("HorizontalArrow");
-        float vDirection = Input.GetAxis("VerticalArrow");
-=======
         float hDirection = Input.GetAxis("Horizontal");
         float vDirection = Input.GetAxis("Vertical");
->>>>>>> parent of 2caa3b6 (reworked key bindings)
+
 
         transform.position += (hDirection * speed * Time.deltaTime) * transform.right + transform.forward * (vDirection * speed * Time.deltaTime);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -boundries.x, boundries.x), 0, Mathf.Clamp(transform.position.z, -boundries.y, boundries.y));
