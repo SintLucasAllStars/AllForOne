@@ -86,7 +86,7 @@ public class CharacterSelecter : MonoBehaviour
 
         Vector3 offset = (cameraOffset.y * selectedCharacter.transform.up) + (cameraOffset.z * selectedCharacter.transform.forward);
 
-        while (Vector3.Distance(cam.position, selectedCharacter.transform.position + offset) >= 0.5f 
+        while (Vector3.Distance(cam.position, selectedCharacter.transform.position + offset) >= 0.5f
             && cam.rotation != selectedCharacter.transform.rotation)
         {
             cam.position = Vector3.Lerp(cam.position, selectedCharacter.transform.position + offset, 0.5f);
@@ -103,15 +103,18 @@ public class CharacterSelecter : MonoBehaviour
     {
         cam.parent = null;
 
-        while (cam.position != oldPosition && cam.rotation != oldRotation)
+        while (cam != null && cam.position != oldPosition && cam.rotation != oldRotation)
         {
             cam.position = Vector3.Lerp(cam.position, oldPosition, 0.5f);
             cam.rotation = Quaternion.Lerp(cam.rotation, oldRotation, 0.5f);
             yield return new WaitForSeconds(0.1f);
         }
 
-        cam.parent = cameraBase;
-        GameManager.gameManager.controllingCamera = true;
+        if (cam != null)
+        {
+            cam.parent = cameraBase;
+            GameManager.gameManager.controllingCamera = true;
+        }
     }
     #endregion
 

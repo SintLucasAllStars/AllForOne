@@ -212,7 +212,7 @@ public class UnitController : MonoBehaviour
         UiManager.uiManager.updateAttackTimer(BaseTimeBetweenAttacks, BaseTimeBetweenAttacks);
         UiManager.uiManager.updateFortified(fortifyTimer, BaseTimeToFortify);
 
-        if(powerups.Count > 0)
+        if (powerups.Count > 0)
         {
             UiManager.uiManager.cycleThroughPowerups(powerups[0].powerUpType);
             UiManager.uiManager.showPowerUpUi();
@@ -252,7 +252,7 @@ public class UnitController : MonoBehaviour
 
         powerUpIndex = 0;
 
-        if(powerups.Count <= 0)
+        if (powerups.Count <= 0)
         {
             UiManager.uiManager.cycleThroughPowerups(-1);
         }
@@ -371,11 +371,14 @@ public class UnitController : MonoBehaviour
 
     public void instantDeath()
     {
-        die();
-        Instantiate(deathParticle, gameObject.transform);
-        animator.SetFloat("health", 0);
-        animator.SetInteger("RandomDeath", Random.Range(0, 2));
-        animator.SetTrigger("takeDamage");
+        if (tag != "Untagged")
+        {
+            die();
+            Instantiate(deathParticle, gameObject.transform);
+            animator.SetFloat("health", 0);
+            animator.SetInteger("RandomDeath", Random.Range(0, 2));
+            animator.SetTrigger("takeDamage");
+        }
     }
 
     public void TakeDamage(float damageValue)
