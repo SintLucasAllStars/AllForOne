@@ -171,11 +171,11 @@ public class CharacterCreater : MonoBehaviour
 
     private void equipmentManagment()
     {
-        if (defenseSlider.value >= 8)
+        if (defenseSlider.value >= 80)
         {
             prefabEquipmentHandler.EquipArmorLevel(1);
         }
-        else if (defenseSlider.value > 3)
+        else if (defenseSlider.value > 30)
         {
             prefabEquipmentHandler.UnEquipArmor();
             prefabEquipmentHandler.EquipArmorLevel(0);
