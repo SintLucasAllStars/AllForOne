@@ -189,11 +189,11 @@ public class CharacterController : MonoBehaviour
 
     private void rotateCamera()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             targetRotation *= Quaternion.Euler(0, 45, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
+        else if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             targetRotation *= Quaternion.Euler(0, -45, 0);
         }

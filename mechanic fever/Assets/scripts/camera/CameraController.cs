@@ -40,8 +40,8 @@ public class CameraController : MonoBehaviour
 
     private void CameraMovement()
     {
-        float hDirection = Input.GetAxis("ArrowInputH");
-        float vDirection = Input.GetAxis("ArrowInputV");
+        float hDirection = Input.GetAxis("HorizontalArrow");
+        float vDirection = Input.GetAxis("VerticalArrow");
 
         transform.position += (hDirection * speed * Time.deltaTime) * transform.right + transform.forward * (vDirection * speed * Time.deltaTime);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -boundries.x, boundries.x), 0, Mathf.Clamp(transform.position.z, -boundries.y, boundries.y));
