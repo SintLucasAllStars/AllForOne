@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
         if (gameOver)
         {
             timerDone = true;
-            characterSelecter.selectedCharacter.GetComponent<CharacterController>().resetCharacter();
+            characterSelecter.selectedCharacter.GetComponent<UnitController>().resetCharacter();
             UiManager.uiManager.disableUnitActionUi();
         }
         else if (!turnTimerPaused && timer > 0)
@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
         {
             timerDone = true;
             StartCoroutine(characterSelecter.resetCamera());
-            characterSelecter.selectedCharacter.GetComponent<CharacterController>().resetCharacter();
+            characterSelecter.selectedCharacter.GetComponent<UnitController>().resetCharacter();
             EndTurn();
         }
     }

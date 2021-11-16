@@ -19,7 +19,7 @@ public class PowerUpInteraction : Interactable
         {
             PowerUp powerInstance = other.gameObject.AddComponent<PowerUp>();
             powerInstance.powerUpType = (int)currentPowerUp;
-            other.GetComponent<CharacterController>().addPowerUp(powerInstance);
+            other.GetComponent<UnitController>().addPowerUp(powerInstance);
             Destroy(gameObject);
         }
     }

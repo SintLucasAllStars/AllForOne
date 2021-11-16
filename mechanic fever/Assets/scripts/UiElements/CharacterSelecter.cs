@@ -73,7 +73,7 @@ public class CharacterSelecter : MonoBehaviour
     private void selectCharacter()
     {
         UiManager.uiManager.controlStartMessage();
-        selectedCharacter.GetComponent<CharacterController>().startCharacterControl();
+        selectedCharacter.GetComponent<UnitController>().startCharacterControl();
     }
 
     #region cameraMovement
@@ -125,10 +125,10 @@ public class CharacterSelecter : MonoBehaviour
 
     private void openUiWindow()
     {
-        healthSlider.value = selectedCharacter.GetComponent<CharacterController>().Health;
-        strengthSlider.value = selectedCharacter.GetComponent<CharacterController>().Strength;
-        speedSlider.value = selectedCharacter.GetComponent<CharacterController>().Speed;
-        defenseSlider.value = selectedCharacter.GetComponent<CharacterController>().Defense;
+        healthSlider.value = selectedCharacter.GetComponent<UnitController>().Health;
+        strengthSlider.value = selectedCharacter.GetComponent<UnitController>().Strength;
+        speedSlider.value = selectedCharacter.GetComponent<UnitController>().Speed;
+        defenseSlider.value = selectedCharacter.GetComponent<UnitController>().Defense;
         healthText.text = $"Health: {healthSlider.value}";
         strengthText.text = $"strength: {strengthSlider.value}";
         speedText.text = $"Speed: {speedSlider.value}";

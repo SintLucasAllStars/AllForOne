@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class CharacterController : MonoBehaviour
+public class UnitController : MonoBehaviour
 {
     public bool controllingCurrentCharacter = false;
 
@@ -14,10 +14,10 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
 
 
-    private characterEquipmentHandler equipmentHandler;
+    private UnitCharacterEquimentManager equipmentHandler;
     private Weapon equipedWeapon;
 
-    private CharacterStats stats;
+    private UnitStats stats;
     #region stats property fields
     public float Health
     {
@@ -80,7 +80,7 @@ public class CharacterController : MonoBehaviour
     public float BaseTimeToFortify;
     private float fortifyTimer = 0;
 
-    public void setStats(CharacterStats stats)
+    public void setStats(UnitStats stats)
     {
         this.stats = stats;
         tag = $"{stats.owner}Owned";
@@ -99,7 +99,7 @@ public class CharacterController : MonoBehaviour
     private void Init()
     {
         animator = GetComponent<Animator>();
-        equipmentHandler = GetComponent<characterEquipmentHandler>();
+        equipmentHandler = GetComponent<UnitCharacterEquimentManager>();
 
         activePowerUp = new PowerUp[3];
 
@@ -340,7 +340,7 @@ public class CharacterController : MonoBehaviour
             new Vector3(1.5f, 1.5f, 2) + (transform.forward * equipedWeapon.range));
         foreach (Collider hitObject in hitColliders)
         {
-            CharacterController controller;
+            UnitController controller;
             if (!hitObject.CompareTag(gameObject.tag))
             {
                 if (Physics.Raycast(weaponOffset, transform.TransformDirection(Vector3.forward), out rayhit))

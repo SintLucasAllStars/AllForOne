@@ -21,7 +21,7 @@ public class WeaponInteraction : Interactable
         {
             Weapon weaponInstance = other.gameObject.AddComponent<Weapon>();
             weaponInstance.SetupWeapon((int)currentWeaponType);
-            other.GetComponent<CharacterController>().addWeapon(weaponInstance);
+            other.GetComponent<UnitController>().addWeapon(weaponInstance);
             Destroy(gameObject);
         }
     }
