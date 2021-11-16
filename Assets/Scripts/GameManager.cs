@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
         _PD.Clear();
         //Create red player
         CreatePlayer(true);
-        Debug.Log("Added");
         //Create blue player
         CreatePlayer(false);
         _red = false;
